@@ -9,7 +9,7 @@ The concept: the site is a building, and each floor is a section (G About, L1 Sk
 - Read `BACKLOG.md` before starting work. Keep it current: tick finished items, add new ones, and keep "Waiting on Shafik" accurate.
 - When Shafik gives feedback that is a lasting rule, add it to this file and tell him. One-off tasks go in `BACKLOG.md`.
 - Bigger changes (several files, a new section, a layout change) go through plan mode first. Shafik approves the plan before anything is built.
-- **Ask first** before enabling GitHub Pages, opening a PR, merging into `main`, or deleting anything.
+- **Ask first** before changing repo settings (Pages, visibility), opening a PR, or deleting anything that isn't a merged branch.
 
 ## Content: never break these
 - `content/resume.md` is the only source of facts. Never invent anything about Shafik. If a section needs content he hasn't given, add a visible `PLACEHOLDER: …` and ask him.
@@ -50,6 +50,8 @@ Use the `design-review` skill (`.claude/skills/design-review/`). Its checker, `n
 A Stop hook (`.claude/settings.json` → `.claude/hooks/design-check-on-stop.js`) runs the same checker automatically when a turn ends with changed site files, and blocks finishing until it passes (3 attempts, then it warns instead). Don't work around it: fix what it reports.
 
 ## Git
-- Work on the session's assigned `claude/…` branch. Commit each version worth keeping, with a message saying what changed and why, and push it.
-- `main` only changes when Shafik asks for a merge.
-- Versions are annotated tags on `main` (`v0.1.0`, `v0.2.0`, ...) with a GitHub Release each. No version branches or per-version repos. Ask before tagging.
+- Shafik trusts Claude's judgement here (2026-10-09): commit, push, merge to `main` and tag without asking. Report what was done afterwards.
+- Commit each finished, checked piece of work, with a message saying what changed and why, and push it.
+- Small changes (docs, backlog, fixes) go straight to `main`. Bigger changes go on a short-lived branch (or the session's assigned `claude/…` branch), merged into `main` once the check passes, then deleted.
+- Versions are annotated tags on `main` with a GitHub Release each (notes and screenshots). Minor bump (`v0.2.0`) for a visible milestone, patch bump (`v0.1.1`) for fixes to a release. Update the versions table in `README.md` with each release. No version branches or per-version repos.
+- Never force-push, rewrite pushed history, or move a published tag.
