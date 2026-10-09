@@ -20,6 +20,8 @@
     { id: "education",    title: "Education",  where: "level 3", level: "L3", file: "education.md",  h: 44 },
     { id: "fun",          title: "Fun facts",  where: "level 2", level: "L2", file: "fun-facts.md",  h: 44 },
     { id: "contact",      title: "Contact",    where: "level 1", level: "L1", file: "contact.ttl",   h: 56, door: true },
+    // Below ground. Drawn, but hidden until the riddle on level 2 is solved.
+    { id: "b1",           title: "Basement",   where: "level B1", level: "B1", file: "b1/cake.md",   h: 34, basement: true },
   ];
   // The cat sits in one window on the fun-facts floor (front face, row 2, column 4).
   const CAT = { id: "fun", row: 1, col: 3 };
@@ -39,10 +41,10 @@
     const wall = (parent, s, front, origin, width, cols, rows) => {
       const g = svgEl("g", { transform: `matrix(${COS} ${front ? -SIN : SIN} 0 1 ${origin[0].toFixed(1)} ${origin[1].toFixed(1)})` });
       g.appendChild(svgEl("rect", { x: 0, y: 0, width, height: s.h, class: "storey__body" + (front ? "" : " storey__body--side") }));
-      const winW = front ? 14 : 12, winH = s.door ? 16 : s.roof ? 12 : 11;
+      const winW = front ? 14 : 12, winH = s.door ? 16 : s.roof ? 12 : s.basement ? 8 : 11;
       const padX = (width - winW * cols) / (cols + 1) * 1.2;
       const gapX = cols > 1 ? (width - padX * 2 - winW * cols) / (cols - 1) : 0;
-      const padTop = s.door ? 12 : s.roof ? 10 : 8;
+      const padTop = s.door ? 12 : s.roof ? 10 : s.basement ? 13 : 8;
       const gapY = rows > 1 ? (s.h - padTop * 2 - winH * rows) / (rows - 1) : 0;
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
@@ -73,7 +75,7 @@
       parent.appendChild(g);
     };
 
-    const total = storeys.reduce((sum, s) => sum + (s.roof ? 0 : s.h), 0);
+    const total = storeys.reduce((sum, s) => sum + (s.roof || s.basement ? 0 : s.h), 0);
 
     // Street level: a paved plot a little wider than the building.
     const M = 9;
@@ -84,7 +86,7 @@
 
     let top = total;
     for (const s of storeys) {
-      const a = svgEl("a", { href: `#${s.id}`, class: "storey", "aria-label": `Go to ${s.title}, ${s.where}` });
+      const a = svgEl("a", { href: `#${s.id}`, class: "storey" + (s.basement ? " storey--b1" : ""), "aria-label": `Go to ${s.title}, ${s.where}` });
       let mid;
       if (s.roof) {
         // The roof: the deck on top of level 6, and a smaller room set back on it.
@@ -99,8 +101,9 @@
         a.appendChild(svgEl("circle", { class: "tower__beacon", cx: mx, cy: my - 36, r: 3.5 }));
         mid = total + s.h / 2;
       } else {
-        wall(a, s, false, iso(SIDE, 0, top), SIDE, 3, s.door ? 1 : 2);
-        wall(a, s, true, iso(0, 0, top), FRONT, 5, s.door ? 1 : 2);
+        const rows = s.door || s.basement ? 1 : 2;
+        wall(a, s, false, iso(SIDE, 0, top), SIDE, 3, rows);
+        wall(a, s, true, iso(0, 0, top), FRONT, 5, rows);
         mid = top - s.h / 2;
         top -= s.h;
       }
@@ -119,9 +122,14 @@
   }
 
   // Phones hide the floor labels and tags, so crop to just the building.
+  // Once the basement is open the drawing grows downward to show it.
+  const tower = document.querySelector(".tower");
   const towerSvg = document.querySelector(".tower svg");
   const phone = window.matchMedia("(max-width: 900px)");
-  const fitTower = () => towerSvg?.setAttribute("viewBox", phone.matches ? "14 28 200 396" : "0 28 300 396");
+  const fitTower = () => {
+    const height = tower?.classList.contains("has-b1") ? 432 : 396;
+    towerSvg?.setAttribute("viewBox", phone.matches ? `14 28 200 ${height}` : `0 28 300 ${height}`);
+  };
   fitTower();
   phone.addEventListener("change", fitTower);
 
@@ -212,7 +220,7 @@
   const links = [...document.querySelectorAll(".files a")];
   const minis = [...document.querySelectorAll(".mini__floor")];
   const sections = [...document.querySelectorAll("[data-section]")];
-  const order = ["about", "skills", "experience", "projects", "education", "fun", "contact"];
+  const order = ["about", "skills", "experience", "projects", "education", "fun", "contact", "b1"];
 
   const setActive = (id) => {
     links.forEach(l => l.classList.toggle("is-active", l.dataset.target === id && l.closest(".dir > ul") === null));
@@ -281,19 +289,49 @@
       flip.appendChild(s);
     });
   }
-  const riddleBtn = document.querySelector(".riddle__btn");
+  /* ---------- Guess the animal to open the basement ---------- */
+  const riddleForm = document.querySelector(".riddle__form");
+  const guess = document.getElementById("guess");
+  const riddleStatus = document.querySelector(".riddle__status");
   const answer = document.getElementById("riddle-answer");
-  riddleBtn?.addEventListener("click", () => {
-    const open = answer.hidden;
-    answer.hidden = !open;
-    riddleBtn.setAttribute("aria-expanded", String(open));
-    riddleBtn.textContent = open ? "Hide answer" : "Show me";
-    flip?.classList.remove("is-flipped");
-    if (open) requestAnimationFrame(() => requestAnimationFrame(() => flip?.classList.add("is-flipped")));
-  });
+  const b1 = document.getElementById("b1");
+
+  const openB1 = (animate) => {
+    riddleForm.hidden = true;
+    answer.hidden = false;
+    if (animate && !reduceMotion) requestAnimationFrame(() => requestAnimationFrame(() => flip?.classList.add("is-flipped")));
+    else flip?.classList.add("is-static");
+    b1.hidden = false;
+    document.querySelectorAll(".b1-entry").forEach(el => { el.hidden = false; });
+    tower?.classList.add("has-b1");
+    fitTower();
+  };
+
+  if (riddleForm && guess && answer && b1) {
+    let misses = 0;
+    riddleForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const said = guess.value.toLowerCase().replace(/[^a-z]/g, "").replace(/^(a|the)(?=.)/, "");
+      if (!said) { riddleStatus.textContent = "Type an animal first."; return; }
+      if (/^(giant)?pandas?$/.test(said)) {
+        try { localStorage.setItem("b1", "open"); } catch (e) {}
+        riddleStatus.textContent = "Correct. The basement is open.";
+        openB1(true);
+        answer.querySelector(".riddle__reward a")?.focus({ preventScroll: true });
+        return;
+      }
+      if (/^(cats?|octocat|kittens?)$/.test(said)) { riddleStatus.textContent = "Close. That is GitHub's logo. Look at my username instead."; return; }
+      misses += 1;
+      riddleStatus.textContent = misses === 1 ? "Not quite. Look at my GitHub username." : "Not quite. Try reading it backwards.";
+    });
+
+    // Solved on an earlier visit: the basement stays open.
+    let solved = false;
+    try { solved = localStorage.getItem("b1") === "open"; } catch (e) {}
+    if (solved) openB1(false);
+  }
 
   /* ---------- Building: hovering a floor previews it ---------- */
-  const tower = document.querySelector(".tower");
   document.querySelectorAll(".storey").forEach(st => {
     const on = () => { tower.classList.add("is-previewing"); st.classList.add("is-hover"); };
     const off = () => { tower.classList.remove("is-previewing"); st.classList.remove("is-hover"); };

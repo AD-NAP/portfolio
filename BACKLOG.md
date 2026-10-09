@@ -107,9 +107,10 @@ Plan approved 2026-10-09. Branch `claude/v0.2-isometric`. Decisions: floors are 
 
 - [x] Step 1: flip the order, rooftop first, down to level 1. Ground floor removed (`11c0dc6`)
 - [x] Step 2: isometric building that leans a few degrees toward the mouse (desktop with a mouse only; off on phones and under reduced motion)
-- [?] Shafik to look at the step 2 screenshots before step 3 starts
-- [ ] Step 3: riddle becomes a typed guess that unlocks a hidden B1 level. Content for now: a cake
-- [ ] Checker: extra pass with B1 unlocked; docs (`CLAUDE.md`, `docs/architecture.md`, README table)
+- [x] Step 3: the riddle is a typed guess that unlocks a hidden B1 level (section, `b1/cake.md` in the explorer, a dashed storey under the building). It stays open on later visits. Content for now: a cake
+- [x] Checker: extra pass with B1 open, plus a test of the riddle; docs updated (`CLAUDE.md`, `docs/architecture.md`, the skill)
+- [ ] B1 needs real content one day (Shafik: empty for now)
+- [ ] 🟢 The B1 storey appears without an animation, because the visitor is on L2 when it unlocks and would not see one
 - [ ] `recruiter-critic` run, merge to `main`, tag and release `v0.2.0`
 - [ ] 🟢 Roof focus ring: the deck's front edges are covered by level 6's outline, so only the roof room shows the ring. Visible, but could be cleaner
 - [ ] 🟢 Sidebar mini building still has the old flat shape with a wide base

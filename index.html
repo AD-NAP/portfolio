@@ -79,6 +79,7 @@
         <li><a href="#education" data-target="education"><span class="ext ext--md"></span>education.md</a></li>
         <li><a href="#fun" data-target="fun"><span class="ext ext--md"></span>fun-facts.md</a></li>
         <li><a href="#contact" data-target="contact"><span class="ext ext--ttl"></span>contact.ttl</a></li>
+        <li class="b1-entry" hidden><a href="#b1" data-target="b1"><span class="ext ext--md"></span>b1/cake.md</a></li>
       </ul>
     </nav>
   </aside>
@@ -262,20 +263,27 @@
     <section id="fun" class="floor" data-section="fun">
       <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L2</span>Fun facts</h2>
       <div class="fun">
-        <p class="fun__fact">I love cats and pandas.</p>
         <div class="riddle">
           <svg class="perch-cat" viewBox="0 0 60 60" aria-hidden="true">
             <path class="perch-cat__tail" d="M37 57c11 0 16-7 13-17-.8-2.6-4.2-2-3.5.8 1.9 7.2-1.6 11.7-9.5 11.7z"/>
             <path d="M11.5 17.5 12 5l6.5 8.5h1L26 5l.5 12.5c1.7 2.3 2.5 5 2.3 7.8 6.6 3.4 11.2 13 10.7 32.7H12c-2.4-12.7-1.2-22.6 1-27.2-1.8-3.6-2.4-9.3-1.5-13.3z"/>
           </svg>
-          <p class="riddle__q">Can you spot the panda? Hint: GitHub.</p>
-          <button class="riddle__btn" type="button" aria-expanded="false" aria-controls="riddle-answer">Show me</button>
+          <form class="riddle__form" novalidate>
+            <label class="riddle__q" for="guess">Guess my favourite animal.</label>
+            <p id="guess-hint" class="riddle__hint">Hint: it is hiding in my GitHub name.</p>
+            <div class="riddle__row">
+              <input id="guess" class="riddle__input" type="text" name="guess" aria-describedby="guess-hint" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="24">
+              <button class="riddle__btn" type="submit">Check</button>
+            </div>
+          </form>
+          <p class="riddle__status" role="status"></p>
           <div id="riddle-answer" class="riddle__a" hidden>
             <p class="flip"><span class="visually-hidden">ad-nap read backwards is pan-da</span><span class="flip__word" aria-hidden="true"></span></p>
-            <p>My GitHub username is <a href="https://github.com/ad-nap">ad-nap</a>. Read it backwards. And GitHub's logo is a cat, so that covers both.</p>
+            <p>My GitHub username is <code>ad-nap</code>. Read it backwards. I love pandas, and cats too: GitHub's logo is a cat, so that covers both.</p>
+            <p class="riddle__reward"><a href="#b1">Take the lift down to B1</a></p>
           </div>
         </div>
-        <p class="fun__hint">There's another cat on this page. It only comes out at night.</p>
+        <p class="fun__hint">There's a cat somewhere else on this page. It only comes out at night.</p>
       </div>
     </section>
 
@@ -287,6 +295,23 @@
       <ul class="contact__links">
         <li><a href="https://github.com/ad-nap">GitHub</a></li>
       </ul>
+    </section>
+
+    <!-- Basement / B1: hidden until the riddle on L2 is solved (main.js) -->
+    <section id="b1" class="floor" data-section="b1" hidden>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">B1</span>Basement</h2>
+      <div class="b1">
+        <svg class="cake" viewBox="0 0 140 122" aria-hidden="true">
+          <ellipse class="cake__plate" cx="70" cy="100" rx="64" ry="15"/>
+          <path class="cake__body" d="M22 60v32a48 12 0 0 0 96 0V60"/>
+          <path class="cake__layer" d="M22 77a48 12 0 0 0 96 0"/>
+          <ellipse class="cake__icing" cx="70" cy="60" rx="48" ry="12"/>
+          <rect class="cake__candle" x="67" y="30" width="6" height="28" rx="1"/>
+          <path class="cake__flame" d="M70 10c5 6 7 9 7 13a7 7 0 0 1-14 0c0-4 2-7 7-13z"/>
+        </svg>
+        <p class="b1__lede">You found the basement.</p>
+        <p class="b1__more">Nothing down here yet, so have some cake.</p>
+      </div>
     </section>
 
     <footer class="foot">
