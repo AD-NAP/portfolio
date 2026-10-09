@@ -45,6 +45,7 @@ The concept: the site is a building, and each floor is a section (G About, L1 Sk
 
 ## Before saying a change is done
 Use the `design-review` skill (`.claude/skills/design-review/`). Its checker, `npm run -s check`, serves the site, screenshots both themes at 390px and 1280px, and fails on overflow, JS errors, axe violations, token contrast, small touch targets or broken reduced motion. Then look at the contact sheets, fix, and re-check. Playwright and Chromium are preinstalled; don't run `playwright install`.
+A Stop hook (`.claude/settings.json` → `.claude/hooks/design-check-on-stop.js`) runs the same checker automatically when a turn ends with changed site files, and blocks finishing until it passes (3 attempts, then it warns instead). Don't work around it: fix what it reports.
 
 ## Git
 - Work on the session's assigned `claude/…` branch. Commit each version worth keeping, with a message saying what changed and why, and push it.

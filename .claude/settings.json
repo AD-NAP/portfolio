@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/design-check-on-stop.js\"",
+            "timeout": 240,
+            "statusMessage": "Running design check on changed site files…"
+          }
+        ]
+      }
+    ]
+  }
+}

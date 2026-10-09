@@ -59,7 +59,8 @@ Design:
 
 ## Tooling
 
-- [ ] Confirm `/design-review` shows up in a new session (skills are discovered at session start)
+- [x] `/design-review` was picked up mid-session (new project skills can load without a restart)
+- [ ] Confirm the Stop hook fires live: in the next session, edit a site file and finish a turn; expect "Running design check on changed site files…"
 
 ## Learning path (Claude Code building blocks)
 
@@ -67,7 +68,7 @@ Design:
 - [x] 2. Turn the corrections log into `CLAUDE.md` (approved; `content/resume.md` added as the source of facts)
 - [x] 3. Plan mode for a bigger change: the v4 accessibility and design fix batch (plan approved, then built)
 - [x] 4. First skill: `.claude/skills/design-review/` (SKILL.md plus `scripts/check.js`, run with `npm run -s check`). Tested: catches planted overflow, JS error, contrast and touch-target failures. Loads as `/design-review` from the next session
-- [ ] 5. First hook (e.g. a link check or screenshot run after edits)
+- [x] 5. First hook: Stop hook runs the design checker when a turn ends with changed site files; blocks until it passes (max 3 attempts). Pipe-tested: pass, skip-when-unchanged, block ×3, give up, recover
 - [ ] 6. First subagent: "recruiter critic" reviewing the site as a hiring manager. Reference: `design-critique`
 - [ ] 7. Full autonomous run: one goal in, the agent plans, builds, self-reviews, fixes, deploys
 
