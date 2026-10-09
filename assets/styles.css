@@ -94,6 +94,22 @@ html.is-switching *::after {
 .star--twinkle { animation: twinkle 4s ease-in-out infinite; }
 @keyframes twinkle { 50% { opacity: .1; } }
 
+/* A rare shooting star (night only). main.js sets its start point and triggers it. */
+.shooting-star {
+  position: absolute; z-index: 2; top: var(--sy, 10%); left: var(--sx, 60%);
+  width: 140px; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), #fff);
+  transform: rotate(155deg); transform-origin: right center;
+  opacity: 0;
+}
+.shooting-star.is-falling { animation: shoot 1.1s ease-in forwards; }
+@keyframes shoot {
+  0%   { opacity: 0; translate: 0 0; }
+  15%  { opacity: 1; }
+  100% { opacity: 0; translate: -260px 120px; }
+}
+[data-theme="light"] .shooting-star { display: none; }
+
 /* ---------- Explorer (sidebar) ---------- */
 .explorer {
   position: fixed; inset: 0 auto 0 0; width: var(--sidebar);
@@ -238,6 +254,13 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 .storey:hover .storey__label, .storey:focus-visible .storey__label { fill: var(--text); }
 .storey:focus-visible { outline: none; }
 
+/* Hovering or focusing a floor previews it: that floor lights up, the rest dim. */
+.storey__win, .storey__cat { transition: fill .25s ease, opacity .25s ease; }
+.tower.is-previewing .storey:not(.is-hover) .storey__win,
+.tower.is-previewing .storey:not(.is-hover) .storey__cat.is-on { opacity: .25; }
+.storey.is-hover .storey__win { fill: var(--accent); }
+.tower.is-previewing .storey:not(.is-hover) .storey__label { opacity: .4; }
+
 /* ---------- Floors (sections) ---------- */
 .floor { padding-block: clamp(64px, 10vw, 120px); border-top: 1px solid var(--line-soft); }
 .floor__title {
@@ -366,8 +389,19 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 
 /* Fun facts */
 .fun { max-width: var(--measure); }
-.fun__fact { margin: 0 0 28px; font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 600; line-height: 1.25; }
-.riddle { padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
+.fun__fact { margin: 0 0 64px; font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 600; line-height: 1.25; }
+.riddle { position: relative; padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
+
+/* A cat sits on the riddle card. Its tail flicks once when this floor scrolls into view. */
+.perch-cat { position: absolute; right: 28px; bottom: calc(100% - 1px); width: 52px; height: 52px; fill: var(--text); }
+.perch-cat__tail { transform-box: fill-box; transform-origin: 0% 85%; }
+.perch-cat.is-flicking .perch-cat__tail { animation: flick 1.1s ease-in-out; }
+@keyframes flick {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-28deg); }
+  50% { transform: rotate(8deg); }
+  75% { transform: rotate(-14deg); }
+}
 .riddle__q { margin: 0 0 16px; font-size: 1.125rem; }
 .riddle__btn {
   font: inherit; font-size: .9375rem; cursor: pointer;

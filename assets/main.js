@@ -226,6 +226,44 @@
     if (open) requestAnimationFrame(() => requestAnimationFrame(() => flip?.classList.add("is-flipped")));
   });
 
+  /* ---------- Building: hovering a floor previews it ---------- */
+  const tower = document.querySelector(".tower");
+  document.querySelectorAll(".storey").forEach(st => {
+    const on = () => { tower.classList.add("is-previewing"); st.classList.add("is-hover"); };
+    const off = () => { tower.classList.remove("is-previewing"); st.classList.remove("is-hover"); };
+    st.addEventListener("pointerenter", on);
+    st.addEventListener("pointerleave", off);
+    st.addEventListener("focus", on);
+    st.addEventListener("blur", off);
+  });
+
+  /* ---------- A rare shooting star (night only) ---------- */
+  const shooter = document.querySelector(".shooting-star");
+  if (shooter && !reduceMotion) {
+    const launch = () => {
+      if (isNight() && !document.hidden) {
+        shooter.style.setProperty("--sx", `${40 + Math.random() * 55}%`);
+        shooter.style.setProperty("--sy", `${4 + Math.random() * 30}%`);
+        shooter.classList.remove("is-falling");
+        void shooter.offsetWidth;               // restart the animation
+        shooter.classList.add("is-falling");
+      }
+      setTimeout(launch, 20000 + Math.random() * 20000);   // 20 to 40 seconds apart
+    };
+    setTimeout(launch, 6000 + Math.random() * 6000);
+  }
+
+  /* ---------- The perched cat flicks its tail once ---------- */
+  const perchCat = document.querySelector(".perch-cat");
+  if (perchCat && !reduceMotion) {
+    new IntersectionObserver((entries, obs) => {
+      if (entries.some(e => e.isIntersecting)) {
+        setTimeout(() => perchCat.classList.add("is-flicking"), 400);
+        obs.disconnect();
+      }
+    }, { threshold: 0.6 }).observe(perchCat);
+  }
+
   // Placeholder links stay inert until real URLs are added.
   document.querySelectorAll(".is-placeholder").forEach(a => a.addEventListener("click", e => e.preventDefault()));
 })();

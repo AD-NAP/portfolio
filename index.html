@@ -29,6 +29,7 @@
   <!-- Page-wide sky: day gradient and night gradient cross-fade; stars are added by main.js -->
   <div class="sky" aria-hidden="true">
     <div class="sky__stars"></div>
+    <span class="shooting-star"></span>
   </div>
 
   <!-- File explorer: desktop sidebar, phone top bar -->
@@ -254,6 +255,10 @@
       <div class="fun">
         <p class="fun__fact">I love cats and pandas.</p>
         <div class="riddle">
+          <svg class="perch-cat" viewBox="0 0 60 60" aria-hidden="true">
+            <path class="perch-cat__tail" d="M37 57c11 0 16-7 13-17-.8-2.6-4.2-2-3.5.8 1.9 7.2-1.6 11.7-9.5 11.7z"/>
+            <path d="M11.5 17.5 12 5l6.5 8.5h1L26 5l.5 12.5c1.7 2.3 2.5 5 2.3 7.8 6.6 3.4 11.2 13 10.7 32.7H12c-2.4-12.7-1.2-22.6 1-27.2-1.8-3.6-2.4-9.3-1.5-13.3z"/>
+          </svg>
           <p class="riddle__q">Can you spot the panda? Hint: GitHub.</p>
           <button class="riddle__btn" type="button" aria-expanded="false" aria-controls="riddle-answer">Show me</button>
           <div id="riddle-answer" class="riddle__a" hidden>
@@ -261,7 +266,7 @@
             <p>My GitHub username is <a href="https://github.com/ad-nap">ad-nap</a>. Read it backwards. And GitHub's logo is a cat, so that covers both.</p>
           </div>
         </div>
-        <p class="fun__hint">There's also a cat somewhere on this page. It only comes out at night.</p>
+        <p class="fun__hint">There's another cat on this page. It only comes out at night.</p>
       </div>
     </section>
 
@@ -272,7 +277,8 @@
       <a class="contact__email" href="mailto:shafik.adam98@gmail.com">shafik.adam98@gmail.com</a>
       <ul class="contact__links">
         <li><a href="https://github.com/ad-nap">GitHub</a></li>
-        <li><a href="#" class="is-placeholder" aria-disabled="true">LinkedIn (PLACEHOLDER: URL needed)</a></li>
+        <!-- TEMPORARY: LinkedIn home page until Shafik sends his profile URL -->
+        <li><a href="https://www.linkedin.com/">LinkedIn</a></li>
       </ul>
     </section>
 
