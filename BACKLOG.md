@@ -55,40 +55,21 @@ Design:
 
 - [ ] Enable GitHub Pages (**ask Shafik first**)
 - [ ] Hosting URL: GitHub only serves a site at the root `https://ad-nap.github.io/` if the repo is named `ad-nap.github.io`. This repo (`autonomous-test.github.io`) would be served at `https://ad-nap.github.io/autonomous-test.github.io/`. Options: rename the repo, or keep it as a test site.
-- [ ] Keep working files (this backlog, future CLAUDE.md, `.claude/`) out of the published site
+- [ ] Keep working files (`BACKLOG.md`, `CLAUDE.md`, `content/`, `reviews/`, `.claude/`) out of the published site
 
 ## Learning path (Claude Code building blocks)
 
-- [~] 1. Hands-on v1 with no setup; collect corrections (v1, v2, v3 done, iterating)
-- [ ] 2. Turn the corrections log into `CLAUDE.md`
+- [x] 1. Hands-on v1 with no setup; collect corrections (v1 to v4)
+- [~] 2. Turn the corrections log into `CLAUDE.md` (drafted; waiting on Shafik's review)
 - [x] 3. Plan mode for a bigger change: the v4 accessibility and design fix batch (plan approved, then built)
 - [ ] 4. First skill: `design-review` (screenshot at several widths, check contrast, spacing, overflow, fix, repeat). Reference: the Design plugin's `design-critique` and `accessibility-review`
 - [ ] 5. First hook (e.g. a link check or screenshot run after edits)
 - [ ] 6. First subagent: "recruiter critic" reviewing the site as a hiring manager. Reference: `design-critique`
 - [ ] 7. Full autonomous run: one goal in, the agent plans, builds, self-reviews, fixes, deploys
 
-## Corrections log (becomes CLAUDE.md in step 2)
+## Corrections log
 
-1. Don't put the phone number on the site. Keep the email.
-2. Ask for LinkedIn and GitHub URLs; never guess them. Use marked placeholders until then.
-3. Never invent facts about Shafik. Use only resume content; mark anything missing as a placeholder and ask.
-4. Respect `prefers-reduced-motion`; keep it fast and readable on phones.
-5. Ask before enabling GitHub Pages or opening a PR.
-6. No photo on the site.
-7. Display name is "Shafik Adam", not the full legal name.
-8. GitHub is `https://github.com/ad-nap`.
-9. Keep the building theme: night is navy with amber lights on; day is a bright sky with lights off. Both themes are required.
-10. The background shouldn't feel empty: use sky elements (sun, moon, stars, clouds) that fit the building story.
-11. Stats must be easy to read at a glance (the 330-cell grid was rejected).
-12. Personality is welcome: fun facts (cats, pandas, the `ad-nap` → `pan-da` riddle).
-13. Projects section is on hold until Shafik sends more projects.
-14. LinkedIn links to the LinkedIn home page temporarily, until Shafik sends his profile URL.
-15. Chosen animations: rare shooting star at night (20-40s apart), floor hover preview, cat tail flick on the fun-facts floor. Mouse tilt was not picked.
-16. Use the Design plugin's `design-critique` and `accessibility-review` as the review standard; save reports under `reviews/` and triage findings into this backlog.
-17. Building floors are real links: keyboard-focusable, announced by screen readers ("Go to Experience, level 2"), with a visible focus outline.
-18. On phones, the building sits small beside the name so content starts on the first screen.
-19. Contact links (email, GitHub, LinkedIn) belong in the hero, not only at the bottom.
-20. Bigger changes go through plan mode first; Shafik approves the plan before building.
+Moved into `CLAUDE.md` in step 2 (all 20 entries). New lasting rules go straight into `CLAUDE.md`; one-off tasks go in this file.
 
 ## Done
 
@@ -102,4 +83,5 @@ Design:
 - [x] v3: shooting star, floor hover preview, perched cat with tail flick, LinkedIn link (commit `6f05f35`)
 - [x] First design critique and accessibility review run and triaged (see Review findings)
 - [x] Merged everything into `main` (created `main` at `5de676b`)
+- [x] Merged v4 into `main` (`2924b09`)
 - [x] v4: all 11 accessibility findings fixed, hero contact links, phone hero with small building (axe: 0 violations)
