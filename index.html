@@ -73,7 +73,7 @@
         </li>
         <li class="dir"><a href="#projects" data-target="projects"><span class="ext ext--dir"></span>projects/</a>
           <ul>
-            <li><a href="#pomozoo" data-target="projects"><span class="ext ext--md"></span>pomozoo.md</a></li>
+            <li><a href="#edge-energy-optimizer" data-target="projects"><span class="ext ext--md"></span>edge-energy-optimizer.md</a></li>
           </ul>
         </li>
         <li><a href="#education" data-target="education"><span class="ext ext--md"></span>education.md</a></li>
@@ -96,12 +96,11 @@
       <div class="hero__text">
         <h1 class="name">Shafik Adam</h1>
         <p class="hero__role">Software engineer building cloud applications and building&#8209;management platforms with Python, TypeScript and AWS.</p>
+        <p class="hero__proof">Cut config preparation from <strong>~3 days to under 5 minutes</strong>. Helped build a Cloud BMS MVP <strong>approved by Azbil Japan leadership</strong>.</p>
         <p class="hero__status"><span class="dot" aria-hidden="true"></span>Systems and Application Engineer at Azbil, Singapore</p>
         <ul class="hero__links" aria-label="Contact">
           <li><a href="mailto:shafik.adam98@gmail.com">Email</a></li>
           <li><a href="https://github.com/ad-nap">GitHub</a></li>
-          <!-- TEMPORARY: LinkedIn home page until Shafik sends his profile URL -->
-          <li><a href="https://www.linkedin.com/">LinkedIn</a></li>
         </ul>
       </div>
 
@@ -163,24 +162,18 @@
           <h3 class="role__title">Systems and Application Engineer, Software Development</h3>
           <p class="role__org">Azbil ASPO, Singapore</p>
           <ul class="role__points">
-            <li>Designed and built an internal Streamlit application that generates Brick Schema building-metadata files from BMS point lists, owning UI/UX, workflow design, and implementation across a 5-month cycle. It completes the metadata pipeline feeding downstream configuration tooling, with planned integration into Cloud BMS deployments.</li>
             <li>Delivered the Event Log feature end to end for Cloud BMS, a cloud-native building management platform: designed a GraphQL <code>eventLogs</code> query on AWS AppSync with cursor-based pagination over DynamoDB (ULID-ordered, configurable page size), structured across adapter, application, and infrastructure layers following Clean Architecture.</li>
             <li>Built the matching Svelte frontend with an expandable table view and infinite scroll, batching 100 records per request to handle large datasets. Wrote MSW mocks simulating 330 records and network latency to verify pagination and loading states.
               <figure class="pages" aria-label="330 mocked records loaded in four requests: 100, 100, 100, then the last 30">
-                <ol class="pages__log" aria-hidden="true">
-                  <li data-page="0"><span class="pages__req">Request 1</span><span class="pages__range">records 1–100</span><span class="pages__status">100 loaded</span></li>
-                  <li data-page="1"><span class="pages__req">Request 2</span><span class="pages__range">records 101–200</span><span class="pages__status">100 loaded</span></li>
-                  <li data-page="2"><span class="pages__req">Request 3</span><span class="pages__range">records 201–300</span><span class="pages__status">100 loaded</span></li>
-                  <li data-page="3"><span class="pages__req">Request 4</span><span class="pages__range">records 301–330</span><span class="pages__status">30 loaded, end</span></li>
-                </ol>
                 <div class="pages__bar" aria-hidden="true">
-                  <span data-page="0" style="--n:100"></span><span data-page="1" style="--n:100"></span><span data-page="2" style="--n:100"></span><span data-page="3" style="--n:30"></span>
+                  <span style="--n:100"></span><span style="--n:100"></span><span style="--n:100"></span><span style="--n:30"></span>
                 </div>
-                <figcaption><span class="pages__total">330</span> mocked records, fetched 100 per request as the table scrolls</figcaption>
+                <figcaption><span class="pages__total">330</span> mocked records in 4 requests: 100, 100, 100, 30</figcaption>
               </figure>
             </li>
             <li>Contributed to the Cloud BMS MVP over 9 months in a 3-developer team using AWS Lambda, AppSync, DynamoDB, S3, CloudFront, and CloudWatch. The MVP was approved by Azbil Japan leadership for continued development toward commercial release.</li>
-            <li>Authored a developer onboarding guide for Cloud BMS environment setup (Docker, AWS configuration), reducing ramp-up time for new team members.</li>
+            <li>Designed and built an internal Streamlit application that generates Brick Schema building-metadata files from BMS point lists, owning UI/UX, workflow design, and implementation across a 5-month cycle. It completes the metadata pipeline feeding downstream configuration tooling, with planned integration into Cloud BMS deployments.</li>
+            <li>Authored a developer onboarding guide for Cloud BMS environment setup (Docker, AWS configuration). A new junior engineer used it and, with minimal guidance, set up his environment and started development on the same day.</li>
           </ul>
         </li>
 
@@ -196,7 +189,7 @@
                   <span class="compare__track"><span class="compare__bar compare__bar--before"></span></span>
                   <span class="compare__value">~3 days</span>
                 </div>
-                <div class="compare__row">
+                <div class="compare__row compare__row--result">
                   <span class="compare__label">With the tool</span>
                   <span class="compare__track"><span class="compare__bar compare__bar--after"></span></span>
                   <span class="compare__value">&lt; 5 min</span>
@@ -221,20 +214,33 @@
     <!-- Projects / L3 -->
     <section id="projects" class="floor" data-section="projects">
       <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L3</span>Projects</h2>
-      <article id="pomozoo" class="project">
+      <article id="edge-energy-optimizer" class="project">
         <div class="project__head">
-          <h3 class="project__name">PomoZoo</h3>
-          <p class="project__meta">Pomodoro productivity mobile app, May to Aug 2021</p>
+          <h3 class="project__name">edge-energy-optimizer</h3>
+          <p class="project__meta">Personal project, Oct 2026, in progress</p>
         </div>
-        <p>Co-developed a cross-platform focus timer in a 2-person team for NUS Orbital, handling notification delivery reliably across every app state:</p>
-        <ul class="states" aria-label="App states where notifications were delivered">
-          <li>Foreground</li>
-          <li>Backgrounded</li>
-          <li>Force-closed</li>
-          <li>Device powered off</li>
+        <p>Forecasts a building's energy load a day ahead. The first of five planned phases towards controlling a simulated building, shaving peak demand with a battery, and deploying at the edge.</p>
+        <figure class="compare compare--stack" aria-label="Forecast error: 45.7 kWh for the same-hour-last-week baseline compared with 34.5 kWh for the forecast model, drawn to scale">
+          <div class="compare__row">
+            <span class="compare__label">Same hour last week (baseline)</span>
+            <span class="compare__track"><span class="compare__bar compare__bar--before"></span></span>
+            <span class="compare__value">45.7 kWh</span>
+          </div>
+          <div class="compare__row compare__row--result">
+            <span class="compare__label">Forecast model</span>
+            <span class="compare__track"><span class="compare__bar compare__bar--model"></span></span>
+            <span class="compare__value">34.5 kWh</span>
+          </div>
+          <figcaption>Mean absolute error on the 2017 test year. Lower is better: 24.5% better than the baseline.</figcaption>
+        </figure>
+        <ul class="role__points">
+          <li>Real meter data from the Building Data Genome Project 2, one office building. Trained on 2016, tested on all of 2017, split by time and never shuffled.</li>
+          <li>Pipeline: naive baselines, calendar, weather and lag features, gradient boosted trees (scikit-learn), evaluation, error analysis, and a <code>forecast()</code> function with tests.</li>
+          <li>Known limits: the model guesses high (bias +13.8 kWh) because the building used about 8% less in 2017 than in 2016, and holidays are the weak spot.</li>
         </ul>
-        <p class="project__stack">React Native, Firebase</p>
-        <p class="placeholder">PLACEHOLDER: screenshot or link for PomoZoo? Send one if you have it.</p>
+        <p class="project__status">Phase 1 of 5 is done. Next: control logic tested against a simulated building (BOPTEST).</p>
+        <p class="project__stack">Python, scikit-learn, pytest, uv</p>
+        <p class="project__link"><a href="https://github.com/AD-NAP/edge-energy-optimizer">Code on GitHub</a></p>
       </article>
     </section>
 
@@ -282,8 +288,6 @@
       <a class="contact__email" href="mailto:shafik.adam98@gmail.com">shafik.adam98@gmail.com</a>
       <ul class="contact__links">
         <li><a href="https://github.com/ad-nap">GitHub</a></li>
-        <!-- TEMPORARY: LinkedIn home page until Shafik sends his profile URL -->
-        <li><a href="https://www.linkedin.com/">LinkedIn</a></li>
       </ul>
     </section>
 

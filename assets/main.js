@@ -192,22 +192,12 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
-  /* ---------- 330 records, 100 per request (like the MSW mocks) ---------- */
+  /* ---------- 330 mocked records, 100 per request: small segmented bar ---------- */
   const pages = document.querySelector(".pages");
   if (pages && !reduceMotion) {
     pages.classList.add("is-armed");
-    const rows = [...pages.querySelectorAll(".pages__log li")];
     const segs = [...pages.querySelectorAll(".pages__bar span")];
-    const play = () => {
-      rows.forEach((row, i) => {
-        const start = 200 + i * 900;          // each request waits on simulated latency
-        setTimeout(() => row.classList.add("is-loading"), start);
-        setTimeout(() => {
-          row.classList.replace("is-loading", "is-done");
-          segs[i].classList.add("is-done");
-        }, start + 600);
-      });
-    };
+    const play = () => segs.forEach((seg, i) => setTimeout(() => seg.classList.add("is-done"), 200 + i * 350));
     new IntersectionObserver((entries, obs) => {
       if (entries.some(e => e.isIntersecting)) { play(); obs.disconnect(); }
     }, { threshold: 0.6 }).observe(pages);

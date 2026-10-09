@@ -11,7 +11,9 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 - [?] LinkedIn profile URL (link hidden until then)
 - [?] Resume PDF, if you want a download link (design critique, priority 1)
-- [?] Which (currently private) repo to link from Projects (Shafik will make it public later)
+- [?] Make `AD-NAP/edge-energy-optimizer` public: the site links it ("Code on GitHub") and it returns 404 to visitors until then (step 7 critic #1, verified)
+- [?] Critic questions only Shafik can answer (step 7): real Cloud BMS or Event Log numbers; what he owned in the MVP beyond the Event Log; where GitHub Actions and SQL were used; NUS start date and the 2018 to 2025 period; whether intern to full-time was a conversion; what roles he is open to
+- [?] React Native and Firebase have no evidence on the page now that PomoZoo is gone: bring PomoZoo back as one line, or trim those skills (step 7 critic #6)
 - [?] Keep or remove the cat that sits in an L5 window at night
 
 ## Site: design and content
@@ -45,7 +47,7 @@ Design:
 - [x] 🟡 Phones: small building beside the name; About now starts on the first screen (critique priority 2)
 - [ ] 🟡 Stat panels and key numbers are buried in long bullet lists; give each role's headline result more weight
 - [ ] 🟢 Consistency: two corner radii (6px panels, round pills); reserve amber for light and progress, not labels
-- [ ] 🟢 Reduce desktop section padding from 120px to ~80px
+- [x] 🟢 Reduce desktop section padding from 120px to ~80px (step 7)
 - [ ] 🟢 Status pill looks clickable; make it plain text with the dot
 - [ ] 🟢 At night the lit windows outshine the name; consider dimming windows slightly or boosting the name
 
@@ -61,13 +63,33 @@ Shafik's decisions (2026-10-09), to be built in the step 7 run:
 - Onboarding guide: add the same-day setup result (now in `content/resume.md`).
 - Other critic questions (production metrics, tool usage counts): none to add.
 
-- [ ] 🔴 Put one line of proof near the top, using resume facts only (~3 days → under 5 minutes; MVP approved by Azbil Japan leadership) (critic #1)
-- [ ] 🔴 Hide the LinkedIn link in hero and Contact until the real URL arrives (critic #2; decided)
-- [ ] 🔴 Replace PomoZoo (and its PLACEHOLDER) with the best project(s) from `AD-NAP/vault` (critic #3, #6; decided)
-- [ ] 🟡 Onboarding guide bullet: add the same-day setup result from `content/resume.md`
-- [ ] 🟡 Time-saved chart: the empty track is 1.47:1 against the full bar at night, so both bars look full; make the track much fainter (critic #5, verified)
-- [ ] 🟡 The 330-mock-records log is the biggest graphic but shows a test fixture; shrink it, give production results the visual weight (critic #4; approved)
-- [ ] 🟢 Tighten spacing in Fun facts and Contact (critic #7; overlaps the section-padding item above)
+- [x] 🔴 Put one line of proof near the top, using resume facts only (~3 days → under 5 minutes; MVP approved by Azbil Japan leadership) (critic #1)
+- [x] 🔴 Hide the LinkedIn link in hero and Contact until the real URL arrives (critic #2; decided)
+- [x] 🔴 Replace PomoZoo (and its PLACEHOLDER) with the best project(s) from `AD-NAP/vault` (critic #3, #6; decided)
+- [x] 🟡 Onboarding guide bullet: add the same-day setup result from `content/resume.md`
+- [x] 🟡 Time-saved chart: the empty track is 1.47:1 against the full bar at night, so both bars look full; make the track much fainter (critic #5, verified)
+- [x] 🟡 The 330-mock-records log is the biggest graphic but shows a test fixture; shrink it, give production results the visual weight (critic #4; approved)
+- [x] 🟢 Tighten spacing in Fun facts and Contact (critic #7; overlaps the section-padding item above)
+
+## Step 7 run (2026-10-09)
+
+Branch `claude/step7-recruiter-critique`. Reports: `reviews/2026-10-09-recruiter-critic-step7-first.md`, `reviews/2026-10-09-recruiter-critic-step7-recheck.md`, `reviews/2026-10-09-design-critique-step7.md`, `reviews/2026-10-09-accessibility-review-step7.md`.
+
+Critic verdict after the fixes: **Maybe for mid-level, Interview for junior or associate** (first report: Interview, levelled junior+). The presentation concerns from the first report are gone; what is left is mostly facts only Shafik can supply (see Waiting on Shafik).
+
+Built:
+- [x] Hero proof line: "Cut config preparation from ~3 days to under 5 minutes. Helped build a Cloud BMS MVP approved by Azbil Japan leadership."
+- [x] Projects: `edge-energy-optimizer` (phase 1 result, to-scale MAE chart, known limits, repo link). Facts are in `content/resume.md` under "From AD-NAP/vault". No other vault project had anything to show.
+- [x] Chart track is the new `--track` token; full bar vs track is 7.36:1 night, 4.93:1 day (was 1.47 and 1.77)
+- [x] Request log is a 6px segmented bar with a one-line caption
+- [x] From the critic's first pass: Event Log bullet now leads the Azbil engineer role; the project's five-phase list became one status line
+
+Left over:
+- [ ] 🟡 Phones: Experience starts on the third screen because About repeats the hero; shorten About or move the Turtle block down (critic #5, #9)
+- [ ] 🟢 Day mode: the amber model bar is 1.65:1 against the chart track; deepen the track or the accent slightly
+- [ ] 🟢 Sidebar entry `edge-energy-optimizer.md` wraps to two lines at 1280px
+- [ ] 🟢 Phone "Files" button: consider "Sections" (critic #9)
+- [ ] 🟢 Consider one Azbil entry showing intern then full-time (needs Shafik's answer on the conversion question)
 
 ## Deploy
 
@@ -82,7 +104,10 @@ Shafik's decisions (2026-10-09), to be built in the step 7 run:
 
 - [x] `/design-review` was picked up mid-session (new project skills can load without a restart)
 - [x] `recruiter-critic` was registered mid-session too (after a short delay)
-- [ ] Confirm the Stop hook fires live: in the next session, edit a site file and finish a turn; expect "Running design check on changed site files…"
+- [ ] Confirm the Stop hook fires live. Still unverified after step 7: that session started in `Workspace/`, so this repo's `.claude/settings.json` hook and the `recruiter-critic` agent were not loaded. Start the next session inside `projects/portfolio/`, edit a site file and finish a turn; expect "Running design check on changed site files…"
+- [x] Local checker works on the Windows PC (2026-10-09): Node 24 LTS installed with winget; Playwright installed with `npm install --no-save playwright` and `npx playwright install chromium`. Note: a later plain `npm install` removes Playwright again, because it is not in `package.json`
+- [ ] Decide whether to add `playwright` to `devDependencies` so the checker installs the same way everywhere
+- [ ] The Design plugin skills (`design-critique`, `accessibility-review`) were not available in the step 7 session; its two reports are Claude's self-review in the same format
 
 ## Learning path (Claude Code building blocks)
 
@@ -92,7 +117,7 @@ Shafik's decisions (2026-10-09), to be built in the step 7 run:
 - [x] 4. First skill: `.claude/skills/design-review/` (SKILL.md plus `scripts/check.js`, run with `npm run -s check`). Tested: catches planted overflow, JS error, contrast and touch-target failures. Available as `/design-review`
 - [x] 5. First hook: Stop hook runs the design checker when a turn ends with changed site files; blocks until it passes (max 3 attempts). Pipe-tested: pass, skip-when-unchanged, block ×3, give up, recover
 - [x] 6. First subagent: `.claude/agents/recruiter-critic.md` (hiring-manager persona, read-only tools, fixed report format). First run's verdict: Interview. Registered mid-session, callable as `recruiter-critic`
-- [ ] 7. Full autonomous run: one goal in, the agent plans, builds, self-reviews, fixes, deploys
+- [~] 7. Full autonomous run: researched, planned, built, self-reviewed and pushed on `claude/step7-recruiter-critique`; waiting for Shafik's go-ahead to merge and deploy
 
 ## Corrections log
 
