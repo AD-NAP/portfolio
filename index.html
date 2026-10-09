@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mohamad Shafik, Software Engineer</title>
+  <meta name="description" content="Mohamad Shafik bin Mohamad Adam: software engineer in Singapore building cloud applications and building-management platforms with Python, TypeScript and AWS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/main.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#about">Skip to content</a>
+
+  <!-- File explorer: desktop sidebar, phone top bar -->
+  <aside class="explorer" aria-label="Site sections">
+    <div class="explorer__head">
+      <svg class="mini" viewBox="0 0 40 72" aria-hidden="true">
+        <rect class="mini__floor" data-floor="contact" x="8" y="6" width="24" height="10"/>
+        <rect class="mini__floor" data-floor="education" x="6" y="18" width="28" height="10"/>
+        <rect class="mini__floor" data-floor="projects" x="6" y="30" width="28" height="10"/>
+        <rect class="mini__floor" data-floor="experience" x="6" y="42" width="28" height="10"/>
+        <rect class="mini__floor" data-floor="skills" x="6" y="54" width="28" height="7"/>
+        <rect class="mini__floor" data-floor="about" x="6" y="63" width="28" height="7"/>
+      </svg>
+      <div>
+        <p class="explorer__title">shafik</p>
+        <p class="explorer__sub">building/</p>
+      </div>
+      <button class="explorer__toggle" aria-expanded="false" aria-controls="files">Files</button>
+    </div>
+    <nav id="files" class="files">
+      <ul>
+        <li><a href="#top" data-target="top"><span class="ext ext--ttl"></span>shafik.ttl</a></li>
+        <li><a href="#about" data-target="about"><span class="ext ext--ttl"></span>about.ttl</a></li>
+        <li><a href="#skills" data-target="skills"><span class="ext ext--ttl"></span>skills.ttl</a></li>
+        <li class="dir"><a href="#experience" data-target="experience"><span class="ext ext--dir"></span>experience/</a>
+          <ul>
+            <li><a href="#azbil-engineer" data-target="experience"><span class="ext ext--md"></span>azbil-engineer.md</a></li>
+            <li><a href="#azbil-intern" data-target="experience"><span class="ext ext--md"></span>azbil-intern.md</a></li>
+            <li><a href="#ground-labs" data-target="experience"><span class="ext ext--md"></span>ground-labs.md</a></li>
+          </ul>
+        </li>
+        <li class="dir"><a href="#projects" data-target="projects"><span class="ext ext--dir"></span>projects/</a>
+          <ul>
+            <li><a href="#pomozoo" data-target="projects"><span class="ext ext--md"></span>pomozoo.md</a></li>
+          </ul>
+        </li>
+        <li><a href="#education" data-target="education"><span class="ext ext--md"></span>education.md</a></li>
+        <li><a href="#contact" data-target="contact"><span class="ext ext--ttl"></span>contact.ttl</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main>
+    <!-- Hero -->
+    <header id="top" class="hero" data-section="top">
+      <div class="hero__text">
+        <h1 class="name">
+          <span class="name__main">Mohamad Shafik</span>
+          <span class="name__rest">bin Mohamad Adam</span>
+        </h1>
+        <p class="hero__role">Software engineer building cloud applications and building&#8209;management platforms with Python, TypeScript and AWS.</p>
+        <p class="hero__status"><span class="dot" aria-hidden="true"></span>Systems and Application Engineer at Azbil, Singapore</p>
+      </div>
+
+      <figure class="tower" aria-label="A building whose floors are the sections of this site">
+        <svg viewBox="0 0 300 440" role="img" aria-hidden="true">
+          <defs>
+            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+              <path d="M10 0H0V10" fill="none" class="tower__gridline"/>
+            </pattern>
+          </defs>
+          <rect x="0" y="0" width="300" height="440" fill="url(#grid)"/>
+          <!-- antenna -->
+          <line class="tower__line" x1="112" y1="14" x2="112" y2="46"/>
+          <circle class="tower__beacon" cx="112" cy="12" r="3.5"/>
+          <g class="tower__floors"></g>
+          <line class="tower__line" x1="10" y1="426" x2="290" y2="426"/>
+        </svg>
+        <figcaption class="tower__caption">Every floor is a section. Select one to go there.</figcaption>
+      </figure>
+    </header>
+
+    <!-- About / ground floor -->
+    <section id="about" class="floor" data-section="about">
+      <h2 class="floor__title"><span class="floor__level">G</span>About</h2>
+      <div class="about">
+        <p class="lede">Software engineer with experience building internal tooling and cloud applications across Python, TypeScript, and AWS. NUS Computer Science graduate currently developing building-management platforms and semantic-metadata tooling at Azbil.</p>
+        <pre class="code" aria-label="The same summary written as Turtle, the format Brick Schema building metadata is stored in"><code><span class="c"># shafik.ttl</span>
+<span class="k">@prefix</span> : <span class="s">&lt;#&gt;</span> .
+
+<span class="n">:shafik</span> <span class="k">a</span> <span class="n">:SoftwareEngineer</span> ;
+  <span class="p">:basedIn</span>     <span class="s">"Singapore"</span> ;
+  <span class="p">:worksAt</span>     <span class="n">:Azbil</span> ;
+  <span class="p">:graduatedFrom</span> <span class="n">:NUS</span> ;
+  <span class="p">:builds</span>      <span class="n">:BuildingManagementPlatforms</span> ,
+               <span class="n">:SemanticMetadataTooling</span> ;
+  <span class="p">:writes</span>      <span class="s">"Python"</span>, <span class="s">"TypeScript"</span> ;
+  <span class="p">:deploysTo</span>   <span class="n">:AWS</span> .</code></pre>
+      </div>
+    </section>
+
+    <!-- Skills / L1 -->
+    <section id="skills" class="floor" data-section="skills">
+      <h2 class="floor__title"><span class="floor__level">L1</span>Skills</h2>
+      <dl class="skills">
+        <div><dt>Languages</dt><dd>Python, SQL, JavaScript, TypeScript</dd></div>
+        <div><dt>Frontend</dt><dd>Streamlit, Svelte, React, React Native, HTML/CSS</dd></div>
+        <div class="skills__wide"><dt>Cloud &amp; infrastructure</dt><dd>AWS (Lambda, AppSync, DynamoDB, S3, CloudFront, CloudWatch), Docker, GitHub Actions</dd></div>
+        <div><dt>Data &amp; APIs</dt><dd>DynamoDB, GraphQL, SPARQL, Firebase, RDF/Brick Schema</dd></div>
+        <div><dt>Practices &amp; tools</dt><dd>Git, Clean Architecture, pytest, MSW, GitHub Copilot</dd></div>
+        <div><dt>Familiar</dt><dd>Java</dd></div>
+      </dl>
+    </section>
+
+    <!-- Experience / L2 -->
+    <section id="experience" class="floor" data-section="experience">
+      <h2 class="floor__title"><span class="floor__level">L2</span>Experience</h2>
+      <ol class="timeline">
+        <li id="azbil-engineer" class="role">
+          <p class="role__when"><time datetime="2026-01">Jan 2026</time> to present</p>
+          <h3 class="role__title">Systems and Application Engineer, Software Development</h3>
+          <p class="role__org">Azbil ASPO, Singapore</p>
+          <ul class="role__points">
+            <li>Designed and built an internal Streamlit application that generates Brick Schema building-metadata files from BMS point lists, owning UI/UX, workflow design, and implementation across a 5-month cycle. It completes the metadata pipeline feeding downstream configuration tooling, with planned integration into Cloud BMS deployments.</li>
+            <li>Delivered the Event Log feature end to end for Cloud BMS, a cloud-native building management platform: designed a GraphQL <code>eventLogs</code> query on AWS AppSync with cursor-based pagination over DynamoDB (ULID-ordered, configurable page size), structured across adapter, application, and infrastructure layers following Clean Architecture.</li>
+            <li>Built the matching Svelte frontend with an expandable table view and infinite scroll, batching 100 records per request to handle large datasets. Wrote MSW mocks simulating 330 records and network latency to verify pagination and loading states.
+              <figure class="batches" aria-label="330 mocked records loaded in batches of 100: three full batches and a final batch of 30">
+                <div class="batches__grid" aria-hidden="true"></div>
+                <figcaption><span class="batches__count">330</span> mocked records, fetched 100 at a time</figcaption>
+              </figure>
+            </li>
+            <li>Contributed to the Cloud BMS MVP over 9 months in a 3-developer team using AWS Lambda, AppSync, DynamoDB, S3, CloudFront, and CloudWatch. The MVP was approved by Azbil Japan leadership for continued development toward commercial release.</li>
+            <li>Authored a developer onboarding guide for Cloud BMS environment setup (Docker, AWS configuration), reducing ramp-up time for new team members.</li>
+          </ul>
+        </li>
+
+        <li id="azbil-intern" class="role">
+          <p class="role__when"><time datetime="2025-06">Jun 2025</time> to <time datetime="2025-12">Dec 2025</time></p>
+          <h3 class="role__title">Software Engineer Intern</h3>
+          <p class="role__org">Azbil ASPO, Singapore</p>
+          <ul class="role__points">
+            <li>Built a Python tool that parses Brick Schema TTL building-metadata files and runs SPARQL queries to auto-generate customer product configuration files, reducing preparation time from approximately 3 days of manual engineering work to under 5 minutes.
+              <figure class="compare" aria-label="Preparation time: about 3 days by hand compared with under 5 minutes with the tool, drawn to scale">
+                <div class="compare__row">
+                  <span class="compare__label">By hand</span>
+                  <span class="compare__track"><span class="compare__bar compare__bar--before"></span></span>
+                  <span class="compare__value">~3 days</span>
+                </div>
+                <div class="compare__row">
+                  <span class="compare__label">With the tool</span>
+                  <span class="compare__track"><span class="compare__bar compare__bar--after"></span></span>
+                  <span class="compare__value">&lt; 5 min</span>
+                </div>
+                <figcaption>Drawn to scale. The second bar is 0.1% of the first.</figcaption>
+              </figure>
+            </li>
+          </ul>
+        </li>
+
+        <li id="ground-labs" class="role">
+          <p class="role__when"><time datetime="2019-08">Aug 2019</time> to <time datetime="2019-11">Nov 2019</time></p>
+          <h3 class="role__title">Software Developer Intern</h3>
+          <p class="role__org">Ground Labs, Singapore</p>
+          <ul class="role__points">
+            <li>Developed frontend features for a desktop data-discovery product, including a four-pane resizable window layout and match highlighting within search results.</li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Projects / L3 -->
+    <section id="projects" class="floor" data-section="projects">
+      <h2 class="floor__title"><span class="floor__level">L3</span>Projects</h2>
+      <article id="pomozoo" class="project">
+        <div class="project__head">
+          <h3 class="project__name">PomoZoo</h3>
+          <p class="project__meta">Pomodoro productivity mobile app, May to Aug 2021</p>
+        </div>
+        <p>Co-developed a cross-platform focus timer in a 2-person team for NUS Orbital, handling notification delivery reliably across every app state:</p>
+        <ul class="states" aria-label="App states where notifications were delivered">
+          <li>Foreground</li>
+          <li>Backgrounded</li>
+          <li>Force-closed</li>
+          <li>Device powered off</li>
+        </ul>
+        <p class="project__stack">React Native, Firebase</p>
+        <p class="placeholder">PLACEHOLDER: screenshot or link for PomoZoo? Send one if you have it.</p>
+      </article>
+    </section>
+
+    <!-- Education / L4 -->
+    <section id="education" class="floor" data-section="education">
+      <h2 class="floor__title"><span class="floor__level">L4</span>Education</h2>
+      <div class="edu">
+        <article>
+          <h3>National University of Singapore</h3>
+          <p class="edu__what">Bachelor of Computing (Computer Science), Honours (Merit), School of Computing, Jan 2026</p>
+          <p class="edu__more">Coursework: Software Engineering; Data Structures and Algorithms; Design and Analysis of Algorithms; Programming Methodology I &amp; II; Computer Organisation; Introduction to AI.</p>
+        </article>
+        <article>
+          <h3>Singapore Polytechnic</h3>
+          <p class="edu__what">Diploma in Electrical and Electronic Engineering (Computer and Power specialisation), Apr 2015 to May 2018</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Contact / roof -->
+    <section id="contact" class="floor floor--roof" data-section="contact">
+      <h2 class="floor__title"><span class="floor__level">R</span>Contact</h2>
+      <p class="contact__lede">The fastest way to reach me is email.</p>
+      <a class="contact__email" href="mailto:shafik.adam98@gmail.com">shafik.adam98@gmail.com</a>
+      <ul class="contact__links">
+        <li><a href="#" class="is-placeholder" aria-disabled="true">LinkedIn (PLACEHOLDER: URL needed)</a></li>
+        <li><a href="#" class="is-placeholder" aria-disabled="true">GitHub (PLACEHOLDER: URL needed)</a></li>
+      </ul>
+    </section>
+
+    <footer class="foot">
+      <p>Built with plain HTML, CSS and JavaScript. Hosted on GitHub Pages.</p>
+    </footer>
+  </main>
+</body>
+</html>
