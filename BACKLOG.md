@@ -54,7 +54,7 @@ Design:
 
 - [x] Make `main` the default branch (done by Shafik)
 - [x] GitHub Pages live from `main` at https://ad-nap.github.io/portfolio-v0.1/ (verified: page, CSS, JS load with no errors in both themes; project files return 404)
-- [x] Repo renamed to `AD-NAP/portfolio-v0.1` (2026-10-09). As a project site it will be served at `https://ad-nap.github.io/portfolio-v0.1/` once Pages is enabled. A root URL (`https://ad-nap.github.io/`) would need the repo named `ad-nap.github.io`.
+- [x] Repo renamed to `AD-NAP/portfolio-v0.1` (2026-10-09). Served as a project site at `https://ad-nap.github.io/portfolio-v0.1/`. A root URL (`https://ad-nap.github.io/`) would need the repo named `ad-nap.github.io`.
 - [x] Keep working files out of the published site: `_config.yml` excludes them (Jekyll 3.10 test build publishes only `index.html` and `assets/`)
 
 ## Tooling
@@ -67,7 +67,7 @@ Design:
 - [x] 1. Hands-on v1 with no setup; collect corrections (v1 to v4)
 - [x] 2. Turn the corrections log into `CLAUDE.md` (approved; `content/resume.md` added as the source of facts)
 - [x] 3. Plan mode for a bigger change: the v4 accessibility and design fix batch (plan approved, then built)
-- [x] 4. First skill: `.claude/skills/design-review/` (SKILL.md plus `scripts/check.js`, run with `npm run -s check`). Tested: catches planted overflow, JS error, contrast and touch-target failures. Loads as `/design-review` from the next session
+- [x] 4. First skill: `.claude/skills/design-review/` (SKILL.md plus `scripts/check.js`, run with `npm run -s check`). Tested: catches planted overflow, JS error, contrast and touch-target failures. Available as `/design-review`
 - [x] 5. First hook: Stop hook runs the design checker when a turn ends with changed site files; blocks until it passes (max 3 attempts). Pipe-tested: pass, skip-when-unchanged, block ×3, give up, recover
 - [ ] 6. First subagent: "recruiter critic" reviewing the site as a hiring manager. Reference: `design-critique`
 - [ ] 7. Full autonomous run: one goal in, the agent plans, builds, self-reviews, fixes, deploys
