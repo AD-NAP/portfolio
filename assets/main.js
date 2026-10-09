@@ -13,13 +13,13 @@
   /* ---------- Hero building: one storey per section ---------- */
   // Top to bottom, matching the order you reach them going up.
   const storeys = [
-    { id: "contact",    level: "R",  file: "contact.ttl",   x: 52, w: 120, h: 46, cols: 4, rows: 1 },
-    { id: "fun",        level: "L5", file: "fun-facts.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "education",  level: "L4", file: "education.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "projects",   level: "L3", file: "projects/",     x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "experience", level: "L2", file: "experience/",   x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "skills",     level: "L1", file: "skills.ttl",    x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "about",      level: "G",  file: "about.ttl",     x: 26, w: 172, h: 76, cols: 6, rows: 1, door: true },
+    { id: "contact",      title: "Contact",    where: "roof",         level: "R",  file: "contact.ttl",   x: 52, w: 120, h: 46, cols: 4, rows: 1 },
+    { id: "fun",          title: "Fun facts",  where: "level 5",      level: "L5", file: "fun-facts.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "education",    title: "Education",  where: "level 4",      level: "L4", file: "education.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "projects",     title: "Projects",   where: "level 3",      level: "L3", file: "projects/",     x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "experience",   title: "Experience", where: "level 2",      level: "L2", file: "experience/",   x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "skills",       title: "Skills",     where: "level 1",      level: "L1", file: "skills.ttl",    x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "about",        title: "About",      where: "ground floor", level: "G",  file: "about.ttl",     x: 26, w: 172, h: 76, cols: 6, rows: 1, door: true },
   ];
   // The cat sits in one window on the fun-facts floor (row 2, column 4).
   const CAT = { id: "fun", row: 1, col: 3 };
@@ -29,7 +29,7 @@
   if (floorsGroup) {
     let y = 46;
     for (const s of storeys) {
-      const a = svgEl("a", { href: `#${s.id}`, class: "storey", "aria-label": `Go to ${s.id}` });
+      const a = svgEl("a", { href: `#${s.id}`, class: "storey", "aria-label": `Go to ${s.title}, ${s.where}` });
       a.appendChild(svgEl("rect", { x: s.x, y, width: s.w, height: s.h, class: "storey__body" }));
 
       const padX = 14, padTop = 10, winW = 16, winH = 13;
@@ -62,10 +62,10 @@
         windows.push({ el: door });
       }
 
-      const tag = svgEl("text", { x: 8, y: y + s.h / 2 + 3, class: "storey__tag" });
+      const tag = svgEl("text", { x: 8, y: y + s.h / 2 + 3, class: "storey__tag", "aria-hidden": "true" });
       tag.textContent = s.level;
       a.appendChild(tag);
-      const label = svgEl("text", { x: 208, y: y + s.h / 2 + 3, class: "storey__label" });
+      const label = svgEl("text", { x: 208, y: y + s.h / 2 + 3, class: "storey__label", "aria-hidden": "true" });
       label.textContent = s.file;
       a.appendChild(label);
 
@@ -73,6 +73,13 @@
       y += s.h;
     }
   }
+
+  // Phones hide the floor labels and tags, so crop to just the building.
+  const towerSvg = document.querySelector(".tower svg");
+  const phone = window.matchMedia("(max-width: 900px)");
+  const fitTower = () => towerSvg?.setAttribute("viewBox", phone.matches ? "20 0 184 470" : "0 0 300 470");
+  fitTower();
+  phone.addEventListener("change", fitTower);
 
   const setWindow = (w, on) => {
     w.el.classList.toggle("is-on", on);
@@ -114,11 +121,10 @@
 
   /* ---------- Day / night toggle ---------- */
   const toggleBtn = document.querySelector(".theme-toggle");
-  const toggleText = document.querySelector(".theme-toggle__text");
   const syncToggle = () => {
     const night = isNight();
-    toggleBtn?.setAttribute("aria-pressed", String(!night));
-    if (toggleText) toggleText.textContent = night ? "Switch to day" : "Switch to night";
+    // Fixed name "Night mode"; pressed means night is on.
+    toggleBtn?.setAttribute("aria-pressed", String(night));
     toggleBtn?.setAttribute("title", night ? "Switch to day" : "Switch to night");
   };
   syncToggle();
@@ -162,10 +168,15 @@
     const open = explorer.classList.toggle("is-open");
     filesToggle.setAttribute("aria-expanded", String(open));
   });
-  links.forEach(l => l.addEventListener("click", () => {
+  const closeFiles = (returnFocus) => {
+    if (!explorer.classList.contains("is-open")) return;
     explorer.classList.remove("is-open");
     filesToggle?.setAttribute("aria-expanded", "false");
-  }));
+    if (returnFocus) filesToggle?.focus();
+  };
+  links.forEach(l => l.addEventListener("click", () => closeFiles(false)));
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeFiles(true); });
+  document.addEventListener("click", e => { if (!explorer.contains(e.target)) closeFiles(false); });
 
   /* ---------- Experience timeline: the line fills as you scroll ---------- */
   const timeline = document.querySelector(".timeline");

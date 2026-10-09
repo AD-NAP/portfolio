@@ -48,7 +48,7 @@
         <p class="explorer__title">shafik</p>
         <p class="explorer__sub">building/</p>
       </div>
-      <button class="theme-toggle" type="button" aria-pressed="false">
+      <button class="theme-toggle" type="button" aria-label="Night mode" aria-pressed="true">
         <svg class="theme-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
           <g class="theme-toggle__sun">
             <circle cx="12" cy="12" r="4.5"/>
@@ -56,7 +56,6 @@
           </g>
           <path class="theme-toggle__moon" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/>
         </svg>
-        <span class="theme-toggle__text">Switch to day</span>
       </button>
       <button class="explorer__toggle" type="button" aria-expanded="false" aria-controls="files">Files</button>
     </div>
@@ -98,20 +97,26 @@
         <h1 class="name">Shafik Adam</h1>
         <p class="hero__role">Software engineer building cloud applications and building&#8209;management platforms with Python, TypeScript and AWS.</p>
         <p class="hero__status"><span class="dot" aria-hidden="true"></span>Systems and Application Engineer at Azbil, Singapore</p>
+        <ul class="hero__links" aria-label="Contact">
+          <li><a href="mailto:shafik.adam98@gmail.com">Email</a></li>
+          <li><a href="https://github.com/ad-nap">GitHub</a></li>
+          <!-- TEMPORARY: LinkedIn home page until Shafik sends his profile URL -->
+          <li><a href="https://www.linkedin.com/">LinkedIn</a></li>
+        </ul>
       </div>
 
       <figure class="tower" aria-label="A building whose floors are the sections of this site">
-        <svg viewBox="0 0 300 470" role="img" aria-hidden="true">
-          <defs>
+        <svg viewBox="0 0 300 470">
+          <defs aria-hidden="true">
             <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
               <path d="M10 0H0V10" fill="none" class="tower__gridline"/>
             </pattern>
           </defs>
-          <rect x="0" y="60" width="300" height="410" fill="url(#grid)"/>
-          <line class="tower__line" x1="112" y1="14" x2="112" y2="46"/>
-          <circle class="tower__beacon" cx="112" cy="12" r="3.5"/>
+          <rect x="0" y="60" width="300" height="410" fill="url(#grid)" aria-hidden="true"/>
+          <line class="tower__line" x1="112" y1="14" x2="112" y2="46" aria-hidden="true"/>
+          <circle class="tower__beacon" cx="112" cy="12" r="3.5" aria-hidden="true"/>
           <g class="tower__floors"></g>
-          <line class="tower__line" x1="10" y1="456" x2="290" y2="456"/>
+          <line class="tower__line" x1="10" y1="456" x2="290" y2="456" aria-hidden="true"/>
         </svg>
         <figcaption class="tower__caption">Select a floor to visit that section.</figcaption>
       </figure>
@@ -119,7 +124,7 @@
 
     <!-- About / ground floor -->
     <section id="about" class="floor" data-section="about">
-      <h2 class="floor__title"><span class="floor__level">G</span>About</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">G</span>About</h2>
       <div class="about">
         <p class="lede">Software engineer with experience building internal tooling and cloud applications across Python, TypeScript, and AWS. NUS Computer Science graduate currently developing building-management platforms and semantic-metadata tooling at Azbil.</p>
         <pre class="code" aria-label="The same summary written as Turtle, the format Brick Schema building metadata is stored in"><code><span class="c"># shafik.ttl</span>
@@ -138,7 +143,7 @@
 
     <!-- Skills / L1 -->
     <section id="skills" class="floor" data-section="skills">
-      <h2 class="floor__title"><span class="floor__level">L1</span>Skills</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L1</span>Skills</h2>
       <dl class="skills">
         <div><dt>Languages</dt><dd>Python, SQL, JavaScript, TypeScript</dd></div>
         <div><dt>Frontend</dt><dd>Streamlit, Svelte, React, React Native, HTML/CSS</dd></div>
@@ -151,7 +156,7 @@
 
     <!-- Experience / L2 -->
     <section id="experience" class="floor" data-section="experience">
-      <h2 class="floor__title"><span class="floor__level">L2</span>Experience</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L2</span>Experience</h2>
       <ol class="timeline">
         <li id="azbil-engineer" class="role">
           <p class="role__when"><time datetime="2026-01">Jan 2026</time> to present</p>
@@ -215,7 +220,7 @@
 
     <!-- Projects / L3 -->
     <section id="projects" class="floor" data-section="projects">
-      <h2 class="floor__title"><span class="floor__level">L3</span>Projects</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L3</span>Projects</h2>
       <article id="pomozoo" class="project">
         <div class="project__head">
           <h3 class="project__name">PomoZoo</h3>
@@ -235,7 +240,7 @@
 
     <!-- Education / L4 -->
     <section id="education" class="floor" data-section="education">
-      <h2 class="floor__title"><span class="floor__level">L4</span>Education</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L4</span>Education</h2>
       <div class="edu">
         <article>
           <h3>National University of Singapore</h3>
@@ -251,7 +256,7 @@
 
     <!-- Fun facts / L5 -->
     <section id="fun" class="floor" data-section="fun">
-      <h2 class="floor__title"><span class="floor__level">L5</span>Fun facts</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L5</span>Fun facts</h2>
       <div class="fun">
         <p class="fun__fact">I love cats and pandas.</p>
         <div class="riddle">
@@ -262,7 +267,7 @@
           <p class="riddle__q">Can you spot the panda? Hint: GitHub.</p>
           <button class="riddle__btn" type="button" aria-expanded="false" aria-controls="riddle-answer">Show me</button>
           <div id="riddle-answer" class="riddle__a" hidden>
-            <p class="flip" aria-label="ad-nap, read backwards, is pan-da"><span class="flip__word" aria-hidden="true"></span></p>
+            <p class="flip"><span class="visually-hidden">ad-nap read backwards is pan-da</span><span class="flip__word" aria-hidden="true"></span></p>
             <p>My GitHub username is <a href="https://github.com/ad-nap">ad-nap</a>. Read it backwards. And GitHub's logo is a cat, so that covers both.</p>
           </div>
         </div>
@@ -272,7 +277,7 @@
 
     <!-- Contact / roof -->
     <section id="contact" class="floor floor--roof" data-section="contact">
-      <h2 class="floor__title"><span class="floor__level">R</span>Contact</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">R</span>Contact</h2>
       <p class="contact__lede">The fastest way to reach me is email.</p>
       <a class="contact__email" href="mailto:shafik.adam98@gmail.com">shafik.adam98@gmail.com</a>
       <ul class="contact__links">

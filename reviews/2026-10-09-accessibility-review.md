@@ -83,3 +83,25 @@ Order is logical and nothing traps focus. The phone "Files" menu does not close 
 2. **Day-mode focus visibility (#6, #7)**: affects keyboard users in day mode, who can't see where focus is.
 3. **Contrast (#1, #2)**: affects low-vision readers; two token changes.
 4. **Minor polish (#3, #4, #8, #9, #10)**: headings, riddle label, target sizes, toggle semantics.
+
+---
+
+## Re-check after fixes (v4)
+**Date:** 2026-10-09 | Same method as above.
+
+| # | Finding | Status | Evidence |
+|---|---------|--------|----------|
+| 1 | Floor tags contrast | ✅ Fixed | Now `--muted`: 7.55:1 night, 5.00:1 day. Hidden on phones |
+| 2 | Day code comments | ✅ Fixed | `#55697F` on `#F3F8FD` = 5.29:1 |
+| 3 | Badge read in headings | ✅ Fixed | Headings announce "About", "Skills", … |
+| 4 | Riddle label | ✅ Fixed | Announced "ad-nap read backwards is pan-da" |
+| 5 | Floor links hidden from AT | ✅ Fixed | 7 links announced, e.g. "Go to Experience, level 2" |
+| 6 | Day focus ring | ✅ Fixed | New `--focus` token: navy in day (13.0:1), amber at night (9.7:1) |
+| 7 | Floors had no outline | ✅ Fixed | Focused floor gets an outline, a 3px border in the focus colour, and lights up |
+| 8 | Sky motion | ✅ Fixed | Twinkle stops after 3 cycles; clouds drift ~10s then hold; shooting star lasts 1.1s |
+| 9 | Touch targets | ✅ Fixed | Theme toggle, Files, contact pills, riddle button, skip link ≥44px. Phone floors are 28–33px (above the 24px WCAG 2.2 minimum; the Files menu has the same links) |
+| 10 | Toggle semantics | ✅ Fixed | "Night mode, toggle button, pressed/not pressed" |
+| 11 | Floor link names | ✅ Fixed | Folded into #5 |
+| – | Files menu Escape | ✅ Fixed | Escape closes it and returns focus to Files; tapping outside closes it |
+
+**axe-core:** 0 violations in all 4 runs (night/day × 390/1280). **200% zoom:** no horizontal scroll. **Still to do by a human:** VoiceOver/NVDA pass.

@@ -20,7 +20,8 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 - [ ] Building tilts slightly with the mouse (desktop only); not picked, parked
 - [ ] Phones: stars sit behind the hero text and read as specks inside letters; keep stars out of the text area or dim them there
-- [ ] Phones: status pill ("Systems and Application Engineer at Azbil, Singapore") wraps to two lines; consider a shorter label
+- [ ] Phones: status pill ("Systems and Application Engineer at Azbil, Singapore") wraps to two lines; consider a shorter label or plain text
+- [ ] Phones: the sun is partly tucked under the top bar in day mode
 - [ ] Favicon (a tiny building, lit at night)
 - [ ] Social preview card (Open Graph image and tags) so links look good when shared
 
@@ -28,22 +29,22 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 Full reports: `reviews/2026-10-09-design-critique.md` and `reviews/2026-10-09-accessibility-review.md`.
 
-Accessibility (fix as one batch):
-- [ ] 🔴 Building floor links are focusable inside an `aria-hidden` SVG; expose them with readable names, or remove them from the Tab order (a11y #5, #11)
-- [ ] 🟡 Day-mode focus ring is 1.67:1; use a dark ring in day mode (a11y #6)
-- [ ] 🟡 Building floors have `outline: none`; give focused floors a visible outline (a11y #7)
-- [ ] 🟡 Floor tags (`R`, `L5`…`G`) fail contrast in both themes; switch to `--muted` (a11y #1)
-- [ ] 🟡 Day-mode code comments are 3.85:1; darken `--code-c` (a11y #2)
-- [ ] 🟢 Hide the floor badge from screen readers so headings read "About", not "G About" (a11y #3)
-- [ ] 🟢 Riddle answer: replace `aria-label` on `<p>` with visually hidden text (a11y #4)
-- [ ] 🟢 Theme toggle: fixed label with `aria-pressed`, or a changing label without it (a11y #10)
-- [ ] 🟢 Touch targets to 44px on phones: theme toggle, Files, GitHub/LinkedIn pills (a11y #9)
-- [ ] 🟢 Sky motion has no on-page pause (only reduced-motion stops it) (a11y #8)
-- [ ] 🟢 Phone Files menu: close on Escape and outside tap
+Accessibility (all fixed in v4; see the re-check section of the report):
+- [x] 🔴 Building floor links are focusable inside an `aria-hidden` SVG; expose them with readable names, or remove them from the Tab order (a11y #5, #11)
+- [x] 🟡 Day-mode focus ring is 1.67:1; use a dark ring in day mode (a11y #6)
+- [x] 🟡 Building floors have `outline: none`; give focused floors a visible outline (a11y #7)
+- [x] 🟡 Floor tags (`R`, `L5`…`G`) fail contrast in both themes; switch to `--muted` (a11y #1)
+- [x] 🟡 Day-mode code comments are 3.85:1; darken `--code-c` (a11y #2)
+- [x] 🟢 Hide the floor badge from screen readers so headings read "About", not "G About" (a11y #3)
+- [x] 🟢 Riddle answer: replace `aria-label` on `<p>` with visually hidden text (a11y #4)
+- [x] 🟢 Theme toggle: fixed label with `aria-pressed`, or a changing label without it (a11y #10)
+- [x] 🟢 Touch targets to 44px on phones: theme toggle, Files, GitHub/LinkedIn pills (a11y #9)
+- [x] 🟢 Sky motion has no on-page pause (only reduced-motion stops it) (a11y #8)
+- [x] 🟢 Phone Files menu: close on Escape and outside tap
 
 Design:
-- [ ] 🔴 Recruiter fast path: email, GitHub, LinkedIn links in the hero (critique priority 1)
-- [ ] 🟡 Phones: shrink or reposition the building so About is one swipe away (critique priority 2)
+- [x] 🔴 Recruiter fast path: email, GitHub, LinkedIn links in the hero (critique priority 1)
+- [x] 🟡 Phones: small building beside the name; About now starts on the first screen (critique priority 2)
 - [ ] 🟡 Stat panels and key numbers are buried in long bullet lists; give each role's headline result more weight
 - [ ] 🟢 Consistency: two corner radii (6px panels, round pills); reserve amber for light and progress, not labels
 - [ ] 🟢 Reduce desktop section padding from 120px to ~80px
@@ -60,7 +61,7 @@ Design:
 
 - [~] 1. Hands-on v1 with no setup; collect corrections (v1, v2, v3 done, iterating)
 - [ ] 2. Turn the corrections log into `CLAUDE.md`
-- [ ] 3. Plan mode for a bigger change (Shafik reviews the plan before anything is built)
+- [x] 3. Plan mode for a bigger change: the v4 accessibility and design fix batch (plan approved, then built)
 - [ ] 4. First skill: `design-review` (screenshot at several widths, check contrast, spacing, overflow, fix, repeat). Reference: the Design plugin's `design-critique` and `accessibility-review`
 - [ ] 5. First hook (e.g. a link check or screenshot run after edits)
 - [ ] 6. First subagent: "recruiter critic" reviewing the site as a hiring manager. Reference: `design-critique`
@@ -84,6 +85,10 @@ Design:
 14. LinkedIn links to the LinkedIn home page temporarily, until Shafik sends his profile URL.
 15. Chosen animations: rare shooting star at night (20-40s apart), floor hover preview, cat tail flick on the fun-facts floor. Mouse tilt was not picked.
 16. Use the Design plugin's `design-critique` and `accessibility-review` as the review standard; save reports under `reviews/` and triage findings into this backlog.
+17. Building floors are real links: keyboard-focusable, announced by screen readers ("Go to Experience, level 2"), with a visible focus outline.
+18. On phones, the building sits small beside the name so content starts on the first screen.
+19. Contact links (email, GitHub, LinkedIn) belong in the hero, not only at the bottom.
+20. Bigger changes go through plan mode first; Shafik approves the plan before building.
 
 ## Done
 
@@ -96,3 +101,5 @@ Design:
 - [x] Design plugin installed (`design-critique`, `accessibility-review`)
 - [x] v3: shooting star, floor hover preview, perched cat with tail flick, LinkedIn link (commit `6f05f35`)
 - [x] First design critique and accessibility review run and triaged (see Review findings)
+- [x] Merged everything into `main` (created `main` at `5de676b`)
+- [x] v4: all 11 accessibility findings fixed, hero contact links, phone hero with small building (axe: 0 violations)
