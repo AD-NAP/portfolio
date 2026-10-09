@@ -9,12 +9,9 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
-- [?] LinkedIn profile URL (currently links to the LinkedIn home page as a stand-in)
+- [?] LinkedIn profile URL (link hidden until then)
 - [?] Resume PDF, if you want a download link (design critique, priority 1)
-- [?] More projects to add (Projects section is on hold until these arrive)
-- [?] PomoZoo screenshot or link (placeholder in the card)
-- [?] Public repos worth linking for a backend role (recruiter critic #6)
-- [?] Any shareable production results: Event Log / Cloud BMS rollout, how often the config tool has been used, onboarding-guide effect (recruiter critic questions; only if real and shareable)
+- [?] Which (currently private) repo to link from Projects (Shafik will make it public later)
 - [?] Keep or remove the cat that sits in an L5 window at night
 
 ## Site: design and content
@@ -55,11 +52,21 @@ Design:
 ## Recruiter critique (2026-10-09)
 
 Report: `reviews/2026-10-09-recruiter-critic.md`. Verdict: **Interview**, but the strongest proof sits too far down the page.
+
+Shafik's decisions (2026-10-09), to be built in the step 7 run:
+- LinkedIn: hide the link (hero and Contact) until he sends the URL.
+- Projects: remove PomoZoo; replace it with the best project(s) from his private repo `AD-NAP/vault`, adding more if they fit. Show the pick in the plan first.
+- Request log: OK to shrink it so production results get the visual weight.
+- Link a project repo that is private for now (he'll make it public); confirm which one.
+- Onboarding guide: add the same-day setup result (now in `content/resume.md`).
+- Other critic questions (production metrics, tool usage counts): none to add.
+
 - [ ] 🔴 Put one line of proof near the top, using resume facts only (~3 days → under 5 minutes; MVP approved by Azbil Japan leadership) (critic #1)
-- [ ] 🔴 LinkedIn points to the LinkedIn home page in hero and Contact; hide it until the real URL arrives, or swap it in (critic #2; needs Shafik's call)
-- [ ] 🟡 Visible PomoZoo `PLACEHOLDER` reads as unfinished on a live site; hide it while Projects is on hold (critic #3; needs Shafik's call)
+- [ ] 🔴 Hide the LinkedIn link in hero and Contact until the real URL arrives (critic #2; decided)
+- [ ] 🔴 Replace PomoZoo (and its PLACEHOLDER) with the best project(s) from `AD-NAP/vault` (critic #3, #6; decided)
+- [ ] 🟡 Onboarding guide bullet: add the same-day setup result from `content/resume.md`
 - [ ] 🟡 Time-saved chart: the empty track is 1.47:1 against the full bar at night, so both bars look full; make the track much fainter (critic #5, verified)
-- [ ] 🟡 The 330-mock-records log is the biggest graphic but shows a test fixture; shrink it, give production results the visual weight (critic #4; the log was Shafik's pick, so ask first)
+- [ ] 🟡 The 330-mock-records log is the biggest graphic but shows a test fixture; shrink it, give production results the visual weight (critic #4; approved)
 - [ ] 🟢 Tighten spacing in Fun facts and Contact (critic #7; overlaps the section-padding item above)
 
 ## Deploy
@@ -72,7 +79,7 @@ Report: `reviews/2026-10-09-recruiter-critic.md`. Verdict: **Interview**, but th
 ## Tooling
 
 - [x] `/design-review` was picked up mid-session (new project skills can load without a restart)
-- [ ] Confirm `recruiter-critic` is listed as an agent in the next session (subagents load at session start, unlike skills)
+- [x] `recruiter-critic` was registered mid-session too (after a short delay)
 - [ ] Confirm the Stop hook fires live: in the next session, edit a site file and finish a turn; expect "Running design check on changed site files…"
 
 ## Learning path (Claude Code building blocks)
@@ -82,7 +89,7 @@ Report: `reviews/2026-10-09-recruiter-critic.md`. Verdict: **Interview**, but th
 - [x] 3. Plan mode for a bigger change: the v4 accessibility and design fix batch (plan approved, then built)
 - [x] 4. First skill: `.claude/skills/design-review/` (SKILL.md plus `scripts/check.js`, run with `npm run -s check`). Tested: catches planted overflow, JS error, contrast and touch-target failures. Available as `/design-review`
 - [x] 5. First hook: Stop hook runs the design checker when a turn ends with changed site files; blocks until it passes (max 3 attempts). Pipe-tested: pass, skip-when-unchanged, block ×3, give up, recover
-- [x] 6. First subagent: `.claude/agents/recruiter-critic.md` (hiring-manager persona, read-only tools, fixed report format). First run's verdict: Interview. Callable by name from the next session
+- [x] 6. First subagent: `.claude/agents/recruiter-critic.md` (hiring-manager persona, read-only tools, fixed report format). First run's verdict: Interview. Registered mid-session, callable as `recruiter-critic`
 - [ ] 7. Full autonomous run: one goal in, the agent plans, builds, self-reviews, fixes, deploys
 
 ## Corrections log

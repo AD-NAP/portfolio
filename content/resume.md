@@ -53,3 +53,4 @@ Singapore · shafik.adam98@gmail.com
 
 - Loves cats and pandas.
 - GitHub username `ad-nap` spells "pan-da" backwards; GitHub's logo is a cat.
+- Onboarding guide (Cloud BMS) effect: a new junior engineer used the guide and, with minimal guidance, set up his environment and started development on the same day. (Shafik, 2026-10-09)

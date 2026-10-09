@@ -14,8 +14,9 @@ The concept: the site is a building, and each floor is a section (G About, L1 Sk
 ## Content: never break these
 - `content/resume.md` is the only source of facts. Never invent anything about Shafik. If a section needs content he hasn't given, add a visible `PLACEHOLDER: …` and ask him.
 - Display name: "Shafik Adam". Email: shafik.adam98@gmail.com. No phone number. No photo.
-- Never guess URLs. GitHub is `https://github.com/ad-nap`. LinkedIn temporarily points to the LinkedIn home page until Shafik sends his profile URL.
-- The Projects section is on hold until Shafik sends more projects.
+- Never guess URLs. GitHub is `https://github.com/ad-nap`. No LinkedIn link until Shafik sends his profile URL (hide it rather than link the LinkedIn home page).
+- Projects come from Shafik's private repo `AD-NAP/vault` (he approved it as a source). PomoZoo is removed. Copy any project fact you use into `content/resume.md` under a "From AD-NAP/vault" heading, with the source file, before it appears on the site.
+- Linking a project repo that is still private is approved by Shafik (he will make it public later). Confirm which repo with him before linking it.
 
 ## Design
 - Use the `frontend-design` skill for design work, and say how it shaped your choices.
@@ -26,7 +27,8 @@ The concept: the site is a building, and each floor is a section (G About, L1 Sk
 - The background should never feel empty: use sky elements that fit the building story.
 - Stats must be readable at a glance, honest, and drawn to scale. A 330-cell grid was rejected as hard to read.
 - Personality stays: fun facts (cats and pandas, the `ad-nap` → `pan-da` riddle), the perched cat, and the night-only window cat.
-- Contact links (Email, GitHub, LinkedIn) stay in the hero as well as at the bottom.
+- Contact links (Email, GitHub, and LinkedIn once available) stay in the hero as well as at the bottom.
+- Production results get the visual weight. Test data (e.g. the 330 mocked records) stays small.
 - Phones: the building sits small beside the name, so content starts on the first screen.
 - Fonts: Bricolage Grotesque (display and body) and Martian Mono (code and file names).
 
