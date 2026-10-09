@@ -13,6 +13,8 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [?] Resume PDF, if you want a download link (design critique, priority 1)
 - [?] More projects to add (Projects section is on hold until these arrive)
 - [?] PomoZoo screenshot or link (placeholder in the card)
+- [?] Public repos worth linking for a backend role (recruiter critic #6)
+- [?] Any shareable production results: Event Log / Cloud BMS rollout, how often the config tool has been used, onboarding-guide effect (recruiter critic questions; only if real and shareable)
 - [?] Keep or remove the cat that sits in an L5 window at night
 
 ## Site: design and content
@@ -50,6 +52,16 @@ Design:
 - [ ] 🟢 Status pill looks clickable; make it plain text with the dot
 - [ ] 🟢 At night the lit windows outshine the name; consider dimming windows slightly or boosting the name
 
+## Recruiter critique (2026-10-09)
+
+Report: `reviews/2026-10-09-recruiter-critic.md`. Verdict: **Interview**, but the strongest proof sits too far down the page.
+- [ ] 🔴 Put one line of proof near the top, using resume facts only (~3 days → under 5 minutes; MVP approved by Azbil Japan leadership) (critic #1)
+- [ ] 🔴 LinkedIn points to the LinkedIn home page in hero and Contact; hide it until the real URL arrives, or swap it in (critic #2; needs Shafik's call)
+- [ ] 🟡 Visible PomoZoo `PLACEHOLDER` reads as unfinished on a live site; hide it while Projects is on hold (critic #3; needs Shafik's call)
+- [ ] 🟡 Time-saved chart: the empty track is 1.47:1 against the full bar at night, so both bars look full; make the track much fainter (critic #5, verified)
+- [ ] 🟡 The 330-mock-records log is the biggest graphic but shows a test fixture; shrink it, give production results the visual weight (critic #4; the log was Shafik's pick, so ask first)
+- [ ] 🟢 Tighten spacing in Fun facts and Contact (critic #7; overlaps the section-padding item above)
+
 ## Deploy
 
 - [x] Make `main` the default branch (done by Shafik)
@@ -60,6 +72,7 @@ Design:
 ## Tooling
 
 - [x] `/design-review` was picked up mid-session (new project skills can load without a restart)
+- [ ] Confirm `recruiter-critic` is listed as an agent in the next session (subagents load at session start, unlike skills)
 - [ ] Confirm the Stop hook fires live: in the next session, edit a site file and finish a turn; expect "Running design check on changed site files…"
 
 ## Learning path (Claude Code building blocks)
@@ -69,7 +82,7 @@ Design:
 - [x] 3. Plan mode for a bigger change: the v4 accessibility and design fix batch (plan approved, then built)
 - [x] 4. First skill: `.claude/skills/design-review/` (SKILL.md plus `scripts/check.js`, run with `npm run -s check`). Tested: catches planted overflow, JS error, contrast and touch-target failures. Available as `/design-review`
 - [x] 5. First hook: Stop hook runs the design checker when a turn ends with changed site files; blocks until it passes (max 3 attempts). Pipe-tested: pass, skip-when-unchanged, block ×3, give up, recover
-- [ ] 6. First subagent: "recruiter critic" reviewing the site as a hiring manager. Reference: `design-critique`
+- [x] 6. First subagent: `.claude/agents/recruiter-critic.md` (hiring-manager persona, read-only tools, fixed report format). First run's verdict: Interview. Callable by name from the next session
 - [ ] 7. Full autonomous run: one goal in, the agent plans, builds, self-reviews, fixes, deploys
 
 ## Corrections log

@@ -51,4 +51,4 @@ Tell Shafik, briefly:
 
 ## Full review rounds
 
-When Shafik asks for a full review (not just a check after a change), also run the Design plugin skills `design-critique` and `accessibility-review` on the screenshots and the checker results. Save their reports as `reviews/YYYY-MM-DD-design-critique.md` and `reviews/YYYY-MM-DD-accessibility-review.md`, then triage the findings into `BACKLOG.md` with 🔴/🟡/🟢 severity.
+When Shafik asks for a full review (not just a check after a change), also run the Design plugin skills `design-critique` and `accessibility-review` on the screenshots and the checker results. Save their reports as `reviews/YYYY-MM-DD-design-critique.md` and `reviews/YYYY-MM-DD-accessibility-review.md`, also hand the screenshots to the `recruiter-critic` subagent and save its report as `reviews/YYYY-MM-DD-recruiter-critic.md`. Spot-check its concrete claims before acting on them, then triage all findings into `BACKLOG.md` with 🔴/🟡/🟢 severity.
