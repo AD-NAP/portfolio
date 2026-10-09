@@ -3,6 +3,8 @@
 exclude:
   - CLAUDE.md
   - BACKLOG.md
+  - README.md
+  - docs/
   - content/
   - reviews/
   - package.json

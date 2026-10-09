@@ -52,3 +52,4 @@ A Stop hook (`.claude/settings.json` → `.claude/hooks/design-check-on-stop.js`
 ## Git
 - Work on the session's assigned `claude/…` branch. Commit each version worth keeping, with a message saying what changed and why, and push it.
 - `main` only changes when Shafik asks for a merge.
+- Versions are annotated tags on `main` (`v0.1.0`, `v0.2.0`, ...) with a GitHub Release each. No version branches or per-version repos. Ask before tagging.
