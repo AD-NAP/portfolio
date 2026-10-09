@@ -1,67 +1,71 @@
 (() => {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const SVG = "http://www.w3.org/2000/svg";
+  const root = document.documentElement;
+  const isNight = () => root.dataset.theme !== "light";
+
+  const svgEl = (tag, attrs) => {
+    const el = document.createElementNS(SVG, tag);
+    Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+    return el;
+  };
 
   /* ---------- Hero building: one storey per section ---------- */
   // Top to bottom, matching the order you reach them going up.
   const storeys = [
-    { id: "contact",    level: "R",  file: "contact.ttl",   x: 52, w: 120, h: 50, cols: 4, rows: 1 },
-    { id: "education",  level: "L4", file: "education.md",  x: 34, w: 156, h: 62, cols: 5, rows: 2 },
-    { id: "projects",   level: "L3", file: "projects/",     x: 34, w: 156, h: 62, cols: 5, rows: 2 },
-    { id: "experience", level: "L2", file: "experience/",   x: 34, w: 156, h: 62, cols: 5, rows: 2 },
-    { id: "skills",     level: "L1", file: "skills.ttl",    x: 34, w: 156, h: 62, cols: 5, rows: 2 },
-    { id: "about",      level: "G",  file: "about.ttl",     x: 26, w: 172, h: 82, cols: 6, rows: 1, door: true },
+    { id: "contact",    level: "R",  file: "contact.ttl",   x: 52, w: 120, h: 46, cols: 4, rows: 1 },
+    { id: "fun",        level: "L5", file: "fun-facts.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "education",  level: "L4", file: "education.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "projects",   level: "L3", file: "projects/",     x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "experience", level: "L2", file: "experience/",   x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "skills",     level: "L1", file: "skills.ttl",    x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "about",      level: "G",  file: "about.ttl",     x: 26, w: 172, h: 76, cols: 6, rows: 1, door: true },
   ];
+  // The cat sits in one window on the fun-facts floor (row 2, column 4).
+  const CAT = { id: "fun", row: 1, col: 3 };
 
   const floorsGroup = document.querySelector(".tower__floors");
-  const windows = [];
+  const windows = [];   // { el, extra? } bottom-to-top order is built below
   if (floorsGroup) {
     let y = 46;
     for (const s of storeys) {
-      const a = document.createElementNS(SVG, "a");
-      a.setAttribute("href", `#${s.id}`);
-      a.setAttribute("class", "storey");
-      a.setAttribute("aria-label", `Go to ${s.id}`);
+      const a = svgEl("a", { href: `#${s.id}`, class: "storey", "aria-label": `Go to ${s.id}` });
+      a.appendChild(svgEl("rect", { x: s.x, y, width: s.w, height: s.h, class: "storey__body" }));
 
-      const body = document.createElementNS(SVG, "rect");
-      Object.entries({ x: s.x, y, width: s.w, height: s.h, class: "storey__body" })
-        .forEach(([k, v]) => body.setAttribute(k, v));
-      a.appendChild(body);
-
-      const padX = 14, padTop = 12, winW = 16, winH = s.door ? 14 : 13;
+      const padX = 14, padTop = 10, winW = 16, winH = 13;
       const gapX = (s.w - padX * 2 - winW * s.cols) / (s.cols - 1);
       const gapY = s.rows > 1 ? (s.h - padTop * 2 - winH * s.rows) / (s.rows - 1) : 0;
       for (let r = 0; r < s.rows; r++) {
         for (let c = 0; c < s.cols; c++) {
           // Ground floor: leave the middle two bays for the door.
           if (s.door && (c === 2 || c === 3)) continue;
-          const win = document.createElementNS(SVG, "rect");
-          Object.entries({
-            x: s.x + padX + c * (winW + gapX),
-            y: y + padTop + r * (winH + gapY),
-            width: winW, height: winH, class: "storey__win",
-          }).forEach(([k, v]) => win.setAttribute(k, v));
+          const wx = s.x + padX + c * (winW + gapX);
+          const wy = s.door ? y + 14 : y + padTop + r * (winH + gapY);
+          const win = svgEl("rect", { x: wx, y: wy, width: winW, height: winH, class: "storey__win" });
           a.appendChild(win);
-          windows.push(win);
+          const entry = { el: win };
+          if (s.id === CAT.id && r === CAT.row && c === CAT.col) {
+            // A small sitting cat silhouette: ears, head, body, curled tail.
+            const cat = svgEl("path", {
+              class: "storey__cat",
+              d: `M${wx + 5} ${wy + 13} V${wy + 7.5} L${wx + 5.4} ${wy + 4} L${wx + 6.8} ${wy + 5.6} H${wx + 8.6} L${wx + 10} ${wy + 4} L${wx + 10.4} ${wy + 7.5} Q${wx + 12} ${wy + 10} ${wx + 11} ${wy + 13} Z M${wx + 11} ${wy + 12.6} q${2.6} 0 ${2.4} -3 l-.9 .1 q.1 2 -1.5 2 Z`,
+            });
+            a.appendChild(cat);
+            entry.extra = cat;
+          }
+          windows.push(entry);
         }
       }
       if (s.door) {
-        const door = document.createElementNS(SVG, "rect");
-        Object.entries({ x: s.x + s.w / 2 - 14, y: y + s.h - 40, width: 28, height: 40, class: "storey__win is-on" })
-          .forEach(([k, v]) => door.setAttribute(k, v));
+        const door = svgEl("rect", { x: s.x + s.w / 2 - 14, y: y + s.h - 40, width: 28, height: 40, class: "storey__win" });
         a.appendChild(door);
+        windows.push({ el: door });
       }
 
-      const tag = document.createElementNS(SVG, "text");
-      tag.setAttribute("x", 8); tag.setAttribute("y", y + s.h / 2 + 3);
-      tag.setAttribute("class", "storey__tag");
+      const tag = svgEl("text", { x: 8, y: y + s.h / 2 + 3, class: "storey__tag" });
       tag.textContent = s.level;
       a.appendChild(tag);
-
-      const label = document.createElementNS(SVG, "text");
-      label.setAttribute("x", 208); label.setAttribute("y", y + s.h / 2 + 3);
-      
-      label.setAttribute("class", "storey__label");
+      const label = svgEl("text", { x: 208, y: y + s.h / 2 + 3, class: "storey__label" });
       label.textContent = s.file;
       a.appendChild(label);
 
@@ -70,25 +74,78 @@
     }
   }
 
-  // The one orchestrated moment: windows switch on from the ground up.
-  if (reduceMotion) {
-    windows.forEach(w => w.classList.add("is-on"));
-  } else {
+  const setWindow = (w, on) => {
+    w.el.classList.toggle("is-on", on);
+    w.extra?.classList.toggle("is-on", on);
+  };
+
+  // Lights switch on from the ground up (windows were collected top-down),
+  // and off from the roof down. A little jitter keeps it from looking mechanical.
+  let lightTimers = [];
+  const setLights = (on, animate) => {
+    lightTimers.forEach(clearTimeout);
+    lightTimers = [];
+    if (!animate || reduceMotion) { windows.forEach(w => setWindow(w, on)); return; }
+    const n = windows.length;
     windows
-      .map((w, i) => ({ w, order: (windows.length - i) + Math.random() * 8 }))
+      .map((w, i) => ({ w, order: (on ? n - i : i) + Math.random() * 8 }))
       .sort((a, b) => a.order - b.order)
-      .forEach(({ w }, i) => setTimeout(() => w.classList.add("is-on"), 300 + i * 28));
+      .forEach(({ w }, i) => lightTimers.push(setTimeout(() => setWindow(w, on), 250 + i * 22)));
+  };
+
+  // First paint: the one orchestrated load moment, only at night.
+  setLights(isNight(), true);
+
+  /* ---------- Stars (night sky) ---------- */
+  const stars = document.querySelector(".sky__stars");
+  if (stars) {
+    // Deterministic scatter so the sky looks the same on every visit.
+    let seed = 7;
+    const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < 70; i++) {
+      const s = document.createElement("span");
+      s.className = "star" + (rand() > .85 ? " star--big" : "") + (rand() > .8 ? " star--twinkle" : "");
+      s.style.left = `${rand() * 100}%`;
+      s.style.top = `${Math.pow(rand(), 1.6) * 100}%`;   // denser near the top
+      s.style.animationDelay = `${-rand() * 4}s`;
+      stars.appendChild(s);
+    }
   }
+
+  /* ---------- Day / night toggle ---------- */
+  const toggleBtn = document.querySelector(".theme-toggle");
+  const toggleText = document.querySelector(".theme-toggle__text");
+  const syncToggle = () => {
+    const night = isNight();
+    toggleBtn?.setAttribute("aria-pressed", String(!night));
+    if (toggleText) toggleText.textContent = night ? "Switch to day" : "Switch to night";
+    toggleBtn?.setAttribute("title", night ? "Switch to day" : "Switch to night");
+  };
+  syncToggle();
+
+  let switchTimer;
+  toggleBtn?.addEventListener("click", () => {
+    const next = isNight() ? "light" : "dark";
+    if (!reduceMotion) {
+      root.classList.add("is-switching");
+      clearTimeout(switchTimer);
+      switchTimer = setTimeout(() => root.classList.remove("is-switching"), 1300);
+    }
+    root.dataset.theme = next;
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    syncToggle();
+    setLights(next === "dark", true);
+  });
 
   /* ---------- Explorer: active file + mini building ---------- */
   const links = [...document.querySelectorAll(".files a")];
   const minis = [...document.querySelectorAll(".mini__floor")];
   const sections = [...document.querySelectorAll("[data-section]")];
+  const order = ["about", "skills", "experience", "projects", "education", "fun", "contact"];
 
   const setActive = (id) => {
     links.forEach(l => l.classList.toggle("is-active", l.dataset.target === id && l.closest(".dir > ul") === null));
     // Every floor up to the one you are on is lit.
-    const order = ["about", "skills", "experience", "projects", "education", "contact"];
     const reached = order.indexOf(id);
     minis.forEach(m => m.classList.toggle("is-lit", order.indexOf(m.dataset.floor) <= reached));
   };
@@ -100,14 +157,14 @@
 
   // Phone: the explorer collapses into a top bar.
   const explorer = document.querySelector(".explorer");
-  const toggle = document.querySelector(".explorer__toggle");
-  toggle?.addEventListener("click", () => {
+  const filesToggle = document.querySelector(".explorer__toggle");
+  filesToggle?.addEventListener("click", () => {
     const open = explorer.classList.toggle("is-open");
-    toggle.setAttribute("aria-expanded", String(open));
+    filesToggle.setAttribute("aria-expanded", String(open));
   });
   links.forEach(l => l.addEventListener("click", () => {
     explorer.classList.remove("is-open");
-    toggle?.setAttribute("aria-expanded", "false");
+    filesToggle?.setAttribute("aria-expanded", "false");
   }));
 
   /* ---------- Experience timeline: the line fills as you scroll ---------- */
@@ -119,35 +176,55 @@
     const mark = window.innerHeight * 0.6;
     const p = Math.min(1, Math.max(0, (mark - r.top) / r.height));
     timeline.style.setProperty("--progress", reduceMotion ? 1 : p.toFixed(3));
-    roles.forEach(role => {
-      const top = role.getBoundingClientRect().top;
-      role.classList.toggle("is-reached", reduceMotion || top < mark);
-    });
+    roles.forEach(role => role.classList.toggle("is-reached", reduceMotion || role.getBoundingClientRect().top < mark));
   };
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
-  /* ---------- 330 mocked records, fetched 100 at a time ---------- */
-  const grid = document.querySelector(".batches__grid");
-  if (grid) {
-    const cells = Array.from({ length: 330 }, (_, i) => {
-      const cell = document.createElement("i");
-      cell.dataset.batch = String(Math.floor(i / 100));
-      grid.appendChild(cell);
-      return cell;
-    });
-    const fill = () => {
-      if (reduceMotion) { cells.forEach(c => c.classList.add("is-on")); return; }
-      // Each batch arrives after a simulated network delay, like the MSW mocks.
-      [0, 1, 2, 3].forEach(b => setTimeout(() => {
-        cells.filter(c => c.dataset.batch === String(b)).forEach(c => c.classList.add("is-on"));
-      }, 250 + b * 550));
+  /* ---------- 330 records, 100 per request (like the MSW mocks) ---------- */
+  const pages = document.querySelector(".pages");
+  if (pages && !reduceMotion) {
+    pages.classList.add("is-armed");
+    const rows = [...pages.querySelectorAll(".pages__log li")];
+    const segs = [...pages.querySelectorAll(".pages__bar span")];
+    const play = () => {
+      rows.forEach((row, i) => {
+        const start = 200 + i * 900;          // each request waits on simulated latency
+        setTimeout(() => row.classList.add("is-loading"), start);
+        setTimeout(() => {
+          row.classList.replace("is-loading", "is-done");
+          segs[i].classList.add("is-done");
+        }, start + 600);
+      });
     };
-    const gio = new IntersectionObserver((entries, obs) => {
-      if (entries.some(e => e.isIntersecting)) { fill(); obs.disconnect(); }
-    }, { threshold: 0.6 });
-    gio.observe(grid);
+    new IntersectionObserver((entries, obs) => {
+      if (entries.some(e => e.isIntersecting)) { play(); obs.disconnect(); }
+    }, { threshold: 0.6 }).observe(pages);
   }
+
+  /* ---------- Fun fact: ad-nap, read backwards ---------- */
+  const word = "ad-nap";
+  const flip = document.querySelector(".flip__word");
+  if (flip) {
+    [...word].forEach((ch, i) => {
+      const s = document.createElement("span");
+      s.textContent = ch;
+      s.style.setProperty("--i", i);
+      s.style.setProperty("--d", word.length - 1 - 2 * i);          // distance to its mirrored slot
+      s.style.setProperty("--y", i % 2 ? "0.7em" : "-0.7em");       // alternate over and under
+      flip.appendChild(s);
+    });
+  }
+  const riddleBtn = document.querySelector(".riddle__btn");
+  const answer = document.getElementById("riddle-answer");
+  riddleBtn?.addEventListener("click", () => {
+    const open = answer.hidden;
+    answer.hidden = !open;
+    riddleBtn.setAttribute("aria-expanded", String(open));
+    riddleBtn.textContent = open ? "Hide answer" : "Show me";
+    flip?.classList.remove("is-flipped");
+    if (open) requestAnimationFrame(() => requestAnimationFrame(() => flip?.classList.add("is-flipped")));
+  });
 
   // Placeholder links stay inert until real URLs are added.
   document.querySelectorAll(".is-placeholder").forEach(a => a.addEventListener("click", e => e.preventDefault()));

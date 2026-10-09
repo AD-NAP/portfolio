@@ -3,8 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mohamad Shafik, Software Engineer</title>
-  <meta name="description" content="Mohamad Shafik bin Mohamad Adam: software engineer in Singapore building cloud applications and building-management platforms with Python, TypeScript and AWS.">
+  <title>Shafik Adam, Software Engineer</title>
+  <meta name="description" content="Shafik Adam: software engineer in Singapore building cloud applications and building-management platforms with Python, TypeScript and AWS.">
+  <script>
+    // Set the theme before first paint so the page never flashes the wrong sky.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <meta name="color-scheme" content="dark light">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
@@ -14,22 +26,38 @@
 <body>
   <a class="skip" href="#about">Skip to content</a>
 
+  <!-- Page-wide sky: day gradient and night gradient cross-fade; stars are added by main.js -->
+  <div class="sky" aria-hidden="true">
+    <div class="sky__stars"></div>
+  </div>
+
   <!-- File explorer: desktop sidebar, phone top bar -->
   <aside class="explorer" aria-label="Site sections">
     <div class="explorer__head">
-      <svg class="mini" viewBox="0 0 40 72" aria-hidden="true">
-        <rect class="mini__floor" data-floor="contact" x="8" y="6" width="24" height="10"/>
-        <rect class="mini__floor" data-floor="education" x="6" y="18" width="28" height="10"/>
-        <rect class="mini__floor" data-floor="projects" x="6" y="30" width="28" height="10"/>
-        <rect class="mini__floor" data-floor="experience" x="6" y="42" width="28" height="10"/>
-        <rect class="mini__floor" data-floor="skills" x="6" y="54" width="28" height="7"/>
-        <rect class="mini__floor" data-floor="about" x="6" y="63" width="28" height="7"/>
+      <svg class="mini" viewBox="0 0 40 84" aria-hidden="true">
+        <rect class="mini__floor" data-floor="contact" x="9" y="4" width="22" height="9"/>
+        <rect class="mini__floor" data-floor="fun" x="6" y="15" width="28" height="9"/>
+        <rect class="mini__floor" data-floor="education" x="6" y="26" width="28" height="9"/>
+        <rect class="mini__floor" data-floor="projects" x="6" y="37" width="28" height="9"/>
+        <rect class="mini__floor" data-floor="experience" x="6" y="48" width="28" height="9"/>
+        <rect class="mini__floor" data-floor="skills" x="6" y="59" width="28" height="9"/>
+        <rect class="mini__floor" data-floor="about" x="4" y="70" width="32" height="11"/>
       </svg>
       <div>
         <p class="explorer__title">shafik</p>
         <p class="explorer__sub">building/</p>
       </div>
-      <button class="explorer__toggle" aria-expanded="false" aria-controls="files">Files</button>
+      <button class="theme-toggle" type="button" aria-pressed="false">
+        <svg class="theme-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <g class="theme-toggle__sun">
+            <circle cx="12" cy="12" r="4.5"/>
+            <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>
+          </g>
+          <path class="theme-toggle__moon" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/>
+        </svg>
+        <span class="theme-toggle__text">Switch to day</span>
+      </button>
+      <button class="explorer__toggle" type="button" aria-expanded="false" aria-controls="files">Files</button>
     </div>
     <nav id="files" class="files">
       <ul>
@@ -49,6 +77,7 @@
           </ul>
         </li>
         <li><a href="#education" data-target="education"><span class="ext ext--md"></span>education.md</a></li>
+        <li><a href="#fun" data-target="fun"><span class="ext ext--md"></span>fun-facts.md</a></li>
         <li><a href="#contact" data-target="contact"><span class="ext ext--ttl"></span>contact.ttl</a></li>
       </ul>
     </nav>
@@ -57,30 +86,33 @@
   <main>
     <!-- Hero -->
     <header id="top" class="hero" data-section="top">
+      <div class="celestial" aria-hidden="true">
+        <div class="sun"></div>
+        <div class="moon"></div>
+        <svg class="cloud cloud--a" viewBox="0 0 120 44"><path d="M18 40h86a14 14 0 0 0 0-28 22 22 0 0 0-41-6 16 16 0 0 0-27 10A12 12 0 0 0 18 40z"/></svg>
+        <svg class="cloud cloud--b" viewBox="0 0 120 44"><path d="M18 40h86a14 14 0 0 0 0-28 22 22 0 0 0-41-6 16 16 0 0 0-27 10A12 12 0 0 0 18 40z"/></svg>
+      </div>
+
       <div class="hero__text">
-        <h1 class="name">
-          <span class="name__main">Mohamad Shafik</span>
-          <span class="name__rest">bin Mohamad Adam</span>
-        </h1>
+        <h1 class="name">Shafik Adam</h1>
         <p class="hero__role">Software engineer building cloud applications and building&#8209;management platforms with Python, TypeScript and AWS.</p>
         <p class="hero__status"><span class="dot" aria-hidden="true"></span>Systems and Application Engineer at Azbil, Singapore</p>
       </div>
 
       <figure class="tower" aria-label="A building whose floors are the sections of this site">
-        <svg viewBox="0 0 300 440" role="img" aria-hidden="true">
+        <svg viewBox="0 0 300 470" role="img" aria-hidden="true">
           <defs>
             <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
               <path d="M10 0H0V10" fill="none" class="tower__gridline"/>
             </pattern>
           </defs>
-          <rect x="0" y="0" width="300" height="440" fill="url(#grid)"/>
-          <!-- antenna -->
+          <rect x="0" y="60" width="300" height="410" fill="url(#grid)"/>
           <line class="tower__line" x1="112" y1="14" x2="112" y2="46"/>
           <circle class="tower__beacon" cx="112" cy="12" r="3.5"/>
           <g class="tower__floors"></g>
-          <line class="tower__line" x1="10" y1="426" x2="290" y2="426"/>
+          <line class="tower__line" x1="10" y1="456" x2="290" y2="456"/>
         </svg>
-        <figcaption class="tower__caption">Every floor is a section. Select one to go there.</figcaption>
+        <figcaption class="tower__caption">Select a floor to visit that section.</figcaption>
       </figure>
     </header>
 
@@ -128,9 +160,17 @@
             <li>Designed and built an internal Streamlit application that generates Brick Schema building-metadata files from BMS point lists, owning UI/UX, workflow design, and implementation across a 5-month cycle. It completes the metadata pipeline feeding downstream configuration tooling, with planned integration into Cloud BMS deployments.</li>
             <li>Delivered the Event Log feature end to end for Cloud BMS, a cloud-native building management platform: designed a GraphQL <code>eventLogs</code> query on AWS AppSync with cursor-based pagination over DynamoDB (ULID-ordered, configurable page size), structured across adapter, application, and infrastructure layers following Clean Architecture.</li>
             <li>Built the matching Svelte frontend with an expandable table view and infinite scroll, batching 100 records per request to handle large datasets. Wrote MSW mocks simulating 330 records and network latency to verify pagination and loading states.
-              <figure class="batches" aria-label="330 mocked records loaded in batches of 100: three full batches and a final batch of 30">
-                <div class="batches__grid" aria-hidden="true"></div>
-                <figcaption><span class="batches__count">330</span> mocked records, fetched 100 at a time</figcaption>
+              <figure class="pages" aria-label="330 mocked records loaded in four requests: 100, 100, 100, then the last 30">
+                <ol class="pages__log" aria-hidden="true">
+                  <li data-page="0"><span class="pages__req">Request 1</span><span class="pages__range">records 1–100</span><span class="pages__status">100 loaded</span></li>
+                  <li data-page="1"><span class="pages__req">Request 2</span><span class="pages__range">records 101–200</span><span class="pages__status">100 loaded</span></li>
+                  <li data-page="2"><span class="pages__req">Request 3</span><span class="pages__range">records 201–300</span><span class="pages__status">100 loaded</span></li>
+                  <li data-page="3"><span class="pages__req">Request 4</span><span class="pages__range">records 301–330</span><span class="pages__status">30 loaded, end</span></li>
+                </ol>
+                <div class="pages__bar" aria-hidden="true">
+                  <span data-page="0" style="--n:100"></span><span data-page="1" style="--n:100"></span><span data-page="2" style="--n:100"></span><span data-page="3" style="--n:30"></span>
+                </div>
+                <figcaption><span class="pages__total">330</span> mocked records, fetched 100 per request as the table scrolls</figcaption>
               </figure>
             </li>
             <li>Contributed to the Cloud BMS MVP over 9 months in a 3-developer team using AWS Lambda, AppSync, DynamoDB, S3, CloudFront, and CloudWatch. The MVP was approved by Azbil Japan leadership for continued development toward commercial release.</li>
@@ -208,14 +248,31 @@
       </div>
     </section>
 
+    <!-- Fun facts / L5 -->
+    <section id="fun" class="floor" data-section="fun">
+      <h2 class="floor__title"><span class="floor__level">L5</span>Fun facts</h2>
+      <div class="fun">
+        <p class="fun__fact">I love cats and pandas.</p>
+        <div class="riddle">
+          <p class="riddle__q">Can you spot the panda? Hint: GitHub.</p>
+          <button class="riddle__btn" type="button" aria-expanded="false" aria-controls="riddle-answer">Show me</button>
+          <div id="riddle-answer" class="riddle__a" hidden>
+            <p class="flip" aria-label="ad-nap, read backwards, is pan-da"><span class="flip__word" aria-hidden="true"></span></p>
+            <p>My GitHub username is <a href="https://github.com/ad-nap">ad-nap</a>. Read it backwards. And GitHub's logo is a cat, so that covers both.</p>
+          </div>
+        </div>
+        <p class="fun__hint">There's also a cat somewhere on this page. It only comes out at night.</p>
+      </div>
+    </section>
+
     <!-- Contact / roof -->
     <section id="contact" class="floor floor--roof" data-section="contact">
       <h2 class="floor__title"><span class="floor__level">R</span>Contact</h2>
       <p class="contact__lede">The fastest way to reach me is email.</p>
       <a class="contact__email" href="mailto:shafik.adam98@gmail.com">shafik.adam98@gmail.com</a>
       <ul class="contact__links">
+        <li><a href="https://github.com/ad-nap">GitHub</a></li>
         <li><a href="#" class="is-placeholder" aria-disabled="true">LinkedIn (PLACEHOLDER: URL needed)</a></li>
-        <li><a href="#" class="is-placeholder" aria-disabled="true">GitHub (PLACEHOLDER: URL needed)</a></li>
       </ul>
     </section>
 
