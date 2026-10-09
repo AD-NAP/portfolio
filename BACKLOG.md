@@ -14,7 +14,6 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [?] More projects to add (Projects section is on hold until these arrive)
 - [?] PomoZoo screenshot or link (placeholder in the card)
 - [?] Keep or remove the cat that sits in an L5 window at night
-- [?] Hosting URL: decide where the site should live (see Deploy)
 
 ## Site: design and content
 
@@ -53,8 +52,9 @@ Design:
 
 ## Deploy
 
-- [ ] Enable GitHub Pages (**ask Shafik first**)
-- [ ] Hosting URL: GitHub only serves a site at the root `https://ad-nap.github.io/` if the repo is named `ad-nap.github.io`. This repo (`autonomous-test.github.io`) would be served at `https://ad-nap.github.io/autonomous-test.github.io/`. Options: rename the repo, or keep it as a test site.
+- [ ] Make `main` the default branch (Shafik: Settings → General)
+- [ ] Enable GitHub Pages from `main` (**ask Shafik first**)
+- [x] Repo renamed to `AD-NAP/portfolio-v0.1` (2026-10-09). As a project site it will be served at `https://ad-nap.github.io/portfolio-v0.1/` once Pages is enabled. A root URL (`https://ad-nap.github.io/`) would need the repo named `ad-nap.github.io`.
 - [ ] Keep working files (`BACKLOG.md`, `CLAUDE.md`, `content/`, `reviews/`, `.claude/`, `package.json`) out of the published site
 
 ## Tooling
