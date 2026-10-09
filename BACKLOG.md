@@ -9,26 +9,46 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
-- [?] LinkedIn URL (contact section shows a marked placeholder until then)
+- [?] LinkedIn profile URL (currently links to the LinkedIn home page as a stand-in)
+- [?] Resume PDF, if you want a download link (design critique, priority 1)
 - [?] More projects to add (Projects section is on hold until these arrive)
 - [?] PomoZoo screenshot or link (placeholder in the card)
-- [?] Pick animations from the idea list below, or none
 - [?] Keep or remove the cat that sits in an L5 window at night
 - [?] Hosting URL: decide where the site should live (see Deploy)
 
 ## Site: design and content
 
-- [ ] Animation ideas (pending Shafik's pick)
-  - [ ] Rare shooting star at night (at most once every ~20s)
-  - [ ] Hovering a floor lights only that floor, as a preview
-  - [ ] Building tilts slightly with the mouse (desktop only)
-  - [ ] Cat's tail flicks once when the fun-facts floor scrolls into view
+- [ ] Building tilts slightly with the mouse (desktop only); not picked, parked
 - [ ] Phones: stars sit behind the hero text and read as specks inside letters; keep stars out of the text area or dim them there
 - [ ] Phones: status pill ("Systems and Application Engineer at Azbil, Singapore") wraps to two lines; consider a shorter label
 - [ ] Favicon (a tiny building, lit at night)
 - [ ] Social preview card (Open Graph image and tags) so links look good when shared
-- [ ] Run `design-critique` on both themes at 390px and 1280px, then triage the findings into this file
-- [ ] Run `accessibility-review`: contrast of muted text in day mode, keyboard order through the SVG floors, screen-reader labels on the building and riddle
+
+## Review findings (2026-10-09)
+
+Full reports: `reviews/2026-10-09-design-critique.md` and `reviews/2026-10-09-accessibility-review.md`.
+
+Accessibility (fix as one batch):
+- [ ] 🔴 Building floor links are focusable inside an `aria-hidden` SVG; expose them with readable names, or remove them from the Tab order (a11y #5, #11)
+- [ ] 🟡 Day-mode focus ring is 1.67:1; use a dark ring in day mode (a11y #6)
+- [ ] 🟡 Building floors have `outline: none`; give focused floors a visible outline (a11y #7)
+- [ ] 🟡 Floor tags (`R`, `L5`…`G`) fail contrast in both themes; switch to `--muted` (a11y #1)
+- [ ] 🟡 Day-mode code comments are 3.85:1; darken `--code-c` (a11y #2)
+- [ ] 🟢 Hide the floor badge from screen readers so headings read "About", not "G About" (a11y #3)
+- [ ] 🟢 Riddle answer: replace `aria-label` on `<p>` with visually hidden text (a11y #4)
+- [ ] 🟢 Theme toggle: fixed label with `aria-pressed`, or a changing label without it (a11y #10)
+- [ ] 🟢 Touch targets to 44px on phones: theme toggle, Files, GitHub/LinkedIn pills (a11y #9)
+- [ ] 🟢 Sky motion has no on-page pause (only reduced-motion stops it) (a11y #8)
+- [ ] 🟢 Phone Files menu: close on Escape and outside tap
+
+Design:
+- [ ] 🔴 Recruiter fast path: email, GitHub, LinkedIn links in the hero (critique priority 1)
+- [ ] 🟡 Phones: shrink or reposition the building so About is one swipe away (critique priority 2)
+- [ ] 🟡 Stat panels and key numbers are buried in long bullet lists; give each role's headline result more weight
+- [ ] 🟢 Consistency: two corner radii (6px panels, round pills); reserve amber for light and progress, not labels
+- [ ] 🟢 Reduce desktop section padding from 120px to ~80px
+- [ ] 🟢 Status pill looks clickable; make it plain text with the dot
+- [ ] 🟢 At night the lit windows outshine the name; consider dimming windows slightly or boosting the name
 
 ## Deploy
 
@@ -38,7 +58,7 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Learning path (Claude Code building blocks)
 
-- [~] 1. Hands-on v1 with no setup; collect corrections (v1 and v2 done, iterating)
+- [~] 1. Hands-on v1 with no setup; collect corrections (v1, v2, v3 done, iterating)
 - [ ] 2. Turn the corrections log into `CLAUDE.md`
 - [ ] 3. Plan mode for a bigger change (Shafik reviews the plan before anything is built)
 - [ ] 4. First skill: `design-review` (screenshot at several widths, check contrast, spacing, overflow, fix, repeat). Reference: the Design plugin's `design-critique` and `accessibility-review`
@@ -61,6 +81,9 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 11. Stats must be easy to read at a glance (the 330-cell grid was rejected).
 12. Personality is welcome: fun facts (cats, pandas, the `ad-nap` → `pan-da` riddle).
 13. Projects section is on hold until Shafik sends more projects.
+14. LinkedIn links to the LinkedIn home page temporarily, until Shafik sends his profile URL.
+15. Chosen animations: rare shooting star at night (20-40s apart), floor hover preview, cat tail flick on the fun-facts floor. Mouse tilt was not picked.
+16. Use the Design plugin's `design-critique` and `accessibility-review` as the review standard; save reports under `reviews/` and triage findings into this backlog.
 
 ## Done
 
@@ -70,4 +93,6 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [x] v2: 330-cell grid replaced with a 4-request log and segmented bar
 - [x] v2: GitHub link added
 - [x] v2: fun-facts floor with the panda riddle and the night-time cat
-- [x] Found the Design plugin (`design-critique`, `accessibility-review`) and showed the install card
+- [x] Design plugin installed (`design-critique`, `accessibility-review`)
+- [x] v3: shooting star, floor hover preview, perched cat with tail flick, LinkedIn link (commit `6f05f35`)
+- [x] First design critique and accessibility review run and triaged (see Review findings)
