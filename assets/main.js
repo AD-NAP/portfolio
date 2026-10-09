@@ -11,15 +11,15 @@
   };
 
   /* ---------- Hero building: one storey per section ---------- */
-  // Top to bottom, matching the order you reach them going up.
+  // Top to bottom, the same order as the page: roof first, level 1 last.
   const storeys = [
-    { id: "contact",      title: "Contact",    where: "roof",         level: "R",  file: "contact.ttl",   x: 52, w: 120, h: 46, cols: 4, rows: 1 },
-    { id: "fun",          title: "Fun facts",  where: "level 5",      level: "L5", file: "fun-facts.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "education",    title: "Education",  where: "level 4",      level: "L4", file: "education.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "projects",     title: "Projects",   where: "level 3",      level: "L3", file: "projects/",     x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "experience",   title: "Experience", where: "level 2",      level: "L2", file: "experience/",   x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "skills",       title: "Skills",     where: "level 1",      level: "L1", file: "skills.ttl",    x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "about",        title: "About",      where: "ground floor", level: "G",  file: "about.ttl",     x: 26, w: 172, h: 76, cols: 6, rows: 1, door: true },
+    { id: "about",        title: "About",      where: "roof",    level: "R",  file: "about.ttl",     x: 52, w: 120, h: 46, cols: 4, rows: 1 },
+    { id: "skills",       title: "Skills",     where: "level 6", level: "L6", file: "skills.ttl",    x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "experience",   title: "Experience", where: "level 5", level: "L5", file: "experience/",   x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "projects",     title: "Projects",   where: "level 4", level: "L4", file: "projects/",     x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "education",    title: "Education",  where: "level 3", level: "L3", file: "education.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "fun",          title: "Fun facts",  where: "level 2", level: "L2", file: "fun-facts.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
+    { id: "contact",      title: "Contact",    where: "level 1", level: "L1", file: "contact.ttl",   x: 26, w: 172, h: 76, cols: 6, rows: 1, door: true },
   ];
   // The cat sits in one window on the fun-facts floor (row 2, column 4).
   const CAT = { id: "fun", row: 1, col: 3 };
@@ -37,7 +37,7 @@
       const gapY = s.rows > 1 ? (s.h - padTop * 2 - winH * s.rows) / (s.rows - 1) : 0;
       for (let r = 0; r < s.rows; r++) {
         for (let c = 0; c < s.cols; c++) {
-          // Ground floor: leave the middle two bays for the door.
+          // Level 1: leave the middle two bays for the door.
           if (s.door && (c === 2 || c === 3)) continue;
           const wx = s.x + padX + c * (winW + gapX);
           const wy = s.door ? y + 14 : y + padTop + r * (winH + gapY);
@@ -86,8 +86,8 @@
     w.extra?.classList.toggle("is-on", on);
   };
 
-  // Lights switch on from the ground up (windows were collected top-down),
-  // and off from the roof down. A little jitter keeps it from looking mechanical.
+  // Lights switch on from the roof down (windows were collected top-down), the way
+  // the page reads, and off from level 1 up. A little jitter keeps it from looking mechanical.
   let lightTimers = [];
   const setLights = (on, animate) => {
     lightTimers.forEach(clearTimeout);
@@ -95,7 +95,7 @@
     if (!animate || reduceMotion) { windows.forEach(w => setWindow(w, on)); return; }
     const n = windows.length;
     windows
-      .map((w, i) => ({ w, order: (on ? n - i : i) + Math.random() * 8 }))
+      .map((w, i) => ({ w, order: (on ? i : n - i) + Math.random() * 8 }))
       .sort((a, b) => a.order - b.order)
       .forEach(({ w }, i) => lightTimers.push(setTimeout(() => setWindow(w, on), 250 + i * 22)));
   };
@@ -151,7 +151,7 @@
 
   const setActive = (id) => {
     links.forEach(l => l.classList.toggle("is-active", l.dataset.target === id && l.closest(".dir > ul") === null));
-    // Every floor up to the one you are on is lit.
+    // Every floor from the roof down to the one you are on is lit.
     const reached = order.indexOf(id);
     minis.forEach(m => m.classList.toggle("is-lit", order.indexOf(m.dataset.floor) <= reached));
   };

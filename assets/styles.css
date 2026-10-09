@@ -425,7 +425,7 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 .fun__hint { margin: 24px 0 0; color: var(--muted); }
 
 /* Contact */
-.floor--roof { padding-bottom: 48px; }
+.floor--last { padding-bottom: 48px; }
 .contact__lede { margin: 0 0 12px; color: var(--muted); }
 .contact__email {
   display: inline-block;
