@@ -12,10 +12,11 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [?] LinkedIn profile URL (link hidden until then)
 - [?] Resume PDF, if you want a download link (design critique, priority 1)
 - [?] Real Cloud BMS or Event Log numbers (for example record counts, users, sites, query times), if any can be shared. Not answered yet
-- [?] Where GitHub Actions and SQL were used (both are in Skills with no evidence on the page)
+- [?] Where GitHub Actions, SQL and React were used (all three are in Skills with no evidence on the page)
+- [?] Any LLM or AI engineering work to show? Contact says you are open to AI engineering roles, and the critic found one classical ML project thin backing for that (v0.2 critic #1)
+- [?] When did edge-energy-optimizer start? The page now only says phase 1 was done in Oct 2026
 - [?] Optional: what filled May 2018 to 2021 besides Ground Labs (for example national service), if you want it on the site
 - [?] Enable the Design plugin (install card shown 2026-10-09) so `design-critique` and `accessibility-review` are available
-- [?] Keep or remove the cat that sits in an L5 window at night
 
 ## Site: design and content
 
@@ -104,9 +105,19 @@ Left over:
 
 Shafik's goals. Goes through plan mode first.
 
-- [ ] Building becomes isometric, and tilts slightly with the mouse
-- [ ] Flip the order: rooftop first, down to level 1, so the building reads top to bottom like the scroll. Remove the ground floor (not a Singapore thing)
-- [ ] Hidden B1 level, unlocked by guessing his favourite animal from his GitHub name. Content for now: a cake
+Plan approved 2026-10-09. Branch `claude/v0.2-isometric`. Decisions: floors are R About, L6 Skills, L5 Experience, L4 Projects, L3 Education, L2 Fun facts, L1 Contact; B1 unlocks by typing the answer; the night window cat stays (now on L2).
+
+- [x] Step 1: flip the order, rooftop first, down to level 1. Ground floor removed (`11c0dc6`)
+- [x] Step 2: isometric building that leans a few degrees toward the mouse (desktop with a mouse only; off on phones and under reduced motion)
+- [x] Step 3: the riddle is a typed guess that unlocks a hidden B1 level (section, `b1/cake.md` in the explorer, a dashed storey under the building). It stays open on later visits. Content for now: a cake
+- [x] Checker: extra pass with B1 open, plus a test of the riddle; docs updated (`CLAUDE.md`, `docs/architecture.md`, the skill)
+- [ ] B1 needs real content one day (Shafik: empty for now)
+- [ ] 🟢 The B1 storey appears without an animation, because the visitor is on L2 when it unlocks and would not see one
+- [x] `recruiter-critic` run before the merge: no blockers, verdict unchanged (Interview for junior or associate, Maybe for mid-level). Report: `reviews/2026-10-09-recruiter-critic-v0.2.md`. Its project date finding is fixed
+- [x] Merged to `main`, tagged and released `v0.2.0` (2026-10-09)
+- [ ] 🟢 Night, desktop: a star sits right behind the "R" floor tag and reads as a strike-through (v0.2 critic #5)
+- [ ] 🟢 Roof focus ring: the deck's front edges are covered by level 6's outline, so only the roof room shows the ring. Visible, but could be cleaner
+- [ ] 🟢 Sidebar mini building still has the old flat shape with a wide base
 
 ## Deploy
 

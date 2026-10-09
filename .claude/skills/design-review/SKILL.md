@@ -22,6 +22,8 @@ The script (`scripts/check.js`) serves the repo itself; nothing else needs to be
 - token contrast (text ≥ 4.5:1, focus ≥ 3:1) in each theme
 - phone touch targets < 44px
 - reduced motion not showing final states
+- the same checks with the hidden basement open (screenshots: `.review/<theme>-<width>-b1-{hero,fun,basement}.png`)
+- the riddle: a wrong guess keeps B1 shut, "panda" opens it, a reload keeps it open
 
 ## 2. Look at the screenshots
 

@@ -25,13 +25,14 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
+| [v0.2.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.2.0) | 2026-10-09 | Isometric building that leans toward the mouse, floors read top to bottom, a hidden basement behind a riddle |
 | [v0.1.1](https://github.com/AD-NAP/portfolio/releases/tag/v0.1.1) | 2026-10-09 | Recruiter fixes: proof line in the hero, edge-energy-optimizer project, clearer charts, tighter timeline facts |
 | [v0.1.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.1.0) | 2026-10-09 | First public version: building concept, day and night themes, WCAG 2.1 AA |
 
 To see an old version, check out its tag:
 
 ```bash
-git switch --detach v0.1.0
+git switch --detach v0.2.0
 ```
 
 ## Docs

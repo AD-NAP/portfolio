@@ -76,6 +76,7 @@ Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved s
 ## Facts Shafik added later (not on the resume)
 
 - Loves cats and pandas.
+- Favourite animal: the panda, which is what his GitHub name hides. (Shafik, 2026-10-09)
 - GitHub username `ad-nap` spells "pan-da" backwards; GitHub's logo is a cat.
 - Onboarding guide (Cloud BMS) effect: a new junior engineer used the guide and, with minimal guidance, set up his environment and started development on the same day. (Shafik, 2026-10-09)
 - Cloud BMS MVP ownership: he owned the Event Log only, and assisted with other small features and bug fixes. (Shafik, 2026-10-09)

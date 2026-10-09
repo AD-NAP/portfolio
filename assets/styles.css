@@ -13,7 +13,9 @@
   --text: #E6EDF5;
   --body: #CBD7E5;
   --muted: #9DB0C7;
-  --facade: #0F1E33;
+  --facade: #0F1E33;        /* front face of the building */
+  --wall-side: #0A1728;     /* side face, in shade */
+  --roof: #16294A;          /* roof decks and the plot at street level */
   --glass: #1C3352;         /* window, lights off */
   --placeholder: #FF8FA3;
   --focus: #FFB84D;
@@ -33,6 +35,8 @@
   --body: #22395A;
   --muted: #4D6584;
   --facade: #F7FAFD;
+  --wall-side: #D3E1EF;
+  --roof: #E8F0F8;
   --glass: #A8C7E3;
   --placeholder: #B0174A;
   --focus: #0F2440;
@@ -202,12 +206,12 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
   font-family: var(--font-mono); font-size: .75rem; color: var(--muted);
 }
 .hero__links { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; margin: 20px 0 0; padding: 0; }
-.hero__links a, .contact__links a:not(.is-placeholder), .project__link a {
+.hero__links a, .contact__links a:not(.is-placeholder), .project__link a, .riddle__reward a {
   display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
   border: 1px solid var(--line); border-radius: 999px; background: var(--card);
   font-family: var(--font-mono); font-size: .75rem; text-decoration: none;
 }
-.hero__links a:hover, .contact__links a:not(.is-placeholder):hover, .project__link a:hover { border-color: var(--accent); }
+.hero__links a:hover, .contact__links a:not(.is-placeholder):hover, .project__link a:hover, .riddle__reward a:hover { border-color: var(--accent); }
 .dot { width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--sensor); box-shadow: 0 0 0 0 color-mix(in srgb, var(--sensor) 60%, transparent); animation: ping 2.4s ease-out 1.6s 2; }
 @keyframes ping { to { box-shadow: 0 0 0 10px transparent; } }
 
@@ -247,7 +251,14 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 
 /* Building */
 .tower { margin: 0; justify-self: end; width: 100%; max-width: 380px; }
-.tower svg { display: block; width: 100%; height: auto; overflow: visible; }
+/* The building leans a few degrees toward the pointer (main.js sets --tilt-x and --tilt-y, each -1 to 1). */
+.tower svg {
+  display: block; width: 100%; height: auto; overflow: visible;
+  transform: perspective(900px) rotateX(calc(var(--tilt-y, 0) * -4deg)) rotateY(calc(var(--tilt-x, 0) * 7deg));
+  transition: transform .35s ease-out;
+}
+.tower__grid { transform: translate(calc(var(--tilt-x, 0) * -5px), calc(var(--tilt-y, 0) * -3px)); transition: transform .35s ease-out; }
+.tower__ground { fill: var(--roof); stroke: var(--line); stroke-width: 1.5; stroke-linejoin: round; opacity: .55; }
 .tower__gridline { stroke: var(--line-soft); stroke-width: .5; opacity: .6; }
 .tower__line { stroke: var(--line); stroke-width: 1.5; fill: none; }
 .tower__beacon { fill: var(--accent); }
@@ -255,15 +266,18 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 .tower__caption { margin-top: 12px; font-family: var(--font-mono); font-size: .6875rem; color: var(--muted); text-align: center; }
 
 .storey { cursor: pointer; }
-.storey__body { fill: var(--facade); stroke: var(--line); stroke-width: 1.5; transition: stroke .2s; }
+.storey__body, .storey__top { fill: var(--facade); stroke: var(--line); stroke-width: 1.5; stroke-linejoin: round; vector-effect: non-scaling-stroke; transition: stroke .2s; }
+.storey__body--side { fill: var(--wall-side); }
+.storey__top { fill: var(--roof); }
 .storey__win { fill: var(--glass); transition: fill .25s ease; }
 .storey__win.is-on { fill: var(--accent); }
 .storey__cat { fill: #0F1E33; opacity: 0; transition: opacity .25s ease; }
 .storey__cat.is-on { opacity: 1; }
 .storey__label { font-family: var(--font-mono); font-size: 9px; fill: var(--muted); }
 .storey__tag { font-family: var(--font-mono); font-size: 9px; fill: var(--muted); }
-.storey:hover .storey__body { stroke: var(--accent); }
-.storey:focus-visible .storey__body { stroke: var(--focus); stroke-width: 3; }
+.storey:hover .storey__body, .storey:hover .storey__top { stroke: var(--accent); }
+.storey:focus-visible { outline: none; }   /* the floor's own outline is the focus ring */
+.storey:focus-visible .storey__body, .storey:focus-visible .storey__top { stroke: var(--focus); stroke-width: 3; }
 .storey:hover .storey__label, .storey:focus-visible .storey__label { fill: var(--text); }
 
 /* Hovering or focusing a floor previews it: that floor lights up, the rest dim. */
@@ -272,6 +286,10 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 .tower.is-previewing .storey:not(.is-hover) .storey__cat.is-on { opacity: .25; }
 .storey.is-hover .storey__win { fill: var(--accent); }
 .tower.is-previewing .storey:not(.is-hover) .storey__label { opacity: .4; }
+
+/* The basement exists only once the riddle is solved. Dashed, because it is below ground. */
+.storey--b1 .storey__body { stroke-dasharray: 4 3; }
+.tower:not(.has-b1) .storey--b1 { display: none; }
 
 /* ---------- Floors (sections) ---------- */
 .floor { padding-block: clamp(48px, 7vw, 80px); border-top: 1px solid var(--line-soft); }
@@ -387,7 +405,6 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 
 /* Fun facts */
 .fun { max-width: var(--measure); }
-.fun__fact { margin: 0 0 28px; font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 600; line-height: 1.25; }
 .riddle { position: relative; padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
 
 /* A cat sits on the riddle card. Its tail flicks once when this floor scrolls into view. */
@@ -400,13 +417,24 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
   50% { transform: rotate(8deg); }
   75% { transform: rotate(-14deg); }
 }
-.riddle__q { margin: 0 0 16px; font-size: 1.125rem; }
+.riddle__q { display: block; margin: 0 0 4px; font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 600; line-height: 1.25; }
+.riddle__hint { margin: 0 0 18px; color: var(--muted); }
+.riddle__row { display: flex; flex-wrap: wrap; gap: 10px; }
+.riddle__input {
+  flex: 1 1 12ch; max-width: 24ch; min-width: 0; min-height: 44px; padding: 8px 16px;
+  border: 1px solid var(--muted); border-radius: 999px;
+  background: var(--bg-deep); color: var(--text);
+  font: inherit; font-family: var(--font-mono); font-size: .875rem;
+}
 .riddle__btn {
   font: inherit; font-size: .9375rem; cursor: pointer;
   min-height: 44px; padding: 8px 18px; border-radius: 999px;
   border: 1px solid var(--accent); background: transparent; color: var(--text);
 }
 .riddle__btn:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); }
+.riddle__status { margin: 14px 0 0; color: var(--body); }
+.riddle__status:empty { display: none; }
+.riddle__reward { margin-top: 18px !important; }
 .riddle__a p { margin: 0; color: var(--body); }
 .riddle__a a { color: var(--accent-text); }
 .flip { margin: 4px 0 16px !important; }
@@ -417,6 +445,7 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
   color: var(--text);
 }
 .flip__word span { display: inline-block; width: 1ch; text-align: center; }
+.flip__word.is-static span { translate: calc(var(--d) * 1ch) 0; color: var(--accent-text); }
 .flip__word.is-flipped span { animation: hop .9s cubic-bezier(.55, 0, .25, 1) forwards; animation-delay: calc(var(--i) * 70ms + .2s); }
 @keyframes hop {
   50%  { translate: calc(var(--d) * .5ch) var(--y); }
@@ -425,7 +454,7 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 .fun__hint { margin: 24px 0 0; color: var(--muted); }
 
 /* Contact */
-.floor--roof { padding-bottom: 48px; }
+.floor--last { padding-bottom: 48px; }
 .contact__lede { margin: 0 0 12px; color: var(--muted); }
 .contact__email {
   display: inline-block;
@@ -437,6 +466,18 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 }
 .contact__email:hover { color: var(--accent-text); }
 .contact__links { list-style: none; padding: 0; margin: 20px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+
+/* Basement */
+.b1 { max-width: var(--measure); }
+.cake { display: block; width: 148px; height: auto; margin-bottom: 20px; overflow: visible; }
+.cake__plate { fill: var(--roof); stroke: var(--line); stroke-width: 1.5; }
+.cake__body { fill: var(--facade); stroke: var(--line); stroke-width: 1.5; stroke-linejoin: round; }
+.cake__layer { fill: none; stroke: var(--accent); stroke-width: 3; }
+.cake__icing { fill: var(--accent); stroke: var(--line); stroke-width: 1.5; }
+.cake__candle { fill: var(--text); }
+.cake__flame { fill: var(--accent); stroke: var(--line); stroke-width: 1; }
+.b1__lede { margin: 0 0 6px; font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 600; line-height: 1.25; }
+.b1__more { margin: 0; color: var(--body); }
 
 .foot { padding: 32px 0 48px; border-top: 1px solid var(--line-soft); color: var(--muted); font-size: .8125rem; }
 

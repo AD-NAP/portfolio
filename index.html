@@ -36,13 +36,13 @@
   <aside class="explorer" aria-label="Site sections">
     <div class="explorer__head">
       <svg class="mini" viewBox="0 0 40 84" aria-hidden="true">
-        <rect class="mini__floor" data-floor="contact" x="9" y="4" width="22" height="9"/>
-        <rect class="mini__floor" data-floor="fun" x="6" y="15" width="28" height="9"/>
-        <rect class="mini__floor" data-floor="education" x="6" y="26" width="28" height="9"/>
+        <rect class="mini__floor" data-floor="about" x="9" y="4" width="22" height="9"/>
+        <rect class="mini__floor" data-floor="skills" x="6" y="15" width="28" height="9"/>
+        <rect class="mini__floor" data-floor="experience" x="6" y="26" width="28" height="9"/>
         <rect class="mini__floor" data-floor="projects" x="6" y="37" width="28" height="9"/>
-        <rect class="mini__floor" data-floor="experience" x="6" y="48" width="28" height="9"/>
-        <rect class="mini__floor" data-floor="skills" x="6" y="59" width="28" height="9"/>
-        <rect class="mini__floor" data-floor="about" x="4" y="70" width="32" height="11"/>
+        <rect class="mini__floor" data-floor="education" x="6" y="48" width="28" height="9"/>
+        <rect class="mini__floor" data-floor="fun" x="6" y="59" width="28" height="9"/>
+        <rect class="mini__floor" data-floor="contact" x="4" y="70" width="32" height="11"/>
       </svg>
       <div>
         <p class="explorer__title">shafik</p>
@@ -79,6 +79,7 @@
         <li><a href="#education" data-target="education"><span class="ext ext--md"></span>education.md</a></li>
         <li><a href="#fun" data-target="fun"><span class="ext ext--md"></span>fun-facts.md</a></li>
         <li><a href="#contact" data-target="contact"><span class="ext ext--ttl"></span>contact.ttl</a></li>
+        <li class="b1-entry" hidden><a href="#b1" data-target="b1"><span class="ext ext--md"></span>b1/cake.md</a></li>
       </ul>
     </nav>
   </aside>
@@ -105,25 +106,23 @@
       </div>
 
       <figure class="tower" aria-label="A building whose floors are the sections of this site">
-        <svg viewBox="0 0 300 470">
+        <svg viewBox="0 28 300 396">
           <defs aria-hidden="true">
             <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
               <path d="M10 0H0V10" fill="none" class="tower__gridline"/>
             </pattern>
           </defs>
-          <rect x="0" y="60" width="300" height="410" fill="url(#grid)" aria-hidden="true"/>
-          <line class="tower__line" x1="112" y1="14" x2="112" y2="46" aria-hidden="true"/>
-          <circle class="tower__beacon" cx="112" cy="12" r="3.5" aria-hidden="true"/>
+          <rect class="tower__grid" x="0" y="60" width="300" height="364" fill="url(#grid)" aria-hidden="true"/>
+          <!-- Storeys, mast and street level are drawn by main.js -->
           <g class="tower__floors"></g>
-          <line class="tower__line" x1="10" y1="456" x2="290" y2="456" aria-hidden="true"/>
         </svg>
         <figcaption class="tower__caption">Select a floor to visit that section.</figcaption>
       </figure>
     </header>
 
-    <!-- About / ground floor -->
+    <!-- About / roof -->
     <section id="about" class="floor" data-section="about">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">G</span>About</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">R</span>About</h2>
       <div class="about">
         <p class="lede">Software engineer with experience building internal tooling and cloud applications across Python, TypeScript, and AWS. NUS Computer Science graduate currently developing building-management platforms and semantic-metadata tooling at Azbil.</p>
         <pre class="code" aria-label="The same summary written as Turtle, the format Brick Schema building metadata is stored in"><code><span class="c"># shafik.ttl</span>
@@ -140,9 +139,9 @@
       </div>
     </section>
 
-    <!-- Skills / L1 -->
+    <!-- Skills / L6 -->
     <section id="skills" class="floor" data-section="skills">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L1</span>Skills</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L6</span>Skills</h2>
       <dl class="skills">
         <div><dt>Languages</dt><dd>Python, SQL, JavaScript, TypeScript</dd></div>
         <div><dt>Frontend</dt><dd>Streamlit, Svelte, React, HTML/CSS</dd></div>
@@ -153,9 +152,9 @@
       </dl>
     </section>
 
-    <!-- Experience / L2 -->
+    <!-- Experience / L5 -->
     <section id="experience" class="floor" data-section="experience">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L2</span>Experience</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L5</span>Experience</h2>
       <ol class="timeline">
         <li id="azbil-engineer" class="role">
           <p class="role__when"><time datetime="2026-01">Jan 2026</time> to present</p>
@@ -211,13 +210,13 @@
       </ol>
     </section>
 
-    <!-- Projects / L3 -->
+    <!-- Projects / L4 -->
     <section id="projects" class="floor" data-section="projects">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L3</span>Projects</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L4</span>Projects</h2>
       <article id="edge-energy-optimizer" class="project">
         <div class="project__head">
           <h3 class="project__name">edge-energy-optimizer</h3>
-          <p class="project__meta">Personal project, Oct 2026, in progress</p>
+          <p class="project__meta">Personal project, in progress. Phase 1 done Oct 2026</p>
         </div>
         <p>Forecasts a building's energy load a day ahead. The first of five planned phases towards controlling a simulated building, shaving peak demand with a battery, and deploying at the edge.</p>
         <figure class="compare compare--stack" aria-label="Forecast error: 45.7 kWh for the same-hour-last-week baseline compared with 34.5 kWh for the forecast model, drawn to scale">
@@ -244,9 +243,9 @@
       </article>
     </section>
 
-    <!-- Education / L4 -->
+    <!-- Education / L3 -->
     <section id="education" class="floor" data-section="education">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L4</span>Education</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L3</span>Education</h2>
       <div class="edu">
         <article>
           <h3>National University of Singapore</h3>
@@ -260,35 +259,59 @@
       </div>
     </section>
 
-    <!-- Fun facts / L5 -->
+    <!-- Fun facts / L2 -->
     <section id="fun" class="floor" data-section="fun">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L5</span>Fun facts</h2>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L2</span>Fun facts</h2>
       <div class="fun">
-        <p class="fun__fact">I love cats and pandas.</p>
         <div class="riddle">
           <svg class="perch-cat" viewBox="0 0 60 60" aria-hidden="true">
             <path class="perch-cat__tail" d="M37 57c11 0 16-7 13-17-.8-2.6-4.2-2-3.5.8 1.9 7.2-1.6 11.7-9.5 11.7z"/>
             <path d="M11.5 17.5 12 5l6.5 8.5h1L26 5l.5 12.5c1.7 2.3 2.5 5 2.3 7.8 6.6 3.4 11.2 13 10.7 32.7H12c-2.4-12.7-1.2-22.6 1-27.2-1.8-3.6-2.4-9.3-1.5-13.3z"/>
           </svg>
-          <p class="riddle__q">Can you spot the panda? Hint: GitHub.</p>
-          <button class="riddle__btn" type="button" aria-expanded="false" aria-controls="riddle-answer">Show me</button>
+          <form class="riddle__form" novalidate>
+            <label class="riddle__q" for="guess">Guess my favourite animal.</label>
+            <p id="guess-hint" class="riddle__hint">Hint: it is hiding in my GitHub name.</p>
+            <div class="riddle__row">
+              <input id="guess" class="riddle__input" type="text" name="guess" aria-describedby="guess-hint" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="24">
+              <button class="riddle__btn" type="submit">Check</button>
+            </div>
+          </form>
+          <p class="riddle__status" role="status"></p>
           <div id="riddle-answer" class="riddle__a" hidden>
             <p class="flip"><span class="visually-hidden">ad-nap read backwards is pan-da</span><span class="flip__word" aria-hidden="true"></span></p>
-            <p>My GitHub username is <a href="https://github.com/ad-nap">ad-nap</a>. Read it backwards. And GitHub's logo is a cat, so that covers both.</p>
+            <p>My GitHub username is <code>ad-nap</code>. Read it backwards. I love pandas, and cats too: GitHub's logo is a cat, so that covers both.</p>
+            <p class="riddle__reward"><a href="#b1">Take the lift down to B1</a></p>
           </div>
         </div>
-        <p class="fun__hint">There's another cat on this page. It only comes out at night.</p>
+        <p class="fun__hint">There's a cat somewhere else on this page. It only comes out at night.</p>
       </div>
     </section>
 
-    <!-- Contact / roof -->
-    <section id="contact" class="floor floor--roof" data-section="contact">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">R</span>Contact</h2>
+    <!-- Contact / L1 -->
+    <section id="contact" class="floor floor--last" data-section="contact">
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L1</span>Contact</h2>
       <p class="contact__lede">Open to backend software development and AI engineering roles. The fastest way to reach me is email.</p>
       <a class="contact__email" href="mailto:shafik.adam98@gmail.com">shafik.adam98@gmail.com</a>
       <ul class="contact__links">
         <li><a href="https://github.com/ad-nap">GitHub</a></li>
       </ul>
+    </section>
+
+    <!-- Basement / B1: hidden until the riddle on L2 is solved (main.js) -->
+    <section id="b1" class="floor" data-section="b1" hidden>
+      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">B1</span>Basement</h2>
+      <div class="b1">
+        <svg class="cake" viewBox="0 0 140 122" aria-hidden="true">
+          <ellipse class="cake__plate" cx="70" cy="100" rx="64" ry="15"/>
+          <path class="cake__body" d="M22 60v32a48 12 0 0 0 96 0V60"/>
+          <path class="cake__layer" d="M22 77a48 12 0 0 0 96 0"/>
+          <ellipse class="cake__icing" cx="70" cy="60" rx="48" ry="12"/>
+          <rect class="cake__candle" x="67" y="30" width="6" height="28" rx="1"/>
+          <path class="cake__flame" d="M70 10c5 6 7 9 7 13a7 7 0 0 1-14 0c0-4 2-7 7-13z"/>
+        </svg>
+        <p class="b1__lede">You found the basement.</p>
+        <p class="b1__more">Nothing down here yet, so have some cake.</p>
+      </div>
     </section>
 
     <footer class="foot">

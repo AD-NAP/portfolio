@@ -10,84 +10,157 @@
     return el;
   };
 
-  /* ---------- Hero building: one storey per section ---------- */
-  // Top to bottom, matching the order you reach them going up.
+  /* ---------- Hero building: one storey per section, drawn isometric ---------- */
+  // Top to bottom, the same order as the page: roof first, level 1 last.
   const storeys = [
-    { id: "contact",      title: "Contact",    where: "roof",         level: "R",  file: "contact.ttl",   x: 52, w: 120, h: 46, cols: 4, rows: 1 },
-    { id: "fun",          title: "Fun facts",  where: "level 5",      level: "L5", file: "fun-facts.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "education",    title: "Education",  where: "level 4",      level: "L4", file: "education.md",  x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "projects",     title: "Projects",   where: "level 3",      level: "L3", file: "projects/",     x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "experience",   title: "Experience", where: "level 2",      level: "L2", file: "experience/",   x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "skills",       title: "Skills",     where: "level 1",      level: "L1", file: "skills.ttl",    x: 34, w: 156, h: 54, cols: 5, rows: 2 },
-    { id: "about",        title: "About",      where: "ground floor", level: "G",  file: "about.ttl",     x: 26, w: 172, h: 76, cols: 6, rows: 1, door: true },
+    { id: "about",        title: "About",      where: "roof",    level: "R",  file: "about.ttl",     h: 28, roof: true },
+    { id: "skills",       title: "Skills",     where: "level 6", level: "L6", file: "skills.ttl",    h: 44 },
+    { id: "experience",   title: "Experience", where: "level 5", level: "L5", file: "experience/",   h: 44 },
+    { id: "projects",     title: "Projects",   where: "level 4", level: "L4", file: "projects/",     h: 44 },
+    { id: "education",    title: "Education",  where: "level 3", level: "L3", file: "education.md",  h: 44 },
+    { id: "fun",          title: "Fun facts",  where: "level 2", level: "L2", file: "fun-facts.md",  h: 44 },
+    { id: "contact",      title: "Contact",    where: "level 1", level: "L1", file: "contact.ttl",   h: 56, door: true },
+    // Below ground. Drawn, but hidden until the riddle on level 2 is solved.
+    { id: "b1",           title: "Basement",   where: "level B1", level: "B1", file: "b1/cake.md",   h: 34, basement: true },
   ];
-  // The cat sits in one window on the fun-facts floor (row 2, column 4).
+  // The cat sits in one window on the fun-facts floor (front face, row 2, column 4).
   const CAT = { id: "fun", row: 1, col: 3 };
 
-  const floorsGroup = document.querySelector(".tower__floors");
-  const windows = [];   // { el, extra? } bottom-to-top order is built below
-  if (floorsGroup) {
-    let y = 46;
-    for (const s of storeys) {
-      const a = svgEl("a", { href: `#${s.id}`, class: "storey", "aria-label": `Go to ${s.title}, ${s.where}` });
-      a.appendChild(svgEl("rect", { x: s.x, y, width: s.w, height: s.h, class: "storey__body" }));
+  // Footprint: u runs back along the shaded side face, v along the front face
+  // (the one that catches the sun and moon). z is height.
+  const SIDE = 70, FRONT = 120;
+  const COS = Math.cos(Math.PI / 6), SIN = 0.5;
+  const NEAR = { x: 92, y: 410 };   // the corner nearest the viewer, at street level
+  const iso = (u, v, z) => [NEAR.x + (v - u) * COS, NEAR.y - (u + v) * SIN - z];
+  const points = (...pts) => pts.map(p => p.map(n => n.toFixed(1)).join(",")).join(" ");
 
-      const padX = 14, padTop = 10, winW = 16, winH = 13;
-      const gapX = (s.w - padX * 2 - winW * s.cols) / (s.cols - 1);
-      const gapY = s.rows > 1 ? (s.h - padTop * 2 - winH * s.rows) / (s.rows - 1) : 0;
-      for (let r = 0; r < s.rows; r++) {
-        for (let c = 0; c < s.cols; c++) {
-          // Ground floor: leave the middle two bays for the door.
-          if (s.door && (c === 2 || c === 3)) continue;
-          const wx = s.x + padX + c * (winW + gapX);
-          const wy = s.door ? y + 14 : y + padTop + r * (winH + gapY);
+  const floorsGroup = document.querySelector(".tower__floors");
+  const windows = [];   // { el, extra? } collected top-down
+  if (floorsGroup) {
+    // A wall is drawn flat (plain rects) inside a group that is skewed onto its face.
+    const wall = (parent, s, front, origin, width, cols, rows) => {
+      const g = svgEl("g", { transform: `matrix(${COS} ${front ? -SIN : SIN} 0 1 ${origin[0].toFixed(1)} ${origin[1].toFixed(1)})` });
+      g.appendChild(svgEl("rect", { x: 0, y: 0, width, height: s.h, class: "storey__body" + (front ? "" : " storey__body--side") }));
+      const winW = front ? 14 : 12, winH = s.door ? 16 : s.roof ? 12 : s.basement ? 8 : 11;
+      const padX = (width - winW * cols) / (cols + 1) * 1.2;
+      const gapX = cols > 1 ? (width - padX * 2 - winW * cols) / (cols - 1) : 0;
+      const padTop = s.door ? 12 : s.roof ? 10 : s.basement ? 13 : 8;
+      const gapY = rows > 1 ? (s.h - padTop * 2 - winH * rows) / (rows - 1) : 0;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          // Level 1: the middle bay of the front face is the door.
+          if (s.door && front && c === 2) continue;
+          const wx = padX + c * (winW + gapX), wy = padTop + r * (winH + gapY);
           const win = svgEl("rect", { x: wx, y: wy, width: winW, height: winH, class: "storey__win" });
-          a.appendChild(win);
+          g.appendChild(win);
           const entry = { el: win };
-          if (s.id === CAT.id && r === CAT.row && c === CAT.col) {
+          if (front && s.id === CAT.id && r === CAT.row && c === CAT.col) {
             // A small sitting cat silhouette: ears, head, body, curled tail.
             const cat = svgEl("path", {
               class: "storey__cat",
-              d: `M${wx + 5} ${wy + 13} V${wy + 7.5} L${wx + 5.4} ${wy + 4} L${wx + 6.8} ${wy + 5.6} H${wx + 8.6} L${wx + 10} ${wy + 4} L${wx + 10.4} ${wy + 7.5} Q${wx + 12} ${wy + 10} ${wx + 11} ${wy + 13} Z M${wx + 11} ${wy + 12.6} q${2.6} 0 ${2.4} -3 l-.9 .1 q.1 2 -1.5 2 Z`,
+              transform: `translate(${wx} ${wy - 0.4}) scale(.86)`,
+              d: "M5 13 V7.5 L5.4 4 L6.8 5.6 H8.6 L10 4 L10.4 7.5 Q12 10 11 13 Z M11 12.6 q2.6 0 2.4 -3 l-.9 .1 q.1 2 -1.5 2 Z",
             });
-            a.appendChild(cat);
+            g.appendChild(cat);
             entry.extra = cat;
           }
           windows.push(entry);
         }
       }
-      if (s.door) {
-        const door = svgEl("rect", { x: s.x + s.w / 2 - 14, y: y + s.h - 40, width: 28, height: 40, class: "storey__win" });
-        a.appendChild(door);
+      if (s.door && front) {
+        const door = svgEl("rect", { x: width / 2 - 11, y: s.h - 36, width: 22, height: 36, class: "storey__win" });
+        g.appendChild(door);
         windows.push({ el: door });
       }
+      parent.appendChild(g);
+    };
 
-      const tag = svgEl("text", { x: 8, y: y + s.h / 2 + 3, class: "storey__tag", "aria-hidden": "true" });
+    const total = storeys.reduce((sum, s) => sum + (s.roof || s.basement ? 0 : s.h), 0);
+
+    // Street level: a paved plot a little wider than the building.
+    const M = 9;
+    floorsGroup.before(svgEl("polygon", {
+      class: "tower__ground", "aria-hidden": "true",
+      points: points(iso(-M, -M, 0), iso(SIDE + M, -M, 0), iso(SIDE + M, FRONT + M, 0), iso(-M, FRONT + M, 0)),
+    }));
+
+    let top = total;
+    for (const s of storeys) {
+      const a = svgEl("a", { href: `#${s.id}`, class: "storey" + (s.basement ? " storey--b1" : ""), "aria-label": `Go to ${s.title}, ${s.where}` });
+      let mid;
+      if (s.roof) {
+        // The roof: the deck on top of level 6, and a smaller room set back on it.
+        const u0 = 12, u1 = 46, v0 = 14, v1 = 74, z = total + s.h;
+        a.appendChild(svgEl("polygon", { class: "storey__top", points: points(iso(0, 0, total), iso(SIDE, 0, total), iso(SIDE, FRONT, total), iso(0, FRONT, total)) }));
+        wall(a, s, false, iso(u1, v0, z), u1 - u0, 2, 1);
+        wall(a, s, true, iso(u0, v0, z), v1 - v0, 3, 1);
+        a.appendChild(svgEl("polygon", { class: "storey__top", points: points(iso(u0, v0, z), iso(u1, v0, z), iso(u1, v1, z), iso(u0, v1, z)) }));
+        // Mast and beacon stand on the room.
+        const [mx, my] = iso((u0 + u1) / 2, (v0 + v1) / 2, z);
+        a.appendChild(svgEl("line", { class: "tower__line", x1: mx, y1: my, x2: mx, y2: my - 34 }));
+        a.appendChild(svgEl("circle", { class: "tower__beacon", cx: mx, cy: my - 36, r: 3.5 }));
+        mid = total + s.h / 2;
+      } else {
+        const rows = s.door || s.basement ? 1 : 2;
+        wall(a, s, false, iso(SIDE, 0, top), SIDE, 3, rows);
+        wall(a, s, true, iso(0, 0, top), FRONT, 5, rows);
+        mid = top - s.h / 2;
+        top -= s.h;
+      }
+
+      const [tx, ty] = iso(SIDE, 0, mid);
+      const tag = svgEl("text", { x: tx - 8, y: ty + 3, class: "storey__tag", "text-anchor": "end", "aria-hidden": "true" });
       tag.textContent = s.level;
       a.appendChild(tag);
-      const label = svgEl("text", { x: 208, y: y + s.h / 2 + 3, class: "storey__label", "aria-hidden": "true" });
+      const [lx, ly] = iso(0, FRONT, mid);
+      const label = svgEl("text", { x: lx + 10, y: ly + 3, class: "storey__label", "aria-hidden": "true" });
       label.textContent = s.file;
       a.appendChild(label);
 
       floorsGroup.appendChild(a);
-      y += s.h;
     }
   }
 
   // Phones hide the floor labels and tags, so crop to just the building.
+  // Once the basement is open the drawing grows downward to show it.
+  const tower = document.querySelector(".tower");
   const towerSvg = document.querySelector(".tower svg");
   const phone = window.matchMedia("(max-width: 900px)");
-  const fitTower = () => towerSvg?.setAttribute("viewBox", phone.matches ? "20 0 184 470" : "0 0 300 470");
+  const fitTower = () => {
+    const height = tower?.classList.contains("has-b1") ? 432 : 396;
+    towerSvg?.setAttribute("viewBox", phone.matches ? `14 28 200 ${height}` : `0 28 300 ${height}`);
+  };
   fitTower();
   phone.addEventListener("change", fitTower);
+
+  // Desktop with a mouse: the building leans a few degrees toward the pointer.
+  const hero = document.querySelector(".hero");
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  if (hero && towerSvg && !reduceMotion) {
+    let frame = 0, tx = 0, ty = 0;
+    const apply = () => {
+      frame = 0;
+      towerSvg.style.setProperty("--tilt-x", tx.toFixed(3));
+      towerSvg.style.setProperty("--tilt-y", ty.toFixed(3));
+    };
+    const tilt = (x, y) => { tx = x; ty = y; if (!frame) frame = requestAnimationFrame(apply); };
+    const clamp = n => Math.max(-1, Math.min(1, n));
+    hero.addEventListener("pointermove", e => {
+      if (phone.matches || !finePointer.matches) return;
+      const r = towerSvg.getBoundingClientRect();
+      tilt(clamp((e.clientX - (r.left + r.width / 2)) / (window.innerWidth / 2)),
+           clamp((e.clientY - (r.top + r.height / 2)) / (window.innerHeight / 2)));
+    });
+    hero.addEventListener("pointerleave", () => tilt(0, 0));
+  }
 
   const setWindow = (w, on) => {
     w.el.classList.toggle("is-on", on);
     w.extra?.classList.toggle("is-on", on);
   };
 
-  // Lights switch on from the ground up (windows were collected top-down),
-  // and off from the roof down. A little jitter keeps it from looking mechanical.
+  // Lights switch on from the roof down (windows were collected top-down), the way
+  // the page reads, and off from level 1 up. A little jitter keeps it from looking mechanical.
   let lightTimers = [];
   const setLights = (on, animate) => {
     lightTimers.forEach(clearTimeout);
@@ -95,9 +168,9 @@
     if (!animate || reduceMotion) { windows.forEach(w => setWindow(w, on)); return; }
     const n = windows.length;
     windows
-      .map((w, i) => ({ w, order: (on ? n - i : i) + Math.random() * 8 }))
+      .map((w, i) => ({ w, order: (on ? i : n - i) + Math.random() * 8 }))
       .sort((a, b) => a.order - b.order)
-      .forEach(({ w }, i) => lightTimers.push(setTimeout(() => setWindow(w, on), 250 + i * 22)));
+      .forEach(({ w }, i) => lightTimers.push(setTimeout(() => setWindow(w, on), 250 + i * 14)));
   };
 
   // First paint: the one orchestrated load moment, only at night.
@@ -147,11 +220,11 @@
   const links = [...document.querySelectorAll(".files a")];
   const minis = [...document.querySelectorAll(".mini__floor")];
   const sections = [...document.querySelectorAll("[data-section]")];
-  const order = ["about", "skills", "experience", "projects", "education", "fun", "contact"];
+  const order = ["about", "skills", "experience", "projects", "education", "fun", "contact", "b1"];
 
   const setActive = (id) => {
     links.forEach(l => l.classList.toggle("is-active", l.dataset.target === id && l.closest(".dir > ul") === null));
-    // Every floor up to the one you are on is lit.
+    // Every floor from the roof down to the one you are on is lit.
     const reached = order.indexOf(id);
     minis.forEach(m => m.classList.toggle("is-lit", order.indexOf(m.dataset.floor) <= reached));
   };
@@ -216,19 +289,49 @@
       flip.appendChild(s);
     });
   }
-  const riddleBtn = document.querySelector(".riddle__btn");
+  /* ---------- Guess the animal to open the basement ---------- */
+  const riddleForm = document.querySelector(".riddle__form");
+  const guess = document.getElementById("guess");
+  const riddleStatus = document.querySelector(".riddle__status");
   const answer = document.getElementById("riddle-answer");
-  riddleBtn?.addEventListener("click", () => {
-    const open = answer.hidden;
-    answer.hidden = !open;
-    riddleBtn.setAttribute("aria-expanded", String(open));
-    riddleBtn.textContent = open ? "Hide answer" : "Show me";
-    flip?.classList.remove("is-flipped");
-    if (open) requestAnimationFrame(() => requestAnimationFrame(() => flip?.classList.add("is-flipped")));
-  });
+  const b1 = document.getElementById("b1");
+
+  const openB1 = (animate) => {
+    riddleForm.hidden = true;
+    answer.hidden = false;
+    if (animate && !reduceMotion) requestAnimationFrame(() => requestAnimationFrame(() => flip?.classList.add("is-flipped")));
+    else flip?.classList.add("is-static");
+    b1.hidden = false;
+    document.querySelectorAll(".b1-entry").forEach(el => { el.hidden = false; });
+    tower?.classList.add("has-b1");
+    fitTower();
+  };
+
+  if (riddleForm && guess && answer && b1) {
+    let misses = 0;
+    riddleForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const said = guess.value.toLowerCase().replace(/[^a-z]/g, "").replace(/^(a|the)(?=.)/, "");
+      if (!said) { riddleStatus.textContent = "Type an animal first."; return; }
+      if (/^(giant)?pandas?$/.test(said)) {
+        try { localStorage.setItem("b1", "open"); } catch (e) {}
+        riddleStatus.textContent = "Correct. The basement is open.";
+        openB1(true);
+        answer.querySelector(".riddle__reward a")?.focus({ preventScroll: true });
+        return;
+      }
+      if (/^(cats?|octocat|kittens?)$/.test(said)) { riddleStatus.textContent = "Close. That is GitHub's logo. Look at my username instead."; return; }
+      misses += 1;
+      riddleStatus.textContent = misses === 1 ? "Not quite. Look at my GitHub username." : "Not quite. Try reading it backwards.";
+    });
+
+    // Solved on an earlier visit: the basement stays open.
+    let solved = false;
+    try { solved = localStorage.getItem("b1") === "open"; } catch (e) {}
+    if (solved) openB1(false);
+  }
 
   /* ---------- Building: hovering a floor previews it ---------- */
-  const tower = document.querySelector(".tower");
   document.querySelectorAll(".storey").forEach(st => {
     const on = () => { tower.classList.add("is-previewing"); st.classList.add("is-hover"); };
     const off = () => { tower.classList.remove("is-previewing"); st.classList.remove("is-hover"); };

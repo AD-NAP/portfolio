@@ -6,6 +6,8 @@
 //   - axe-core WCAG 2.1 AA violations
 //   - token contrast (text ≥ 4.5:1, focus ≥ 3:1) per theme
 //   - touch targets under 44px at phone widths
+//   - the same checks again with the hidden basement (B1) open
+//   - the riddle: wrong guesses keep B1 shut, "panda" opens it, a reload keeps it open
 // Usage: node .claude/skills/design-review/scripts/check.js [--out DIR] [--widths 390,1280] [--themes dark,light]
 // Exit code 1 when any check fails, so it can gate hooks and CI.
 
@@ -56,6 +58,26 @@ const TOKEN_PAIRS = [
   ["--focus", "--bg", 3], ["--focus", "--facade", 3],
 ];
 
+// Checks that read the page as it stands: overflow, axe, small touch targets.
+const audit = async (page, phone) => {
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  await page.addScriptTag({ content: axeSrc });
+  const axe = await page.evaluate(async () => {
+    const r = await window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"] } });
+    return r.violations.map(v => ({ id: v.id, impact: v.impact, help: v.help,
+      targets: v.nodes.slice(0, 5).map(n => n.target.join(" ")) }));
+  });
+  const smallTargets = phone ? await page.evaluate(() =>
+    [...document.querySelectorAll("a[href], button, input")]
+      .filter(el => !el.closest(".storey"))              // floors: equivalent links exist in the Files menu
+      .map(el => { const r = el.getBoundingClientRect(); return { el, r }; })
+      .filter(({ el, r }) => r.width > 0 && getComputedStyle(el).visibility !== "hidden" && !el.classList.contains("skip"))
+      .filter(({ r }) => r.width < 44 || r.height < 44)
+      .map(({ el, r }) => ({ name: (el.getAttribute("aria-label") || el.textContent || el.id).trim().replace(/\s+/g, " ").slice(0, 40), w: Math.round(r.width), h: Math.round(r.height) }))
+  ) : [];
+  return { overflow, axe, smallTargets };
+};
+
 (async () => {
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
@@ -63,6 +85,7 @@ const TOKEN_PAIRS = [
   const url = `http://localhost:${server.address().port}/`;
   const browser = await chromium.launch();
   const results = [];
+  const b1Results = [];
 
   for (const theme of THEMES) for (const width of WIDTHS) {
     const tag = `${theme}-${width}`;
@@ -99,14 +122,7 @@ const TOKEN_PAIRS = [
     }
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
 
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-
-    await page.addScriptTag({ content: axeSrc });
-    const axe = await page.evaluate(async () => {
-      const r = await window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"] } });
-      return r.violations.map(v => ({ id: v.id, impact: v.impact, help: v.help,
-        targets: v.nodes.slice(0, 5).map(n => n.target.join(" ")) }));
-    });
+    const { overflow, axe, smallTargets } = await audit(page, phone);
 
     const tokens = await page.evaluate(names => {
       const cs = getComputedStyle(document.documentElement);
@@ -118,15 +134,6 @@ const TOKEN_PAIRS = [
       const r = ratio(fg, bg);
       return { pair: `${f} on ${b}`, fg, bg, ratio: +r.toFixed(2), min, pass: r >= min };
     });
-
-    const smallTargets = phone ? await page.evaluate(() =>
-      [...document.querySelectorAll("a[href], button")]
-        .filter(el => !el.closest(".storey"))              // floors: equivalent links exist in the Files menu
-        .map(el => { const r = el.getBoundingClientRect(); return { el, r }; })
-        .filter(({ el, r }) => r.width > 0 && getComputedStyle(el).visibility !== "hidden" && !el.classList.contains("skip"))
-        .filter(({ r }) => r.width < 44 || r.height < 44)
-        .map(({ el, r }) => ({ name: (el.getAttribute("aria-label") || el.textContent).trim().replace(/\s+/g, " ").slice(0, 40), w: Math.round(r.width), h: Math.round(r.height) }))
-    ) : [];
 
     // Contact sheet: every screen side by side in one image, for a quick visual pass.
     const sheet = path.join(OUT, `${tag}-sheet.png`);
@@ -140,7 +147,48 @@ const TOKEN_PAIRS = [
 
     results.push({ theme, width, sheet: path.relative(ROOT, sheet), screens, overflow, errors, axe, contrast, smallTargets });
     await page.close();
+
+    // Same theme and width with the basement already open (as on a return visit).
+    const b1Page = await browser.newPage({
+      viewport: { width, height: phone ? 844 : 800 },
+      deviceScaleFactor: phone ? 2 : 1,
+      colorScheme: theme === "light" ? "light" : "dark",
+    });
+    const b1Errors = [];
+    b1Page.on("pageerror", e => b1Errors.push(e.message));
+    b1Page.on("console", m => { if (m.type() === "error") b1Errors.push(m.text()); });
+    await b1Page.addInitScript(() => { try { localStorage.setItem("b1", "open"); } catch (e) {} });
+    await b1Page.goto(url, { waitUntil: "networkidle" });
+    await b1Page.waitForTimeout(2500);
+    const b1Screens = [];
+    for (const [name, sel] of [["hero", "#top"], ["fun", "#fun"], ["basement", "#b1"]]) {
+      await b1Page.evaluate(s => document.querySelector(s).scrollIntoView({ behavior: "instant", block: "start" }), sel);
+      await b1Page.waitForTimeout(700);
+      const file = path.join(OUT, `${tag}-b1-${name}.png`);
+      await b1Page.screenshot({ path: file });
+      b1Screens.push(path.relative(ROOT, file));
+    }
+    await b1Page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    const b1Visible = await b1Page.evaluate(() => !document.getElementById("b1").hidden && !!document.querySelector(".storey--b1")?.getBoundingClientRect().width);
+    b1Results.push({ theme, width, screens: b1Screens, errors: b1Errors, visible: b1Visible, ...(await audit(b1Page, phone)) });
+    await b1Page.close();
   }
+
+  // The riddle itself: wrong guesses keep the basement shut, the right one opens it for good.
+  const rp = await browser.newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" });
+  await rp.goto(url, { waitUntil: "networkidle" });
+  const b1Shown = () => rp.evaluate(() => !document.getElementById("b1").hidden);
+  const tryGuess = async word => { await rp.fill("#guess", word); await rp.click(".riddle__btn"); await rp.waitForTimeout(200); };
+  const riddle = { hiddenAtStart: !(await b1Shown()) };
+  await tryGuess("cat");
+  riddle.hintAfterWrong = await rp.textContent(".riddle__status");
+  riddle.hiddenAfterWrong = !(await b1Shown());
+  await tryGuess(" Panda ");
+  riddle.openAfterRight = await b1Shown();
+  riddle.floorLinkShown = await rp.evaluate(() => !!document.querySelector(".storey--b1")?.getBoundingClientRect().width);
+  await rp.reload({ waitUntil: "networkidle" });
+  riddle.openAfterReload = await b1Shown();
+  await rp.close();
 
   // Reduced motion: windows must be in their final state immediately, with nothing animating.
   const rm = await browser.newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark", reducedMotion: "reduce" });
@@ -164,15 +212,28 @@ const TOKEN_PAIRS = [
     r.contrast.filter(c => c.pass === false).forEach(c => fails.push(`${t}: contrast ${c.pair} = ${c.ratio}:1 (needs ${c.min}:1)`));
     r.smallTargets.forEach(s => fails.push(`${t}: touch target "${s.name}" is ${s.w}×${s.h}px (needs 44×44)`));
   }
+  for (const r of b1Results) {
+    const t = `${r.theme} @ ${r.width}px, B1 open`;
+    if (!r.visible) fails.push(`${t}: the basement is not shown`);
+    if (r.overflow > 0) fails.push(`${t}: horizontal overflow ${r.overflow}px`);
+    r.errors.forEach(e => fails.push(`${t}: JS error: ${e}`));
+    r.axe.forEach(v => fails.push(`${t}: axe ${v.impact} ${v.id} (${v.help}) at ${v.targets.join(", ")}`));
+    r.smallTargets.forEach(s => fails.push(`${t}: touch target "${s.name}" is ${s.w}×${s.h}px (needs 44×44)`));
+  }
+  if (!riddle.hiddenAtStart) fails.push("riddle: the basement is visible before the riddle is solved");
+  if (!riddle.hiddenAfterWrong || !riddle.hintAfterWrong) fails.push("riddle: a wrong guess should show a hint and keep the basement shut");
+  if (!riddle.openAfterRight || !riddle.floorLinkShown) fails.push('riddle: "panda" should open the basement and add its floor to the building');
+  if (!riddle.openAfterReload) fails.push("riddle: the basement should stay open after a reload");
   if (reducedMotion.windowsLit !== reducedMotion.windowsTotal || reducedMotion.running > 0)
     fails.push(`reduced motion: ${reducedMotion.windowsLit}/${reducedMotion.windowsTotal} windows lit, ${reducedMotion.running} animations running`);
 
-  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, reducedMotion, results };
+  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, reducedMotion, riddle, results, b1Results };
   fs.writeFileSync(path.join(OUT, "report.json"), JSON.stringify(report, null, 2));
 
   console.log(`Design check: ${report.pass ? "PASS" : `FAIL (${fails.length})`}`);
   fails.forEach(f => console.log(`  ✗ ${f}`));
   for (const r of results) console.log(`  ${r.theme} @ ${r.width}px: ${r.screens.length} screens, contact sheet ${r.sheet}`);
+  console.log(`  B1 open: ${b1Results.length} passes, screenshots .review${path.sep}<theme>-<width>-b1-{hero,fun,basement}.png`);
   console.log(`  report: ${path.relative(ROOT, path.join(OUT, "report.json"))}`);
   process.exit(report.pass ? 0 : 1);
 })().catch(e => { console.error(e); server.close(); process.exit(2); });
