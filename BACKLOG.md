@@ -11,14 +11,14 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 - [?] LinkedIn profile URL (link hidden until then)
 - [?] Resume PDF, if you want a download link (design critique, priority 1)
-- [?] Make `AD-NAP/edge-energy-optimizer` public: the site links it ("Code on GitHub") and it returns 404 to visitors until then (step 7 critic #1, verified)
-- [?] Critic questions only Shafik can answer (step 7): real Cloud BMS or Event Log numbers; what he owned in the MVP beyond the Event Log; where GitHub Actions and SQL were used; NUS start date and the 2018 to 2025 period; whether intern to full-time was a conversion; what roles he is open to
-- [?] React Native and Firebase have no evidence on the page now that PomoZoo is gone: bring PomoZoo back as one line, or trim those skills (step 7 critic #6)
+- [?] Real Cloud BMS or Event Log numbers (for example record counts, users, sites, query times), if any can be shared. Not answered yet
+- [?] Where GitHub Actions and SQL were used (both are in Skills with no evidence on the page)
+- [?] Optional: what filled May 2018 to 2021 besides Ground Labs (for example national service), if you want it on the site
+- [?] Enable the Design plugin (install card shown 2026-10-09) so `design-critique` and `accessibility-review` are available
 - [?] Keep or remove the cat that sits in an L5 window at night
 
 ## Site: design and content
 
-- [ ] Building tilts slightly with the mouse (desktop only); not picked, parked
 - [ ] Phones: stars sit behind the hero text and read as specks inside letters; keep stars out of the text area or dim them there
 - [ ] Phones: status pill ("Systems and Application Engineer at Azbil, Singapore") wraps to two lines; consider a shorter label or plain text
 - [ ] Phones: the sun is partly tucked under the top bar in day mode
@@ -89,7 +89,24 @@ Left over:
 - [ ] 🟢 Day mode: the amber model bar is 1.65:1 against the chart track; deepen the track or the accent slightly
 - [ ] 🟢 Sidebar entry `edge-energy-optimizer.md` wraps to two lines at 1280px
 - [ ] 🟢 Phone "Files" button: consider "Sections" (critic #9)
-- [ ] 🟢 Consider one Azbil entry showing intern then full-time (needs Shafik's answer on the conversion question)
+- [x] 🟢 Azbil engineer role now says it was a conversion from the internship (v0.1.1)
+
+## v0.1.1: Shafik's answers (2026-10-09)
+
+- [x] `AD-NAP/edge-energy-optimizer` made public (history scanned for secrets first: none); the "Code on GitHub" link returns 200
+- [x] Skills: React Native and Firebase trimmed
+- [x] Cloud BMS MVP bullet says what he owned: the Event Log, plus help on other small features and bug fixes
+- [x] NUS shows 2021 to Jan 2026
+- [x] Contact says he is open to backend software development and AI engineering roles
+- [x] All new facts recorded in `content/resume.md`
+
+## v0.2.0: isometric building (planned, 2026-10-09)
+
+Shafik's goals. Goes through plan mode first.
+
+- [ ] Building becomes isometric, and tilts slightly with the mouse
+- [ ] Flip the order: rooftop first, down to level 1, so the building reads top to bottom like the scroll. Remove the ground floor (not a Singapore thing)
+- [ ] Hidden B1 level, unlocked by guessing his favourite animal from his GitHub name. Content for now: a cake
 
 ## Deploy
 
@@ -99,7 +116,7 @@ Left over:
 - [x] Versions are tagged releases in this one repo (`docs/decisions/0001-one-repo-tagged-releases.md`). `v0.1.0` tagged and released.
 - [x] Add screenshots (day and night, phone and desktop) to the `v0.1.0` release
 - [x] Step 7 deployed (2026-10-09, `13c330e`). Pages had been switched to source "GitHub Actions" with no workflow, so pushes did not deploy; set back to "Deploy from a branch: main" with Shafik's approval. Verified live: page, CSS and JS return 200 with no console errors in both themes; `CLAUDE.md`, `BACKLOG.md`, `README.md`, `content/`, `reviews/`, `docs/`, `package.json`, `_config.yml` and `.claude/` return 404
-- [ ] Tag and release `v0.2.0` for the step 7 changes (notes, screenshots, README versions table)
+- [x] `v0.1.1` tagged and released (2026-10-09): step 7 plus Shafik's answers. Shafik reserved `v0.2.0` for the isometric rebuild
 - [x] Keep working files out of the published site: `_config.yml` excludes them (Jekyll 3.10 test build publishes only `index.html` and `assets/`)
 
 ## Tooling
@@ -109,7 +126,7 @@ Left over:
 - [ ] Confirm the Stop hook fires live. Still unverified after step 7: that session started in `Workspace/`, so this repo's `.claude/settings.json` hook and the `recruiter-critic` agent were not loaded. Start the next session inside `projects/portfolio/`, edit a site file and finish a turn; expect "Running design check on changed site files…"
 - [x] Local checker works on the Windows PC (2026-10-09): Node 24 LTS installed with winget; Playwright installed with `npm install --no-save playwright` and `npx playwright install chromium`. Note: a later plain `npm install` removes Playwright again, because it is not in `package.json`
 - [ ] Decide whether to add `playwright` to `devDependencies` so the checker installs the same way everywhere
-- [ ] The Design plugin skills (`design-critique`, `accessibility-review`) were not available in the step 7 session; its two reports are Claude's self-review in the same format
+- [ ] The Design plugin is not enabled (checked 2026-10-09: only `frontend-design` is). It is in the catalog as "Design" by Anthropic; install card shown, waiting on Shafik. The step 7 reports are Claude's self-review in the same format
 
 ## Learning path (Claude Code building blocks)
 

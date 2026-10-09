@@ -47,7 +47,7 @@ Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved s
 ### edge-energy-optimizer (personal project, in progress)
 
 - Goal: forecast building load, control a simulated building, shave peak demand with a battery, and deploy it all at the edge. (`projects/edge-energy-optimizer.md`)
-- GitHub repo `AD-NAP/edge-energy-optimizer`, private, description "Building load forecasting, control, and peak shaving at the edge". (GitHub repo metadata; local path from `projects/edge-energy-optimizer.md`)
+- GitHub repo `AD-NAP/edge-energy-optimizer` (public since 2026-10-09), description "Building load forecasting, control, and peak shaving at the edge". (GitHub repo metadata; local path from `projects/edge-energy-optimizer.md`)
 - Five planned phases: 1. energy load forecasting (ML); 2. control logic tested against a simulated building (BOPTEST); 3. BACnet and Modbus protocol integration; 4. peak demand shaving with a simulated battery; 5. edge deployment on k3s with MQTT and a dashboard. Everything is simulated, so it needs no hardware. (`ideas/edge-energy-optimizer-plan.md`)
 - Status: phase 1 done on 2026-10-04. Phase 2 is next. Phases 3 to 5 are not scheduled yet. (`projects/edge-energy-optimizer.md`, `ideas/edge-energy-optimizer-plan.md`)
 - Phase 1 result: day-ahead load forecast, MAE 34.5 kWh on the 2017 test year against 45.7 kWh for the "same hour last week" baseline, so 24.5% better. (`projects/edge-energy-optimizer.md`, `dev-log/04-10-2026.md`)
@@ -78,3 +78,9 @@ Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved s
 - Loves cats and pandas.
 - GitHub username `ad-nap` spells "pan-da" backwards; GitHub's logo is a cat.
 - Onboarding guide (Cloud BMS) effect: a new junior engineer used the guide and, with minimal guidance, set up his environment and started development on the same day. (Shafik, 2026-10-09)
+- Cloud BMS MVP ownership: he owned the Event Log only, and assisted with other small features and bug fixes. (Shafik, 2026-10-09)
+- NUS start year: 2021. (Shafik, 2026-10-09)
+- Azbil: the move from intern to full-time was a conversion. (Shafik, 2026-10-09)
+- Open to roles in backend software development and AI engineering. (Shafik, 2026-10-09)
+- Site skills list: React Native and Firebase are trimmed from the site, because PomoZoo (their only evidence) is no longer shown. They stay on the resume above. (Shafik, 2026-10-09)
+- `AD-NAP/edge-energy-optimizer` was made public on 2026-10-09 at Shafik's request.
