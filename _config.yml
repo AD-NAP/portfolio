@@ -1,0 +1,10 @@
+# GitHub Pages (Jekyll) settings. The site itself is plain HTML; this file only
+# keeps project and tooling files from being published as pages.
+exclude:
+  - CLAUDE.md
+  - BACKLOG.md
+  - content/
+  - reviews/
+  - package.json
+  - package-lock.json
+  - node_modules/

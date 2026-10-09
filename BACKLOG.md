@@ -52,10 +52,10 @@ Design:
 
 ## Deploy
 
-- [ ] Make `main` the default branch (Shafik: Settings → General)
-- [ ] Enable GitHub Pages from `main` (**ask Shafik first**)
+- [x] Make `main` the default branch (done by Shafik)
+- [~] Enable GitHub Pages from `main`: Shafik approved going live; he switches it on in Settings → Pages
 - [x] Repo renamed to `AD-NAP/portfolio-v0.1` (2026-10-09). As a project site it will be served at `https://ad-nap.github.io/portfolio-v0.1/` once Pages is enabled. A root URL (`https://ad-nap.github.io/`) would need the repo named `ad-nap.github.io`.
-- [ ] Keep working files (`BACKLOG.md`, `CLAUDE.md`, `content/`, `reviews/`, `.claude/`, `package.json`) out of the published site
+- [x] Keep working files out of the published site: `_config.yml` excludes them (Jekyll 3.10 test build publishes only `index.html` and `assets/`)
 
 ## Tooling
 
