@@ -40,6 +40,30 @@ Singapore · shafik.adam98@gmail.com
 
 - Co-developed a cross-platform focus timer in a 2-person team for NUS Orbital, handling notification delivery reliably across app states including foreground, backgrounded, force-closed, and device powered off.
 
+## From AD-NAP/vault
+
+Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved source for projects). Each fact names its source file. PomoZoo above is no longer shown on the site.
+
+### edge-energy-optimizer (personal project, in progress)
+
+- Goal: forecast building load, control a simulated building, shave peak demand with a battery, and deploy it all at the edge. (`projects/edge-energy-optimizer.md`)
+- GitHub repo `AD-NAP/edge-energy-optimizer`, private, description "Building load forecasting, control, and peak shaving at the edge". (GitHub repo metadata; local path from `projects/edge-energy-optimizer.md`)
+- Five planned phases: 1. energy load forecasting (ML); 2. control logic tested against a simulated building (BOPTEST); 3. BACnet and Modbus protocol integration; 4. peak demand shaving with a simulated battery; 5. edge deployment on k3s with MQTT and a dashboard. Everything is simulated, so it needs no hardware. (`ideas/edge-energy-optimizer-plan.md`)
+- Status: phase 1 done on 2026-10-04. Phase 2 is next. Phases 3 to 5 are not scheduled yet. (`projects/edge-energy-optimizer.md`, `ideas/edge-energy-optimizer-plan.md`)
+- Phase 1 result: day-ahead load forecast, MAE 34.5 kWh on the 2017 test year against 45.7 kWh for the "same hour last week" baseline, so 24.5% better. (`projects/edge-energy-optimizer.md`, `dev-log/04-10-2026.md`)
+- Data: real meter data from the Building Data Genome Project 2, one office building (`Hog_office_Shawnna`). (`dev-log/04-10-2026.md`)
+- Pipeline built: dataset, naive baselines, features, time-based split, gradient boosted trees, evaluation, error analysis, and a `forecast()` function with tests. (`dev-log/04-10-2026.md`)
+- Model: `HistGradientBoostingRegressor` from scikit-learn, default settings, 100 trees. (`learning/machine-learning/gradient-boosted-trees.md`)
+- Features: calendar (hour, day of week, day of year, is holiday), weather (air temperature, dew point), lags (load 24 hours and 168 hours before). (`learning/machine-learning/features-and-target.md`)
+- Split: train on 8 Jan to 31 Dec 2016 (8,616 rows), test on all of 2017 (8,760 rows); split by time, never shuffled. (`learning/machine-learning/train-test-split.md`)
+- Known limits: the model guesses high (bias +13.8 kWh) because the building used about 8% less in 2017 than in 2016; holidays are the weak spot (MAE 61.9 kWh against 32.6 on weekdays). (`dev-log/04-10-2026.md`, `learning/machine-learning/error-analysis.md`)
+- Tooling: uv for the Python environment. (`dev-log/04-10-2026.md`)
+
+### Considered and not used
+
+- rag-agent-service: planned, not started, repo not created yet. Nothing to show. (`projects/rag-agent-service.md`)
+- 30-days-of-python, neetcode-150: practice repos, nothing solved yet. (`projects/30-days-of-python.md`, `projects/neetcode-150.md`)
+
 ## Education
 
 - National University of Singapore, School of Computing: Bachelor of Computing (Computer Science), Honours (Merit), Jan 2026. Relevant coursework: Software Engineering; Data Structures and Algorithms; Design and Analysis of Algorithms; Programming Methodology I & II; Computer Organisation; Introduction to AI.
