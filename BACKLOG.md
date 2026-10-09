@@ -75,7 +75,7 @@ Shafik's decisions (2026-10-09), to be built in the step 7 run:
 - [x] GitHub Pages live from `main` at https://ad-nap.github.io/portfolio/ (verified: page, CSS, JS load with no errors in both themes; project files return 404)
 - [x] Repo renamed to `AD-NAP/portfolio` (2026-10-09, was `portfolio-v0.1`). Served as a project site at `https://ad-nap.github.io/portfolio/`. A root URL (`https://ad-nap.github.io/`) would need the repo named `ad-nap.github.io`.
 - [x] Versions are tagged releases in this one repo (`docs/decisions/0001-one-repo-tagged-releases.md`). `v0.1.0` tagged and released.
-- [ ] Add screenshots (day and night, phone and desktop) to the `v0.1.0` release
+- [x] Add screenshots (day and night, phone and desktop) to the `v0.1.0` release
 - [x] Keep working files out of the published site: `_config.yml` excludes them (Jekyll 3.10 test build publishes only `index.html` and `assets/`)
 
 ## Tooling
