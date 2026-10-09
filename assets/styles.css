@@ -13,7 +13,9 @@
   --text: #E6EDF5;
   --body: #CBD7E5;
   --muted: #9DB0C7;
-  --facade: #0F1E33;
+  --facade: #0F1E33;        /* front face of the building */
+  --wall-side: #0A1728;     /* side face, in shade */
+  --roof: #16294A;          /* roof decks and the plot at street level */
   --glass: #1C3352;         /* window, lights off */
   --placeholder: #FF8FA3;
   --focus: #FFB84D;
@@ -33,6 +35,8 @@
   --body: #22395A;
   --muted: #4D6584;
   --facade: #F7FAFD;
+  --wall-side: #D3E1EF;
+  --roof: #E8F0F8;
   --glass: #A8C7E3;
   --placeholder: #B0174A;
   --focus: #0F2440;
@@ -247,7 +251,14 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 
 /* Building */
 .tower { margin: 0; justify-self: end; width: 100%; max-width: 380px; }
-.tower svg { display: block; width: 100%; height: auto; overflow: visible; }
+/* The building leans a few degrees toward the pointer (main.js sets --tilt-x and --tilt-y, each -1 to 1). */
+.tower svg {
+  display: block; width: 100%; height: auto; overflow: visible;
+  transform: perspective(900px) rotateX(calc(var(--tilt-y, 0) * -4deg)) rotateY(calc(var(--tilt-x, 0) * 7deg));
+  transition: transform .35s ease-out;
+}
+.tower__grid { transform: translate(calc(var(--tilt-x, 0) * -5px), calc(var(--tilt-y, 0) * -3px)); transition: transform .35s ease-out; }
+.tower__ground { fill: var(--roof); stroke: var(--line); stroke-width: 1.5; stroke-linejoin: round; opacity: .55; }
 .tower__gridline { stroke: var(--line-soft); stroke-width: .5; opacity: .6; }
 .tower__line { stroke: var(--line); stroke-width: 1.5; fill: none; }
 .tower__beacon { fill: var(--accent); }
@@ -255,15 +266,18 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 .tower__caption { margin-top: 12px; font-family: var(--font-mono); font-size: .6875rem; color: var(--muted); text-align: center; }
 
 .storey { cursor: pointer; }
-.storey__body { fill: var(--facade); stroke: var(--line); stroke-width: 1.5; transition: stroke .2s; }
+.storey__body, .storey__top { fill: var(--facade); stroke: var(--line); stroke-width: 1.5; stroke-linejoin: round; vector-effect: non-scaling-stroke; transition: stroke .2s; }
+.storey__body--side { fill: var(--wall-side); }
+.storey__top { fill: var(--roof); }
 .storey__win { fill: var(--glass); transition: fill .25s ease; }
 .storey__win.is-on { fill: var(--accent); }
 .storey__cat { fill: #0F1E33; opacity: 0; transition: opacity .25s ease; }
 .storey__cat.is-on { opacity: 1; }
 .storey__label { font-family: var(--font-mono); font-size: 9px; fill: var(--muted); }
 .storey__tag { font-family: var(--font-mono); font-size: 9px; fill: var(--muted); }
-.storey:hover .storey__body { stroke: var(--accent); }
-.storey:focus-visible .storey__body { stroke: var(--focus); stroke-width: 3; }
+.storey:hover .storey__body, .storey:hover .storey__top { stroke: var(--accent); }
+.storey:focus-visible { outline: none; }   /* the floor's own outline is the focus ring */
+.storey:focus-visible .storey__body, .storey:focus-visible .storey__top { stroke: var(--focus); stroke-width: 3; }
 .storey:hover .storey__label, .storey:focus-visible .storey__label { fill: var(--text); }
 
 /* Hovering or focusing a floor previews it: that floor lights up, the rest dim. */

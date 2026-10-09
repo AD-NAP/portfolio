@@ -105,17 +105,15 @@
       </div>
 
       <figure class="tower" aria-label="A building whose floors are the sections of this site">
-        <svg viewBox="0 0 300 470">
+        <svg viewBox="0 28 300 396">
           <defs aria-hidden="true">
             <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
               <path d="M10 0H0V10" fill="none" class="tower__gridline"/>
             </pattern>
           </defs>
-          <rect x="0" y="60" width="300" height="410" fill="url(#grid)" aria-hidden="true"/>
-          <line class="tower__line" x1="112" y1="14" x2="112" y2="46" aria-hidden="true"/>
-          <circle class="tower__beacon" cx="112" cy="12" r="3.5" aria-hidden="true"/>
+          <rect class="tower__grid" x="0" y="60" width="300" height="364" fill="url(#grid)" aria-hidden="true"/>
+          <!-- Storeys, mast and street level are drawn by main.js -->
           <g class="tower__floors"></g>
-          <line class="tower__line" x1="10" y1="456" x2="290" y2="456" aria-hidden="true"/>
         </svg>
         <figcaption class="tower__caption">Select a floor to visit that section.</figcaption>
       </figure>

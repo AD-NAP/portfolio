@@ -15,7 +15,6 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [?] Where GitHub Actions and SQL were used (both are in Skills with no evidence on the page)
 - [?] Optional: what filled May 2018 to 2021 besides Ground Labs (for example national service), if you want it on the site
 - [?] Enable the Design plugin (install card shown 2026-10-09) so `design-critique` and `accessibility-review` are available
-- [?] Keep or remove the cat that sits in an L5 window at night
 
 ## Site: design and content
 
@@ -104,9 +103,16 @@ Left over:
 
 Shafik's goals. Goes through plan mode first.
 
-- [ ] Building becomes isometric, and tilts slightly with the mouse
-- [ ] Flip the order: rooftop first, down to level 1, so the building reads top to bottom like the scroll. Remove the ground floor (not a Singapore thing)
-- [ ] Hidden B1 level, unlocked by guessing his favourite animal from his GitHub name. Content for now: a cake
+Plan approved 2026-10-09. Branch `claude/v0.2-isometric`. Decisions: floors are R About, L6 Skills, L5 Experience, L4 Projects, L3 Education, L2 Fun facts, L1 Contact; B1 unlocks by typing the answer; the night window cat stays (now on L2).
+
+- [x] Step 1: flip the order, rooftop first, down to level 1. Ground floor removed (`11c0dc6`)
+- [x] Step 2: isometric building that leans a few degrees toward the mouse (desktop with a mouse only; off on phones and under reduced motion)
+- [?] Shafik to look at the step 2 screenshots before step 3 starts
+- [ ] Step 3: riddle becomes a typed guess that unlocks a hidden B1 level. Content for now: a cake
+- [ ] Checker: extra pass with B1 unlocked; docs (`CLAUDE.md`, `docs/architecture.md`, README table)
+- [ ] `recruiter-critic` run, merge to `main`, tag and release `v0.2.0`
+- [ ] 🟢 Roof focus ring: the deck's front edges are covered by level 6's outline, so only the roof room shows the ring. Visible, but could be cleaner
+- [ ] 🟢 Sidebar mini building still has the old flat shape with a wide base
 
 ## Deploy
 
