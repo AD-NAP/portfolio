@@ -53,7 +53,7 @@ Design:
 ## Deploy
 
 - [x] Make `main` the default branch (done by Shafik)
-- [~] Enable GitHub Pages from `main`: Shafik approved going live; he switches it on in Settings → Pages
+- [x] GitHub Pages live from `main` at https://ad-nap.github.io/portfolio-v0.1/ (verified: page, CSS, JS load with no errors in both themes; project files return 404)
 - [x] Repo renamed to `AD-NAP/portfolio-v0.1` (2026-10-09). As a project site it will be served at `https://ad-nap.github.io/portfolio-v0.1/` once Pages is enabled. A root URL (`https://ad-nap.github.io/`) would need the repo named `ad-nap.github.io`.
 - [x] Keep working files out of the published site: `_config.yml` excludes them (Jekyll 3.10 test build publishes only `index.html` and `assets/`)
 
