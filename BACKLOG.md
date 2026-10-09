@@ -98,6 +98,8 @@ Left over:
 - [x] Repo renamed to `AD-NAP/portfolio` (2026-10-09, was `portfolio-v0.1`). Served as a project site at `https://ad-nap.github.io/portfolio/`. A root URL (`https://ad-nap.github.io/`) would need the repo named `ad-nap.github.io`.
 - [x] Versions are tagged releases in this one repo (`docs/decisions/0001-one-repo-tagged-releases.md`). `v0.1.0` tagged and released.
 - [x] Add screenshots (day and night, phone and desktop) to the `v0.1.0` release
+- [x] Step 7 deployed (2026-10-09, `13c330e`). Pages had been switched to source "GitHub Actions" with no workflow, so pushes did not deploy; set back to "Deploy from a branch: main" with Shafik's approval. Verified live: page, CSS and JS return 200 with no console errors in both themes; `CLAUDE.md`, `BACKLOG.md`, `README.md`, `content/`, `reviews/`, `docs/`, `package.json`, `_config.yml` and `.claude/` return 404
+- [ ] Tag and release `v0.2.0` for the step 7 changes (notes, screenshots, README versions table)
 - [x] Keep working files out of the published site: `_config.yml` excludes them (Jekyll 3.10 test build publishes only `index.html` and `assets/`)
 
 ## Tooling
@@ -117,7 +119,7 @@ Left over:
 - [x] 4. First skill: `.claude/skills/design-review/` (SKILL.md plus `scripts/check.js`, run with `npm run -s check`). Tested: catches planted overflow, JS error, contrast and touch-target failures. Available as `/design-review`
 - [x] 5. First hook: Stop hook runs the design checker when a turn ends with changed site files; blocks until it passes (max 3 attempts). Pipe-tested: pass, skip-when-unchanged, block ×3, give up, recover
 - [x] 6. First subagent: `.claude/agents/recruiter-critic.md` (hiring-manager persona, read-only tools, fixed report format). First run's verdict: Interview. Registered mid-session, callable as `recruiter-critic`
-- [~] 7. Full autonomous run: researched, planned, built, self-reviewed and pushed on `claude/step7-recruiter-critique`; waiting for Shafik's go-ahead to merge and deploy
+- [x] 7. Full autonomous run: researched, planned, built, self-reviewed, merged (`13c330e`) and deployed on 2026-10-09 after Shafik's go-ahead
 
 ## Corrections log
 
