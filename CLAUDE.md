@@ -44,11 +44,7 @@ The concept: the site is a building, and each floor is a section (G About, L1 Sk
 - Touch targets ≥ 44px on phones. Mark decorative graphics `aria-hidden="true"`.
 
 ## Before saying a change is done
-1. Serve locally: `python3 -m http.server 8080`. Playwright and Chromium are preinstalled; don't run `playwright install`.
-2. Screenshot both themes at 390px and 1280px, and look at the screenshots.
-3. Confirm no horizontal scroll and no console errors.
-4. Run an axe-core scan and get 0 violations.
-5. For review rounds, use the Design plugin's `design-critique` and `accessibility-review`. Save reports as `reviews/YYYY-MM-DD-<name>.md`, and triage the findings into `BACKLOG.md`.
+Use the `design-review` skill (`.claude/skills/design-review/`). Its checker, `npm run -s check`, serves the site, screenshots both themes at 390px and 1280px, and fails on overflow, JS errors, axe violations, token contrast, small touch targets or broken reduced motion. Then look at the contact sheets, fix, and re-check. Playwright and Chromium are preinstalled; don't run `playwright install`.
 
 ## Git
 - Work on the session's assigned `claude/…` branch. Commit each version worth keeping, with a message saying what changed and why, and push it.

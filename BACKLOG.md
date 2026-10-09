@@ -55,14 +55,18 @@ Design:
 
 - [ ] Enable GitHub Pages (**ask Shafik first**)
 - [ ] Hosting URL: GitHub only serves a site at the root `https://ad-nap.github.io/` if the repo is named `ad-nap.github.io`. This repo (`autonomous-test.github.io`) would be served at `https://ad-nap.github.io/autonomous-test.github.io/`. Options: rename the repo, or keep it as a test site.
-- [ ] Keep working files (`BACKLOG.md`, `CLAUDE.md`, `content/`, `reviews/`, `.claude/`) out of the published site
+- [ ] Keep working files (`BACKLOG.md`, `CLAUDE.md`, `content/`, `reviews/`, `.claude/`, `package.json`) out of the published site
+
+## Tooling
+
+- [ ] Confirm `/design-review` shows up in a new session (skills are discovered at session start)
 
 ## Learning path (Claude Code building blocks)
 
 - [x] 1. Hands-on v1 with no setup; collect corrections (v1 to v4)
-- [~] 2. Turn the corrections log into `CLAUDE.md` (drafted; waiting on Shafik's review)
+- [x] 2. Turn the corrections log into `CLAUDE.md` (approved; `content/resume.md` added as the source of facts)
 - [x] 3. Plan mode for a bigger change: the v4 accessibility and design fix batch (plan approved, then built)
-- [ ] 4. First skill: `design-review` (screenshot at several widths, check contrast, spacing, overflow, fix, repeat). Reference: the Design plugin's `design-critique` and `accessibility-review`
+- [x] 4. First skill: `.claude/skills/design-review/` (SKILL.md plus `scripts/check.js`, run with `npm run -s check`). Tested: catches planted overflow, JS error, contrast and touch-target failures. Loads as `/design-review` from the next session
 - [ ] 5. First hook (e.g. a link check or screenshot run after edits)
 - [ ] 6. First subagent: "recruiter critic" reviewing the site as a hiring manager. Reference: `design-critique`
 - [ ] 7. Full autonomous run: one goal in, the agent plans, builds, self-reviews, fixes, deploys
