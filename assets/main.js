@@ -130,8 +130,14 @@
     const height = tower?.classList.contains("has-b1") ? 432 : 396;
     towerSvg?.setAttribute("viewBox", phone.matches ? `14 28 200 ${height}` : `0 28 300 ${height}`);
   };
-  fitTower();
-  phone.addEventListener("change", fitTower);
+  // Phones: the Turtle block repeats the About text, so it starts collapsed there.
+  const ttl = document.querySelector(".about__ttl");
+  const fitLayout = () => {
+    fitTower();
+    if (ttl) ttl.open = !phone.matches;
+  };
+  fitLayout();
+  phone.addEventListener("change", fitLayout);
 
   // Desktop with a mouse: the building leans a few degrees toward the pointer.
   const hero = document.querySelector(".hero");
@@ -182,7 +188,9 @@
     // Deterministic scatter so the sky looks the same on every visit.
     let seed = 7;
     const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-    for (let i = 0; i < 70; i++) {
+    // Phones get half as many, so fewer land behind text.
+    const count = phone.matches ? 35 : 70;
+    for (let i = 0; i < count; i++) {
       const s = document.createElement("span");
       s.className = "star" + (rand() > .85 ? " star--big" : "") + (rand() > .8 ? " star--twinkle" : "");
       s.style.left = `${rand() * 100}%`;

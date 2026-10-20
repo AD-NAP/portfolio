@@ -20,11 +20,11 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Site: design and content
 
-- [ ] Phones: stars sit behind the hero text and read as specks inside letters; keep stars out of the text area or dim them there
-- [ ] Phones: status pill ("Systems and Application Engineer at Azbil, Singapore") wraps to two lines; consider a shorter label or plain text
-- [ ] Phones: the sun is partly tucked under the top bar in day mode
-- [ ] Favicon (a tiny building, lit at night)
-- [ ] Social preview card (Open Graph image and tags) so links look good when shared
+- [x] Phones: stars sit behind the hero text and read as specks inside letters; keep stars out of the text area or dim them there
+- [x] Phones: status pill ("Systems and Application Engineer at Azbil, Singapore") wraps to two lines; consider a shorter label or plain text
+- [x] Phones: the sun is partly tucked under the top bar in day mode
+- [x] Favicon (a tiny building, lit at night)
+- [x] Social preview card (Open Graph image and tags) so links look good when shared
 
 ## Review findings (2026-10-09)
 
@@ -46,11 +46,11 @@ Accessibility (all fixed in v4; see the re-check section of the report):
 Design:
 - [x] 🔴 Recruiter fast path: email, GitHub, LinkedIn links in the hero (critique priority 1)
 - [x] 🟡 Phones: small building beside the name; About now starts on the first screen (critique priority 2)
-- [ ] 🟡 Stat panels and key numbers are buried in long bullet lists; give each role's headline result more weight
-- [ ] 🟢 Consistency: two corner radii (6px panels, round pills); reserve amber for light and progress, not labels
+- [x] 🟡 Stat panels and key numbers are buried in long bullet lists; give each role's headline result more weight
+- [x] 🟢 Consistency: two corner radii (6px panels, round pills); reserve amber for light and progress, not labels
 - [x] 🟢 Reduce desktop section padding from 120px to ~80px (step 7)
-- [ ] 🟢 Status pill looks clickable; make it plain text with the dot
-- [ ] 🟢 At night the lit windows outshine the name; consider dimming windows slightly or boosting the name
+- [x] 🟢 Status pill looks clickable; make it plain text with the dot
+- [x] 🟢 At night the lit windows outshine the name; consider dimming windows slightly or boosting the name
 
 ## Recruiter critique (2026-10-09)
 
@@ -86,7 +86,7 @@ Built:
 - [x] From the critic's first pass: Event Log bullet now leads the Azbil engineer role; the project's five-phase list became one status line
 
 Left over:
-- [ ] 🟡 Phones: Experience starts on the third screen because About repeats the hero; shorten About or move the Turtle block down (critic #5, #9)
+- [x] 🟡 Phones: Experience starts on the third screen because About repeats the hero; shorten About or move the Turtle block down (critic #5, #9)
 - [ ] 🟢 Day mode: the amber model bar is 1.65:1 against the chart track; deepen the track or the accent slightly
 - [ ] 🟢 Sidebar entry `edge-energy-optimizer.md` wraps to two lines at 1280px
 - [ ] 🟢 Phone "Files" button: consider "Sections" (critic #9)
@@ -118,6 +118,18 @@ Plan approved 2026-10-09. Branch `claude/v0.2-isometric`. Decisions: floors are 
 - [ ] 🟢 Night, desktop: a star sits right behind the "R" floor tag and reads as a strike-through (v0.2 critic #5)
 - [ ] 🟢 Roof focus ring: the deck's front edges are covered by level 6's outline, so only the roof room shows the ring. Visible, but could be cleaner
 - [ ] 🟢 Sidebar mini building still has the old flat shape with a wide base
+
+## v0.3.0: phone fixes and polish (2026-10-20)
+
+Plan approved 2026-10-20. Branch `claude/v0.3-phone-polish`.
+
+- [x] Phones: Experience heading at 1609px on a 390x844 screen (was 2180px). Turtle block collapses behind "View as shafik.ttl"; Skills rows put the label beside the list; tighter section spacing
+- [x] Phones: 35 fainter stars and a sky-coloured text halo at night, so stars no longer read as specks in letters
+- [x] Status is plain text with the dot; phones drop ", Singapore" so it fits one line
+- [x] Headline result per Azbil role: MVP approval line for the engineer role, the to-scale chart moved above the bullets for the intern role
+- [x] Two radii only (6px panels, round pills); labels moved from amber to muted; new `--lit` token dims night windows slightly
+- [x] `assets/favicon.svg` and `assets/og.png` with Open Graph and Twitter tags
+- [ ] 🟢 `og.png` is a static screenshot; re-render it if the hero changes (see `docs/architecture.md`)
 
 ## Deploy
 

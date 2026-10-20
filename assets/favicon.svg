@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The site's building at night: front face lit by the moon, side face in shade, amber windows on. -->
+  <rect width="32" height="32" rx="7" fill="#0F1E33"/>
+  <path d="M9 9 16 5.5 16 28 9 24.5Z" fill="#0A1728" stroke="#2E4D73" stroke-linejoin="round"/>
+  <path d="M16 5.5 24 9 24 24.5 16 28Z" fill="#16294A" stroke="#2E4D73" stroke-linejoin="round"/>
+  <g fill="#FFB84D">
+    <path d="M11 11.5l2-1v2.2l-2 1z M11 16.5l2-1v2.2l-2 1z M11 21.5l2-1v2.2l-2 1z"/>
+    <path d="M18 10.5l2 .9v2.2l-2-.9z M21 11.8l1.5.7v2.2l-1.5-.7z M18 15.5l2 .9v2.2l-2-.9z M21 16.8l1.5.7v2.2l-1.5-.7z M18 20.5l2 .9v2.2l-2-.9z"/>
+  </g>
+</svg>

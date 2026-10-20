@@ -17,6 +17,16 @@
     })();
   </script>
   <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Shafik Adam, Software Engineer">
+  <meta property="og:description" content="Software engineer in Singapore building cloud applications and building-management platforms with Python, TypeScript and AWS.">
+  <meta property="og:url" content="https://ad-nap.github.io/portfolio/">
+  <meta property="og:image" content="https://ad-nap.github.io/portfolio/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Shafik Adam, software engineer, beside an isometric building with its lights on at night">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
@@ -98,7 +108,7 @@
         <h1 class="name">Shafik Adam</h1>
         <p class="hero__role">Software engineer building cloud applications and building&#8209;management platforms with Python, TypeScript and AWS.</p>
         <p class="hero__proof">Cut config preparation from <strong>~3 days to under 5 minutes</strong>. Helped build a Cloud BMS MVP <strong>approved by Azbil Japan leadership</strong>.</p>
-        <p class="hero__status"><span class="dot" aria-hidden="true"></span>Systems and Application Engineer at Azbil, Singapore</p>
+        <p class="hero__status"><span class="dot" aria-hidden="true"></span><span>Systems and Application Engineer at Azbil<span class="hero__where">, Singapore</span></span></p>
         <ul class="hero__links" aria-label="Contact">
           <li><a href="mailto:shafik.adam98@gmail.com">Email</a></li>
           <li><a href="https://github.com/ad-nap">GitHub</a></li>
@@ -125,6 +135,8 @@
       <h2 class="floor__title"><span class="floor__level" aria-hidden="true">R</span>About</h2>
       <div class="about">
         <p class="lede">Software engineer with experience building internal tooling and cloud applications across Python, TypeScript, and AWS. NUS Computer Science graduate currently developing building-management platforms and semantic-metadata tooling at Azbil.</p>
+        <details class="about__ttl" open>
+        <summary>View as shafik.ttl</summary>
         <pre class="code" aria-label="The same summary written as Turtle, the format Brick Schema building metadata is stored in"><code><span class="c"># shafik.ttl</span>
 <span class="k">@prefix</span> : <span class="s">&lt;#&gt;</span> .
 
@@ -136,6 +148,7 @@
                <span class="n">:SemanticMetadataTooling</span> ;
   <span class="p">:writes</span>      <span class="s">"Python"</span>, <span class="s">"TypeScript"</span> ;
   <span class="p">:deploysTo</span>   <span class="n">:AWS</span> .</code></pre>
+        </details>
       </div>
     </section>
 
@@ -160,6 +173,7 @@
           <p class="role__when"><time datetime="2026-01">Jan 2026</time> to present</p>
           <h3 class="role__title">Systems and Application Engineer, Software Development</h3>
           <p class="role__org">Azbil ASPO, Singapore. Converted to full-time from the internship below.</p>
+          <p class="role__headline">Cloud BMS MVP approved by Azbil Japan leadership for continued development toward commercial release.</p>
           <ul class="role__points">
             <li>Delivered the Event Log feature end to end for Cloud BMS, a cloud-native building management platform: designed a GraphQL <code>eventLogs</code> query on AWS AppSync with cursor-based pagination over DynamoDB (ULID-ordered, configurable page size), structured across adapter, application, and infrastructure layers following Clean Architecture.</li>
             <li>Built the matching Svelte frontend with an expandable table view and infinite scroll, batching 100 records per request to handle large datasets. Wrote MSW mocks simulating 330 records and network latency to verify pagination and loading states.
@@ -170,7 +184,7 @@
                 <figcaption><span class="pages__total">330</span> mocked records in 4 requests: 100, 100, 100, 30</figcaption>
               </figure>
             </li>
-            <li>Contributed to the Cloud BMS MVP over 9 months in a 3-developer team using AWS Lambda, AppSync, DynamoDB, S3, CloudFront, and CloudWatch: owned the Event Log and assisted with other small features and bug fixes. The MVP was approved by Azbil Japan leadership for continued development toward commercial release.</li>
+            <li>Contributed to the Cloud BMS MVP over 9 months in a 3-developer team using AWS Lambda, AppSync, DynamoDB, S3, CloudFront, and CloudWatch: owned the Event Log and assisted with other small features and bug fixes.</li>
             <li>Designed and built an internal Streamlit application that generates Brick Schema building-metadata files from BMS point lists, owning UI/UX, workflow design, and implementation across a 5-month cycle. It completes the metadata pipeline feeding downstream configuration tooling, with planned integration into Cloud BMS deployments.</li>
             <li>Authored a developer onboarding guide for Cloud BMS environment setup (Docker, AWS configuration). A new junior engineer used it and, with minimal guidance, set up his environment and started development on the same day.</li>
           </ul>
@@ -180,22 +194,21 @@
           <p class="role__when"><time datetime="2025-06">Jun 2025</time> to <time datetime="2025-12">Dec 2025</time></p>
           <h3 class="role__title">Software Engineer Intern</h3>
           <p class="role__org">Azbil ASPO, Singapore</p>
+          <figure class="compare compare--headline" aria-label="Preparation time: about 3 days by hand compared with under 5 minutes with the tool, drawn to scale">
+            <div class="compare__row">
+              <span class="compare__label">By hand</span>
+              <span class="compare__track"><span class="compare__bar compare__bar--before"></span></span>
+              <span class="compare__value">~3 days</span>
+            </div>
+            <div class="compare__row compare__row--result">
+              <span class="compare__label">With the tool</span>
+              <span class="compare__track"><span class="compare__bar compare__bar--after"></span></span>
+              <span class="compare__value">&lt; 5 min</span>
+            </div>
+            <figcaption>Drawn to scale. The second bar is 0.1% of the first.</figcaption>
+          </figure>
           <ul class="role__points">
-            <li>Built a Python tool that parses Brick Schema TTL building-metadata files and runs SPARQL queries to auto-generate customer product configuration files, reducing preparation time from approximately 3 days of manual engineering work to under 5 minutes.
-              <figure class="compare" aria-label="Preparation time: about 3 days by hand compared with under 5 minutes with the tool, drawn to scale">
-                <div class="compare__row">
-                  <span class="compare__label">By hand</span>
-                  <span class="compare__track"><span class="compare__bar compare__bar--before"></span></span>
-                  <span class="compare__value">~3 days</span>
-                </div>
-                <div class="compare__row compare__row--result">
-                  <span class="compare__label">With the tool</span>
-                  <span class="compare__track"><span class="compare__bar compare__bar--after"></span></span>
-                  <span class="compare__value">&lt; 5 min</span>
-                </div>
-                <figcaption>Drawn to scale. The second bar is 0.1% of the first.</figcaption>
-              </figure>
-            </li>
+            <li>Built a Python tool that parses Brick Schema TTL building-metadata files and runs SPARQL queries to auto-generate customer product configuration files, reducing preparation time from approximately 3 days of manual engineering work to under 5 minutes.</li>
           </ul>
         </li>
 
