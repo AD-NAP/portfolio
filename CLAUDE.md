@@ -8,7 +8,7 @@ The concept: the site is an isometric building, and each floor is a section. It 
 - Shafik is learning Claude Code while we build. At each step, say briefly what you're doing, which Claude Code building block it uses, and what comes next.
 - Read `BACKLOG.md` before starting work. Keep it current: tick finished items, add new ones, and keep "Waiting on Shafik" accurate.
 - When Shafik gives feedback that is a lasting rule, add it to this file and tell him. One-off tasks go in `BACKLOG.md`.
-- Bigger changes (several files, a new section, a layout change) go through plan mode first. Shafik approves the plan before anything is built.
+- Every change to the repo, however small, goes through plan mode first. Shafik describes the change briefly; Claude researches and writes the plan; Shafik approves it. After approval, Claude works autonomously to the end (build, check, commit, merge, deploy) without further check-ins, and reports afterwards. (Shafik, 2026-10-20)
 - **Ask first** before changing repo settings (Pages, visibility), opening a PR, or deleting anything that isn't a merged branch.
 
 ## Content: never break these
