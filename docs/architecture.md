@@ -16,6 +16,8 @@ One page, three files, no build step:
 | `assets/styles.css` | Layout, both themes, motion. Colours come from tokens in `:root` and `[data-theme]`. |
 | `assets/main.js` | Behaviour: draws the building, theme toggle, floor navigation, sky motion, scroll effects, the riddle. |
 
+Also in `assets/`: `favicon.svg` (the building at night) and `og.png`, the 1200x630 link preview. `og.png` is a screenshot of the hero at night with the sidebar and buttons hidden; re-render it with Playwright if the hero changes.
+
 `content/resume.md` is the only source of facts. Nothing appears on the site unless it is in that file first.
 
 ## The building
@@ -23,6 +25,10 @@ One page, three files, no build step:
 `main.js` draws the hero building as SVG from one list, `storeys`. A helper, `iso(u, v, z)`, turns a point on the building into screen coordinates (30 degree isometric). Each wall is drawn flat, as plain rectangles, inside a group that is skewed onto its face, so windows, the door and the cat need no special maths.
 
 Each storey is one link, so the building is keyboard navigation as well as a picture.
+
+## Phones
+
+Below 900px the sidebar becomes a top bar and the building sits small beside the name. The Turtle block in About is a `<details>` that `main.js` keeps open on desktop and closed on phones, so Experience starts on the second screen.
 
 ## The basement
 
