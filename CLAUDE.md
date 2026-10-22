@@ -14,7 +14,8 @@ The concept: the site is an isometric building, and each floor is a section. It 
 ## Content: never break these
 - `content/resume.md` is the only source of facts. Never invent anything about Shafik. If a section needs content he hasn't given, add a visible `PLACEHOLDER: …` and ask him.
 - Display name: "Shafik Adam". Email: shafik.adam98@gmail.com. No phone number. No photo.
-- Never guess URLs. GitHub is `https://github.com/ad-nap`. No LinkedIn link until Shafik sends his profile URL (hide it rather than link the LinkedIn home page).
+- Never guess URLs. GitHub is `https://github.com/ad-nap`. LinkedIn is `https://www.linkedin.com/in/shafikadam/`.
+- The resume PDF (`assets/Shafik-Adam-Resume.pdf`) is Shafik's vault master CV (`career/resume-master.md`) with the phone number removed. Never publish a version with the phone number.
 - Projects come from Shafik's private repo `AD-NAP/vault` (he approved it as a source). PomoZoo is removed. Copy any project fact you use into `content/resume.md` under a "From AD-NAP/vault" heading, with the source file, before it appears on the site.
 - Linking a project repo that is still private is approved by Shafik (he will make it public later). Confirm which repo with him before linking it.
 
@@ -29,7 +30,7 @@ The concept: the site is an isometric building, and each floor is a section. It 
 - Personality stays: the riddle on L2 (visitors type Shafik's favourite animal, hinted by `ad-nap` → `pan-da`; the answer is never shown before they solve it), the hidden B1 it unlocks, the perched cat, and the night-only window cat (Shafik confirmed on 2026-10-09 that it stays).
 - B1 is a reward, not content: nothing a recruiter needs may live only there. For now it holds a cake.
 - The building's light comes from the right, where the sun and moon sit: the front face is lit (`--facade`), the side face is in shade (`--wall-side`).
-- Contact links (Email, GitHub, and LinkedIn once available) stay in the hero as well as at the bottom.
+- Contact links (Email, GitHub, LinkedIn, Resume PDF) stay in the hero as well as at the bottom.
 - Production results get the visual weight. Test data (e.g. the 330 mocked records) stays small.
 - Phones: the building sits small beside the name, so content starts on the first screen.
 - Fonts: Bricolage Grotesque (display and body) and Martian Mono (code and file names).

@@ -9,8 +9,6 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
-- [?] LinkedIn profile URL (link hidden until then)
-- [?] Resume PDF, if you want a download link (design critique, priority 1)
 - [?] Real Cloud BMS or Event Log numbers (for example record counts, users, sites, query times), if any can be shared. Not answered yet
 - [?] Where GitHub Actions, SQL and React were used (all three are in Skills with no evidence on the page)
 - [?] Any LLM or AI engineering work to show? Contact says you are open to AI engineering roles, and the critic found one classical ML project thin backing for that (v0.2 critic #1)
@@ -100,6 +98,12 @@ Left over:
 - [x] NUS shows 2021 to Jan 2026
 - [x] Contact says he is open to backend software development and AI engineering roles
 - [x] All new facts recorded in `content/resume.md`
+
+## v0.3.1: Shafik's answers (2026-10-22)
+
+- [x] LinkedIn link in the hero and Contact: https://www.linkedin.com/in/shafikadam/
+- [x] Resume PDF download (`assets/Shafik-Adam-Resume.pdf`) in the hero and Contact: the vault master CV, phone number removed (design critique, priority 1)
+- [ ] Regenerate the PDF whenever the vault master CV changes (next: after the cumulus-coach demo is added, around 2026-10-30)
 
 ## v0.2.0: isometric building (planned, 2026-10-09)
 

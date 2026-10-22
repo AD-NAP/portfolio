@@ -85,3 +85,5 @@ Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved s
 - Open to roles in backend software development and AI engineering. (Shafik, 2026-10-09)
 - Site skills list: React Native and Firebase are trimmed from the site, because PomoZoo (their only evidence) is no longer shown. They stay on the resume above. (Shafik, 2026-10-09)
 - `AD-NAP/edge-energy-optimizer` was made public on 2026-10-09 at Shafik's request.
+- LinkedIn: https://www.linkedin.com/in/shafikadam/ (from AD-NAP/vault `todo/soon/job-switch.md`, updated 2026-10-18; Shafik, 2026-10-22)
+- Downloadable resume `assets/Shafik-Adam-Resume.pdf`: his general master CV from AD-NAP/vault `career/resume-master.md` (rebuilt 2026-10-18), with the phone number removed. Its wording is newer than this file in places; the site text still comes only from this file. (Shafik, 2026-10-22)
