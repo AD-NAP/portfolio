@@ -25,6 +25,7 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
+| [v0.3.2](https://github.com/AD-NAP/portfolio/releases/tag/v0.3.2) | 2026-10-22 | Fix: Ground Labs internship dates (May 2022 to Aug 2022), on the page and in the resume PDF |
 | [v0.3.1](https://github.com/AD-NAP/portfolio/releases/tag/v0.3.1) | 2026-10-22 | LinkedIn link and a resume PDF download, in the hero and Contact |
 | [v0.3.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.3.0) | 2026-10-20 | Phones: Experience on the second screen, quieter stars, one-line status. Headline results per role, favicon, link preview card, amber kept for light |
 | [v0.2.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.2.0) | 2026-10-09 | Isometric building that leans toward the mouse, floors read top to bottom, a hidden basement behind a riddle |

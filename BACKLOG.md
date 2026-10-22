@@ -96,6 +96,10 @@ Left over:
 - [x] Contact says he is open to backend software development and AI engineering roles
 - [x] All new facts recorded in `content/resume.md`
 
+## v0.3.2: Ground Labs dates fixed (2026-10-22)
+
+- [x] Ground Labs internship was dated Aug 2019 to Nov 2019 by mistake. Now May 2022 to Aug 2022 on the page, in `content/resume.md` and in the resume PDF. The `reviews/` reports from 2026-10-09 still say 2019; they are dated records and stay as they are
+
 ## v0.3.1: Shafik's answers (2026-10-22)
 
 - [x] LinkedIn link in the hero and Contact: https://www.linkedin.com/in/shafikadam/

@@ -30,7 +30,7 @@ Singapore · shafik.adam98@gmail.com
 
 - Built a Python tool that parses Brick Schema TTL building-metadata files and runs SPARQL queries to auto-generate customer product configuration files, reducing preparation time from approximately 3 days of manual engineering work to under 5 minutes.
 
-### Ground Labs, Singapore: Software Developer Intern (Aug 2019 to Nov 2019)
+### Ground Labs, Singapore: Software Developer Intern (May 2022 to Aug 2022)
 
 - Developed frontend features for a desktop data-discovery product, including a four-pane resizable window layout and match highlighting within search results.
 
@@ -92,3 +92,4 @@ Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved s
 - AI engineering work: cumulus-coach, an AWS study agent with RAG, tool calling and an eval set, in progress; nothing to show on the site until it ships (around 2026-10-30). (Shafik, 2026-10-22)
 - edge-energy-optimizer started on 2026-10-04 (first commit), the same day phase 1 was done. (From AD-NAP/edge-energy-optimizer git history, 2026-10-22)
 - May 2018 to 2021, between Singapore Polytechnic and NUS: full-time National Service. Not shown on the site. (Shafik, 2026-10-22)
+- Ground Labs dates corrected from Aug 2019 to Nov 2019 (wrong) to May 2022 to Aug 2022, during NUS. Final interview 27 Apr 2022; NUS SIP period 11 May to 31 Jul 2022, shown as May to Aug. (Shafik, 2026-10-22)
