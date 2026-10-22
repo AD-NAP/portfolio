@@ -87,3 +87,8 @@ Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved s
 - `AD-NAP/edge-energy-optimizer` was made public on 2026-10-09 at Shafik's request.
 - LinkedIn: https://www.linkedin.com/in/shafikadam/ (from AD-NAP/vault `todo/soon/job-switch.md`, updated 2026-10-18; Shafik, 2026-10-22)
 - Downloadable resume `assets/Shafik-Adam-Resume.pdf`: his general master CV from AD-NAP/vault `career/resume-master.md` (rebuilt 2026-10-18), with the phone number removed. Its wording is newer than this file in places; the site text still comes only from this file. (Shafik, 2026-10-22)
+- Cloud BMS: no real users yet and no shareable numbers. The MVP has approval to continue development and looks promising for certain markets. (Shafik, 2026-10-22)
+- GitHub Actions: worked with the team's pipeline, which a senior set up; say "worked with", not "built". His project cumulus-coach will add CI/CD he builds himself. (Shafik, 2026-10-22)
+- AI engineering work: cumulus-coach, an AWS study agent with RAG, tool calling and an eval set, in progress; nothing to show on the site until it ships (around 2026-10-30). (Shafik, 2026-10-22)
+- edge-energy-optimizer started on 2026-10-04 (first commit), the same day phase 1 was done. (From AD-NAP/edge-energy-optimizer git history, 2026-10-22)
+- May 2018 to 2021, between Singapore Polytechnic and NUS: full-time National Service. Not shown on the site. (Shafik, 2026-10-22)

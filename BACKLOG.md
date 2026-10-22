@@ -9,12 +9,9 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
-- [?] Real Cloud BMS or Event Log numbers (for example record counts, users, sites, query times), if any can be shared. Not answered yet
-- [?] Where GitHub Actions, SQL and React were used (all three are in Skills with no evidence on the page)
-- [?] Any LLM or AI engineering work to show? Contact says you are open to AI engineering roles, and the critic found one classical ML project thin backing for that (v0.2 critic #1)
-- [?] When did edge-energy-optimizer start? The page now only says phase 1 was done in Oct 2026
-- [?] Optional: what filled May 2018 to 2021 besides Ground Labs (for example national service), if you want it on the site
-- [?] Enable the Design plugin (install card shown 2026-10-09) so `design-critique` and `accessibility-review` are available
+- [?] Where SQL and React were used (both are in Skills with no evidence on the page). GitHub Actions answered 2026-10-22: he worked with the team's pipeline, set up by a senior; cumulus-coach will add CI/CD he builds himself
+- [~] LLM or AI engineering work to show: cumulus-coach (the AWS study agent: RAG, tool calling, eval, Docker, CI) will cover it, after the demo ships around 2026-10-30
+- [?] Enable the Design plugin (install card shown 2026-10-09 and again 2026-10-22) so `design-critique` and `accessibility-review` are available
 
 ## Site: design and content
 
@@ -103,6 +100,9 @@ Left over:
 
 - [x] LinkedIn link in the hero and Contact: https://www.linkedin.com/in/shafikadam/
 - [x] Resume PDF download (`assets/Shafik-Adam-Resume.pdf`) in the hero and Contact: the vault master CV, phone number removed (design critique, priority 1)
+- [x] Cloud BMS or Event Log numbers: none to share yet. No real users; the MVP has approval to continue development and looks promising for certain markets
+- [x] edge-energy-optimizer started 2026-10-04 (first commit, same day as phase 1). The site's "Oct 2026" is already right
+- [x] May 2018 to 2021: full-time National Service. Recorded in `content/resume.md`, not shown on the site
 - [ ] Regenerate the PDF whenever the vault master CV changes (next: after the cumulus-coach demo is added, around 2026-10-30)
 
 ## v0.2.0: isometric building (planned, 2026-10-09)
