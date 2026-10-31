@@ -59,9 +59,27 @@ Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved s
 - Known limits: the model guesses high (bias +13.8 kWh) because the building used about 8% less in 2017 than in 2016; holidays are the weak spot (MAE 61.9 kWh against 32.6 on weekdays). (`dev-log/04-10-2026.md`, `learning/machine-learning/error-analysis.md`)
 - Tooling: uv for the Python environment. (`dev-log/04-10-2026.md`)
 
+## From the cumulus-coach repo and vault
+
+Copied on 2026-10-31. Sources: the public repo `AD-NAP/cumulus-coach` (`README.md`, commit `e611980`), vault `projects/cumulus-coach.md` and vault `career/resume-master.md` (updated 29-10-2026).
+
+### cumulus-coach (personal project, in progress)
+
+- An agentic AWS study coach: answers questions from public AWS documentation with citations, calls a tool to look up an AWS service by name when the excerpts are not enough, and says so instead of guessing when the documents don't cover a question. (`README.md`)
+- Public repo: https://github.com/AD-NAP/cumulus-coach. Started 2026-10-20. (vault `projects/cumulus-coach.md`)
+- RAG: 10 public AWS doc pages, chunked (500 words, 50 overlap), embedded locally and stored in Chroma. The top 3 chunks go to Claude as numbered excerpts, and every claim cites one, such as [2]. (`README.md`)
+- Two refusal layers: a distance cutoff in code refuses far-off questions without calling the API, so they cost nothing; the system prompt refuses anything the excerpts don't support. (`README.md`)
+- Cutoff 1.1, picked from measured best distances on 18 questions: on-topic 0.528 to 1.042, near-topic 0.794 to 1.342, off-topic 1.736 to 2.062. Smaller is closer. (vault `projects/cumulus-coach.md`, 26-10-2026)
+- Structured output: every answer is an `Answer` with `text`, `refused` and `citations`. (`README.md`)
+- Tool-using agent: `ToolAgent` runs a Claude tool-use loop with a `lookup_service` tool, capped at 5 rounds; tool results continue the excerpt numbering so they can be cited. `RagAgent` is the baseline behind the same `Agent` interface. (`README.md`)
+- Tests and CI: 18 pytest tests run on every push with GitHub Actions; Claude and Chroma are replaced with fakes, so tests are free and need no API key. (`README.md`)
+- Stack: Python, the Claude API (Haiku 5.5 for development), Chroma with local embeddings, pytest, GitHub Actions. (`README.md`)
+- Status: minimum demo complete on 29-10-2026. Next: an eval set of about 20 questions comparing `RagAgent` and `ToolAgent`. (vault `projects/cumulus-coach.md`, `README.md`)
+- Master CV wording: summary adds "and LLM applications with RAG and function calling"; skills row "AI and LLM: Claude API (function calling, structured outputs), RAG, embeddings, Chroma vector store, Claude Code, GitHub Copilot". (vault `career/resume-master.md`)
+
 ### Considered and not used
 
-- rag-agent-service: planned, not started, repo not created yet. Nothing to show. (`projects/rag-agent-service.md`)
+- rag-agent-service: never started; the idea became cumulus-coach. (`projects/rag-agent-service.md`, `projects/cumulus-coach.md`)
 - 30-days-of-python, neetcode-150: practice repos, nothing solved yet. (`projects/30-days-of-python.md`, `projects/neetcode-150.md`)
 
 ## Education
@@ -86,7 +104,7 @@ Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved s
 - Site skills list: React Native and Firebase are trimmed from the site, because PomoZoo (their only evidence) is no longer shown. They stay on the resume above. (Shafik, 2026-10-09)
 - `AD-NAP/edge-energy-optimizer` was made public on 2026-10-09 at Shafik's request.
 - LinkedIn: https://www.linkedin.com/in/shafikadam/ (from AD-NAP/vault `todo/soon/job-switch.md`, updated 2026-10-18; Shafik, 2026-10-22)
-- Downloadable resume `assets/Shafik-Adam-Resume.pdf`: his general master CV from AD-NAP/vault `career/resume-master.md` (rebuilt 2026-10-18), with the phone number removed. Its wording is newer than this file in places; the site text still comes only from this file. (Shafik, 2026-10-22)
+- Downloadable resume `assets/Shafik-Adam-Resume.pdf`: his general master CV from AD-NAP/vault `career/resume-master.md` (rebuilt 2026-10-18), with the phone number removed. Rebuilt 2026-10-31 from the master CV updated 29-10-2026 (adds cumulus-coach and the GitHub link), with `npm run -s resume`. Its wording is newer than this file in places; the site text still comes only from this file. (Shafik, 2026-10-22)
 - Cloud BMS: no real users yet and no shareable numbers. The MVP has approval to continue development and looks promising for certain markets. (Shafik, 2026-10-22)
 - GitHub Actions: worked with the team's pipeline, which a senior set up; say "worked with", not "built". His project cumulus-coach will add CI/CD he builds himself. (Shafik, 2026-10-22)
 - AI engineering work: cumulus-coach, an AWS study agent with RAG, tool calling and an eval set, in progress; nothing to show on the site until it ships (around 2026-10-30). (Shafik, 2026-10-22)

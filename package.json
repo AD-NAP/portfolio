@@ -3,9 +3,11 @@
   "private": true,
   "description": "Dev tooling only. The site itself has no build step.",
   "scripts": {
-    "check": "node .claude/skills/design-review/scripts/check.js"
+    "check": "node .claude/skills/design-review/scripts/check.js",
+    "resume": "node tools/build-resume.js ../../vault/career/resume-master.md assets/Shafik-Adam-Resume.pdf"
   },
   "devDependencies": {
-    "axe-core": "4.10.2"
+    "axe-core": "4.10.2",
+    "playwright": "1.64.0"
   }
 }

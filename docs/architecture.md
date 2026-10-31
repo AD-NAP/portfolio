@@ -18,6 +18,8 @@ One page, three files, no build step:
 
 Also in `assets/`: `favicon.svg` (the building at night) and `og.png`, the 1200x630 link preview. `og.png` is a screenshot of the hero at night with the sidebar and buttons hidden; re-render it with Playwright if the hero changes.
 
+The resume download, `assets/Shafik-Adam-Resume.pdf`, is built from the vault master CV with `npm run -s resume` (`tools/build-resume.js`: drops the phone number, prints one A4 page with Playwright). Rebuild it whenever `vault/career/resume-master.md` changes.
+
 `content/resume.md` is the only source of facts. Nothing appears on the site unless it is in that file first.
 
 ## The building

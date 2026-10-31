@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shafik Adam, Software Engineer</title>
-  <meta name="description" content="Shafik Adam: software engineer in Singapore building cloud applications and building-management platforms with Python, TypeScript and AWS.">
+  <meta name="description" content="Shafik Adam: software engineer in Singapore building cloud applications, building-management platforms and LLM applications with Python, TypeScript and AWS.">
   <script>
     // Set the theme before first paint so the page never flashes the wrong sky.
     (function () {
@@ -20,7 +20,7 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Shafik Adam, Software Engineer">
-  <meta property="og:description" content="Software engineer in Singapore building cloud applications and building-management platforms with Python, TypeScript and AWS.">
+  <meta property="og:description" content="Software engineer in Singapore building cloud applications, building-management platforms and LLM applications with Python, TypeScript and AWS.">
   <meta property="og:url" content="https://ad-nap.github.io/portfolio/">
   <meta property="og:image" content="https://ad-nap.github.io/portfolio/assets/og.png">
   <meta property="og:image:width" content="1200">
@@ -67,7 +67,7 @@
           <path class="theme-toggle__moon" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/>
         </svg>
       </button>
-      <button class="explorer__toggle" type="button" aria-expanded="false" aria-controls="files">Files</button>
+      <button class="explorer__toggle" type="button" aria-expanded="false" aria-controls="files">Sections</button>
     </div>
     <nav id="files" class="files">
       <ul>
@@ -83,6 +83,7 @@
         </li>
         <li class="dir"><a href="#projects" data-target="projects"><span class="ext ext--dir"></span>projects/</a>
           <ul>
+            <li><a href="#cumulus-coach" data-target="projects"><span class="ext ext--md"></span>cumulus-coach.md</a></li>
             <li><a href="#edge-energy-optimizer" data-target="projects"><span class="ext ext--md"></span>edge-energy-optimizer.md</a></li>
           </ul>
         </li>
@@ -106,7 +107,7 @@
 
       <div class="hero__text">
         <h1 class="name">Shafik Adam</h1>
-        <p class="hero__role">Software engineer building cloud applications and building&#8209;management platforms with Python, TypeScript and AWS.</p>
+        <p class="hero__role">Software engineer building cloud applications, building&#8209;management platforms and LLM applications with Python, TypeScript and AWS.</p>
         <p class="hero__proof">Cut config preparation from <strong>~3 days to under 5 minutes</strong>. Helped build a Cloud BMS MVP <strong>approved by Azbil Japan leadership</strong>.</p>
         <p class="hero__status"><span class="dot" aria-hidden="true"></span><span>Systems and Application Engineer at Azbil<span class="hero__where">, Singapore</span></span></p>
         <ul class="hero__links" aria-label="Contact">
@@ -158,12 +159,12 @@
     <section id="skills" class="floor" data-section="skills">
       <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L6</span>Skills</h2>
       <dl class="skills">
-        <div><dt>Languages</dt><dd>Python, SQL, JavaScript, TypeScript</dd></div>
+        <div><dt>Languages</dt><dd>Python, SQL, JavaScript, TypeScript; familiar with Java</dd></div>
         <div><dt>Frontend</dt><dd>Streamlit, Svelte, React, HTML/CSS</dd></div>
         <div class="skills__wide"><dt>Cloud &amp; infrastructure</dt><dd>AWS (Lambda, AppSync, DynamoDB, S3, CloudFront, CloudWatch), Docker, GitHub Actions</dd></div>
         <div><dt>Data &amp; APIs</dt><dd>DynamoDB, GraphQL, SPARQL, RDF/Brick Schema</dd></div>
-        <div><dt>Practices &amp; tools</dt><dd>Git, Clean Architecture, pytest, MSW, GitHub Copilot</dd></div>
-        <div><dt>Familiar</dt><dd>Java</dd></div>
+        <div><dt>AI &amp; LLM</dt><dd>Claude API (function calling, structured outputs), RAG, embeddings, Chroma</dd></div>
+        <div class="skills__wide"><dt>Practices &amp; tools</dt><dd>Git, Clean Architecture, pytest, MSW, GitHub Copilot</dd></div>
       </dl>
     </section>
 
@@ -228,6 +229,43 @@
     <!-- Projects / L4 -->
     <section id="projects" class="floor" data-section="projects">
       <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L4</span>Projects</h2>
+      <article id="cumulus-coach" class="project">
+        <div class="project__head">
+          <h3 class="project__name">cumulus-coach</h3>
+          <p class="project__meta">Personal project, in progress. Started Oct 2026</p>
+        </div>
+        <p>An AWS study coach. It answers from public AWS documentation with citations, looks up a service with a tool when the excerpts are not enough, and says so instead of guessing when the documents do not cover a question.</p>
+        <figure class="compare compare--range" aria-label="Best-match distance on 18 test questions, drawn to scale from 0 to 2.1: on-topic 0.53 to 1.04, near-topic 0.79 to 1.34, off-topic 1.74 to 2.06. The cutoff is 1.1.">
+          <div class="range__rows">
+            <div class="compare__row compare__row--result">
+              <span class="compare__label">On-topic questions</span>
+              <span class="compare__track"><span class="compare__bar compare__bar--range" style="--from:25.14%; --to:49.62%"></span></span>
+              <span class="compare__value">0.53 to 1.04</span>
+            </div>
+            <div class="compare__row">
+              <span class="compare__label">Near-topic questions</span>
+              <span class="compare__track"><span class="compare__bar compare__bar--range" style="--from:37.81%; --to:63.90%"></span></span>
+              <span class="compare__value">0.79 to 1.34</span>
+            </div>
+            <div class="compare__row">
+              <span class="compare__label">Off-topic questions</span>
+              <span class="compare__track"><span class="compare__bar compare__bar--range" style="--from:82.67%; --to:98.19%"></span></span>
+              <span class="compare__value">1.74 to 2.06</span>
+            </div>
+            <div class="compare__row range__axis" aria-hidden="true"><span class="range__scale"><span class="range__cut">cutoff 1.1</span></span></div>
+          </div>
+          <figcaption>Best-match distance on 18 test questions; smaller is closer. Above the 1.1 cutoff, a question is refused without an API call. Below it, Claude answers from the excerpts, and the system prompt refuses what they do not support.</figcaption>
+        </figure>
+        <ul class="role__points">
+          <li>RAG over 10 public AWS doc pages: chunked with overlap and embedded locally into Chroma. The top 3 chunks go to Claude as numbered excerpts, and every claim cites one.</li>
+          <li>A tool-using agent: a Claude tool-use loop calls <code>lookup_service</code>, feeds the result back as a citable source, and stops after 5 rounds. Every answer is structured: text, a refused flag and the cited sources.</li>
+          <li>18 pytest tests with Claude and Chroma replaced by fakes, so they need no API key, run in GitHub Actions on every push.</li>
+        </ul>
+        <p class="project__status">Minimum demo done. Next: an eval set of about 20 questions comparing the plain RAG agent with the tool-using one.</p>
+        <p class="project__stack">Python, Claude API, Chroma, pytest, GitHub Actions</p>
+        <p class="project__link"><a href="https://github.com/AD-NAP/cumulus-coach">Code on GitHub</a></p>
+      </article>
+
       <article id="edge-energy-optimizer" class="project">
         <div class="project__head">
           <h3 class="project__name">edge-energy-optimizer</h3>
