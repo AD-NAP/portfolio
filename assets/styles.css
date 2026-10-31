@@ -19,7 +19,8 @@
   --glass: #1C3352;         /* window, lights off */
   --placeholder: #FF8FA3;
   --focus: #FFB84D;
-  --lit: #E9A446;            /* lit window: a touch below --accent so the name stays brightest */
+  --lit: #E9A446;
+  --bar-result: #FFB84D;     /* result bars in charts */            /* lit window: a touch below --accent so the name stays brightest */
   --code-c: #6C819C; --code-k: #5ED0C0; --code-n: #FFB84D; --code-p: #A9C1E0; --code-s: #C8D6E8;
   --card: rgba(10, 22, 38, .6);
   color-scheme: dark;
@@ -42,6 +43,7 @@
   --placeholder: #B0174A;
   --focus: #0F2440;
   --lit: #F2A922;
+  --bar-result: #B06F00;     /* deeper amber, 3:1 against the chart track */
   --code-c: #55697F; --code-k: #0F7F71; --code-n: #8C5300; --code-p: #2B5A8C; --code-s: #22395A;
   --card: rgba(255, 255, 255, .55);
   color-scheme: light;
@@ -49,7 +51,7 @@
 :root {
   --font-display: "Bricolage Grotesque", system-ui, sans-serif;
   --font-mono: "Martian Mono", ui-monospace, monospace;
-  --sidebar: 248px;
+  --sidebar: 260px;
   --measure: 68ch;
   --gutter: clamp(16px, 4vw, 56px);
   --switch: 1.1s;
@@ -119,6 +121,10 @@ html.is-switching *::after {
 }
 [data-theme="light"] .shooting-star { display: none; }
 
+/* Night: a soft halo in the sky colour hides stars that land right behind letters. */
+[data-theme="dark"] main { text-shadow: 0 0 3px var(--bg), 0 0 6px var(--bg); }
+[data-theme="dark"] .code { text-shadow: none; }   /* solid background: no stars to hide */
+
 /* ---------- Explorer (sidebar) ---------- */
 .explorer {
   position: fixed; inset: 0 auto 0 0; width: var(--sidebar);
@@ -159,11 +165,12 @@ html.is-switching *::after {
 
 .files ul { list-style: none; margin: 0; padding: 0; }
 .files > ul { padding-top: 14px; }
-.files li ul { margin-left: 13px; padding-left: 10px; border-left: 1px solid var(--line-soft); }
+.files li ul { margin-left: 9px; padding-left: 6px; border-left: 1px solid var(--line-soft); }
 .files a {
   display: flex; align-items: center; gap: 9px;
   padding: 6px 8px; border-radius: 6px;
   color: var(--muted); text-decoration: none;
+  white-space: nowrap;   /* file names stay on one line */
 }
 .files a:hover { color: var(--text); background: color-mix(in srgb, var(--line) 25%, transparent); }
 .files a.is-active { color: var(--text); background: color-mix(in srgb, var(--accent) 14%, transparent); box-shadow: inset 2px 0 0 var(--accent); }
@@ -304,6 +311,7 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
   line-height: 1.1;
 }
 .floor__level {
+  background: var(--bg);   /* solid, so a star behind the tag never reads as a strike-through */
   display: inline-grid; place-items: center;
   min-width: 2.4em; height: 2.4em; padding: 0 .4em;
   border: 1px solid var(--line);
@@ -370,10 +378,29 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
 .compare__track { height: 14px; background: var(--track); border-radius: 2px; position: relative; overflow: hidden; }
 .compare__bar { position: absolute; inset: 0 auto 0 0; border-radius: 2px; }
 .compare__bar--before { width: 100%; background: var(--muted); }
-.compare__bar--after { width: max(0.12%, 3px); background: var(--accent); box-shadow: 0 0 10px var(--accent); }
-.compare__bar--model { width: 75.5%; background: var(--accent); }   /* 34.5 / 45.7 */
+.compare__bar--after { width: max(0.12%, 3px); background: var(--bar-result); box-shadow: 0 0 10px var(--bar-result); }
+.compare__bar--model { width: 75.5%; background: var(--bar-result); }   /* 34.5 / 45.7 */
 .compare--stack .compare__row { grid-template-columns: 1fr 5.5em; }
 .compare--stack .compare__label { grid-column: 1 / -1; margin-bottom: -6px; }
+/* Range chart: each bar spans a measured range on a shared axis; one line marks the cutoff. */
+.compare--range .compare__row { grid-template-columns: minmax(0, 1fr) 7em; }
+.compare--range .compare__label { grid-column: 1 / -1; margin-bottom: -6px; }
+.compare__bar--range { left: var(--from); width: calc(var(--to) - var(--from)); background: var(--muted); }
+.compare--range .compare__row--result .compare__bar--range { background: var(--bar-result); }
+.range__rows { --cut: 52.38%; }   /* 1.1 on a 0 to 2.1 axis */
+.compare--range .compare__track { overflow: visible; }
+.compare--range .compare__track::after {
+  content: ""; position: absolute; top: -5px; bottom: -5px; left: var(--cut);
+  width: 2px; margin-left: -1px; background: var(--text);
+}
+.range__axis { margin: -4px 0 0; }
+.range__scale { position: relative; grid-column: 1; height: 1.2em; }
+.range__cut {
+  position: absolute; left: var(--cut); translate: -50% 0; white-space: nowrap;
+  font-family: var(--font-mono); font-size: .6875rem; color: var(--text);
+}
+.compare--range figcaption { margin-top: 6px; }
+.project + .project { margin-top: 32px; }
 .compare figcaption, .pages figcaption { margin-top: 10px; font-size: .8125rem; color: var(--muted); }
 
 /* Test fixture: 330 mocked records, 100 per request. Kept small on purpose.
@@ -517,7 +544,7 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
   }
   .hero__text { display: contents; }
   .name { grid-area: name; font-size: clamp(3.5rem, 17vw, 5rem); }
-  .hero__role { grid-area: role; margin-top: 20px; font-size: 1.0625rem; }
+  .hero__role { grid-area: role; margin-top: 20px; font-size: 1rem; }
   .hero__proof { grid-area: proof; max-width: none; margin-top: 14px; font-size: .9375rem; }
   .hero__status { grid-area: status; justify-self: start; margin-top: 16px; font-size: .875rem; }
   .hero__links { grid-area: links; }
@@ -529,11 +556,11 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
   .cloud--a { display: none; }
   .cloud--b { width: 64px; top: 10px; left: 40%; }
 
-  .floor { padding-block: 32px; }
+  .floor { padding-block: 28px; }
   .hero__where { display: none; }   /* keeps the status on one line; About says Singapore */
-  .floor__title { margin-bottom: 24px; }
+  .floor__title { margin-bottom: 20px; }
   /* Label beside the list, like a spec sheet, so each row is one or two lines. */
-  .skills > div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 12px; align-items: baseline; padding-right: 0; }
+  .skills > div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 12px; align-items: baseline; padding-right: 0; }
   .skills dt { margin-bottom: 0; }
   .about { grid-template-columns: 1fr; gap: 20px; }
   .lede { font-size: 1.125rem; }
@@ -547,10 +574,8 @@ main { margin-left: var(--sidebar); padding: 0 var(--gutter); }
   .about__ttl[open] > summary::before { content: "\2212"; }
   .about__ttl[open] > summary { margin-bottom: 8px; }
   .skills > div { padding-block: 12px; }
-  .skills dd { font-size: 1rem; }
+  .skills dd { font-size: .9375rem; }
 
-  /* Night: a soft halo in the sky colour hides stars that land right behind letters. */
-  [data-theme="dark"] main { text-shadow: 0 0 3px var(--bg), 0 0 6px var(--bg); }
   /* Smaller, fainter stars, so the ones between words read as sky, not punctuation. */
   .star { opacity: .3; }
   .star--big { width: 2px; height: 2px; opacity: .55; }

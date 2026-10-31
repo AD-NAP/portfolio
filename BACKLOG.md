@@ -82,9 +82,9 @@ Built:
 
 Left over:
 - [x] 🟡 Phones: Experience starts on the third screen because About repeats the hero; shorten About or move the Turtle block down (critic #5, #9)
-- [ ] 🟢 Day mode: the amber model bar is 1.65:1 against the chart track; deepen the track or the accent slightly
-- [ ] 🟢 Sidebar entry `edge-energy-optimizer.md` wraps to two lines at 1280px
-- [ ] 🟢 Phone "Files" button: consider "Sections" (critic #9)
+- [x] 🟢 Day mode: the amber model bar is 1.65:1 against the chart track; deepen the track or the accent slightly
+- [x] 🟢 Sidebar entry `edge-energy-optimizer.md` wraps to two lines at 1280px
+- [x] 🟢 Phone "Files" button: consider "Sections" (critic #9)
 - [x] 🟢 Azbil engineer role now says it was a conversion from the internship (v0.1.1)
 
 ## v0.1.1: Shafik's answers (2026-10-09)
@@ -107,7 +107,8 @@ Left over:
 - [x] Cloud BMS or Event Log numbers: none to share yet. No real users; the MVP has approval to continue development and looks promising for certain markets
 - [x] edge-energy-optimizer started 2026-10-04 (first commit, same day as phase 1). The site's "Oct 2026" is already right
 - [x] May 2018 to 2021: full-time National Service. Recorded in `content/resume.md`, not shown on the site
-- [ ] Regenerate the PDF whenever the vault master CV changes (next: after the cumulus-coach demo is added, around 2026-10-30)
+- [x] Regenerate the PDF after cumulus-coach was added to the master CV (done 2026-10-31 in v0.4.0, now `npm run -s resume`)
+- [ ] Rebuild the PDF whenever the vault master CV changes: `npm run -s resume`
 
 ## v0.2.0: isometric building (planned, 2026-10-09)
 
@@ -123,7 +124,7 @@ Plan approved 2026-10-09. Branch `claude/v0.2-isometric`. Decisions: floors are 
 - [ ] 🟢 The B1 storey appears without an animation, because the visitor is on L2 when it unlocks and would not see one
 - [x] `recruiter-critic` run before the merge: no blockers, verdict unchanged (Interview for junior or associate, Maybe for mid-level). Report: `reviews/2026-10-09-recruiter-critic-v0.2.md`. Its project date finding is fixed
 - [x] Merged to `main`, tagged and released `v0.2.0` (2026-10-09)
-- [ ] 🟢 Night, desktop: a star sits right behind the "R" floor tag and reads as a strike-through (v0.2 critic #5)
+- [x] 🟢 Night, desktop: a star sits right behind the "R" floor tag and reads as a strike-through (v0.2 critic #5)
 - [ ] 🟢 Roof focus ring: the deck's front edges are covered by level 6's outline, so only the roof room shows the ring. Visible, but could be cleaner
 - [ ] 🟢 Sidebar mini building still has the old flat shape with a wide base
 
@@ -138,6 +139,22 @@ Plan approved 2026-10-20. Branch `claude/v0.3-phone-polish`.
 - [x] Two radii only (6px panels, round pills); labels moved from amber to muted; new `--lit` token dims night windows slightly
 - [x] `assets/favicon.svg` and `assets/og.png` with Open Graph and Twitter tags
 - [ ] 🟢 `og.png` is a static screenshot; re-render it if the hero changes (see `docs/architecture.md`)
+
+## v0.4.0: cumulus-coach and backlog fixes (2026-10-31)
+
+Plan approved 2026-10-31. Branch `claude/v0.4-cumulus-coach`.
+
+- [x] cumulus-coach on L4, first: purpose, a to-scale chart of the measured distances behind the 1.1 cutoff, 3 bullets, status, stack, repo link. Facts in `content/resume.md` with sources. Answers the old "any LLM or AI work to show?" question
+- [x] Sidebar entry `projects/cumulus-coach.md`; Skills row "AI & LLM"; "Familiar: Java" folded into Languages, as in the master CV
+- [x] Hero says "and LLM applications"; meta descriptions and `og.png` updated to match
+- [x] Phones: Experience heading at 1655px on a 390x844 screen (under the 1688px target), after slightly tighter phone spacing and hero type
+- [x] Resume PDF rebuilt from the master CV (adds cumulus-coach and the GitHub link), one page, no phone number. `tools/build-resume.js`, run with `npm run -s resume`
+- [x] Day-mode result bars use a new `--bar-result` token (deeper amber, 3:1 against the track)
+- [x] Sidebar is 260px wide and file names never wrap
+- [x] Phone menu button says "Sections"
+- [x] Night text halo now at all widths (off on the code block, which has its own background); floor tags have a solid fill
+- [x] `playwright@1.64.0` in `devDependencies`
+- [ ] 🟢 Update the cumulus-coach card when the eval set lands (its next milestone)
 
 ## Deploy
 
@@ -156,7 +173,7 @@ Plan approved 2026-10-20. Branch `claude/v0.3-phone-polish`.
 - [x] `recruiter-critic` was registered mid-session too (after a short delay)
 - [ ] Confirm the Stop hook fires live. Still unverified after step 7: that session started in `Workspace/`, so this repo's `.claude/settings.json` hook and the `recruiter-critic` agent were not loaded. Start the next session inside `projects/portfolio/`, edit a site file and finish a turn; expect "Running design check on changed site files…"
 - [x] Local checker works on the Windows PC (2026-10-09): Node 24 LTS installed with winget; Playwright installed with `npm install --no-save playwright` and `npx playwright install chromium`. Note: a later plain `npm install` removes Playwright again, because it is not in `package.json`
-- [ ] Decide whether to add `playwright` to `devDependencies` so the checker installs the same way everywhere
+- [x] Decide whether to add `playwright` to `devDependencies` so the checker installs the same way everywhere
 - [ ] The Design plugin is not enabled (checked 2026-10-09: only `frontend-design` is). It is in the catalog as "Design" by Anthropic; install card shown, waiting on Shafik. The step 7 reports are Claude's self-review in the same format
 
 ## Learning path (Claude Code building blocks)
