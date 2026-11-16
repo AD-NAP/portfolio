@@ -25,6 +25,7 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
+| [v0.4.1](https://github.com/AD-NAP/portfolio/releases/tag/v0.4.1) | 2026-11-16 | edge-energy-optimizer card: phases 1 and 2 done, phases 3 to 5 parked. Resume PDF rebuilt from the updated master CV |
 | [v0.4.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.4.0) | 2026-10-31 | cumulus-coach project with a to-scale cutoff chart, AI and LLM skills, rebuilt resume PDF, sidebar and chart fixes |
 | [v0.3.2](https://github.com/AD-NAP/portfolio/releases/tag/v0.3.2) | 2026-10-22 | Fix: Ground Labs internship dates (May 2022 to Aug 2022), on the page and in the resume PDF |
 | [v0.3.1](https://github.com/AD-NAP/portfolio/releases/tag/v0.3.1) | 2026-10-22 | LinkedIn link and a resume PDF download, in the hero and Contact |

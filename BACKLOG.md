@@ -156,6 +156,13 @@ Plan approved 2026-10-31. Branch `claude/v0.4-cumulus-coach`.
 - [x] `playwright@1.64.0` in `devDependencies`
 - [ ] 🟢 Update the cumulus-coach card when the eval set lands (its next milestone)
 
+## edge-energy-optimizer phase 2 (2026-11-16, released as v0.4.1)
+
+- [x] Project card: phases 1 and 2 done, phases 3 to 5 parked. Phase 2 bullets for the look-ahead heuristic and the MPC. Facts in `content/resume.md` with sources
+- [x] Resume PDF rebuilt from the master CV updated 16-11-2026. One page, no phone number
+- [x] `tools/build-resume.js`: the master CV now writes links as Markdown (`[text](url)`); the builder strips them to plain text before linking. Line height 1.27 to 1.23 so the longer CV stays on one page
+- [ ] 🟢 Resume PDF: the long edge-energy-optimizer heading pushes its repo link onto a second line
+
 ## Deploy
 
 - [x] Make `main` the default branch (done by Shafik)

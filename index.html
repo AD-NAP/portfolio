@@ -269,9 +269,9 @@
       <article id="edge-energy-optimizer" class="project">
         <div class="project__head">
           <h3 class="project__name">edge-energy-optimizer</h3>
-          <p class="project__meta">Personal project, in progress. Phase 1 done Oct 2026</p>
+          <p class="project__meta">Personal project. Phases 1 and 2 done, Oct to Nov 2026</p>
         </div>
-        <p>Forecasts a building's energy load a day ahead. The first of five planned phases towards controlling a simulated building, shaving peak demand with a battery, and deploying at the edge.</p>
+        <p>Forecasts a real office building's energy load a day ahead, then controls a simulated heat pump home to cut its heating cost. Two of five planned phases are done.</p>
         <figure class="compare compare--stack" aria-label="Forecast error: 45.7 kWh for the same-hour-last-week baseline compared with 34.5 kWh for the forecast model, drawn to scale">
           <div class="compare__row">
             <span class="compare__label">Same hour last week (baseline)</span>
@@ -283,15 +283,15 @@
             <span class="compare__track"><span class="compare__bar compare__bar--model"></span></span>
             <span class="compare__value">34.5 kWh</span>
           </div>
-          <figcaption>Mean absolute error on the 2017 test year. Lower is better: 24.5% better than the baseline.</figcaption>
+          <figcaption>Phase 1 forecast: mean absolute error on the 2017 test year. Lower is better: 24.5% better than the baseline.</figcaption>
         </figure>
         <ul class="role__points">
-          <li>Real meter data from the Building Data Genome Project 2, one office building. Trained on 2016, tested on all of 2017, split by time and never shuffled.</li>
-          <li>Pipeline: naive baselines, calendar, weather and lag features, gradient boosted trees (scikit-learn), evaluation, error analysis, and a <code>forecast()</code> function with tests.</li>
-          <li>Known limits: the model guesses high (bias +13.8 kWh) because the building used about 8% less in 2017 than in 2016, and holidays are the weak spot.</li>
+          <li>Phase 1: hourly forecast with gradient boosted trees on real meter data (Building Data Genome Project 2). Trained on 2016, tested on all of 2017, split by time. It guesses high (bias +13.8 kWh) because the building used about 8% less in 2017.</li>
+          <li>Phase 2: controls a simulated heat pump home in the BOPTEST simulator (Docker). A look-ahead heuristic cut heating cost 10% to 16% against a fixed thermostat.</li>
+          <li>Then a model predictive controller: a thermal model fitted from a system identification experiment, plus a 24-hour linear program re-solved every hour. On two unseen test periods it cut cost 14% to 20% against the thermostat and 3% to 8% against the heuristic, with similar comfort.</li>
         </ul>
-        <p class="project__status">Phase 1 of 5 is done. Next: control logic tested against a simulated building (BOPTEST).</p>
-        <p class="project__stack">Python, scikit-learn, pytest, uv</p>
+        <p class="project__status">Phases 1 and 2 are done. Phases 3 to 5 are parked.</p>
+        <p class="project__stack">Python, scikit-learn, SciPy, BOPTEST, Docker, pytest, uv</p>
         <p class="project__link"><a href="https://github.com/AD-NAP/edge-energy-optimizer">Code on GitHub</a></p>
       </article>
     </section>

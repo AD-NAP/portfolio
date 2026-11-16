@@ -2,7 +2,8 @@
 const fs = require("fs"), path = require("path");
 const { chromium } = require(path.resolve("node_modules/playwright"));
 const [src, out] = process.argv.slice(2);
-const md = fs.readFileSync(src, "utf8").replace(/\r\n/g, "\n").split("\n---\n")[1];
+const md = fs.readFileSync(src, "utf8").replace(/\r\n/g, "\n").split("\n---\n")[1]
+  .replace(/\[([^\]]+)\]\(https?:[^)]+\)/g, "$1");   // [text](url) -> text; linkify adds the link back
 const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 const linkify = s => s.replace(/(github\.com\/[\w\/-]+|linkedin\.com\/in\/[\w-]+)/g, m => `<a href="https://${m}">${m}</a>`)
                      .replace(/([\w.]+@[\w.]+\.\w+)/, m => `<a href="mailto:${m}">${m}</a>`);
@@ -25,7 +26,7 @@ for (const sec of md.split(/\n## /).slice(1)) {
       let t = line.slice(4), link = "";
       const bar = t.indexOf(" | "); if (bar > -1) { link = t.slice(bar + 3); t = t.slice(0, bar); }
       const m = t.match(/^(.*) \(([^)]*)\)$/);
-      const left = esc(m ? m[1] : t) + (link ? ` | <span class="link">${linkify(esc(link))}</span>` : "");
+      const left = esc(m ? m[1] : t) + (link ? ` <span class="link">| ${linkify(esc(link))}</span>` : "");
       html += `<div class="item"><span class="what">${left}</span><span class="when">${m ? esc(m[2]) : ""}</span></div>`;
     } else if (line.startsWith("- ")) {
       if (!inList) { html += "<ul>"; inList = true; }
@@ -38,7 +39,7 @@ for (const sec of md.split(/\n## /).slice(1)) {
 }
 const page = `<!doctype html><meta charset="utf-8"><style>
 @page { size: A4; margin: 11mm 14mm; }
-body { font-family: Calibri, Carlito, "Segoe UI", sans-serif; font-size: 10pt; line-height: 1.27; color: #000; margin: 0; }
+body { font-family: Calibri, Carlito, "Segoe UI", sans-serif; font-size: 10pt; line-height: 1.23; color: #000; margin: 0; }
 h1 { text-align: center; font-size: 19pt; margin: 0 0 2px; }
 .contact { text-align: center; margin: 0 0 8px; }
 a { color: inherit; }

@@ -49,7 +49,7 @@ Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved s
 - Goal: forecast building load, control a simulated building, shave peak demand with a battery, and deploy it all at the edge. (`projects/edge-energy-optimizer.md`)
 - GitHub repo `AD-NAP/edge-energy-optimizer` (public since 2026-10-09), description "Building load forecasting, control, and peak shaving at the edge". (GitHub repo metadata; local path from `projects/edge-energy-optimizer.md`)
 - Five planned phases: 1. energy load forecasting (ML); 2. control logic tested against a simulated building (BOPTEST); 3. BACnet and Modbus protocol integration; 4. peak demand shaving with a simulated battery; 5. edge deployment on k3s with MQTT and a dashboard. Everything is simulated, so it needs no hardware. (`ideas/edge-energy-optimizer-plan.md`)
-- Status: phase 1 done on 2026-10-04. Phase 2 is next. Phases 3 to 5 are not scheduled yet. (`projects/edge-energy-optimizer.md`, `ideas/edge-energy-optimizer-plan.md`)
+- Status (2026-10-09, superseded below): phase 1 done on 2026-10-04. Phase 2 is next. Phases 3 to 5 are not scheduled yet. (`projects/edge-energy-optimizer.md`, `ideas/edge-energy-optimizer-plan.md`)
 - Phase 1 result: day-ahead load forecast, MAE 34.5 kWh on the 2017 test year against 45.7 kWh for the "same hour last week" baseline, so 24.5% better. (`projects/edge-energy-optimizer.md`, `dev-log/04-10-2026.md`)
 - Data: real meter data from the Building Data Genome Project 2, one office building (`Hog_office_Shawnna`). (`dev-log/04-10-2026.md`)
 - Pipeline built: dataset, naive baselines, features, time-based split, gradient boosted trees, evaluation, error analysis, and a `forecast()` function with tests. (`dev-log/04-10-2026.md`)
@@ -58,6 +58,14 @@ Copied from Shafik's private notes repo `AD-NAP/vault` on 2026-10-09 (approved s
 - Split: train on 8 Jan to 31 Dec 2016 (8,616 rows), test on all of 2017 (8,760 rows); split by time, never shuffled. (`learning/machine-learning/train-test-split.md`)
 - Known limits: the model guesses high (bias +13.8 kWh) because the building used about 8% less in 2017 than in 2016; holidays are the weak spot (MAE 61.9 kWh against 32.6 on weekdays). (`dev-log/04-10-2026.md`, `learning/machine-learning/error-analysis.md`)
 - Tooling: uv for the Python environment. (`dev-log/04-10-2026.md`)
+
+Phase 2 facts copied on 2026-11-16 from the public repo `AD-NAP/edge-energy-optimizer` (`README.md`, `docs/results/phase2.md`, `docs/decisions/0004-mpc-controller.md`, commit `5b55b2b`):
+
+- Status: phases 1 and 2 complete; phases 3 to 5 parked, with no plans to pick them up for now. Phase 2 finished 16 November 2026. (`README.md`, `docs/results/phase2.md`)
+- Phase 2 setup: controls a simulated heat pump family home in the BOPTEST simulator (test case `bestest_hydronic_heat_pump`, v0.9.0), run locally in Docker. Baseline is a thermostat fixed at 21.2 °C. (`README.md`, `docs/results/phase2.md`)
+- Look-ahead heuristic ("predictive controller"): cut heating cost 10% to 16% against the fixed thermostat in all four scenarios, with comfort no worse. (`docs/results/phase2.md`)
+- Model predictive controller: a four-parameter thermal model fitted from a system identification experiment (random heat pump signal), plus a 24-hour linear program (SciPy HiGHS) re-solved every hour. On two unseen two-week test periods it cut cost 14% to 20% against the thermostat and 3% to 8% against the heuristic, with similar comfort. (`docs/results/phase2.md`, `docs/decisions/0004-mpc-controller.md`)
+- Stack added in phase 2: SciPy, BOPTEST, Docker. (`pyproject.toml`, `README.md`)
 
 ## From the cumulus-coach repo and vault
 
