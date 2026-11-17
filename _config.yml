@@ -4,6 +4,8 @@ exclude:
   - CLAUDE.md
   - BACKLOG.md
   - README.md
+  - PRODUCT.md
+  - DESIGN.md
   - docs/
   - content/
   - reviews/

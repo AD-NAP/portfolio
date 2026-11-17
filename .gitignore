@@ -1,3 +1,10 @@
 node_modules/
 .review/
 .claude/hooks/.state/
+
+# Impeccable: keep config.json and critique reports; ignore runtime state
+.impeccable/*
+!.impeccable/config.json
+!.impeccable/critique/
+**/.impeccable/hook.cache.json
+.claude/skills/impeccable/scripts/bin/

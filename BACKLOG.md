@@ -163,6 +163,27 @@ Plan approved 2026-10-31. Branch `claude/v0.4-cumulus-coach`.
 - [x] `tools/build-resume.js`: the master CV now writes links as Markdown (`[text](url)`); the builder strips them to plain text before linking. Line height 1.27 to 1.23 so the longer CV stays on one page
 - [ ] 🟢 Resume PDF: the long edge-energy-optimizer heading pushes its repo link onto a second line
 
+## v0.5.0: design skills and polish (2026-11-17)
+
+Plan approved 2026-11-17. Branch `claude/beautiful-meitner-lxxr21`. Report: `reviews/2026-11-17-skills-review.md`.
+
+- [x] Researched outside UI skills. React Bits (pro.reactbits.dev) needs React, so kept plain HTML; picked Impeccable and Emil Kowalski's skills
+- [x] Installed Impeccable (skill, 5 agents, design hook on edits and at turn end) and 12 of Emil's skills into `.claude/`. Sources, commits and licences in `.claude/skills/THIRD_PARTY.md`. Impeccable telemetry off
+- [x] `PRODUCT.md` and `DESIGN.md` written for Impeccable (CLAUDE.md wins on conflicts)
+- [x] Review: Impeccable detector (source and rendered page) and critique, Emil's `improve-animations`, `mobile-native` and `break-ui` checks
+- [x] Fixes: phone skills label overlap, 16px riddle input (no iPhone zoom), shorter lines (60ch), no card inside a card, hover only on hover devices, press feedback, status dot ping removed, star twinkle settles by ~8s, cheaper building lean, motion tokens, `theme-color`, themed text selection
+- [x] Checker uses the preinstalled Chromium in cloud sessions (`check.js`)
+- [x] Detector clean on the rendered page at 1280px and 390px; rejected findings recorded as ignores with reasons in `.impeccable/config.json`
+
+### Ideas from the skills review (Shafik picks)
+- [ ] 🟡 Desktop floors leave the right ~40% empty: a second column for charts beside role text, or a side rail with the floor's level and file name
+- [ ] 🟢 Consolidate the 13 font sizes into 5 or 6 size tokens
+- [ ] 🟢 B1 reveal: light the basement windows one by one when the riddle is solved
+- [ ] 🟢 Phone "Sections" menu: 180ms fade and small drop instead of appearing at once
+- [ ] 🟢 Optional: a small to-scale chart for edge-energy-optimizer phase 2 (14% to 20% cost cut); the number is already in `content/resume.md` (recruiter critic, `reviews/2026-11-17-recruiter-critic-v0.5.md`)
+
+Recruiter critic after the fixes: **Interview** (junior to early mid-level). Its concern that the test-data chart looked like a production chart was fixed (no amber on it), and the hero proof line is a size bigger.
+
 ## Deploy
 
 - [x] Make `main` the default branch (done by Shafik)

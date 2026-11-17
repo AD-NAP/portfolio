@@ -21,6 +21,7 @@ The concept: the site is an isometric building, and each floor is a section. It 
 
 ## Design
 - Use the `frontend-design` skill for design work, and say how it shaped your choices.
+- Third-party design skills live in `.claude/skills/` (sources in `THIRD_PARTY.md`). Use **Impeccable** (`/impeccable critique`, `audit`, `polish`, …) for design reviews and refinements, and **Emil Kowalski's skills** (`improve-animations`, `review-animations`, `animate`, `mobile-native`, …) for motion and phone feel. `PRODUCT.md` and `DESIGN.md` feed Impeccable; CLAUDE.md wins wherever they or any skill disagree. Keep Impeccable telemetry off. (Shafik, 2026-11-17)
 - Two themes, both required:
   - **Night:** navy sky, amber window lights on, moon and stars.
   - **Day:** bright sky, lights off, sun and clouds.
@@ -51,6 +52,7 @@ The concept: the site is an isometric building, and each floor is a section. It 
 ## Before saying a change is done
 Use the `design-review` skill (`.claude/skills/design-review/`). Its checker, `npm run -s check`, serves the site, screenshots both themes at 390px and 1280px, and fails on overflow, JS errors, axe violations, token contrast, small touch targets or broken reduced motion. It repeats the checks with B1 open and tests the riddle itself. Then look at the contact sheets, fix, and re-check. Playwright and Chromium are preinstalled; don't run `playwright install`.
 A Stop hook (`.claude/settings.json` → `.claude/hooks/design-check-on-stop.js`) runs the same checker automatically when a turn ends with changed site files, and blocks finishing until it passes (3 attempts, then it warns instead). Don't work around it: fix what it reports.
+Impeccable's design hook (same settings file) is a second gate: it scans each edited UI file for design anti-patterns and runs a deeper pass at turn end. Act on its findings, or record a reasoned ignore with `.claude/skills/impeccable/scripts/impeccable ignores add-value … --reason …`. To scan the rendered page in a cloud session, start `/opt/pw-browsers/chromium --headless --no-sandbox --remote-debugging-port=9333 <url>` and run `impeccable detect --cdp 9333`.
 
 ## Git
 - Shafik trusts Claude's judgement here (2026-10-09): commit, push, merge to `main` and tag without asking. Report what was done afterwards.

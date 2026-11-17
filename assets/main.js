@@ -144,10 +144,13 @@
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
   if (hero && towerSvg && !reduceMotion) {
     let frame = 0, tx = 0, ty = 0;
+    const grid = towerSvg.querySelector(".tower__grid");
+    // Transforms go straight onto the two moving elements (not via inherited CSS variables),
+    // so the shapes inside the SVG don't recalculate style on every pointer frame.
     const apply = () => {
       frame = 0;
-      towerSvg.style.setProperty("--tilt-x", tx.toFixed(3));
-      towerSvg.style.setProperty("--tilt-y", ty.toFixed(3));
+      towerSvg.style.transform = `perspective(900px) rotateX(${(ty * -4).toFixed(2)}deg) rotateY(${(tx * 7).toFixed(2)}deg)`;
+      if (grid) grid.style.transform = `translate(${(tx * -5).toFixed(2)}px, ${(ty * -3).toFixed(2)}px)`;
     };
     const tilt = (x, y) => { tx = x; ty = y; if (!frame) frame = requestAnimationFrame(apply); };
     const clamp = n => Math.max(-1, Math.min(1, n));
@@ -202,7 +205,11 @@
 
   /* ---------- Day / night toggle ---------- */
   const toggleBtn = document.querySelector(".theme-toggle");
+  // The phone's browser bar takes the sidebar colour of the current theme.
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  const syncThemeColor = () => themeColor?.setAttribute("content", getComputedStyle(root).getPropertyValue("--bg-deep").trim());
   const syncToggle = () => {
+    syncThemeColor();
     const night = isNight();
     // Fixed name "Night mode"; pressed means night is on.
     toggleBtn?.setAttribute("aria-pressed", String(night));
