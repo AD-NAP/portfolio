@@ -40,3 +40,7 @@ CLAUDE.md wins over every skill. Verdicts: **fix now** (done in v0.5.0), **backl
 | Reduced motion should keep gentle fades | improve-animations (accessibility) | CLAUDE.md: reduced motion shows final states with no animation. |
 | Shooting star uses `ease-in` | improve-animations (easing) | It's sky decoration, not UI: a meteor speeding up as it burns in is the intended look. |
 | Theme switch is 1.1s, over the 300ms UI budget | improve-animations (duration) | A rare, explanatory moment (the sun sets and the moon rises); Emil's table allows longer for those. |
+
+## Follow-up from the recruiter critic
+
+The `recruiter-critic` subagent (`reviews/2026-11-17-recruiter-critic-v0.5.md`) caught a side effect of fix #4: without its box, the cumulus-coach test-data chart looked like a production chart. It now uses `--text` instead of amber, so production results keep the visual weight (CLAUDE.md). The hero proof line went up a size (1.0625rem → 1.125rem).

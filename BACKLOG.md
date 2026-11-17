@@ -180,6 +180,9 @@ Plan approved 2026-11-17. Branch `claude/beautiful-meitner-lxxr21`. Report: `rev
 - [ ] 🟢 Consolidate the 13 font sizes into 5 or 6 size tokens
 - [ ] 🟢 B1 reveal: light the basement windows one by one when the riddle is solved
 - [ ] 🟢 Phone "Sections" menu: 180ms fade and small drop instead of appearing at once
+- [ ] 🟢 Optional: a small to-scale chart for edge-energy-optimizer phase 2 (14% to 20% cost cut); the number is already in `content/resume.md` (recruiter critic, `reviews/2026-11-17-recruiter-critic-v0.5.md`)
+
+Recruiter critic after the fixes: **Interview** (junior to early mid-level). Its concern that the test-data chart looked like a production chart was fixed (no amber on it), and the hero proof line is a size bigger.
 
 ## Deploy
 
