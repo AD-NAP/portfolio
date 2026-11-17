@@ -25,6 +25,7 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
+| [v0.5.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.5.0) | 2026-11-17 | Design skills (Impeccable, Emil Kowalski) installed and run: phone fixes, shorter lines, flatter project charts, press feedback, calmer automatic motion |
 | [v0.4.1](https://github.com/AD-NAP/portfolio/releases/tag/v0.4.1) | 2026-11-16 | edge-energy-optimizer card: phases 1 and 2 done, phases 3 to 5 parked. Resume PDF rebuilt from the updated master CV |
 | [v0.4.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.4.0) | 2026-10-31 | cumulus-coach project with a to-scale cutoff chart, AI and LLM skills, rebuilt resume PDF, sidebar and chart fixes |
 | [v0.3.2](https://github.com/AD-NAP/portfolio/releases/tag/v0.3.2) | 2026-10-22 | Fix: Ground Labs internship dates (May 2022 to Aug 2022), on the page and in the resume PDF |
@@ -41,6 +42,9 @@ git switch --detach v0.2.0
 ```
 
 ## Docs
+
+- [PRODUCT.md](PRODUCT.md) and [DESIGN.md](DESIGN.md): product context and the design system, for the Impeccable design skill.
+- [.claude/skills/THIRD_PARTY.md](.claude/skills/THIRD_PARTY.md): the outside skills used to design and review the site.
 
 - [docs/architecture.md](docs/architecture.md): how the site is put together.
 - [docs/decisions/](docs/decisions/): choices that are hard to reverse.

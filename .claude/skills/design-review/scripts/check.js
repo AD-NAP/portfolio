@@ -83,7 +83,9 @@ const audit = async (page, phone) => {
   fs.mkdirSync(OUT, { recursive: true });
   await new Promise(r => server.listen(0, r));
   const url = `http://localhost:${server.address().port}/`;
-  const browser = await chromium.launch();
+  // Cloud sessions ship one Chromium at this path; Playwright's own download may not match the pinned version.
+  const CLOUD_CHROMIUM = "/opt/pw-browsers/chromium";
+  const browser = await chromium.launch(fs.existsSync(CLOUD_CHROMIUM) ? { executablePath: CLOUD_CHROMIUM } : {});
   const results = [];
   const b1Results = [];
 

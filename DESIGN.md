@@ -53,7 +53,7 @@ rounded:
 spacing:
   gutter: "clamp(16px, 4vw, 56px)"
   floor: "clamp(48px, 7vw, 80px)"
-  measure: "68ch"
+  measure: "60ch"
 components:
   link-pill:
     backgroundColor: "{colors.night-deep}"
@@ -118,12 +118,12 @@ A night palette of navy and amber, and a day palette of pale sky and deep ink, s
 - **Display** (800, clamp 4–8rem, line-height 0.88, width 75): the name only.
 - **Headline** (700, clamp 2–3rem, width 80): floor titles, with a mono level tag (`L5`) beside them.
 - **Title** (650, clamp 1.3–1.6rem): role titles; the role headline result at 600, 1.125–1.25rem.
-- **Body** (400, 1.0625rem, line-height 1.6, max 68ch): paragraphs and bullet points in `--body`.
+- **Body** (400, 1.0625rem, line-height 1.6, max 60ch, about 75 letters): paragraphs and bullet points in `--body`.
 - **Label** (mono 400, 0.75rem): dates, file names, chart values, skill group names, in `--muted`.
 
 ## Layout
 
-A fixed 260px file-explorer sidebar on the left, with content in a 1040px column (`--gutter` sides). The hero fills the first screen: name, role, proof line, status and links on the left, the building on the right. Floors stack with `clamp(48px, 7vw, 80px)` padding and a soft line between them. Under 900px the sidebar becomes a top bar with a "Files" menu, and the building shrinks to 112px beside the name so content starts on the first screen. Under 520px, charts and skills go to one column.
+A fixed 260px file-explorer sidebar on the left, with content in a 1040px frame, text held to 60ch (`--gutter` sides). The hero fills the first screen: name, role, proof line, status and links on the left, the building on the right. Floors stack with `clamp(48px, 7vw, 80px)` padding and a soft line between them. Under 900px the sidebar becomes a top bar with a "Files" menu, and the building shrinks to 112px beside the name so content starts on the first screen. Under 520px, charts and skills go to one column.
 
 ## Elevation & Depth
 
@@ -146,11 +146,14 @@ Project cards (6px, `--bg-deep`, 1px `--line`, 28px padding), the riddle card (`
 ### Navigation
 The file explorer: mono file names in `--muted`. Hover gives `--text` on a faint line tint. The active file gets an amber tint and a 2px amber inner bar on the left. On phones it's a top bar with a 44px "Files" toggle and a 44px theme toggle.
 
+### Press and hover
+Pills and buttons squeeze to `scale(.97)` on press (160ms, `--ease-out`). Hover colour changes only apply on devices that hover, so nothing stays highlighted after a tap. Text selection and the input caret use the amber tokens.
+
 ### The building (signature)
 An SVG isometric tower in the hero. Each floor is a link: hover or focus lights that floor's windows and dims the rest, and focus draws a 3px `--focus` stroke. Windows light up one by one on load. With a mouse, the tower leans up to 7° toward the pointer.
 
 ### Stat charts (signature)
-Horizontal bars drawn to scale on a faint `--track`. The baseline is `--muted` and the result is `--bar-result`, with the value in mono beside it. The range chart marks the cutoff with a single `--text` line.
+Horizontal bars drawn to scale on a faint `--track`. On their own they sit in a light panel; inside a project card they drop the panel and keep a rule above, so there's never a card inside a card. The baseline is `--muted` and the result is `--bar-result`, with the value in mono beside it. The range chart marks the cutoff with a single `--text` line.
 
 ## Do's and Don'ts
 
@@ -160,6 +163,8 @@ Horizontal bars drawn to scale on a faint `--track`. The baseline is `--muted` a
 - **Do** draw numbers to scale and label them in mono.
 - **Do** keep touch targets at 44px or more on phones.
 - **Do** keep the light on the right: lit front face, shaded side.
+
+- **Do** use the motion tokens: `--ease-out` (`cubic-bezier(0.23, 1, 0.32, 1)`) for responses to a click or tap, `--ease-in-out` (`cubic-bezier(0.77, 0, 0.175, 1)`) for things crossing the screen. UI responses stay under 300ms; the 1.1s day/night switch is the one deliberate long moment.
 
 ### Don't:
 - **Don't** add drop shadows or glassy cards; depth comes from the building and tonal layers.
