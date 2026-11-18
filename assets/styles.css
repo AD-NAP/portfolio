@@ -74,7 +74,7 @@ p { margin: 0 0 1em; }
 h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); color: var(--ink); text-wrap: balance; }
 a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: .18em; }
 a:hover { text-decoration-thickness: 2px; }
-:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 1px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: .86em; color: var(--ink); overflow-wrap: anywhere; }
 mark { background: var(--yellow); color: var(--on-yellow); padding: 0 .2em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 
@@ -92,7 +92,7 @@ mark { background: var(--yellow); color: var(--on-yellow); padding: 0 .2em; box-
 /* The sunflower pass is a text-shadow of the blue words, landing a few pixels off,
    the way two riso drums never quite line up. One copy of the text, so find and copy stay clean. */
 .ink { text-shadow: var(--mis-x) var(--mis-y) 0 var(--yellow); transition: text-shadow .45s var(--ease-out); }
-/* Hover or focus anywhere in a section and its title snaps into register. */
+/* A title snaps into register when hovered, arrived at from a link, or when focus is in its section. */
 .ink:hover,
 .spread:target .ink,
 .spread:focus-within .ink { text-shadow: 0 0 0 var(--yellow); }
@@ -106,7 +106,7 @@ mark { background: var(--yellow); color: var(--on-yellow); padding: 0 .2em; box-
   border-bottom: 2px solid var(--ink);
 }
 .mast__title {
-  display: flex; align-items: baseline; gap: 12px; min-height: 44px; align-self: stretch; align-items: center;
+  display: flex; align-items: center; gap: 12px; min-height: 44px; align-self: stretch;
   font-family: var(--font-display); font-weight: 800; font-variation-settings: "wdth" 120; font-size: 1.1rem;
   text-decoration: none; color: var(--ink); white-space: nowrap;
 }
@@ -406,5 +406,4 @@ main { padding: 0 var(--gutter); }
 /* ---------- Reduced motion: the finished print, nothing moving ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-  html { scroll-behavior: auto; }
 }

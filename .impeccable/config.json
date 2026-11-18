@@ -3,6 +3,16 @@
   "detector": {
     "ignoreRules": [],
     "ignoreFiles": [],
-    "ignoreValues": []
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-18T00:38:10.646Z",
+        "reason": "Source-only scan without CSS: spreads have 56-104px top padding below the dashed trim line; the rendered scan (detect --cdp) passes"
+      }
+    ]
   }
 }
