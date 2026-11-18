@@ -42,7 +42,7 @@
   --font-body: "Literata", Georgia, serif;
   --gutter: clamp(16px, 4vw, 56px);
   --measure: 65ch;
-  --mis-x: 3px;            /* how far the yellow pass sits off the blue one */
+  --mis-x: 3px;            /* how far the red pass sits off the grey one */
   --mis-y: 2px;
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   color-scheme: light;
@@ -163,7 +163,7 @@ main { padding: 0 var(--gutter); }
 .cover__name:focus { outline: none; }
 .cover__issue {
   display: block; margin-top: 14px;
-  font: italic 400 clamp(1.05rem, 1.8vw, 1.3rem) var(--font-body); font-variation-settings: normal;
+  font: italic 400 clamp(1.05rem, 1.8vw, 1.3rem)/1.35 var(--font-body); font-variation-settings: normal;
   color: var(--muted); text-shadow: none; letter-spacing: 0;
 }
 .cover__replay { margin: 8px 0 0; }
@@ -248,7 +248,7 @@ main { padding: 0 var(--gutter); }
 }
 .meishi__back > * { opacity: var(--back-ink, 1); }
 .meishi__back { transform: rotateY(180deg); }
-.meishi__org { display: flex; align-items: center; gap: 10px; margin: 0; font: 650 clamp(.78rem, 2.2vw, .95rem) var(--font-display); color: var(--ink); }
+.meishi__org { display: flex; align-items: center; gap: 10px; margin: 0; font: 650 clamp(.78rem, 2.2vw, .95rem)/1.35 var(--font-display); color: var(--ink); }
 .meishi__mark { width: 4px; align-self: stretch; min-height: 1.1em; background: var(--accent); }
 .meishi__name {
   margin-top: auto; font-size: clamp(1.6rem, 6vw, 2.6rem); font-weight: 850;
@@ -257,10 +257,10 @@ main { padding: 0 var(--gutter); }
 .meishi__title { margin: 6px 0 0; max-width: 34ch; font-size: clamp(.78rem, 2.2vw, .95rem); line-height: 1.35; color: var(--text); }
 .meishi__email { margin: auto 0 0; padding-top: 10px; border-top: 1px solid var(--rule); font-size: clamp(.8rem, 2.2vw, .95rem); }
 .meishi__email a { display: inline-flex; align-items: center; min-height: 44px; margin: -12px 0 -12px; }
-.meishi__back-name { margin: 0 0 auto; font: 800 clamp(.95rem, 2.8vw, 1.2rem) var(--font-display); color: var(--ink); }
+.meishi__back-name { margin: 0 0 auto; font: 800 clamp(.95rem, 2.8vw, 1.2rem)/1.3 var(--font-display); color: var(--ink); }
 .meishi__contacts { display: grid; gap: 6px; margin: 0; font-size: clamp(.78rem, 2.2vw, .95rem); }
 .meishi__contacts div { display: grid; grid-template-columns: 6.5em 1fr; align-items: baseline; gap: 12px; padding-top: 6px; border-top: 1px solid var(--rule); }
-.meishi__contacts dt { font: 700 1em var(--font-display); color: var(--accent); }
+.meishi__contacts dt { font: 700 1em/1.4 var(--font-display); color: var(--accent); }
 .meishi__contacts dd { margin: 0; color: var(--text); overflow-wrap: anywhere; }
 .card-stage__after {
   display: grid; justify-items: center; gap: 14px; text-align: center;
@@ -271,7 +271,7 @@ main { padding: 0 var(--gutter); }
 .card-stage__cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 16px; margin: 0; }
 .card-open {
   display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px;
-  font: 750 1.05rem var(--font-display); color: var(--paper); text-decoration: none;
+  font: 750 1.05rem/1.3 var(--font-display); color: var(--paper); text-decoration: none;
   background: var(--ink); transition: transform .12s var(--ease-out), background-color .2s;
 }
 .card-open:hover { background: var(--accent); color: var(--on-accent); }
@@ -348,7 +348,7 @@ main { padding: 0 var(--gutter); }
   left: var(--from, 0%); width: calc(var(--to) - var(--from, 0%));
   background: var(--accent); box-shadow: inset 0 0 0 2px var(--ink);
 }
-/* Baselines print as a halftone of the blue ink: present, but quieter than the result. */
+/* Baselines print as a halftone of the grey ink: present, but quieter than the result. */
 .chart__bar--before { background: radial-gradient(var(--halftone) 34%, transparent 37%) 0 0 / 5px 5px; box-shadow: inset 0 0 0 1px var(--halftone); }
 .chart__bar--sliver { min-width: 3px; background: var(--ink); box-shadow: none; }
 .chart figcaption { margin-top: 14px; font-size: .92rem; color: var(--muted); font-style: italic; max-width: var(--measure); }

@@ -144,6 +144,15 @@
     window.scrollTo({ top: coverTop(), behavior: reduceMotion ? "auto" : "smooth" });
     afterScroll(() => coverTitle?.focus({ preventScroll: true }));
   });
+  // Keyboard users: if focus moves into the cover while the card still lies over it, go to the
+  // cover first, so the focused link is never hidden under the card.
+  cover?.addEventListener("focusin", () => {
+    if (!cardTrigger || window.scrollY >= cardTrigger.end - 1) return;
+    requestAnimationFrame(() => {             // after the browser's own scroll-to-focus
+      window.scrollTo({ top: cardTrigger.end, behavior: "instant" });
+      cardTrigger.getTween()?.progress(1);    // finish the scrub at once instead of easing into place
+    });
+  });
   document.querySelector(".card-replay")?.addEventListener("click", e => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
@@ -201,7 +210,7 @@
       fill = fillScale();
       render(0);
       cardTrigger = tween.scrollTrigger;
-      if (cardSeen() && !location.hash) window.scrollTo(0, cardTrigger.end);
+      if (cardSeen() && !location.hash) window.scrollTo({ top: cardTrigger.end, behavior: "instant" });
       return () => {
         root.classList.remove("has-card-motion"); coverTitle.classList.remove("is-scroll-print");
         stage.removeAttribute("style"); coverTitle.style.removeProperty("--print"); coverTitle.style.removeProperty("--mis-x");
@@ -226,7 +235,7 @@
   // a jump made earlier is undone when the browser settles the page's scroll position.
   if (stage && cardSeen() && !location.hash) {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    const jump = () => requestAnimationFrame(() => window.scrollTo(0, coverTop()));
+    const jump = () => requestAnimationFrame(() => window.scrollTo({ top: coverTop(), behavior: "instant" }));
     if (document.readyState === "complete") jump();
     else window.addEventListener("load", jump, { once: true });
   }

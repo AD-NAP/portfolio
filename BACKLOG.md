@@ -9,6 +9,8 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
+- [?] Publish v1.1.0 on github.com: tag `v1.1.0` on the latest `main`, title "v1.1.0: The build log, Issue 2", notes from `docs/releases/v1.1.0.md`
+- [?] Recruiter critic's questions (2026-11-18): cumulus-coach eval results; a demo, screenshot or recording of cumulus-coach; anything shareable about the metadata generator's effect; junior or mid-level target
 - [?] Delete the two merged branches on GitHub (Branches → bin icon): `claude/ecstatic-dijkstra-wwvvi2` and `claude/beautiful-meitner-lxxr21`. Cloud sessions can't delete remote branches
 - [x] Page order: Experience now comes before Projects (Shafik, 2026-11-18)
 - [x] Section names are plain: Experience, Projects, Lessons learned, Skills, Education, Contact (Shafik, 2026-11-18)
@@ -19,6 +21,20 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [?] Where SQL and React were used (both are in Skills with no evidence on the page). GitHub Actions answered 2026-10-22: he worked with the team's pipeline, set up by a senior; cumulus-coach will add CI/CD he builds himself
 - [~] LLM or AI engineering work to show: cumulus-coach (the AWS study agent: RAG, tool calling, eval, Docker, CI) will cover it, after the demo ships around 2026-10-30
 - [?] Enable the Design plugin (install card shown 2026-10-09 and again 2026-10-22) so `design-critique` and `accessibility-review` are available
+
+## v1.1.0: Issue 2, the name card (2026-11-18)
+
+Decision: `docs/decisions/0003-name-card-and-new-inks.md`. Reviews: `reviews/2026-11-18-recruiter-critic-v1.1.md`, `reviews/2026-11-18-finish-review-v1.1.md`.
+
+- [x] Grey and red inks across the site (tokens `--accent`, `--on-accent`, `--desk`)
+- [x] Meishi name card first, handed over on load; scrubbed, pinned flip into the cover; returning visitors skip it
+- [x] Intro line and links under the card (recruiter critic); card and cover pinned together, real 3D turn, CSS variables only (finish review)
+- [x] Checker: card tests (first screen, button, returning visitor, replay, keyboard focus)
+- [x] Docs, DESIGN.md regenerated, og.png from the card, release notes
+- [ ] Thumbs holding the card during the hand-over: not built (the plan allowed it only if it read cleanly); revisit if wanted
+- [ ] Ceiling ideas (finish review): a physical edge or thickness during the turn; the card back carrying the zine's title block
+- [ ] Motion review: Shafik can run `/review-animations` on the hand-over and the flip (Claude cannot start that skill)
+- [ ] Note: Impeccable's rendered scan reports the cover "occluded" by the card at the top of the page. That is the design (the card lies over the cover until the flip), and keyboard focus is handled; the scan's ignores cannot target rendered scans
 
 ## v1.0.0: The build log, a riso zine (2026-11-18)
 

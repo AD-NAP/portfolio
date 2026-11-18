@@ -235,6 +235,17 @@ const audit = async (page, phone) => {
     r.buttonOpensCover = await cp.evaluate(() => document.activeElement?.id === "cover-title" && document.getElementById("cover-title").getBoundingClientRect().top < innerHeight / 2);
     await cp.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
     await cp.waitForTimeout(600);
+    // Keyboard: tabbing from the card into the cover must never leave focus hidden under the card.
+    await cp.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await cp.waitForTimeout(600);
+    await cp.evaluate(() => document.querySelector(".card-open").focus());
+    await cp.keyboard.press("Tab");
+    await cp.waitForTimeout(400);
+    r.tabIntoCoverVisible = await cp.evaluate(() => {
+      const a = document.activeElement, b = a.getBoundingClientRect();
+      const top = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
+      return !!a.closest("#top") && (top === a || a.contains(top));
+    });
     const mid = await cp.evaluate(() => { const t = window.ScrollTrigger?.getAll()[0]; return t ? t.start + (t.end - t.start) / 2 : 0; });
     await cp.evaluate(y => window.scrollTo({ top: y, behavior: "instant" }), mid);
     await cp.waitForTimeout(1100);
@@ -289,6 +300,7 @@ const audit = async (page, phone) => {
     if (!r.buttonOpensCover) fails.push(`${t}: "Open the build log" should bring the cover into view and focus its heading`);
     if (!r.returningOpensOnCover) fails.push(`${t}: a returning visitor should open on the cover`);
     if (!r.replayShowsCard) fails.push(`${t}: "See my card again" should scroll back to the card`);
+    if (!r.tabIntoCoverVisible) fails.push(`${t}: tabbing from the card into the cover should show the focused link, not leave it under the card`);
   }
   if (reducedMotion.inkPrinted !== reducedMotion.inkLayers || reducedMotion.running > 0)
     fails.push(`reduced motion: ${reducedMotion.inkPrinted}/${reducedMotion.inkLayers} ink layers printed, ${reducedMotion.running} animations running`);

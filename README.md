@@ -1,6 +1,6 @@
 # Shafik Adam portfolio
 
-Single-page portfolio, printed as a two-ink riso zine called The build log, one issue per release. Plain HTML, CSS and JavaScript with no build step.
+Single-page portfolio, printed as a two-ink zine called The build log, one issue per release. Since Issue 2 it opens on a name card that turns into the cover. Plain HTML, CSS and JavaScript with no build step.
 
 Live site: https://ad-nap.github.io/portfolio/
 
@@ -25,6 +25,7 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
+| [v1.1.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.1.0) | 2026-11-18 | Issue 2: opens on a meishi-style name card that turns over into the zine cover as you scroll; grey and red inks |
 | [v1.0.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.0.0) | 2026-11-18 | Redesign: The build log, Issue 1. A two-ink riso zine replaces the building: cover lines that link to the proof, Experience first, Lessons learned, day and night prints, section titles that print on scroll, a resettable riddle that opens a centrefold |
 | [v0.5.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.5.0) | 2026-11-17 | Design skills (Impeccable, Emil Kowalski) installed and run: phone fixes, shorter lines, flatter project charts, press feedback, calmer automatic motion |
 | [v0.4.1](https://github.com/AD-NAP/portfolio/releases/tag/v0.4.1) | 2026-11-16 | edge-energy-optimizer card: phases 1 and 2 done, phases 3 to 5 parked. Resume PDF rebuilt from the updated master CV |
