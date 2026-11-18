@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-18T15:41:06.231Z",
+  "generatedAt": "2026-11-18T15:57:57.585Z",
   "title": "Design System: The drawing sheet",
   "extensions": {
     "colorMeta": {
@@ -339,8 +339,8 @@
       },
       {
         "name": "card-to-sheet",
-        "value": "ScrollTrigger pin, scrub .8, snap [0, 1] .25-.6s power2.inOut",
-        "purpose": "The signature transition; transforms and opacity only."
+        "value": "two states, 1.5s sine.inOut, play() to open and reverse() to close",
+        "purpose": "The signature transition, triggered by any scroll or the button; transforms and opacity only."
       }
     ],
     "breakpoints": [
@@ -406,7 +406,7 @@
   ],
   "narrative": {
     "northStar": "The Drawing Sheet",
-    "overview": "The page is a technical drawing sheet, and the visitor first meets it folded into a business card. The card lies on a drafting desk with faint dimension lines that mark it as 91 by 55. When it opens, the card's stock grows into the sheet, the name walks up to the top-left title slot, and the navigation arrives. The portfolio was printed on the card all along.\n\nThe sheet is calm, precise and editorial. It is light warm grey with almost-black ink and a faint twelve-column grid ruled in hairlines. Section titles stand on full-width rules, and the footer is a drawing title block. Restraint carries the personality. One typeface, set wide and heavy for the name and plain for reading. One red, kept for the single mark that matters in each region. There is no texture, no gradient and no decoration that a draughtsman wouldn't draw.\n\nThe dark theme is the same sheet in graphite, with chalk-white ink and a brighter red.",
+    "overview": "The page is a technical drawing sheet, and the visitor first meets it folded into a business card. The card lies on a drafting desk with faint dimension lines that mark it as 91 by 55. When it opens, the card's stock grows into the sheet, the name walks up to the top-left title slot, and the navigation arrives. The portfolio was printed on the card all along.\n\nThe sheet is calm, precise and editorial. It is light warm grey with almost-black ink and a faint twelve-column grid ruled in hairlines. Section titles stand on full-width rules, and the footer is a drawing title block. Restraint carries the personality. One typeface, set wide and heavy for the name and plain for reading. One red, kept for the single mark that matters in each region. There is no texture, no gradient and no decoration that a draughtsman wouldn't draw.\n\nThe dark theme, the default, is the same sheet in graphite, with chalk-white ink and a brighter red.",
     "keyCharacteristics": [
       "A drafting desk, a business card and a drawing sheet: three surfaces, one material.",
       "A hairline grid of twelve columns across the content width, fixed to the window.",

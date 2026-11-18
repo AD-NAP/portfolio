@@ -88,13 +88,23 @@ const audit = async (page, phone) => {
   // Cloud sessions ship one Chromium at this path; Playwright's own download may not match the pinned version.
   const CLOUD_CHROMIUM = "/opt/pw-browsers/chromium";
   const browser = await chromium.launch(fs.existsSync(CLOUD_CHROMIUM) ? { executablePath: CLOUD_CHROMIUM } : {});
+  // Dark is the site's default theme. Seed each page's saved theme from its colour scheme,
+  // so the light runs really are light.
+  const newPage = async opts => {
+    const p = await browser.newPage(opts);
+    await p.addInitScript(t => { try { if (!localStorage.getItem("theme")) localStorage.setItem("theme", t); } catch (e) {} },
+      opts.colorScheme === "light" ? "light" : "dark");
+    return p;
+  };
+  // Read one of the card transition's CSS variables.
+  const cardVar = (page, el, name) => page.evaluate(([el, name]) => parseFloat(getComputedStyle(document.querySelector(el)).getPropertyValue(name)), [el, name]);
   const results = [];
   const cfResults = [];
 
   for (const theme of THEMES) for (const width of WIDTHS) {
     const tag = `${theme}-${width}`;
     const phone = width < 600;
-    const page = await browser.newPage({
+    const page = await newPage({
       viewport: { width, height: phone ? 844 : 800 },
       deviceScaleFactor: phone ? 2 : 1,
       colorScheme: theme === "light" ? "light" : "dark",
@@ -104,6 +114,15 @@ const audit = async (page, phone) => {
     page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
     await page.goto(url, { waitUntil: "networkidle" });
     await page.waitForTimeout(2500);                      // let the load animation finish
+
+    // Screen 1 is the card. One wheel step opens it (the 1.5s transition); then the page scrolls normally.
+    const screens = [];
+    const cardShot = path.join(OUT, `${tag}-01.png`);
+    await page.screenshot({ path: cardShot });
+    screens.push(path.relative(ROOT, cardShot));
+    await page.mouse.move(width / 2, 300);
+    await page.mouse.wheel(0, 40);
+    await page.waitForTimeout(2200);
 
     // Warm-up pass: scroll the whole page once so every scroll-triggered animation
     // runs to its final state before screenshots.
@@ -116,10 +135,9 @@ const audit = async (page, phone) => {
     await page.waitForTimeout(4500);
 
     // Screens: scroll one viewport at a time so fixed UI renders as a visitor sees it.
-    const screens = [];
-    for (let i = 0, y = 0; y < height && i < MAX_SCREENS; i++, y += vh) {
+    for (let i = 1, y = 0; y < height && i < MAX_SCREENS; i++, y += vh) {
       await page.evaluate(top => window.scrollTo({ top, behavior: "instant" }), y);
-      await page.waitForTimeout(i < 2 ? 1800 : 300);   // the first screens hold the scrubbed card: let it settle
+      await page.waitForTimeout(300);
       const file = path.join(OUT, `${tag}-${String(i + 1).padStart(2, "0")}.png`);
       await page.screenshot({ path: file });
       screens.push(path.relative(ROOT, file));
@@ -153,7 +171,7 @@ const audit = async (page, phone) => {
     await page.close();
 
     // Same theme and width with the bonus already open (as on a return visit).
-    const cfPage = await browser.newPage({
+    const cfPage = await newPage({
       viewport: { width, height: phone ? 844 : 800 },
       deviceScaleFactor: phone ? 2 : 1,
       colorScheme: theme === "light" ? "light" : "dark",
@@ -161,7 +179,7 @@ const audit = async (page, phone) => {
     const cfErrors = [];
     cfPage.on("pageerror", e => cfErrors.push(e.message));
     cfPage.on("console", m => { if (m.type() === "error") cfErrors.push(m.text()); });
-    await cfPage.addInitScript(() => { try { localStorage.setItem("bonus", "open"); } catch (e) {} });
+    await cfPage.addInitScript(() => { try { localStorage.setItem("bonus", "open"); localStorage.setItem("card", "seen"); } catch (e) {} });
     await cfPage.goto(url, { waitUntil: "networkidle" });
     await cfPage.waitForTimeout(2500);
     const cfScreens = [];
@@ -179,7 +197,7 @@ const audit = async (page, phone) => {
   }
 
   // The riddle itself: wrong guesses keep the bonus shut, the right one opens it for good.
-  const rp = await browser.newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" });
+  const rp = await newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" });
   await rp.goto(url, { waitUntil: "networkidle" });
   const cfShown = () => rp.evaluate(() => !document.getElementById("bonus").hidden);
   const tryGuess = async word => { await rp.fill("#guess", word); await rp.click(".riddle__btn"); await rp.waitForTimeout(200); };
@@ -200,7 +218,7 @@ const audit = async (page, phone) => {
   await rp.close();
 
   // Reduced motion: the card, the bar and About show as plain sections, with nothing animating.
-  const rm = await browser.newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark", reducedMotion: "reduce" });
+  const rm = await newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark", reducedMotion: "reduce" });
   await rm.goto(url, { waitUntil: "networkidle" });
   await rm.waitForTimeout(300);
   const reducedMotion = await rm.evaluate(() => ({
@@ -211,11 +229,12 @@ const audit = async (page, phone) => {
     barShown: getComputedStyle(document.querySelector(".bar")).visibility === "visible" && getComputedStyle(document.querySelector(".bar__nav li")).opacity === "1",
   }));
 
-  // The card, at phone and desktop width: first visit, the button, landing, snap, a returning visitor, the replay link.
+  // The card, at phone and desktop width: first visit, the button and the wheel (paced), landing, closing at the top,
+  // keyboard, a returning visitor, the replay link.
   const card = [];
   for (const [width, height] of [[390, 844], [1280, 800]]) {
     const r = { width };
-    const cp = await browser.newPage({ viewport: { width, height }, colorScheme: "light" });
+    const cp = await newPage({ viewport: { width, height }, colorScheme: "light" });
     await cp.goto(url, { waitUntil: "networkidle" });
     await cp.waitForTimeout(1200);
     r.frontOnFirstScreen = await cp.evaluate(() => {
@@ -223,8 +242,11 @@ const audit = async (page, phone) => {
       return inView(document.getElementById("card-name")) && inView(document.querySelector(".card__email a")) && inView(document.querySelector(".card-open"));
     });
     r.barHiddenOnCard = await cp.evaluate(() => getComputedStyle(document.querySelector(".bar")).visibility === "hidden");
+    // "Open the portfolio" plays the transition over about 1.5s: still under way at 0.5s, done by 2.2s.
     await cp.click(".card-open");
-    await cp.waitForTimeout(2200);
+    await cp.waitForTimeout(500);
+    r.buttonPaced = await cardVar(cp, "#about", "--about-alpha") < .5 && await cardVar(cp, "#card", "--paper-sx") > 1.01;
+    await cp.waitForTimeout(1700);
     r.buttonOpensPortfolio = await cp.evaluate(() => document.activeElement?.id === "about-title" && document.getElementById("about-title").getBoundingClientRect().top < innerHeight / 2);
     r.barShownAfter = await cp.evaluate(() => getComputedStyle(document.querySelector(".bar")).visibility === "visible" && getComputedStyle(document.querySelector(".bar__nav li:last-child")).opacity === "1");
     // The card's name, at its landing spot, must sit exactly on the bar's name (they swap in one frame).
@@ -233,46 +255,64 @@ const audit = async (page, phone) => {
       const a = box(document.getElementById("card-name")), b = box(document.querySelector(".bar__name"));
       return Math.max(Math.abs(a.left - b.left), Math.abs(a.top - b.top), Math.abs(a.width - b.width));
     });
-    await cp.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
-    await cp.waitForTimeout(600);
+    // At the top of the page, one wheel step up plays it back to the card, at the same pace.
+    await cp.mouse.move(width / 2, height / 2);
+    await cp.waitForTimeout(500);
+    await cp.mouse.wheel(0, -40);
+    await cp.waitForTimeout(2200);
+    r.wheelUpCloses = await cp.evaluate(() => getComputedStyle(document.querySelector(".bar")).visibility === "hidden" && document.getElementById("card-name").getBoundingClientRect().top > 60);
+    await cp.close();
+
+    // Any scroll opens it: one small wheel step plays the whole transition, at the button's pace.
+    const wp = await newPage({ viewport: { width, height }, colorScheme: "light" });
+    await wp.goto(url, { waitUntil: "networkidle" });
+    await wp.waitForTimeout(1200);
+    await wp.mouse.move(width / 2, height / 2);
+    await wp.mouse.wheel(0, 40);
+    await wp.waitForTimeout(500);
+    r.wheelPaced = await cardVar(wp, "#about", "--about-alpha") < .5 && await cardVar(wp, "#card", "--paper-sx") > 1.01;
+    const midShot = path.join(OUT, `light-${width}-card-mid.png`);
+    await wp.screenshot({ path: midShot });
+    r.midFlipScreenshot = path.relative(ROOT, midShot);
+    await wp.waitForTimeout(1700);
+    r.wheelOpens = await wp.evaluate(() => window.scrollY === 0 && getComputedStyle(document.querySelector(".bar")).visibility === "visible"
+      && getComputedStyle(document.getElementById("about")).opacity === "1" && !document.documentElement.classList.contains("is-card-locked"));
+    // Below the top, the page scrolls normally.
+    await wp.mouse.wheel(0, 400);
+    await wp.waitForTimeout(800);
+    r.scrollsAfterOpen = await wp.evaluate(() => window.scrollY > 100);
+    await wp.close();
+
     // Keyboard: tabbing past the card must never leave focus hidden under it.
-    await cp.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
-    await cp.waitForTimeout(600);
-    await cp.evaluate(() => document.querySelector(".card-open").focus());
-    await cp.keyboard.press("Tab");
-    await cp.waitForTimeout(400);
-    r.tabPastCardVisible = await cp.evaluate(() => {
+    const kp = await newPage({ viewport: { width, height }, colorScheme: "light" });
+    await kp.goto(url, { waitUntil: "networkidle" });
+    await kp.waitForTimeout(1200);
+    await kp.evaluate(() => document.querySelector(".card-open").focus());
+    await kp.keyboard.press("Tab");
+    await kp.waitForTimeout(400);
+    r.tabPastCardVisible = await kp.evaluate(() => {
       const a = document.activeElement, b = a.getBoundingClientRect();
       const top = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
       return !a.closest("#card") && (top === a || a.contains(top));
     });
-    // Let go a third of the way in: it must settle at the card or the portfolio, never half-open.
-    await cp.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
-    await cp.waitForTimeout(800);
-    const third = await cp.evaluate(() => { const t = window.ScrollTrigger?.getAll()[0]; return t ? (t.end - t.start) / 3 : 0; });
-    await cp.mouse.move(width / 2, height / 2);
-    await cp.mouse.wheel(0, third);
-    await cp.waitForTimeout(2500);
-    r.snapRestsAtEnd = await cp.evaluate(() => { const t = window.ScrollTrigger?.getAll()[0]; return !!t && (t.progress < .005 || t.progress > .995); });
-    const mid = await cp.evaluate(() => { const t = window.ScrollTrigger?.getAll()[0]; return t ? t.start + (t.end - t.start) / 2 : 0; });
-    await cp.evaluate(y => window.scrollTo({ top: y, behavior: "instant" }), mid);
-    await cp.waitForTimeout(1100);
-    const midShot = path.join(OUT, `light-${width}-card-mid.png`);
-    await cp.screenshot({ path: midShot });
-    r.midFlipScreenshot = path.relative(ROOT, midShot);
-    await cp.close();
+    await kp.close();
 
-    const rv = await browser.newPage({ viewport: { width, height }, colorScheme: "light" });
+    const rv = await newPage({ viewport: { width, height }, colorScheme: "light" });
     await rv.addInitScript(() => { try { localStorage.setItem("card", "seen"); } catch (e) {} });
     await rv.goto(url, { waitUntil: "networkidle" });
     await rv.waitForTimeout(1200);
     r.returningOpensOnPortfolio = await rv.evaluate(() => { const b = document.getElementById("about-title").getBoundingClientRect(); return b.top >= 0 && b.top < innerHeight / 2 && getComputedStyle(document.querySelector(".bar")).visibility === "visible"; });
     await rv.click(".card-replay");
-    await rv.waitForTimeout(2200);
-    r.replayShowsCard = await rv.evaluate(() => window.scrollY < 5);
+    await rv.waitForTimeout(3600);
+    r.replayShowsCard = await rv.evaluate(() => getComputedStyle(document.querySelector(".bar")).visibility === "hidden" && document.activeElement?.classList.contains("card-open"));
     await rv.close();
     card.push(r);
   }
+  // Dark by default: a first-time visitor whose system is set to light still gets the dark theme.
+  const dp = await browser.newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "light" });
+  await dp.goto(url, { waitUntil: "networkidle" });
+  const darkByDefault = await dp.evaluate(() => document.documentElement.dataset.theme === "dark");
+  await dp.close();
   await browser.close();
   server.close();
 
@@ -308,14 +348,18 @@ const audit = async (page, phone) => {
     if (!r.buttonOpensPortfolio) fails.push(`${t}: "Open the portfolio" should bring About into view and focus its heading`);
     if (!r.barShownAfter) fails.push(`${t}: the bar and all its links should be shown once the card has opened`);
     if (!(r.landingOffset <= 1)) fails.push(`${t}: the card's name lands ${r.landingOffset?.toFixed(1)}px away from the bar's name (needs 1px or less)`);
-    if (!r.snapRestsAtEnd) fails.push(`${t}: letting go a third of the way in should settle at the card or the portfolio`);
+    if (!r.buttonPaced) fails.push(`${t}: "Open the portfolio" should play the transition over about 1.5s (it was not under way at 0.5s)`);
+    if (!r.wheelPaced || !r.wheelOpens) fails.push(`${t}: one small wheel step should play the whole transition, at the button's pace`);
+    if (!r.scrollsAfterOpen) fails.push(`${t}: once open, the page should scroll normally`);
+    if (!r.wheelUpCloses) fails.push(`${t}: scrolling up at the top of the page should play back to the card`);
     if (!r.returningOpensOnPortfolio) fails.push(`${t}: a returning visitor should open on the portfolio with the bar shown`);
-    if (!r.replayShowsCard) fails.push(`${t}: "See my card again" should scroll back to the card`);
+    if (!r.replayShowsCard) fails.push(`${t}: "See my card again" should play back to the card and focus its button`);
     if (!r.tabPastCardVisible) fails.push(`${t}: tabbing past the card should show the focused link, not leave it under the card`);
   }
+  if (!darkByDefault) fails.push("theme: a first-time visitor should get the dark theme, whatever their system setting");
   if (reducedMotion.running > 0) fails.push(`reduced motion: ${reducedMotion.running} animations running`);
 
-  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, reducedMotion, riddle, card, results, cfResults };
+  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, darkByDefault, reducedMotion, riddle, card, results, cfResults };
   fs.writeFileSync(path.join(OUT, "report.json"), JSON.stringify(report, null, 2));
 
   console.log(`Design check: ${report.pass ? "PASS" : `FAIL (${fails.length})`}`);

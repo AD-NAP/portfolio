@@ -56,6 +56,7 @@
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 html {
+  scrollbar-gutter: stable;   /* the page keeps its width when the scroll lock lifts */
   scroll-behavior: smooth; scroll-padding-top: calc(var(--bar-h) + 16px);
   -webkit-text-size-adjust: 100%; background: var(--paper);
 }
@@ -208,16 +209,22 @@ main { position: relative; z-index: 1; padding: 0 var(--gutter); }
 .intro__or { color: var(--muted); }
 
 /* ---------- The opening, with motion (main.js) ----------
-   The card lies over About, both pinned for a screen. GSAP drives one number through CSS variables:
-   the card's paper grows into the sheet, its name walks to the bar, the nav arrives, About fades in. */
+   Two states. The card lies over About, fixed to the window, and the page does not scroll until it
+   has opened. GSAP plays one number through CSS variables: the card's paper grows into the sheet,
+   its name walks to the bar, the nav arrives, About fades in. */
 .opening { position: relative; }
-.has-card-motion .opening { min-height: 100svh; }
+.is-card-locked, .is-card-locked body { overflow: hidden; overscroll-behavior: none; }
+.is-card-locked { background: var(--desk); }   /* the scrollbar gutter matches the desk while the card is closed */
+.has-card-motion body { background: var(--paper); }   /* the sheet stays sheet-coloured over that */
 .has-card-motion .intro {
-  position: absolute; top: 0; left: calc(var(--gutter) * -1); z-index: 1;
-  height: 100svh; margin: 0; padding: 0; display: grid; align-items: center;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1;
+  width: auto; height: 100svh; margin: 0; padding: 0; display: grid; align-items: center;
   visibility: var(--stage-vis, visible); pointer-events: var(--stage-events, auto);
 }
 .has-card-motion .card__paper, .has-card-motion .card__name { will-change: transform; }
+/* The name is the page's h1: when the stage hides, the name stays in the page (transparent, on top of
+   the bar's name) so it is still the page's heading for screen readers. */
+.has-card-motion .card__name { visibility: visible; pointer-events: none; }
 .has-card-motion .about {
   position: relative; z-index: 2;
   opacity: var(--about-alpha, 1); translate: 0 var(--about-y, 0px); pointer-events: var(--about-events, auto);

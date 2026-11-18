@@ -20,7 +20,7 @@ Since v1.2.0 (2026-11-18) the page is **a business card that opens into a drawin
 
 ## Operating Context
 - Hosted on GitHub Pages from `main`. Plain HTML, CSS and JS, with no build step and no framework (`index.html`, `assets/styles.css`, `assets/main.js`). Keep it that way.
-- Two required themes: light (warm-grey sheet, almost-black ink, red) and dark (graphite sheet, chalk-white ink, a brighter red).
+- Two required themes: dark (graphite sheet, chalk-white ink, a brighter red), the default for first-time visitors, and light (warm-grey sheet, almost-black ink, red).
 - Checks: `npm run -s check` (the design-review skill) must pass before any change is done. It screenshots both themes at 390px and 1280px and runs axe.
 
 ## Capabilities and Constraints
@@ -28,7 +28,7 @@ Since v1.2.0 (2026-11-18) the page is **a business card that opens into a drawin
 - The bar's links and the Highlights are real links with a visible focus state.
 - Personality to keep: the riddle in Contact and the hidden Bonus it opens (it holds a cake), with a reset. The cats were retired in v1.2.0.
 - The Bonus is a reward, not content: nothing a recruiter needs may live only there.
-- Motion rules (from CLAUDE.md): the only automatic motion is the card settling onto the desk on load (under 1s). The card-to-sheet transition follows the scroll and snaps to an end. All other motion answers the user. `prefers-reduced-motion` shows the final states.
+- Motion rules (from CLAUDE.md): the only automatic motion is the card settling onto the desk on load (under 1s). Any scroll on the card, or the button, plays the card-to-sheet transition in 1.5s; moving up at the very top plays it back. All other motion answers the user. `prefers-reduced-motion` shows the final states.
 - Open decisions: where SQL and React were used (no evidence on the page yet). Projects as engineering stories (Problem, Constraints, Architecture, Decisions, Implementation, Result) is planned for a later release.
 
 ## Brand Commitments

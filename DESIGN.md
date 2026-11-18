@@ -115,7 +115,7 @@ The page is a technical drawing sheet, and the visitor first meets it folded int
 
 The sheet is calm, precise and editorial. It is light warm grey with almost-black ink and a faint twelve-column grid ruled in hairlines. Section titles stand on full-width rules, and the footer is a drawing title block. Restraint carries the personality. One typeface, set wide and heavy for the name and plain for reading. One red, kept for the single mark that matters in each region. There is no texture, no gradient and no decoration that a draughtsman wouldn't draw.
 
-The dark theme is the same sheet in graphite, with chalk-white ink and a brighter red.
+The dark theme, the default, is the same sheet in graphite, with chalk-white ink and a brighter red.
 
 **Key Characteristics:**
 - A drafting desk, a business card and a drawing sheet: three surfaces, one material.
@@ -211,7 +211,7 @@ Edges are drawn, not rounded: 2px on buttons and inputs, 3px on the card. Frames
 - **The bar:** name on the left in the card's lettering, section links on the right in 550 weight, and the outline theme button. The current section and hover get a 2px red underline, offset .45em.
 
 ### Card to sheet (signature)
-One scrubbed, pinned, snapped motion (GSAP ScrollTrigger), using transforms and opacity only. The card's lines and the links under it step aside. The card's stock scales into the full sheet. The name walks to the bar and swaps with the bar's name in the same frame. The links arrive from the right in uneven steps. About, already laid out underneath, fades in. Letting go mid-way settles to whichever end you were heading for. Under reduced motion or without GSAP, the card and About are plain sections and the bar is always shown.
+One 1.5s motion between two states (GSAP; any scroll, swipe or the button plays it, and moving up at the very top of the page plays it back), using transforms and opacity only. The card's lines and the links under it step aside. The card's stock scales into the full sheet. The name walks to the bar and swaps with the bar's name in the same frame. The links arrive from the right in uneven steps. About, already laid out underneath, fades in. Turning around mid-way reverses it smoothly. Under reduced motion or without GSAP, the card and About are plain sections and the bar is always shown.
 
 ### Charts
 Drawn to scale. The result is a solid Rule Red bar, the baseline is hatched in Pencil, other ranges are outlined in ink, and a sliver too small to see is drawn as an ink line.
