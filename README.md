@@ -1,6 +1,6 @@
 # Shafik Adam portfolio
 
-Single-page portfolio, drawn as a building where each floor is a section. Plain HTML, CSS and JavaScript with no build step.
+Single-page portfolio, printed as a two-ink riso zine called The build log, one issue per release. Plain HTML, CSS and JavaScript with no build step.
 
 Live site: https://ad-nap.github.io/portfolio/
 
@@ -17,7 +17,7 @@ npm install
 npm run -s check
 ```
 
-`npm install` brings in Playwright and axe-core. The first time, also run `npx playwright install chromium` for the browser.
+`npm install` brings in Playwright and axe-core. The first time, also run `npx playwright install chromium` for the browser (not needed in Claude Code cloud sessions, which ship Chromium).
 
 The checker serves the site, screenshots both themes at phone and desktop width, and fails on overflow, JS errors, axe violations, low contrast, small touch targets or broken reduced motion.
 
@@ -25,6 +25,7 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
+| [v1.0.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.0.0) | 2026-11-18 | Redesign: The build log, Issue 1. A two-ink riso zine replaces the building: cover lines that link to the proof, Notes I took, day and night prints, the riddle opens a centrefold |
 | [v0.5.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.5.0) | 2026-11-17 | Design skills (Impeccable, Emil Kowalski) installed and run: phone fixes, shorter lines, flatter project charts, press feedback, calmer automatic motion |
 | [v0.4.1](https://github.com/AD-NAP/portfolio/releases/tag/v0.4.1) | 2026-11-16 | edge-energy-optimizer card: phases 1 and 2 done, phases 3 to 5 parked. Resume PDF rebuilt from the updated master CV |
 | [v0.4.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.4.0) | 2026-10-31 | cumulus-coach project with a to-scale cutoff chart, AI and LLM skills, rebuilt resume PDF, sidebar and chart fixes |

@@ -21,19 +21,19 @@ The script (`scripts/check.js`) serves the repo itself; nothing else needs to be
 - axe-core WCAG 2.1 AA violations
 - token contrast (text ≥ 4.5:1, focus ≥ 3:1) in each theme
 - phone touch targets < 44px
-- reduced motion not showing final states
-- the same checks with the hidden basement open (screenshots: `.review/<theme>-<width>-b1-{hero,fun,basement}.png`)
-- the riddle: a wrong guess keeps B1 shut, "panda" opens it, a reload keeps it open
+- reduced motion not showing the finished print
+- the same checks with the hidden centrefold open (screenshots: `.review/<theme>-<width>-cf-{cover,contact,centrefold}.png`)
+- the riddle: a wrong guess keeps the centrefold shut, "panda" opens it and adds it to the contents, a reload keeps it open
 
 ## 2. Look at the screenshots
 
 Start with the four contact sheets, `.review/<theme>-<width>-sheet.png` (every screen side by side). Open single screens (`.review/<theme>-<width>-NN.png`) only where a sheet shows something worth a closer look. The script can't see design problems, so check by eye:
 
-- **Overlap and clipping:** text cut off, elements colliding (sun or moon vs. tower, clouds or stars behind text), anything hidden under the phone top bar.
+- **Overlap and clipping:** text cut off, elements colliding (the perched cat vs. the name, the riddle's folded corner vs. its question), anything hidden under the masthead.
 - **Hierarchy:** name and role read first; section headings stand out; stats are readable at a glance.
 - **Spacing and alignment:** consistent rhythm between sections; left edges line up; no orphaned single words in headings.
-- **Both themes look intentional:** night (lights on) and day (lights off) each feel finished, not inverted.
-- **Phone first screen:** name, role, small building and contact links visible; About begins within one swipe.
+- **Both prints look intentional:** day (blue and sunflower on white stock) and night (pale and sunflower on dark stock) each feel finished, not inverted. The sunflower pass sits just off the blue, never muddy.
+- **Phone first screen:** name, one line, contact links and the lead cover line visible; the first spread begins within one swipe.
 - **Content:** no invented facts (compare with `content/resume.md`); placeholders are visible and marked `PLACEHOLDER:`.
 - **Project rules:** everything in `CLAUDE.md` under Design, Motion and Accessibility still holds.
 

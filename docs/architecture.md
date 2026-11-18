@@ -12,29 +12,32 @@ One page, three files, no build step:
 
 | File | Job |
 |---|---|
-| `index.html` | All content and structure. Each section is a floor of the building, in page order: roof first, level 1 last, then a hidden basement. |
-| `assets/styles.css` | Layout, both themes, motion. Colours come from tokens in `:root` and `[data-theme]`. |
-| `assets/main.js` | Behaviour: draws the building, theme toggle, floor navigation, sky motion, scroll effects, the riddle. |
+| `index.html` | All content and structure, in zine order: masthead, cover, spreads (Now building, Day job, the hidden centrefold, Notes I took, Toolbox and School), back page, colophon. |
+| `assets/styles.css` | Layout, both prints, the two-ink effect and the print run. Colours come from tokens in `:root` and `[data-theme]`. |
+| `assets/main.js` | Behaviour: print toggle, contents highlight, the riddle and centrefold, the `ad-nap` flip, the cat's tail. |
 
-Also in `assets/`: `favicon.svg` (the building at night) and `og.png`, the 1200x630 link preview. `og.png` is a screenshot of the hero at night with the sidebar and buttons hidden; re-render it with Playwright if the hero changes.
+Also in `assets/`: `favicon.svg` (a two-ink "SA" stamp) and `og.png`, the 1200x630 link preview. `og.png` is a screenshot of the cover in the day print with the masthead hidden; re-render it with Playwright if the cover changes.
 
 The resume download, `assets/Shafik-Adam-Resume.pdf`, is built from the vault master CV with `npm run -s resume` (`tools/build-resume.js`: drops the phone number, prints one A4 page with Playwright). Rebuild it whenever `vault/career/resume-master.md` changes.
 
 `content/resume.md` is the only source of facts. Nothing appears on the site unless it is in that file first.
 
-## The building
+## The zine
 
-`main.js` draws the hero building as SVG from one list, `storeys`. A helper, `iso(u, v, z)`, turns a point on the building into screen coordinates (30 degree isometric). Each wall is drawn flat, as plain rectangles, inside a group that is skewed onto its face, so windows, the door and the cat need no special maths.
+Since v1.0.0 the site is "The build log", a two-ink riso zine ([decisions/0002-riso-zine-redesign.md](decisions/0002-riso-zine-redesign.md)).
 
-Each storey is one link, so the building is keyboard navigation as well as a picture.
+- **Two inks.** Headings with the class `ink` get the sunflower pass as a `text-shadow`, offset a few pixels (`--mis-x`, `--mis-y`). There is only one copy of the text. Hovering or focusing a section brings its title into register.
+- **The print run.** On load, the cover name animates once (`@keyframes print-run`): the sunflower pass rolls across, then the blue ink comes in. Reduced motion shows the finished print.
+- **Paper.** One static SVG noise layer (`body::after`) blends into both prints.
+- **Charts.** Bars are drawn to scale with CSS custom properties (`--from`, `--to`). Results print in solid sunflower; baselines print as a blue halftone.
 
 ## Phones
 
-Below 900px the sidebar becomes a top bar and the building sits small beside the name. The Turtle block in About is a `<details>` that `main.js` keeps open on desktop and closed on phones, so Experience starts on the second screen.
+Below 900px each spread becomes one column and the masthead contents become a horizontal strip. Below 600px the masthead stops being sticky, so the cover (name, line, contact links, lead cover line) fills the first screen.
 
-## The basement
+## The centrefold
 
-B1 is in the page from the start but `hidden`: the section, its explorer entry and its storey. Solving the riddle on L2 shows all three and saves `b1 = open` in `localStorage`, so it stays open on later visits. Nothing a recruiter needs lives there.
+The centrefold section is in the page from the start but `hidden`, with its contents entry. Solving the riddle on the back page shows both and saves `centrefold = open` in `localStorage`, so it stays open on later visits. Nothing a recruiter needs lives there.
 
 ## Hosting
 
@@ -48,7 +51,7 @@ edit site file ──► npm run -s check ──► pass ──► done
                         └── fail ──► fix ──► re-check
 ```
 
-- `.claude/skills/design-review/` holds the checker (`scripts/check.js`) and the review steps. The checker also runs with B1 open, and tests that only the right answer opens it.
+- `.claude/skills/design-review/` holds the checker (`scripts/check.js`) and the review steps. The checker also runs with the centrefold open, and tests that only the right answer opens it.
 - A Stop hook (`.claude/hooks/design-check-on-stop.js`) runs the checker when a Claude Code turn ends with changed site files.
 - `.claude/agents/recruiter-critic.md` reviews the site as a hiring manager. Reports land in `reviews/`.
 
