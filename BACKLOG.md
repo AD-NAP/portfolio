@@ -9,6 +9,7 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
+- [?] Tag and publish v1.0.0 (the cloud session could push `main` but not tags). On your PC: `git fetch origin && git tag -a v1.0.0 db4c1be -m "v1.0.0: The build log, Issue 1" && git push origin v1.0.0`, then create the GitHub Release from `docs/releases/v1.0.0.md` with the four screenshots in `docs/releases/v1.0.0/`
 - [?] v1.0.0 page order: projects come before Day job, as approved in the brief. The recruiter critic suggests Day job first for backend roles. Keep, or swap?
 - [?] Section names: keep the zine voice ("Day job", "Toolbox", "Now building") or switch to plain "Experience", "Skills", "Projects"?
 - [?] Was any Cloud BMS work written in TypeScript (resolvers, Lambdas, the Svelte frontend)? The cover claims TypeScript but no bullet shows it
