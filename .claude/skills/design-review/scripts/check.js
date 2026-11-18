@@ -6,6 +6,7 @@
 //   - axe-core WCAG 2.1 AA violations
 //   - token contrast (text ≥ 4.5:1, focus ≥ 3:1) per theme
 //   - touch targets under 44px at phone widths
+//   - scroll print: section titles are fully printed once scrolled past
 //   - the same checks again with the hidden centrefold open
 //   - the riddle: wrong guesses keep the centrefold shut, "panda" opens it, a reload keeps it open, the reset shuts it again
 // Usage: node .claude/skills/design-review/scripts/check.js [--out DIR] [--widths 390,1280] [--themes dark,light]
@@ -112,6 +113,15 @@ const audit = async (page, phone) => {
     }
     await page.waitForTimeout(4500);
 
+    // Scroll print: at the bottom of the page, every section title that has passed the
+    // print band (top above 60% of the viewport) must be fully printed.
+    await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+    await page.waitForTimeout(1200);
+    const unprinted = await page.evaluate(() => [...document.querySelectorAll(".spread__title.is-scroll-print")]
+      .filter(t => t.offsetParent && t.getBoundingClientRect().top < innerHeight * 0.6)
+      .filter(t => parseFloat(getComputedStyle(t).getPropertyValue("--print")) < 100)
+      .map(t => `${t.textContent.trim()} (${getComputedStyle(t).getPropertyValue("--print").trim()})`));
+
     // Screens: scroll one viewport at a time so fixed UI renders as a visitor sees it.
     const screens = [];
     for (let i = 0, y = 0; y < height && i < MAX_SCREENS; i++, y += vh) {
@@ -146,7 +156,7 @@ const audit = async (page, phone) => {
     await sheetPage.screenshot({ path: sheet, fullPage: true });
     await sheetPage.close();
 
-    results.push({ theme, width, sheet: path.relative(ROOT, sheet), screens, overflow, errors, axe, contrast, smallTargets });
+    results.push({ theme, width, sheet: path.relative(ROOT, sheet), screens, overflow, errors, axe, contrast, smallTargets, unprinted });
     await page.close();
 
     // Same theme and width with the centrefold already open (as on a return visit).
@@ -217,6 +227,7 @@ const audit = async (page, phone) => {
     r.axe.forEach(v => fails.push(`${t}: axe ${v.impact} ${v.id} (${v.help}) at ${v.targets.join(", ")}`));
     r.contrast.filter(c => c.pass === false).forEach(c => fails.push(`${t}: contrast ${c.pair} = ${c.ratio}:1 (needs ${c.min}:1)`));
     r.smallTargets.forEach(s => fails.push(`${t}: touch target "${s.name}" is ${s.w}×${s.h}px (needs 44×44)`));
+    r.unprinted.forEach(u => fails.push(`${t}: section title not fully printed after scrolling past it: ${u}`));
   }
   for (const r of cfResults) {
     const t = `${r.theme} @ ${r.width}px, centrefold open`;

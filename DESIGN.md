@@ -107,7 +107,7 @@ Provenance: this world replaced the seeded isometric-building world at v1.0.0 (2
 - Misregistration on section titles, done as a `text-shadow`, one copy of the text.
 - Square everything: no radius anywhere.
 - Print furniture as structure: masthead, cover lines with page numbers, folios, a dashed trim line between spreads, staples on the centrefold.
-- One automatic motion: the print run on load.
+- One automatic motion: the print run on load. Section titles print as you scroll to them, following the scroll.
 
 ## Colors
 
@@ -212,6 +212,9 @@ Section titles and the cover name are one text copy with the sunflower pass as a
 
 ### The print run (signature)
 On load, the cover name prints: the sunflower pass rolls in from the left (clip-path), then the blue ink comes in on top. 0.9s on `--ease-out` (`cubic-bezier(.16, 1, .3, 1)`). It is the only automatic motion.
+
+### Scroll print (signature)
+As a section title crosses the band from 90% to 60% down the viewport, it prints the same way, scrubbed to the scroll by GSAP ScrollTrigger (`scrub: 0.4`): `--print` rolls a clip-path from the left, then `--mis-x` slides the sunflower pass from -18px into its 3px offset. Scrolling back un-prints it. Only CSS variables move; the `.is-scroll-print` class is added by script, so without GSAP or with reduced motion the titles simply show printed.
 
 ## Do's and Don'ts
 

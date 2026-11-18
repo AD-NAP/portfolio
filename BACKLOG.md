@@ -29,6 +29,8 @@ Brainstormed with frontend-design and Impeccable `shape`; Shafik chose the riso 
 - [x] Design checker retargeted (centrefold, ink tokens, finished print under reduced motion)
 - [x] Recruiter critic and Impeccable finish review: all material fixes applied
 - [x] CLAUDE.md, PRODUCT.md, DESIGN.md, architecture, README rewritten; favicon and og.png redone
+- [x] GSAP skills installed (6 of GreenSock's official skills) and a trial feature: section titles print on scroll, scrubbed (2026-11-18)
+- [ ] Decide after trying it: keep the scroll print, tune it, or remove it. Other scroll ideas, each needing Shafik's approval: charts filling to scale as they come into view, cover-line page numbers ticking as you move through the issue
 - [ ] Ceiling ideas from the finish review: a cover-scale nameplate, page furniture (edges, fold, bigger folios), real overprint on chart fills, crop marks on trim lines, a two-ink cake
 
 ## Site: design and content
