@@ -1,36 +1,40 @@
-/* The build log: a two-ink riso zine.
-   Every colour comes from the tokens below. Day print: blue and sunflower on white stock.
-   Night print: pale and sunflower ink on dark blue stock. */
+/* The build log: a two-ink zine, handed over as a name card.
+   Every colour comes from the tokens below. Day print: grey and red ink on white stock.
+   Night print: light grey and red ink on dark grey stock. A lighter grey is the third tone. */
 
 :root,
 [data-theme="light"] {
-  --paper: #F2F3EF;        /* white stock, cool rather than cream */
-  --paper-deep: #E4E8E1;   /* fields and inputs */
-  --ink: #3255A4;          /* riso medium blue: headlines, links */
-  --text: #1E2F5C;         /* blue printed heavy: body text */
-  --muted: #4B5A7E;
-  --yellow: #FFB511;       /* riso sunflower: fills and charts, never text on paper */
-  --on-yellow: #1E2F5C;
-  --rule: #9FAACB;
-  --focus: #1E2F5C;
-  --halftone: #3255A4;
+  --paper: #FAFAF8;        /* white stock */
+  --paper-deep: #ECEDEE;   /* light grey: fields, inputs, the card's back */
+  --ink: #2A2C30;          /* dark grey ink: headings, links */
+  --text: #33363B;         /* body text */
+  --muted: #5D6168;
+  --accent: #C8202B;       /* red ink: the second pass, fills, rules; text only at this contrast */
+  --on-accent: #FFFFFF;
+  --rule: #C4C7CC;
+  --focus: #C8202B;
+  --halftone: #6B6F76;
+  --desk: #E4E5E7;         /* the surface the name card is handed over on */
+  --card-shadow: 0 1px 2px rgb(20 21 24 / .14), 0 22px 44px -14px rgb(20 21 24 / .32);
   --blend: multiply;       /* inks overprint the way they do on paper */
-  --grain-opacity: .22;
+  --grain-opacity: .18;
 }
 
 [data-theme="dark"] {
-  --paper: #17203A;        /* dark blue stock */
-  --paper-deep: #202B4A;
-  --ink: #E8ECF4;
-  --text: #DCE2EE;
-  --muted: #A9B4CC;
-  --yellow: #FFB511;
-  --on-yellow: #17203A;
-  --rule: #3F4C70;
-  --focus: #FFB511;
-  --halftone: #8EA6DA;
+  --paper: #232528;        /* dark grey stock */
+  --paper-deep: #2E3135;
+  --ink: #ECEDEF;
+  --text: #D9DBDE;
+  --muted: #A5A9AF;
+  --accent: #F05A5F;       /* brighter red so it still reads on dark stock */
+  --on-accent: #16171A;
+  --rule: #4A4E54;
+  --focus: #F05A5F;
+  --halftone: #8A8F96;
+  --desk: #18191B;
+  --card-shadow: 0 1px 2px rgb(0 0 0 / .4), 0 22px 44px -14px rgb(0 0 0 / .7);
   --blend: screen;
-  --grain-opacity: .16;
+  --grain-opacity: .14;
 }
 
 :root {
@@ -38,7 +42,7 @@
   --font-body: "Literata", Georgia, serif;
   --gutter: clamp(16px, 4vw, 56px);
   --measure: 65ch;
-  --mis-x: 3px;            /* how far the yellow pass sits off the blue one */
+  --mis-x: 3px;            /* how far the red pass sits off the grey one */
   --mis-y: 2px;
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   color-scheme: light;
@@ -68,7 +72,7 @@ body::after {
   opacity: var(--grain-opacity);
   mix-blend-mode: var(--blend);
 }
-::selection { background: var(--yellow); color: var(--on-yellow); }
+::selection { background: var(--accent); color: var(--on-accent); }
 p, li, figcaption, dd { text-wrap: pretty; }
 p { margin: 0 0 1em; }
 h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); color: var(--ink); text-wrap: balance; }
@@ -76,7 +80,7 @@ a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: .1
 a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: .86em; color: var(--ink); overflow-wrap: anywhere; }
-mark { background: var(--yellow); color: var(--on-yellow); padding: 0 .2em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+mark { background: var(--accent); color: var(--on-accent); padding: 0 .2em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 
 .skip {
   position: absolute; left: 12px; top: -60px; z-index: 60;
@@ -89,18 +93,19 @@ mark { background: var(--yellow); color: var(--on-yellow); padding: 0 .2em; box-
 }
 
 /* ---------- Two inks ---------- */
-/* The sunflower pass is a text-shadow of the blue words, landing a few pixels off,
+/* The red pass is a text-shadow of the grey words, landing a few pixels off,
    the way two riso drums never quite line up. One copy of the text, so find and copy stay clean. */
-.ink { text-shadow: var(--mis-x) var(--mis-y) 0 var(--yellow); transition: text-shadow .45s var(--ease-out); }
+.ink { text-shadow: var(--mis-x) var(--mis-y) 0 var(--accent); transition: text-shadow .45s var(--ease-out); }
 /* A title snaps into register when hovered, arrived at from a link, or when focus is in its section. */
 .ink:hover,
 .spread:target .ink,
-.spread:focus-within .ink { text-shadow: 0 0 0 var(--yellow); }
+.spread:focus-within .ink { text-shadow: 0 0 0 var(--accent); }
 
 /* Section titles print as they scroll into view (main.js, GSAP ScrollTrigger, scrubbed).
-   GSAP only moves two variables: --print rolls the inks across, --mis-x slides the sunflower pass
+   GSAP only moves two variables: --print rolls the inks across, --mis-x slides the red pass
    into place. Without GSAP, or with reduced motion, the class is never added and titles show printed. */
-.spread__title.is-scroll-print {
+.spread__title.is-scroll-print,
+.cover__name.is-scroll-print {
   clip-path: inset(-12px calc(100% - var(--print, 100%)) -12px 0);
   transition: none;   /* the scroll drives the shadow; a transition would make it lag */
 }
@@ -130,7 +135,7 @@ mark { background: var(--yellow); color: var(--on-yellow); padding: 0 .2em; box-
   font-family: var(--font-display); font-weight: 600; font-size: .95rem; text-decoration: none; color: var(--ink);
 }
 .mast__nav a:hover,
-.mast__nav a[aria-current="true"] { text-decoration: underline; text-decoration-color: var(--yellow); text-decoration-thickness: .3em; text-underline-offset: .2em; }
+.mast__nav a[aria-current="true"] { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: .3em; text-underline-offset: .2em; }
 
 .print-toggle {
   display: inline-flex; align-items: center; gap: 8px; flex: none;
@@ -150,11 +155,19 @@ main { padding: 0 var(--gutter); }
 /* ---------- Cover ---------- */
 .cover { padding: clamp(56px, 9vw, 120px) 0 clamp(48px, 7vw, 96px); }
 .cover__name {
-  font-size: clamp(3.4rem, 10.5vw, 9.5rem);
-  font-weight: 900; font-variation-settings: "wdth" 150;
-  line-height: .9; letter-spacing: -.01em;
-  --mis-x: 7px; --mis-y: 5px;
+  font-size: clamp(2.6rem, 7.4vw, 6rem);
+  font-weight: 900; font-variation-settings: "wdth" 140;
+  line-height: .95; letter-spacing: -.01em;
+  --mis-x: 6px; --mis-y: 4px;
 }
+.cover__name:focus { outline: none; }
+.cover__issue {
+  display: block; margin-top: 14px;
+  font: italic 400 clamp(1.05rem, 1.8vw, 1.3rem)/1.35 var(--font-body); font-variation-settings: normal;
+  color: var(--muted); text-shadow: none; letter-spacing: 0;
+}
+.cover__replay { margin: 8px 0 0; }
+.cover__replay a { display: inline-flex; align-items: center; min-height: 44px; font-style: italic; color: var(--muted); }
 .cover__body {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 88px);
   margin-top: clamp(32px, 4.5vw, 56px);
@@ -172,18 +185,11 @@ main { padding: 0 var(--gutter); }
   min-height: 44px; padding: 10px 0;
   font: 650 1.08rem/1.3 var(--font-display); text-decoration: none; color: var(--ink);
 }
-.coverlines a:hover span:first-child { text-decoration: underline; text-decoration-color: var(--yellow); text-decoration-thickness: .28em; text-underline-offset: .12em; text-decoration-skip-ink: none; }
+.coverlines a:hover span:first-child { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: .28em; text-underline-offset: .12em; text-decoration-skip-ink: none; }
 .coverlines__page { flex: none; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
 .coverlines__lead a { font-size: 1.3rem; font-weight: 800; }
-.coverlines__lead a span:first-child { background: var(--yellow); color: var(--on-yellow); padding: .25em .5em; line-height: 1.55; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.coverlines__lead a span:first-child { background: var(--accent); color: var(--on-accent); padding: .25em .5em; line-height: 1.55; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 
-/* The print run: on load the sunflower pass rolls across, then the blue ink comes in on top. */
-@keyframes print-run {
-  0%   { clip-path: inset(0 100% 0 0); color: transparent; text-shadow: calc(var(--mis-x) - 18px) var(--mis-y) 0 var(--yellow); }
-  50%  { clip-path: inset(0 0 0 0); color: transparent; text-shadow: var(--mis-x) var(--mis-y) 0 var(--yellow); }
-  100% { clip-path: inset(0 0 0 0); color: var(--ink); text-shadow: var(--mis-x) var(--mis-y) 0 var(--yellow); }
-}
-.cover__name { animation: print-run .9s var(--ease-out) both; }
 
 /* The cat sits on the top edge of the riddle card, left of the folded corner. */
 .perch-cat { position: absolute; right: 64px; bottom: calc(100% - 1px); width: 52px; height: 52px; fill: var(--ink); }
@@ -196,15 +202,91 @@ main { padding: 0 var(--gutter); }
   75% { transform: rotate(-14deg); }
 }
 
-/* Contact links: words with a thick sunflower underline, like a highlighter pass. */
+/* Contact links: words with a thick red underline, like a highlighter pass. */
 .links { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 28px 0 0; padding: 0; list-style: none; }
 .links a {
   display: inline-flex; align-items: center; min-height: 44px;
   font-family: var(--font-display); font-weight: 700; font-variation-settings: "wdth" 110; font-size: 1.1rem;
-  text-decoration: underline; text-decoration-color: var(--yellow); text-decoration-thickness: .32em;
+  text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: .32em;
   text-underline-offset: .12em; text-decoration-skip-ink: none;
 }
-.links a:hover { background: var(--yellow); color: var(--on-yellow); text-decoration: none; }
+.links a:hover { background: var(--accent); color: var(--on-accent); text-decoration: none; }
+
+/* ---------- Name card (meishi) ---------- */
+/* Handed over on load; scrolling flips it and grows its back into the cover (main.js).
+   Without GSAP or with reduced motion it is simply the first section, front side up. */
+/* Full bleed with an explicit width, so GSAP measures the real size when it pins the stage. */
+.card-stage { position: relative; overflow: clip; width: calc(100% + 2 * var(--gutter)); margin: 0 0 0 calc(var(--gutter) * -1); padding: clamp(40px, 8vw, 96px) 0; }
+.card-stage { pointer-events: var(--stage-events, auto); }
+.card-stage__desk { position: absolute; inset: 0; background: var(--desk); opacity: var(--desk-alpha, 1); }
+.card-stage__inner {
+  position: relative; display: grid; justify-items: center; gap: 26px;
+  padding: 0 var(--gutter); perspective: 1800px;
+}
+.meishi-hand {
+  width: min(580px, 100%); transform-origin: 50% 100%;
+  perspective: 1600px;   /* the card's own turn needs perspective on its parent */
+  animation: hand-over .8s var(--ease-out) both;
+}
+[data-card="seen"] .meishi-hand { animation: none; }
+/* Offered the polite way: it rises into place with a slight bow, then levels out. */
+@keyframes hand-over {
+  from { transform: translateY(44px) rotateX(20deg); }
+  55%  { transform: translateY(-6px) rotateX(-5deg); }
+  to   { transform: none; }
+}
+.meishi {
+  position: relative; aspect-ratio: 91 / 55; transform-style: preserve-3d;
+  transform: rotateY(var(--card-turn, 0deg)) scale(var(--card-scale, 1));
+}
+.meishi__face {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  padding: clamp(16px, 5%, 32px) clamp(18px, 6%, 38px);
+  background: var(--paper); box-shadow: var(--card-shadow);
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  opacity: var(--face-alpha, 1);
+}
+.meishi__back > * { opacity: var(--back-ink, 1); }
+.meishi__back { transform: rotateY(180deg); }
+.meishi__org { display: flex; align-items: center; gap: 10px; margin: 0; font: 650 clamp(.78rem, 2.2vw, .95rem)/1.35 var(--font-display); color: var(--ink); }
+.meishi__mark { width: 4px; align-self: stretch; min-height: 1.1em; background: var(--accent); }
+.meishi__name {
+  margin-top: auto; font-size: clamp(1.6rem, 6vw, 2.6rem); font-weight: 850;
+  font-variation-settings: "wdth" 115; line-height: 1; --mis-x: 2px; --mis-y: 2px;
+}
+.meishi__title { margin: 6px 0 0; max-width: 34ch; font-size: clamp(.78rem, 2.2vw, .95rem); line-height: 1.35; color: var(--text); }
+.meishi__email { margin: auto 0 0; padding-top: 10px; border-top: 1px solid var(--rule); font-size: clamp(.8rem, 2.2vw, .95rem); }
+.meishi__email a { display: inline-flex; align-items: center; min-height: 44px; margin: -12px 0 -12px; }
+.meishi__back-name { margin: 0 0 auto; font: 800 clamp(.95rem, 2.8vw, 1.2rem)/1.3 var(--font-display); color: var(--ink); }
+.meishi__contacts { display: grid; gap: 6px; margin: 0; font-size: clamp(.78rem, 2.2vw, .95rem); }
+.meishi__contacts div { display: grid; grid-template-columns: 6.5em 1fr; align-items: baseline; gap: 12px; padding-top: 6px; border-top: 1px solid var(--rule); }
+.meishi__contacts dt { font: 700 1em/1.4 var(--font-display); color: var(--accent); }
+.meishi__contacts dd { margin: 0; color: var(--text); overflow-wrap: anywhere; }
+.card-stage__after {
+  display: grid; justify-items: center; gap: 14px; text-align: center;
+  opacity: var(--after-alpha, 1); transform: translateY(var(--after-y, 0px)); visibility: var(--after-vis, visible);
+}
+.card-stage__intro { max-width: 46ch; margin: 0; font-size: clamp(1rem, 1.6vw, 1.12rem); line-height: 1.45; }
+.card-stage__links { justify-content: center; margin: 0; }
+.card-stage__cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 16px; margin: 0; }
+.card-open {
+  display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px;
+  font: 750 1.05rem/1.3 var(--font-display); color: var(--paper); text-decoration: none;
+  background: var(--ink); transition: transform .12s var(--ease-out), background-color .2s;
+}
+.card-open:hover { background: var(--accent); color: var(--on-accent); }
+.card-open:active { transform: scale(.97); }
+.card-stage__or { font-style: italic; color: var(--muted); }
+
+/* With GSAP: the card stage lies over the cover, and both are pinned together while the card turns,
+   so the grown back lands exactly where the cover already sits. */
+.opening { position: relative; }
+.has-card-motion .opening { min-height: 100svh; }
+.has-card-motion .card-stage {
+  position: absolute; top: 0; left: calc(var(--gutter) * -1); z-index: 20;
+  height: 100svh; margin: 0; display: grid; align-items: center; padding: 64px 0 24px;
+}
+.has-card-motion .meishi { will-change: transform; }
 
 /* ---------- Spreads ---------- */
 .spread {
@@ -234,12 +316,12 @@ main { padding: 0 var(--gutter); }
 .page__meta { color: var(--muted); font-style: italic; }
 .page__headline {
   margin: 18px 0 20px; padding: 14px 18px;
-  background: var(--yellow); color: var(--on-yellow);
+  background: var(--accent); color: var(--on-accent);
   font: 650 1.15rem/1.4 var(--font-display);
 }
 .page__status { color: var(--text); font-weight: 600; }
 .page__stack { color: var(--muted); font-style: italic; margin-bottom: 4px; }
-.page__link a { display: inline-flex; align-items: center; min-height: 44px; font: 700 1.05rem var(--font-display); text-decoration-color: var(--yellow); text-decoration-thickness: .28em; text-underline-offset: .12em; text-decoration-skip-ink: none; }
+.page__link a { display: inline-flex; align-items: center; min-height: 44px; font: 700 1.05rem var(--font-display); text-decoration-color: var(--accent); text-decoration-thickness: .28em; text-underline-offset: .12em; text-decoration-skip-ink: none; }
 .nowrap { white-space: nowrap; }
 
 /* Day job: the full-time role runs across the spread, the internships are the page pair below. */
@@ -264,9 +346,9 @@ main { padding: 0 var(--gutter); }
 .chart__bar {
   position: absolute; top: 0; bottom: 0;
   left: var(--from, 0%); width: calc(var(--to) - var(--from, 0%));
-  background: var(--yellow); box-shadow: inset 0 0 0 2px var(--ink);
+  background: var(--accent); box-shadow: inset 0 0 0 2px var(--ink);
 }
-/* Baselines print as a halftone of the blue ink: present, but quieter than the result. */
+/* Baselines print as a halftone of the grey ink: present, but quieter than the result. */
 .chart__bar--before { background: radial-gradient(var(--halftone) 34%, transparent 37%) 0 0 / 5px 5px; box-shadow: inset 0 0 0 1px var(--halftone); }
 .chart__bar--sliver { min-width: 3px; background: var(--ink); box-shadow: none; }
 .chart figcaption { margin-top: 14px; font-size: .92rem; color: var(--muted); font-style: italic; max-width: var(--measure); }
@@ -311,16 +393,16 @@ main { padding: 0 var(--gutter); }
   display: inline-flex; align-items: center; min-height: 44px;
   font: 800 clamp(1.2rem, 3.2vw, 2rem) var(--font-display); font-variation-settings: "wdth" 95;
   overflow-wrap: anywhere;
-  text-decoration-color: var(--yellow); text-decoration-thickness: .22em; text-underline-offset: .14em; text-decoration-skip-ink: none;
+  text-decoration-color: var(--accent); text-decoration-thickness: .22em; text-underline-offset: .14em; text-decoration-skip-ink: none;
 }
-.backpage__email a:hover { background: var(--yellow); color: var(--on-yellow); text-decoration: none; }
+.backpage__email a:hover { background: var(--accent); color: var(--on-accent); text-decoration: none; }
 .backpage__hint { margin-top: 24px; color: var(--muted); font-style: italic; }
 
 /* The riddle, printed on a page with a dog-eared corner. */
 .riddle { position: relative; margin-top: 56px; padding: 26px 26px 24px; border: 2px solid var(--ink); background: var(--paper); }
 .riddle__fold {
   position: absolute; top: -2px; right: -2px; width: 46px; height: 46px;
-  background: linear-gradient(225deg, var(--paper) 50%, var(--yellow) 50%);
+  background: linear-gradient(225deg, var(--paper) 50%, var(--accent) 50%);
   box-shadow: -1px 1px 0 var(--ink);
   transform-origin: 100% 0;
   transition: scale .5s var(--ease-out), opacity .5s var(--ease-out);
@@ -344,7 +426,7 @@ main { padding: 0 var(--gutter); }
 .riddle__status { margin: 14px 0 0; }
 .riddle__status:empty { display: none; }
 .riddle__a p { margin: 0 0 12px; }
-.riddle__reward a { display: inline-flex; align-items: center; min-height: 44px; font: 750 1.1rem var(--font-display); text-decoration-color: var(--yellow); text-decoration-thickness: .28em; text-underline-offset: .12em; }
+.riddle__reward a { display: inline-flex; align-items: center; min-height: 44px; font: 750 1.1rem var(--font-display); text-decoration-color: var(--accent); text-decoration-thickness: .28em; text-underline-offset: .12em; }
 .flip__word { display: inline-flex; font: 800 clamp(2.2rem, 7vw, 3.2rem)/1.2 var(--font-display); color: var(--ink); }
 .flip__word span { display: inline-block; width: .9em; text-align: center; }
 .flip__word.is-static span { translate: calc(var(--d) * .9em) 0; }
@@ -356,7 +438,7 @@ main { padding: 0 var(--gutter); }
 
 /* The night cat only shows up in the night print. */
 .night-cat { display: none; position: absolute; right: 8px; bottom: calc(100% - 1px); width: 48px; height: 48px; fill: var(--ink); }
-.night-cat__eye { fill: var(--yellow); }
+.night-cat__eye { fill: var(--accent); }
 [data-theme="dark"] .night-cat { display: block; }
 
 /* ---------- Centrefold ---------- */
@@ -379,11 +461,11 @@ main { padding: 0 var(--gutter); }
 .centrefold__lede { font: 800 1.5rem var(--font-display); color: var(--ink); margin: 18px 0 6px; }
 .cake { width: 160px; height: auto; }
 .cake__plate { fill: var(--paper-deep); stroke: var(--ink); stroke-width: 2; }
-.cake__body { fill: var(--yellow); stroke: var(--ink); stroke-width: 2; }
+.cake__body { fill: var(--accent); stroke: var(--ink); stroke-width: 2; }
 .cake__layer { fill: none; stroke: var(--ink); stroke-width: 2; }
 .cake__icing { fill: var(--paper); stroke: var(--ink); stroke-width: 2; }
 .cake__candle { fill: var(--ink); }
-.cake__flame { fill: var(--yellow); stroke: var(--ink); stroke-width: 1.5; }
+.cake__flame { fill: var(--accent); stroke: var(--ink); stroke-width: 1.5; }
 
 /* ---------- Colophon ---------- */
 .colophon { position: relative; width: min(1200px, 100% - 2 * var(--gutter)); margin: 0 auto; padding: 28px 0 40px; border-top: 2px solid var(--ink); }
@@ -408,7 +490,7 @@ main { padding: 0 var(--gutter); }
   .mast { position: static; padding-top: 6px; padding-bottom: 2px; }
   .mast__issue { display: none; }
   .cover { padding: 52px 0 36px; }
-  .cover__name { font-size: clamp(3rem, 16.5vw, 5rem); font-variation-settings: "wdth" 125; --mis-x: 4px; --mis-y: 3px; }
+  .cover__name { font-size: clamp(2.4rem, 12.5vw, 3.6rem); font-variation-settings: "wdth" 110; --mis-x: 4px; --mis-y: 3px; }
   .perch-cat { width: 44px; height: 44px; right: 56px; }
   .cover__body { margin-top: 20px; grid-template-columns: 1fr; gap: 24px; }
   .coverlines a { font-size: 1rem; padding: 8px 0; }
@@ -420,6 +502,10 @@ main { padding: 0 var(--gutter); }
   .chart__axis { grid-template-columns: 1fr; }
   .chart__axis > span:not(.chart__track) { display: none; }
   .riddle { padding: 20px 18px; }
+  .has-card-motion .card-stage { align-items: start; padding-top: max(24px, 9svh); }
+  .card-stage__inner { gap: 18px; }
+  .card-stage__after { gap: 8px; }
+  .mast__nav a { padding: 0 6px; font-size: .86rem; }
 }
 
 /* ---------- Reduced motion: the finished print, nothing moving ---------- */

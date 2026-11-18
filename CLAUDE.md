@@ -2,7 +2,7 @@
 
 Single-page portfolio for Shafik Adam, a software engineer in Singapore. Plain HTML/CSS/JS with no build step: `index.html`, `assets/styles.css`, `assets/main.js`. Intended host: GitHub Pages, served from `main`.
 
-The concept (since v1.0.0, 2026-11-18): the site is **The build log**, a self-published two-ink riso zine by a builder and learner. Each minor or major release is a new issue (v1.0.0 is Issue 1, v1.1.0 Issue 2); a patch is a reprint. Update the masthead and colophon with each issue. It reads top to bottom: the cover, then spreads with plain names: Experience (pp. 2–3), Projects (pp. 4–5), Lessons learned (pp. 6–7), Skills and Education (pp. 8–9), and a back page, Contact, with the riddle. Experience comes before Projects, and section names stay plain so recruiters can scan them; the zine voice lives in the look, the masthead and the cover lines (Shafik, 2026-11-18). A hidden centrefold opens when a visitor solves the riddle. The masthead holds the zine's title, its contents and the print toggle. The isometric building (v0.2.0 to v0.5.0) is retired; see `docs/decisions/0002-riso-zine-redesign.md`.
+The concept (since v1.0.0, 2026-11-18): the site is **The build log**, a self-published two-ink riso zine by a builder and learner. Each minor or major release is a new issue (v1.0.0 is Issue 1, v1.1.0 Issue 2); a patch is a reprint. Update the masthead and colophon with each issue. Since v1.1.0 (Issue 2) the site opens on a **name card**: a meishi-style business card naming Shafik's role at Azbil. Scrolling, or "Open the build log", flips the card and grows its back into the zine cover; see `docs/decisions/0003-name-card-and-new-inks.md`. After the card it reads top to bottom: the cover, then spreads with plain names: Experience (pp. 2–3), Projects (pp. 4–5), Lessons learned (pp. 6–7), Skills and Education (pp. 8–9), and a back page, Contact, with the riddle. Experience comes before Projects, and section names stay plain so recruiters can scan them; the zine voice lives in the look, the masthead and the cover lines (Shafik, 2026-11-18). A hidden centrefold opens when a visitor solves the riddle. The masthead holds the zine's title, its contents and the print toggle. The isometric building (v0.2.0 to v0.5.0) is retired; see `docs/decisions/0002-riso-zine-redesign.md`.
 
 ## Working with Shafik
 - Shafik is learning Claude Code while we build. At each step, say briefly what you're doing, which Claude Code building block it uses, and what comes next.
@@ -23,26 +23,28 @@ The concept (since v1.0.0, 2026-11-18): the site is **The build log**, a self-pu
 - Use the `frontend-design` skill for design work, and say how it shaped your choices.
 - Third-party design skills live in `.claude/skills/` (sources in `.claude/skills/THIRD_PARTY.md`). Use **Impeccable** (`/impeccable critique`, `audit`, `polish`, …) for design reviews and refinements, and **Emil Kowalski's skills** (`improve-animations`, `review-animations`, `animate`, `mobile-native`, …) for motion and phone feel. GreenSock's **GSAP skills** (`gsap-scrolltrigger`, `gsap-timeline`, `gsap-core`, …) cover GSAP code. `PRODUCT.md` and `DESIGN.md` feed Impeccable; CLAUDE.md wins wherever they or any skill disagree. Keep Impeccable telemetry off. (Shafik, 2026-11-17)
 - Two prints, both required (the theme toggle reads "Night print"):
-  - **Day print:** cool white stock, riso blue ink, sunflower ink for fills and charts. Never sunflower text on paper.
-  - **Night print:** dark blue stock, pale ink, sunflower ink.
+  - **Day print:** white stock, dark grey ink, red accent.
+  - **Night print:** dark grey stock, light grey ink, a brighter red accent.
+  - A lighter grey is the third tone (fields, rules, halftones, the card's desk). The red is Azbil-like but our own; red is text only where it reaches 4.5:1, otherwise a fill with `--on-accent` text on it. (Shafik, 2026-11-18)
 - Colours come from the tokens in `:root` and `[data-theme]` in `styles.css`. Don't hard-code colours in components.
-- Two inks only. The sunflower pass is a `text-shadow` sitting a few pixels off the blue, like riso misregistration. Never duplicate text for an effect: find-in-page and copy must see one copy.
+- Two inks only: grey and red. The red pass is a `text-shadow` sitting a few pixels off the grey, like riso misregistration. Never duplicate text for an effect: find-in-page and copy must see one copy.
 - The paper should feel printed, not distressed: one static grain layer, no torn edges or fake grunge.
 - Stats must be readable at a glance, honest, and drawn to scale. A 330-cell grid was rejected as hard to read.
 - Personality stays: the riddle on the back page (visitors type Shafik's favourite animal, hinted by `ad-nap` → `pan-da`; the answer is never shown before they solve it), the hidden centrefold it unlocks (with a "Reset the riddle" button so visitors can play again), the cat sitting on the riddle card, and the cat that only appears in the night print, perched on the colophon rule. The cat is not on the cover: it looked out of place there (Shafik, 2026-11-18).
 - The centrefold is a reward, not content: nothing a recruiter needs may live only there. For now it holds a cake.
+- The name card (meishi, 91 × 55): front has "Azbil ASPO, Singapore" as text with a red rule (never the Azbil logo), the name (the page's `h1`), the title and the email; the back has the contact details. The back is a picture (`aria-hidden`, `inert`); the real links are on the cover. (Shafik, 2026-11-18)
 - The cover carries the proof: cover lines ("In this issue") link to the articles with page numbers, and the production result leads.
 - Contact links (Email, GitHub, LinkedIn, Resume PDF) stay on the cover as well as on the back page.
 - Production results get the visual weight. Test data (e.g. the 330 mocked records) stays small.
-- Phones: the cover fits the name, the line, the contact links and the lead cover line on the first screen.
+- First screen, at every width: the card front (name, title, Azbil, email), then under the card a one-line intro ("Software engineer: cloud backends and AI tools…"), GitHub, LinkedIn and Resume (PDF), and "Open the build log". The recruiter critic asked for this so the first screen still answers who, what and how to reach him (2026-11-18). The same flip runs on phones.
 - Fonts: Anybody (display, set wide and heavy) and Literata (body). Code uses the system monospace, and only for code. (2026-11-18)
 - GSAP (core and ScrollTrigger) is self-hosted in `assets/vendor/`, pinned to one version; the page loads no third-party scripts. Use the `gsap-*` skills for GSAP work, but prefer plain CSS where it is enough. Animate CSS variables rather than inline styles, so the CSS states (hover, focus, `:target`, reduced motion) keep working, and the page must look finished if GSAP fails to load. (2026-11-18)
 
 ## Motion
-- Allowed automatic motion: only the print run on page load (the sunflower pass rolls across the cover name, then the blue ink comes in; under 1s).
-- Scroll motion: section titles print as they scroll into view (GSAP ScrollTrigger, scrubbed to the scrollbar, so it answers the visitor and un-prints when they scroll back). Any other scroll motion needs Shafik's approval first. (Shafik, 2026-11-18)
+- Allowed automatic motion: only the hand-over on page load (the card rises into place with a slight bow, under 1s).
+- Scroll motion, scrubbed to the scrollbar so it answers the visitor and reverses on the way back up: the card flip (GSAP ScrollTrigger pins the card and the cover together for one screen; the card turns in real 3D, its back grows over the screen and swaps instantly for the cover underneath, whose title then receives its ink; no faded in-between; "Open the build log" scrolls through the same motion) and section titles printing as they scroll into view. Returning visitors (`card = seen`) open on the cover, with "See my card again" to replay. Any other scroll motion needs Shafik's approval first. (Shafik, 2026-11-18)
 - Everything else answers the user: the print toggle, section titles snapping into register on hover or focus, the riddle corner unfolding and the `ad-nap` letters flipping, the cat's tail flick when the riddle card comes into view.
-- `prefers-reduced-motion` shows final states with no animation.
+- `prefers-reduced-motion` shows final states with no animation: no pin, no flip; the card and the cover are normal sections.
 
 ## Accessibility (WCAG 2.1 AA; the axe scan must stay at 0 violations)
 - Contrast: text ≥ 4.5:1 and focus indicators ≥ 3:1, in both themes. Use the `--focus` token for focus styles.

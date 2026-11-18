@@ -7,6 +7,7 @@
 //   - token contrast (text ≥ 4.5:1, focus ≥ 3:1) per theme
 //   - touch targets under 44px at phone widths
 //   - scroll print: section titles are fully printed once scrolled past
+//   - the name card: on the first screen, the button opens the cover, returning visitors open on the cover, the replay link
 //   - the same checks again with the hidden centrefold open
 //   - the riddle: wrong guesses keep the centrefold shut, "panda" opens it, a reload keeps it open, the reset shuts it again
 // Usage: node .claude/skills/design-review/scripts/check.js [--out DIR] [--widths 390,1280] [--themes dark,light]
@@ -55,7 +56,7 @@ const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m);
 // Token pairs that must pass in every theme: [foreground, background, minimum].
 const TOKEN_PAIRS = [
   ["--text", "--paper", 4.5], ["--ink", "--paper", 4.5], ["--muted", "--paper", 4.5],
-  ["--text", "--paper-deep", 4.5], ["--muted", "--paper-deep", 4.5], ["--on-yellow", "--yellow", 4.5],
+  ["--text", "--paper-deep", 4.5], ["--muted", "--paper-deep", 4.5], ["--on-accent", "--accent", 4.5],
   ["--paper", "--ink", 4.5], ["--focus", "--paper", 3], ["--focus", "--paper-deep", 3],
 ];
 
@@ -214,7 +215,56 @@ const audit = async (page, phone) => {
     inkLayers: document.querySelectorAll(".ink").length,
     inkPrinted: [...document.querySelectorAll(".ink")].filter(el => { const cs = getComputedStyle(el); return cs.clipPath === "none" && cs.color !== "rgba(0, 0, 0, 0)"; }).length,
     running: document.getAnimations().filter(a => a.playState === "running").length,
+    cardPinned: document.documentElement.classList.contains("has-card-motion"),
+    cardAndCoverShown: !!document.querySelector("#card-name")?.getBoundingClientRect().height && !!document.querySelector("#cover-title")?.getBoundingClientRect().height,
   }));
+
+  // The name card, at phone and desktop width: first visit, the button, a returning visitor, the replay link.
+  const card = [];
+  for (const [width, height] of [[390, 844], [1280, 800]]) {
+    const r = { width };
+    const cp = await browser.newPage({ viewport: { width, height }, colorScheme: "light" });
+    await cp.goto(url, { waitUntil: "networkidle" });
+    await cp.waitForTimeout(1200);
+    r.frontOnFirstScreen = await cp.evaluate(() => {
+      const inView = el => { const b = el?.getBoundingClientRect(); return !!b && b.height > 0 && b.top >= 0 && b.bottom <= innerHeight; };
+      return inView(document.getElementById("card-name")) && inView(document.querySelector(".meishi__email a")) && inView(document.querySelector(".card-open"));
+    });
+    await cp.click(".card-open");
+    await cp.waitForTimeout(2200);
+    r.buttonOpensCover = await cp.evaluate(() => document.activeElement?.id === "cover-title" && document.getElementById("cover-title").getBoundingClientRect().top < innerHeight / 2);
+    await cp.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await cp.waitForTimeout(600);
+    // Keyboard: tabbing from the card into the cover must never leave focus hidden under the card.
+    await cp.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await cp.waitForTimeout(600);
+    await cp.evaluate(() => document.querySelector(".card-open").focus());
+    await cp.keyboard.press("Tab");
+    await cp.waitForTimeout(400);
+    r.tabIntoCoverVisible = await cp.evaluate(() => {
+      const a = document.activeElement, b = a.getBoundingClientRect();
+      const top = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
+      return !!a.closest("#top") && (top === a || a.contains(top));
+    });
+    const mid = await cp.evaluate(() => { const t = window.ScrollTrigger?.getAll()[0]; return t ? t.start + (t.end - t.start) / 2 : 0; });
+    await cp.evaluate(y => window.scrollTo({ top: y, behavior: "instant" }), mid);
+    await cp.waitForTimeout(1100);
+    const midShot = path.join(OUT, `light-${width}-card-mid.png`);
+    await cp.screenshot({ path: midShot });
+    r.midFlipScreenshot = path.relative(ROOT, midShot);
+    await cp.close();
+
+    const rv = await browser.newPage({ viewport: { width, height }, colorScheme: "light" });
+    await rv.addInitScript(() => { try { localStorage.setItem("card", "seen"); } catch (e) {} });
+    await rv.goto(url, { waitUntil: "networkidle" });
+    await rv.waitForTimeout(1200);
+    r.returningOpensOnCover = await rv.evaluate(() => { const b = document.getElementById("cover-title").getBoundingClientRect(); return b.top >= 0 && b.top < innerHeight / 2; });
+    await rv.click(".card-replay");
+    await rv.waitForTimeout(2200);
+    r.replayShowsCard = await rv.evaluate(() => window.scrollY < 5);
+    await rv.close();
+    card.push(r);
+  }
   await browser.close();
   server.close();
 
@@ -243,10 +293,19 @@ const audit = async (page, phone) => {
   if (!riddle.openAfterReload) fails.push("riddle: the centrefold should stay open after a reload");
   if (!riddle.shutAfterReset) fails.push('riddle: "Reset the riddle" should hide the centrefold, show the form again and focus the input');
   if (!riddle.shutAfterResetReload) fails.push("riddle: after a reset the centrefold should stay shut on reload");
+  if (reducedMotion.cardPinned || !reducedMotion.cardAndCoverShown) fails.push("reduced motion: the card should not be pinned, and the card and cover should both show as normal sections");
+  for (const r of card) {
+    const t = `name card @ ${r.width}px`;
+    if (!r.frontOnFirstScreen) fails.push(`${t}: the name, email and "Open the build log" should all be on the first screen`);
+    if (!r.buttonOpensCover) fails.push(`${t}: "Open the build log" should bring the cover into view and focus its heading`);
+    if (!r.returningOpensOnCover) fails.push(`${t}: a returning visitor should open on the cover`);
+    if (!r.replayShowsCard) fails.push(`${t}: "See my card again" should scroll back to the card`);
+    if (!r.tabIntoCoverVisible) fails.push(`${t}: tabbing from the card into the cover should show the focused link, not leave it under the card`);
+  }
   if (reducedMotion.inkPrinted !== reducedMotion.inkLayers || reducedMotion.running > 0)
     fails.push(`reduced motion: ${reducedMotion.inkPrinted}/${reducedMotion.inkLayers} ink layers printed, ${reducedMotion.running} animations running`);
 
-  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, reducedMotion, riddle, results, cfResults };
+  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, reducedMotion, riddle, card, results, cfResults };
   fs.writeFileSync(path.join(OUT, "report.json"), JSON.stringify(report, null, 2));
 
   console.log(`Design check: ${report.pass ? "PASS" : `FAIL (${fails.length})`}`);

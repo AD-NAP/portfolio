@@ -118,20 +118,126 @@
     if (solved) openCentrefold(false);
   }
 
-  /* ---------- Section titles print as they scroll into view ----------
-     GSAP ScrollTrigger, scrubbed: the print follows the scrollbar, so scrolling back un-prints it.
-     Only CSS variables move (see .is-scroll-print in styles.css). Skipped under reduced motion. */
-  if (window.gsap && window.ScrollTrigger) {
+  /* ---------- The name card ----------
+     First visit: the card is handed over (CSS), then scrolling, or "Open the build log", flips it
+     and grows its back into the cover. GSAP ScrollTrigger pins the card over the page and scrubs
+     the flip to the scroll, so scrolling back up plays it in reverse. Returning visitors open on
+     the cover, and "See my card again" scrolls back up to it. */
+  const stage = document.getElementById("card");
+  const meishi = document.querySelector(".meishi");
+  const cover = document.getElementById("top");
+  const coverTitle = document.getElementById("cover-title");
+  let cardTrigger = null;
+  const cardSeen = () => { try { return localStorage.getItem("card") === "seen"; } catch (e) { return false; } };
+  const markCardSeen = () => { try { localStorage.setItem("card", "seen"); } catch (e) {} };
+  const afterScroll = fn => {
+    let done = false;
+    const go = () => { if (!done) { done = true; fn(); } };
+    window.addEventListener("scrollend", go, { once: true });
+    setTimeout(go, 1400);   // no scroll needed, or no scrollend support
+  };
+  const coverTop = () => cardTrigger ? cardTrigger.end : cover.getBoundingClientRect().top + window.scrollY;
+
+  document.querySelector(".card-open")?.addEventListener("click", e => {
+    e.preventDefault();
+    markCardSeen();
+    window.scrollTo({ top: coverTop(), behavior: reduceMotion ? "auto" : "smooth" });
+    afterScroll(() => coverTitle?.focus({ preventScroll: true }));
+  });
+  // Keyboard users: if focus moves into the cover while the card still lies over it, go to the
+  // cover first, so the focused link is never hidden under the card.
+  cover?.addEventListener("focusin", () => {
+    if (!cardTrigger || window.scrollY >= cardTrigger.end - 1) return;
+    requestAnimationFrame(() => {             // after the browser's own scroll-to-focus
+      window.scrollTo({ top: cardTrigger.end, behavior: "instant" });
+      cardTrigger.getTween()?.progress(1);    // finish the scrub at once instead of easing into place
+    });
+  });
+  document.querySelector(".card-replay")?.addEventListener("click", e => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    afterScroll(() => document.querySelector(".card-open")?.focus({ preventScroll: true }));
+  });
+
+  if (window.gsap && window.ScrollTrigger && stage && meishi) {
     gsap.registerPlugin(ScrollTrigger);
-    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+    const mm = gsap.matchMedia();
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      root.classList.add("has-card-motion");
+      const opening = document.querySelector(".opening");
+      const hand = document.querySelector(".meishi-hand");
+      // How far the card must grow, from where it sits on the stage, for its back to cover the screen.
+      const fillScale = () => {
+        const w = meishi.offsetWidth, h = meishi.offsetHeight;
+        const hr = hand.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+        const cx = hr.left - sr.left + w / 2, cy = hr.top - sr.top + h / 2;   // card centre within the stage
+        return Math.max(2 * Math.max(cx, innerWidth - cx) / w, 2 * Math.max(cy, innerHeight - cy) / h) * 1.08;
+      };
+      // One number, p (0 to 1), follows the scroll; render() turns it into the CSS variables the stage
+      // reads (see .card-stage in styles.css). Same p, same picture, in both directions.
+      const turnEase = gsap.parseEase("power1.inOut"), growEase = gsap.parseEase("power2.in");
+      const span = (p, a, b) => gsap.utils.clamp(0, 1, (p - a) / (b - a));
+      let fill = 1;
+      const render = p => {
+        const turn = turnEase(span(p, 0, 0.42));          // 0 to 0.42: the card turns over
+        const grow = growEase(span(p, 0.45, 0.75));       // 0.45 to 0.75: its back grows over the screen
+        const after = 1 - span(p, 0, 0.12);               // the lines under the card step aside first
+        const landed = p >= 0.75;                         // the back is now the cover's paper
+        const ink = span(p, 0.76, 0.96);                  // and the cover title receives its ink
+        const v = {
+          "--card-turn": `${180 * turn}deg`,
+          "--card-scale": p < 0.45 ? 1 + 0.12 * turn : 1.12 + (fill - 1.12) * grow,
+          "--back-ink": 1 - span(p, 0.45, 0.57),
+          "--after-alpha": after, "--after-y": `${12 * (1 - after)}px`, "--after-vis": after > 0 ? "visible" : "hidden",
+          "--face-alpha": landed ? 0 : 1, "--desk-alpha": landed ? 0 : 1, "--stage-events": landed ? "none" : "auto",
+        };
+        for (const k in v) stage.style.setProperty(k, v[k]);
+        coverTitle.style.setProperty("--print", `${100 * ink}%`);
+        coverTitle.style.setProperty("--mis-x", `${-18 + 24 * ink}px`);
+      };
+      coverTitle.classList.add("is-scroll-print");
+      const progress = { p: 0 };
+      const tween = gsap.to(progress, {
+        p: 1, ease: "none", onUpdate: () => render(progress.p),
+        scrollTrigger: {
+          trigger: opening, start: "top top", end: "+=100%",
+          pin: true, scrub: 0.5, invalidateOnRefresh: true,   // card and cover pinned together
+          onRefresh: () => { fill = fillScale(); render(progress.p); },
+          onLeave: markCardSeen,
+        },
+      });
+      fill = fillScale();
+      render(0);
+      cardTrigger = tween.scrollTrigger;
+      if (cardSeen() && !location.hash) window.scrollTo({ top: cardTrigger.end, behavior: "instant" });
+      return () => {
+        root.classList.remove("has-card-motion"); coverTitle.classList.remove("is-scroll-print");
+        stage.removeAttribute("style"); coverTitle.style.removeProperty("--print"); coverTitle.style.removeProperty("--mis-x");
+        cardTrigger = null;
+      };
+    });
+
+    /* ---------- Section titles print as they scroll into view ----------
+       Scrubbed: the print follows the scrollbar, so scrolling back un-prints it.
+       Only CSS variables move (see .is-scroll-print in styles.css). Skipped under reduced motion. */
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.utils.toArray(".spread__title").forEach(title => {   // top to bottom, as ScrollTrigger expects
         title.classList.add("is-scroll-print");
-        gsap.timeline({ scrollTrigger: { trigger: title, start: "top 90%", end: "top 60%", scrub: 0.4 } })
+        gsap.timeline({ scrollTrigger: { trigger: title, start: "top 90%", end: "top 72%", scrub: 0.4 } })
           .fromTo(title, { "--print": "0%" }, { "--print": "100%", ease: "none", duration: 0.55 })
           .fromTo(title, { "--mis-x": "-18px" }, { "--mis-x": "3px", ease: "power2.out", duration: 0.45 }, 0.3);
       });
       return () => document.querySelectorAll(".is-scroll-print").forEach(t => t.classList.remove("is-scroll-print"));
     });
+  }
+  // Returning visitors (with no #link to follow) open straight on the cover. Wait for "load":
+  // a jump made earlier is undone when the browser settles the page's scroll position.
+  if (stage && cardSeen() && !location.hash) {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    const jump = () => requestAnimationFrame(() => window.scrollTo({ top: coverTop(), behavior: "instant" }));
+    if (document.readyState === "complete") jump();
+    else window.addEventListener("load", jump, { once: true });
   }
 
   /* ---------- The cat on the riddle card flicks its tail when the card comes into view ---------- */

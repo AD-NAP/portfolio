@@ -1,161 +1,113 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-18T00:35:47+00:00",
+  "generatedAt": "2026-11-18T03:23:09+00:00",
   "title": "Design System: The build log",
   "extensions": {
     "colorMeta": {
       "day-paper": {
         "role": "neutral",
         "displayName": "White Stock",
-        "canonical": "#F2F3EF",
-        "purpose": "Day print paper (--paper).",
+        "canonical": "#FAFAF8",
+        "purpose": "Day print paper and the card faces (--paper).",
         "tonalRamp": [
           "#0B0B0B",
           "#252524",
-          "#424240",
-          "#61625F",
-          "#82837F",
-          "#A5A5A3",
-          "#C9C9C7",
-          "#EEEEED"
+          "#424241",
+          "#616160",
+          "#828281",
+          "#A5A5A4",
+          "#C9C9C8",
+          "#EEEEEE"
         ]
       },
       "day-paper-deep": {
         "role": "neutral",
-        "displayName": "Deep Stock",
-        "canonical": "#E4E8E1",
-        "purpose": "Day print fields (--paper-deep).",
+        "displayName": "Pale Grey Stock",
+        "canonical": "#ECEDEE",
+        "purpose": "Day print fields: the riddle input, the cake plate (--paper-deep).",
         "tonalRamp": [
-          "#0B0B0A",
-          "#242623",
-          "#41433F",
-          "#5F625D",
-          "#80837E",
-          "#A3A6A1",
-          "#C8CAC6",
-          "#EEEFED"
+          "#0B0B0B",
+          "#252525",
+          "#414242",
+          "#606162",
+          "#818283",
+          "#A4A5A6",
+          "#C9C9C9",
+          "#EEEEEF"
         ]
       },
-      "riso-blue": {
+      "graphite-ink": {
         "role": "primary",
-        "displayName": "Riso Blue",
-        "canonical": "#3255A4",
-        "purpose": "Day print ink: headings, links, frames (--ink, --halftone).",
+        "displayName": "Graphite Ink",
+        "canonical": "#2A2C30",
+        "purpose": "Day print ink: headings, links, frames, solid buttons (--ink).",
         "tonalRamp": [
-          "#040A1A",
-          "#152344",
-          "#284073",
-          "#3D5EA5",
-          "#5D80CA",
-          "#88A5DF",
-          "#B4CAF4",
-          "#E7EFFE"
+          "#0B0B0C",
+          "#242527",
+          "#404245",
+          "#5F6165",
+          "#808287",
+          "#A3A5A8",
+          "#C8C9CC",
+          "#EEEEF0"
         ]
       },
       "day-text": {
         "role": "neutral",
-        "displayName": "Heavy Blue",
-        "canonical": "#1E2F5C",
-        "purpose": "Day print body text, --on-yellow and --focus.",
+        "displayName": "Graphite Body",
+        "canonical": "#33363B",
+        "purpose": "Day print body text (--text).",
         "tonalRamp": [
-          "#070B15",
-          "#1C2439",
-          "#344161",
-          "#4D608C",
-          "#6D81B0",
-          "#94A5CA",
-          "#BDC9E4",
-          "#E7EFFE"
+          "#0A0B0C",
+          "#242527",
+          "#404246",
+          "#5E6166",
+          "#7F8288",
+          "#A3A5A9",
+          "#C7C9CC",
+          "#EDEEF0"
         ]
       },
       "day-muted": {
         "role": "neutral",
-        "displayName": "Faded Ink",
-        "canonical": "#4B5A7E",
+        "displayName": "Faded Graphite",
+        "canonical": "#5D6168",
         "purpose": "Day print meta, captions, folios (--muted).",
         "tonalRamp": [
-          "#080B12",
-          "#1E2534",
-          "#384259",
-          "#536181",
-          "#7382A4",
-          "#99A5C0",
-          "#C0C9DD",
-          "#E9EEFA"
+          "#0A0B0D",
+          "#232528",
+          "#3F4247",
+          "#5E6168",
+          "#7F8289",
+          "#A2A5AA",
+          "#C7C9CD",
+          "#EDEEF1"
         ]
       },
       "day-rule": {
         "role": "neutral",
         "displayName": "Trim Line",
-        "canonical": "#9FAACB",
-        "purpose": "Day print dividers (--rule).",
+        "canonical": "#C4C7CC",
+        "purpose": "Day print dividers and the rules inside the card (--rule).",
         "tonalRamp": [
-          "#090B11",
-          "#212531",
-          "#3B4154",
-          "#58607B",
-          "#78819E",
-          "#9DA4BB",
-          "#C3C9D9",
-          "#EBEEF8"
+          "#0B0B0C",
+          "#242527",
+          "#404245",
+          "#5F6165",
+          "#808287",
+          "#A3A5A8",
+          "#C8C9CB",
+          "#EEEEF0"
         ]
       },
-      "sunflower": {
-        "role": "secondary",
-        "displayName": "Sunflower",
-        "canonical": "#FFB511",
-        "purpose": "The second drum in both prints: fills, charts, misregistration; night focus. Never text on paper.",
-        "tonalRamp": [
-          "#120900",
-          "#332101",
-          "#583C04",
-          "#7F5909",
-          "#AA7810",
-          "#CC9C48",
-          "#E6C38D",
-          "#FEECD0"
-        ]
-      },
-      "night-paper": {
+      "day-halftone": {
         "role": "neutral",
-        "displayName": "Dark Blue Stock",
-        "canonical": "#17203A",
-        "purpose": "Night print paper; --on-yellow at night.",
-        "tonalRamp": [
-          "#090B11",
-          "#202531",
-          "#3A4255",
-          "#56617C",
-          "#76829F",
-          "#9BA5BC",
-          "#C2C9DA",
-          "#EAEEF8"
-        ]
-      },
-      "night-paper-deep": {
-        "role": "neutral",
-        "displayName": "Deep Night Stock",
-        "canonical": "#202B4A",
-        "purpose": "Night print fields.",
-        "tonalRamp": [
-          "#080B12",
-          "#1F2533",
-          "#394158",
-          "#546080",
-          "#7582A3",
-          "#9AA5BF",
-          "#C1C9DC",
-          "#EAEEFA"
-        ]
-      },
-      "night-ink": {
-        "role": "primary",
-        "displayName": "Pale Ink",
-        "canonical": "#E8ECF4",
-        "purpose": "Night print ink (--ink).",
+        "displayName": "Halftone Grey",
+        "canonical": "#6B6F76",
+        "purpose": "Day print halftone dots for baselines and test data (--halftone).",
         "tonalRamp": [
           "#0A0B0D",
-          "#242528",
+          "#232528",
           "#404246",
           "#5E6167",
           "#7F8289",
@@ -164,79 +116,227 @@
           "#EDEEF1"
         ]
       },
+      "day-desk": {
+        "role": "neutral",
+        "displayName": "Desk Grey",
+        "canonical": "#E4E5E7",
+        "purpose": "The surface the card lies on in the day print (--desk).",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252526",
+          "#414243",
+          "#606163",
+          "#818284",
+          "#A4A5A6",
+          "#C9C9CA",
+          "#EEEEEF"
+        ]
+      },
+      "meishi-red": {
+        "role": "secondary",
+        "displayName": "Meishi Red",
+        "canonical": "#C8202B",
+        "purpose": "Day print second drum: misregistration, fills, charts, underlines, focus (--accent, --focus).",
+        "tonalRamp": [
+          "#1D0102",
+          "#49070A",
+          "#7B1318",
+          "#B11F27",
+          "#D94A48",
+          "#EF8079",
+          "#FDB4AD",
+          "#FEE9E7"
+        ]
+      },
+      "day-on-accent": {
+        "role": "neutral",
+        "displayName": "On Red",
+        "canonical": "#FFFFFF",
+        "purpose": "Text on red fills in the day print (--on-accent).",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#A5A5A5",
+          "#C9C9C9",
+          "#EEEEEE"
+        ]
+      },
+      "night-paper": {
+        "role": "neutral",
+        "displayName": "Dark Grey Stock",
+        "canonical": "#232528",
+        "purpose": "Night print paper and card faces.",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#242527",
+          "#414244",
+          "#5F6164",
+          "#808286",
+          "#A3A5A8",
+          "#C8C9CB",
+          "#EEEEF0"
+        ]
+      },
+      "night-paper-deep": {
+        "role": "neutral",
+        "displayName": "Deep Night Stock",
+        "canonical": "#2E3135",
+        "purpose": "Night print fields.",
+        "tonalRamp": [
+          "#0A0B0C",
+          "#242527",
+          "#404245",
+          "#5E6165",
+          "#7F8387",
+          "#A3A5A9",
+          "#C7C9CC",
+          "#EDEEF0"
+        ]
+      },
+      "night-ink": {
+        "role": "primary",
+        "displayName": "Pale Grey Ink",
+        "canonical": "#ECEDEF",
+        "purpose": "Night print ink (--ink).",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252526",
+          "#414243",
+          "#606163",
+          "#818284",
+          "#A4A5A6",
+          "#C9C9CA",
+          "#EEEEEF"
+        ]
+      },
       "night-text": {
         "role": "neutral",
         "displayName": "Pale Body",
-        "canonical": "#DCE2EE",
+        "canonical": "#D9DBDE",
         "purpose": "Night print body text.",
         "tonalRamp": [
-          "#0A0B0D",
-          "#232529",
-          "#3F4249",
-          "#5D616A",
-          "#7E828C",
-          "#A1A5AD",
-          "#C6C9CF",
-          "#EDEEF2"
+          "#0B0B0C",
+          "#242526",
+          "#414244",
+          "#606164",
+          "#818285",
+          "#A4A5A7",
+          "#C8C9CA",
+          "#EEEEEF"
         ]
       },
       "night-muted": {
         "role": "neutral",
         "displayName": "Night Faded Ink",
-        "canonical": "#A9B4CC",
+        "canonical": "#A5A9AF",
         "purpose": "Night print meta and captions.",
         "tonalRamp": [
-          "#090B0F",
-          "#21252E",
-          "#3C4250",
-          "#586174",
-          "#798297",
-          "#9EA5B5",
-          "#C4C9D5",
-          "#EBEEF5"
+          "#0A0B0C",
+          "#242527",
+          "#404246",
+          "#5E6166",
+          "#7F8388",
+          "#A2A5A9",
+          "#C7C9CC",
+          "#EDEEF0"
         ]
       },
       "night-rule": {
         "role": "neutral",
         "displayName": "Night Trim Line",
-        "canonical": "#3F4C70",
+        "canonical": "#4A4E54",
         "purpose": "Night print dividers.",
         "tonalRamp": [
-          "#080B12",
-          "#1F2534",
-          "#384159",
-          "#546082",
-          "#7481A5",
-          "#9AA5C1",
-          "#C1C9DD",
-          "#EAEEFA"
+          "#0A0B0C",
+          "#232528",
+          "#3F4246",
+          "#5E6167",
+          "#7F8388",
+          "#A2A5AA",
+          "#C7C9CD",
+          "#EDEEF0"
         ]
       },
       "night-halftone": {
         "role": "neutral",
         "displayName": "Night Halftone",
-        "canonical": "#8EA6DA",
-        "purpose": "Night print halftone dots for baselines and test data.",
+        "canonical": "#8A8F96",
+        "purpose": "Night print halftone dots.",
         "tonalRamp": [
-          "#070B15",
-          "#1C2538",
-          "#344160",
-          "#4D608B",
-          "#6D82AE",
-          "#94A5C9",
-          "#BDC9E3",
-          "#E7EFFE"
+          "#0A0B0D",
+          "#232528",
+          "#3F4246",
+          "#5D6267",
+          "#7E8389",
+          "#A2A5AA",
+          "#C7C9CD",
+          "#EDEEF1"
+        ]
+      },
+      "night-desk": {
+        "role": "neutral",
+        "displayName": "Night Desk",
+        "canonical": "#18191B",
+        "purpose": "The surface the card lies on in the night print.",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#242526",
+          "#414244",
+          "#606163",
+          "#818285",
+          "#A4A5A7",
+          "#C8C9CA",
+          "#EEEEEF"
+        ]
+      },
+      "night-red": {
+        "role": "secondary",
+        "displayName": "Bright Red",
+        "canonical": "#F05A5F",
+        "purpose": "Night print second drum and focus; brighter so it reads on dark stock.",
+        "tonalRamp": [
+          "#1C0203",
+          "#470B10",
+          "#771A21",
+          "#AB2934",
+          "#D35054",
+          "#EA8381",
+          "#FEB3AF",
+          "#FFE9E7"
+        ]
+      },
+      "night-on-accent": {
+        "role": "neutral",
+        "displayName": "Night On Red",
+        "canonical": "#16171A",
+        "purpose": "Text on red fills in the night print.",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#242526",
+          "#414244",
+          "#606164",
+          "#818286",
+          "#A4A5A8",
+          "#C8C9CB",
+          "#EEEEEF"
         ]
       }
     },
     "typographyMeta": {
       "display": {
-        "displayName": "Cover name",
-        "purpose": "The cover name only; carries the print run and the largest misregistration (7px 5px)."
+        "displayName": "Cover title",
+        "purpose": "\"The build log\" on the cover; prints in at the end of the card flip. Misregistered 6px 4px (4px 3px on phones)."
+      },
+      "card-name": {
+        "displayName": "Card name",
+        "purpose": "The name on the card's front, the page's h1. Misregistered 2px 2px."
       },
       "headline": {
         "displayName": "Spread title",
-        "purpose": "Section titles, always misregistered (.ink)."
+        "purpose": "Section titles, always misregistered (.ink), printed in on scroll."
       },
       "title": {
         "displayName": "Article title",
@@ -248,7 +348,7 @@
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Masthead contents, toggle, folios, chart values, cover lines, contact links (Anybody 600 to 800)."
+        "purpose": "Masthead contents, toggle, folios, chart values, cover lines, contact links, card labels (Anybody 600 to 800)."
       },
       "code": {
         "displayName": "Code",
@@ -260,26 +360,47 @@
         "light": "Day print",
         "dark": "Night print"
       },
+      "accent": {
+        "--accent": "red ink",
+        "--on-accent": "text on red fills"
+      },
       "misregistration": {
         "--mis-x": "3px",
         "--mis-y": "2px",
-        "cover": "7px 5px",
-        "cover-phone": "4px 3px"
+        "cover": "6px 4px",
+        "cover-phone": "4px 3px",
+        "card-name": "2px 2px"
       },
       "blend": {
         "light": "multiply",
         "dark": "screen"
       },
       "grainOpacity": {
-        "light": 0.22,
-        "dark": 0.16
+        "light": 0.18,
+        "dark": 0.14
+      },
+      "cardStage": {
+        "--card-turn": "0 to 180deg",
+        "--card-scale": "1 to fill",
+        "--back-ink": "1 to 0",
+        "--face-alpha": "1 or 0",
+        "--desk-alpha": "1 or 0",
+        "--after-alpha": "1 to 0",
+        "--after-y": "0 to 12px",
+        "--after-vis": "visible or hidden",
+        "--stage-events": "auto or none"
       }
     },
     "shadows": [
       {
         "name": "misregistration",
-        "value": "var(--mis-x) var(--mis-y) 0 var(--yellow)",
-        "purpose": "text-shadow: the sunflower pass on .ink titles; 0 0 0 when in register."
+        "value": "var(--mis-x) var(--mis-y) 0 var(--accent)",
+        "purpose": "text-shadow: the red pass on .ink titles and the card name; 0 0 0 when in register."
+      },
+      {
+        "name": "card-shadow",
+        "value": "0 1px 2px rgb(20 21 24 / .14), 0 22px 44px -14px rgb(20 21 24 / .32)",
+        "purpose": "--card-shadow (day; night uses black at .4 and .7): the name card on the desk. The only cast shadow."
       },
       {
         "name": "ink-outline",
@@ -296,12 +417,22 @@
       {
         "name": "ease-out",
         "value": "cubic-bezier(.16, 1, .3, 1)",
-        "purpose": "Default easing for every response and the print run."
+        "purpose": "Default easing for every response and the hand-over."
       },
       {
-        "name": "print-run",
-        "value": "0.9s ease-out, once on load",
-        "purpose": "Only automatic motion: sunflower pass rolls in by clip-path, then blue ink arrives."
+        "name": "hand-over",
+        "value": "0.8s ease-out, once on load",
+        "purpose": "Only automatic motion: the card rises from 44px down, tipped back 20deg, overshoots slightly (-6px, -5deg) and settles. Skipped for returning visitors (data-card=\"seen\")."
+      },
+      {
+        "name": "card-flip",
+        "value": "ScrollTrigger pin on .opening, end +=100%, scrub 0.5; one progress p rendered into CSS variables",
+        "purpose": "0-0.12 lines under the card step aside; 0-0.42 card turns 180deg (power1.inOut) and swells to 1.12; 0.45-0.75 back grows to fill the screen (power2.in); at 0.75 card and desk vanish over the pinned cover; 0.76-0.96 the cover title prints in."
+      },
+      {
+        "name": "scroll-print",
+        "value": "ScrollTrigger top 90% to top 72%, scrub 0.4",
+        "purpose": "Section titles: --print rolls a clip-path, --mis-x slides the red pass from -18px to 3px. Reverses on the way up."
       },
       {
         "name": "register-snap",
@@ -330,13 +461,13 @@
       },
       {
         "name": "tail-flick",
-        "value": "1.1s ease-in-out, once on first scroll",
-        "purpose": "The perched cat flicks its tail."
+        "value": "1.1s ease-in-out, once",
+        "purpose": "The cat on the riddle card flicks its tail when the card comes into view."
       },
       {
         "name": "reduced-motion",
         "value": "animation and transition none",
-        "purpose": "Under prefers-reduced-motion everything shows its final state."
+        "purpose": "Under prefers-reduced-motion everything shows its final state: no hand-over, no pin, no flip; card and cover are plain sections."
       }
     ],
     "breakpoints": [
@@ -352,6 +483,22 @@
   },
   "components": [
     {
+      "name": "Name Card",
+      "kind": "card",
+      "refersTo": "meishi",
+      "description": "Signature: the 91 x 55 meishi on the desk. Organisation as text beside a red rule, the misregistered name, the title, the email under a rule. Square, paper, the one cast shadow.",
+      "html": "<div class=\"ds-desk\"><div class=\"ds-meishi\"><p class=\"ds-meishi__org\"><span aria-hidden=\"true\"></span>Azbil ASPO, Singapore</p><p class=\"ds-meishi__name\">Shafik Adam</p><p class=\"ds-meishi__title\">Systems and Application Engineer, Software Development</p><p class=\"ds-meishi__email\"><a href=\"#\">shafik.adam98@gmail.com</a></p></div></div>",
+      "css": ".ds-desk{padding:32px 16px;background:var(--desk)}.ds-meishi{display:flex;flex-direction:column;width:min(420px,100%);aspect-ratio:91/55;margin:0 auto;padding:5% 6%;background:var(--paper);box-shadow:var(--card-shadow);border-radius:0;font-family:\"Literata\",Georgia,serif;color:var(--text)}.ds-meishi__org{display:flex;align-items:center;gap:10px;margin:0;font:650 .85rem \"Anybody\",\"Arial Narrow\",sans-serif;color:var(--ink)}.ds-meishi__org span{width:4px;align-self:stretch;min-height:1.1em;background:var(--accent)}.ds-meishi__name{margin:auto 0 0;font:850 2rem/1 \"Anybody\",\"Arial Narrow\",sans-serif;font-variation-settings:\"wdth\" 115;color:var(--ink);text-shadow:2px 2px 0 var(--accent)}.ds-meishi__title{margin:6px 0 0;font-size:.85rem;line-height:1.35}.ds-meishi__email{margin:auto 0 0;padding-top:10px;border-top:1px solid var(--rule);font-size:.85rem}.ds-meishi__email a{color:var(--ink);text-underline-offset:.18em}.ds-meishi__email a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"
+    },
+    {
+      "name": "Open the build log",
+      "kind": "button",
+      "refersTo": "card-open",
+      "description": "The call to action under the card: a solid ink block that fills red on hover.",
+      "html": "<a class=\"ds-card-open\" href=\"#\">Open the build log</a>",
+      "css": ".ds-card-open{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;font:750 1.05rem \"Anybody\",\"Arial Narrow\",sans-serif;color:var(--paper);background:var(--ink);text-decoration:none;border-radius:0;transition:transform .12s cubic-bezier(.16,1,.3,1),background-color .2s}.ds-card-open:hover{background:var(--accent);color:var(--on-accent)}.ds-card-open:active{transform:scale(.97)}.ds-card-open:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"
+    },
+    {
       "name": "Print Toggle",
       "kind": "button",
       "refersTo": "print-toggle",
@@ -363,7 +510,7 @@
       "name": "Solid Button",
       "kind": "button",
       "refersTo": "button-solid",
-      "description": "The riddle's submit button: a square block of ink.",
+      "description": "The riddle's Check button: a square block of ink.",
       "html": "<button class=\"ds-btn-solid\" type=\"button\">Check</button>",
       "css": ".ds-btn-solid{min-height:44px;padding:0 20px;font:750 1rem \"Anybody\",\"Arial Narrow\",sans-serif;color:var(--paper);background:var(--ink);border:2px solid var(--ink);border-radius:0;cursor:pointer;transition:transform .12s cubic-bezier(.16,1,.3,1)}.ds-btn-solid:active{transform:scale(.97)}.ds-btn-solid:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"
     },
@@ -371,7 +518,7 @@
       "name": "Text Input",
       "kind": "input",
       "refersTo": "input",
-      "description": "Square field on deep stock with a 2px ink frame; 16px text so phones do not zoom.",
+      "description": "Square field on pale grey stock with a 2px ink frame; 16px text so phones do not zoom.",
       "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"An animal\" aria-label=\"Your answer\">",
       "css": ".ds-input{min-height:44px;padding:8px 12px;max-width:24ch;border:2px solid var(--ink);border-radius:0;background:var(--paper-deep);color:var(--text);font:1rem \"Literata\",Georgia,serif;caret-color:var(--ink)}.ds-input:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"
     },
@@ -379,70 +526,62 @@
       "name": "Masthead Contents",
       "kind": "nav",
       "refersTo": "masthead",
-      "description": "The zine title, issue line and contents links; current section gets a thick sunflower underline.",
-      "html": "<nav class=\"ds-mast\"><a class=\"ds-mast__title\" href=\"#\">Shafik Adam<span>The build log, issue 1</span></a><ol><li><a href=\"#\" aria-current=\"true\">Now building</a></li><li><a href=\"#\">Day job</a></li><li><a href=\"#\">Contact</a></li></ol></nav>",
-      "css": ".ds-mast{display:flex;align-items:center;gap:24px;padding:10px 16px;background:var(--paper);border-bottom:2px solid var(--ink)}.ds-mast__title{display:flex;align-items:center;gap:12px;min-height:44px;font:800 1.1rem \"Anybody\",\"Arial Narrow\",sans-serif;font-variation-settings:\"wdth\" 120;color:var(--ink);text-decoration:none}.ds-mast__title span{font:italic 400 .9rem \"Literata\",Georgia,serif;color:var(--muted)}.ds-mast ol{display:flex;gap:2px;margin:0 0 0 auto;padding:0;list-style:none}.ds-mast ol a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;font:600 .95rem \"Anybody\",\"Arial Narrow\",sans-serif;color:var(--ink);text-decoration:none}.ds-mast ol a:hover,.ds-mast ol a[aria-current=\"true\"]{text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:.3em;text-underline-offset:.2em}.ds-mast a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"
+      "description": "The zine title, issue line and contents links; the current section gets a thick red underline.",
+      "html": "<nav class=\"ds-mast\"><a class=\"ds-mast__title\" href=\"#\">Shafik Adam<span>The build log, issue 2, November 2026</span></a><ol><li><a href=\"#\" aria-current=\"true\">Experience</a></li><li><a href=\"#\">Projects</a></li><li><a href=\"#\">Contact</a></li></ol></nav>",
+      "css": ".ds-mast{display:flex;align-items:center;gap:24px;padding:10px 16px;background:var(--paper);border-bottom:2px solid var(--ink)}.ds-mast__title{display:flex;align-items:center;gap:12px;min-height:44px;font:800 1.1rem \"Anybody\",\"Arial Narrow\",sans-serif;font-variation-settings:\"wdth\" 120;color:var(--ink);text-decoration:none}.ds-mast__title span{font:italic 400 .9rem \"Literata\",Georgia,serif;color:var(--muted)}.ds-mast ol{display:flex;gap:2px;margin:0 0 0 auto;padding:0;list-style:none}.ds-mast ol a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;font:600 .95rem \"Anybody\",\"Arial Narrow\",sans-serif;color:var(--ink);text-decoration:none}.ds-mast ol a:hover,.ds-mast ol a[aria-current=\"true\"]{text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:.3em;text-underline-offset:.2em}.ds-mast a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"
     },
     {
       "name": "Highlighter Link",
       "kind": "custom",
       "refersTo": "links",
-      "description": "Contact links: Anybody words under a thick sunflower underline; hover fills them with sunflower.",
+      "description": "Contact links: Anybody words under a thick red underline; hover fills them red.",
       "html": "<a class=\"ds-hl-link\" href=\"#\">GitHub</a>",
-      "css": ".ds-hl-link{display:inline-flex;align-items:center;min-height:44px;font:700 1.1rem \"Anybody\",\"Arial Narrow\",sans-serif;font-variation-settings:\"wdth\" 110;color:var(--ink);text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:.32em;text-underline-offset:.12em;text-decoration-skip-ink:none}.ds-hl-link:hover{background:var(--yellow);color:var(--on-yellow);text-decoration:none}.ds-hl-link:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"
+      "css": ".ds-hl-link{display:inline-flex;align-items:center;min-height:44px;font:700 1.1rem \"Anybody\",\"Arial Narrow\",sans-serif;font-variation-settings:\"wdth\" 110;color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:.32em;text-underline-offset:.12em;text-decoration-skip-ink:none}.ds-hl-link:hover{background:var(--accent);color:var(--on-accent);text-decoration:none}.ds-hl-link:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"
     },
     {
       "name": "Cover Lines",
       "kind": "nav",
       "refersTo": "coverlines",
-      "description": "\"In this issue\": links to articles with page numbers; the lead result sits on sunflower.",
-      "html": "<nav class=\"ds-coverlines\"><h2>In this issue</h2><ol><li class=\"ds-lead\"><a href=\"#\"><span>Config prep: from about 3 days to under 5 minutes</span><span class=\"ds-pg\">p. 4</span></a></li><li><a href=\"#\"><span>Six notes from the dev log</span><span class=\"ds-pg\">p. 6</span></a></li></ol></nav>",
-      "css": ".ds-coverlines{border-top:2px solid var(--ink);padding-top:14px}.ds-coverlines h2{margin:0 0 4px;font:800 1.05rem \"Anybody\",\"Arial Narrow\",sans-serif;font-variation-settings:\"wdth\" 120;color:var(--ink)}.ds-coverlines ol{margin:0;padding:0;list-style:none}.ds-coverlines li{border-bottom:1px solid var(--rule)}.ds-coverlines a{display:flex;align-items:baseline;justify-content:space-between;gap:16px;min-height:44px;padding:10px 0;font:650 1.08rem/1.3 \"Anybody\",\"Arial Narrow\",sans-serif;color:var(--ink);text-decoration:none}.ds-coverlines a:hover span:first-child{text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:.28em;text-underline-offset:.12em;text-decoration-skip-ink:none}.ds-coverlines a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.ds-pg{flex:none;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}.ds-lead a{font-size:1.3rem;font-weight:800}.ds-lead a span:first-child{background:var(--yellow);color:var(--on-yellow);padding:.25em .5em;line-height:1.55;box-decoration-break:clone;-webkit-box-decoration-break:clone}"
+      "description": "\"In this issue\": links to articles with page numbers; the lead production result sits on red.",
+      "html": "<nav class=\"ds-coverlines\"><h2>In this issue</h2><ol><li class=\"ds-lead\"><a href=\"#\"><span>Config prep at Azbil: from about 3 days to under 5 minutes</span><span class=\"ds-pg\">p. 2</span></a></li><li><a href=\"#\"><span>Six lessons from the dev log</span><span class=\"ds-pg\">p. 6</span></a></li></ol></nav>",
+      "css": ".ds-coverlines{border-top:2px solid var(--ink);padding-top:14px}.ds-coverlines h2{margin:0 0 4px;font:800 1.05rem \"Anybody\",\"Arial Narrow\",sans-serif;font-variation-settings:\"wdth\" 120;color:var(--ink)}.ds-coverlines ol{margin:0;padding:0;list-style:none}.ds-coverlines li{border-bottom:1px solid var(--rule)}.ds-coverlines a{display:flex;align-items:baseline;justify-content:space-between;gap:16px;min-height:44px;padding:10px 0;font:650 1.08rem/1.3 \"Anybody\",\"Arial Narrow\",sans-serif;color:var(--ink);text-decoration:none}.ds-coverlines a:hover span:first-child{text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:.28em;text-underline-offset:.12em;text-decoration-skip-ink:none}.ds-coverlines a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.ds-pg{flex:none;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}.ds-lead a{font-size:1.3rem;font-weight:800}.ds-lead a span:first-child{background:var(--accent);color:var(--on-accent);padding:.25em .5em;line-height:1.55;box-decoration-break:clone;-webkit-box-decoration-break:clone}"
     },
     {
       "name": "Misregistered Title",
       "kind": "custom",
       "refersTo": "ink-title",
-      "description": "Signature: one copy of the title with the sunflower pass as a text-shadow; snaps into register on hover or focus within.",
-      "html": "<h2 class=\"ds-ink-title\" tabindex=\"0\">Now building</h2>",
-      "css": ".ds-ink-title{margin:0;font:850 clamp(2.6rem,6vw,4.5rem)/.95 \"Anybody\",\"Arial Narrow\",sans-serif;font-variation-settings:\"wdth\" 125;color:var(--ink);text-shadow:var(--mis-x,3px) var(--mis-y,2px) 0 var(--yellow);transition:text-shadow .45s cubic-bezier(.16,1,.3,1)}.ds-ink-title:hover,.ds-ink-title:focus-visible{text-shadow:0 0 0 var(--yellow)}.ds-ink-title:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"
-    },
-    {
-      "name": "Headline Panel",
-      "kind": "card",
-      "refersTo": "sunflower-panel",
-      "description": "The one result an article leads with, on a sunflower fill.",
-      "html": "<p class=\"ds-headline\">Cut config preparation from about 3 days to under 5 minutes.</p>",
-      "css": ".ds-headline{margin:0;padding:14px 18px;background:var(--yellow);color:var(--on-yellow);font:650 1.15rem/1.4 \"Anybody\",\"Arial Narrow\",sans-serif;max-width:52rem}"
+      "description": "Signature: one copy of the title with the red pass as a text-shadow; snaps into register on hover or focus within.",
+      "html": "<h2 class=\"ds-ink-title\" tabindex=\"0\">Experience</h2>",
+      "css": ".ds-ink-title{margin:0;font:850 clamp(2.6rem,6vw,4.5rem)/.95 \"Anybody\",\"Arial Narrow\",sans-serif;font-variation-settings:\"wdth\" 125;color:var(--ink);text-shadow:var(--mis-x,3px) var(--mis-y,2px) 0 var(--accent);transition:text-shadow .45s cubic-bezier(.16,1,.3,1)}.ds-ink-title:hover,.ds-ink-title:focus-visible{text-shadow:0 0 0 var(--accent)}.ds-ink-title:focus-visible{outline:3px solid var(--focus);outline-offset:3px}"
     },
     {
       "name": "Result Chart",
       "kind": "custom",
       "refersTo": "chart",
-      "description": "Two inks to scale: result as a sunflower bar with an ink outline, baseline as blue halftone.",
+      "description": "Two inks to scale: the result as a red bar with an ink outline, the baseline as grey halftone.",
       "html": "<div class=\"ds-chart\"><div class=\"ds-row\"><span>Baseline</span><span class=\"ds-track\"><span class=\"ds-bar ds-bar--before\" style=\"width:100%\"></span></span><span class=\"ds-val\">45.7 kWh</span></div><div class=\"ds-row\"><span><b>Forecast</b></span><span class=\"ds-track\"><span class=\"ds-bar\" style=\"width:75.5%\"></span></span><span class=\"ds-val\">34.5 kWh</span></div></div>",
-      "css": ".ds-chart{display:grid;gap:12px;font-family:\"Literata\",Georgia,serif;color:var(--text)}.ds-row{display:grid;grid-template-columns:7rem 1fr 6rem;align-items:center;gap:14px;font-size:.95rem}.ds-track{position:relative;height:20px}.ds-bar{position:absolute;inset:0 auto 0 0;background:var(--yellow);box-shadow:inset 0 0 0 2px var(--ink)}.ds-bar--before{background:radial-gradient(var(--halftone) 34%,transparent 37%) 0 0/5px 5px;box-shadow:inset 0 0 0 1px var(--halftone)}.ds-val{font:650 1rem \"Anybody\",\"Arial Narrow\",sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)}"
+      "css": ".ds-chart{display:grid;gap:12px;font-family:\"Literata\",Georgia,serif;color:var(--text)}.ds-row{display:grid;grid-template-columns:7rem 1fr 6rem;align-items:center;gap:14px;font-size:.95rem}.ds-track{position:relative;height:20px}.ds-bar{position:absolute;inset:0 auto 0 0;background:var(--accent);box-shadow:inset 0 0 0 2px var(--ink)}.ds-bar--before{background:radial-gradient(var(--halftone) 34%,transparent 37%) 0 0/5px 5px;box-shadow:inset 0 0 0 1px var(--halftone)}.ds-val{font:650 1rem \"Anybody\",\"Arial Narrow\",sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)}"
     }
   ],
   "narrative": {
     "northStar": "The Build Log",
-    "overview": "**Creative North Star: \"The Build Log\"**\n\nThe page is a self-published zine, printed on a riso in two inks. Each release is an issue (v1.0.0 is Issue 1; a patch is a reprint). The masthead carries the title, the contents and which print you hold. The cover sells the issue with cover lines and page numbers. Spreads follow, each with two pages split by a hairline gutter and numbered with folios. A back page holds contact and the riddle, and a hidden centrefold opens when the riddle is solved.\n\nTwo inks do all the work: a riso blue (pale ink in the night print) and a sunflower yellow. The sunflower pass never lines up perfectly with the blue, so headings carry a few pixels of misregistration. The stock is a cool white by day and a dark blue by night, with one static layer of grain so it reads as printed rather than rendered. Nothing is distressed. Type is wide and heavy for headings and a bookish serif for reading.\n\nProvenance: this world replaced the seeded isometric-building world at v1.0.0 (2026-11-18; see `docs/decisions/0002-riso-zine-redesign.md`). It came from direction roll `seed:e4c83ff7a6b64abf`, which ran degraded (the style catalog was unreachable from the cloud session, so there were no challengers). It is a code-led build with no comps, so this file is the record of what shipped. Because the world replaced the seeded one, no `world:` provenance is carried.",
+    "overview": "The page is a self-published zine, printed on a riso in two inks, and it is handed to you as a name card first. Each release is an issue (v1.0.0 was Issue 1, v1.1.0 is Issue 2; a patch is a reprint). The opening is a meishi (91 × 55) lying on a desk: it rises into your hand on load, and as you scroll it turns over, its back grows across the screen and becomes the zine's cover. From there the zine reads as before: a masthead with the title, the contents and which print you hold; a cover that sells the issue with cover lines and page numbers; spreads of two pages split by a hairline gutter and numbered with folios; a back page with contact and the riddle; and a hidden centrefold that opens when the riddle is solved.\n\nTwo inks do all the work: a dark graphite grey (pale grey in the night print) and a red. The red pass never lines up perfectly with the grey, so headings carry a few pixels of misregistration. A lighter grey is the third tone, for fields, rules, halftones and the desk. The stock is near white by day and dark grey by night, with one static layer of grain so it reads as printed rather than rendered. Nothing is distressed. Type is wide and heavy for headings and a bookish serif for reading.\n\nProvenance: the zine world replaced the seeded isometric-building world at v1.0.0 (2026-11-18; see `docs/decisions/0002-riso-zine-redesign.md`). It came from direction roll `seed:e4c83ff7a6b64abf`, which ran degraded (the style catalog was unreachable from the cloud session, so there were no challengers). Issue 2 (v1.1.0) extended that world rather than replacing it: it added the name card opening and changed the inks from riso blue and sunflower to graphite and red (see `docs/decisions/0003-name-card-and-new-inks.md`). It is a code-led build with no comps, so this file is the record of what shipped. Because the world replaced the seeded one, no `world:` provenance is carried.",
     "keyCharacteristics": [
-      "Two inks only: blue (or pale) and sunflower, on paper stock. No third hue.",
-      "Misregistration on section titles, done as a `text-shadow`, one copy of the text.",
-      "Square everything: no radius anywhere.",
-      "Print furniture as structure: masthead, cover lines with page numbers, folios, a dashed trim line between spreads, staples on the centrefold.",
-      "One automatic motion: the print run on load."
+      "Two inks only: graphite (pale grey at night) and red, plus a lighter grey and the paper.",
+      "Misregistration on titles and the card name, done as a `text-shadow`, one copy of the text.",
+      "Square everything: no radius anywhere, the name card included.",
+      "Print furniture as structure: a name card, masthead, cover lines with page numbers, folios, a dashed trim line between spreads, staples on the centrefold.",
+      "One automatic motion: the card handed over on load. The card flip and the section titles follow the scroll."
     ],
     "rules": [
       {
         "name": "The Two Drums Rule",
-        "body": "Every colour is one of the two inks, a tint of one (halftone, rule, muted), or the paper. A third hue breaks the print.",
+        "body": "Every colour is one of the two inks, a tint of the grey (halftone, rule, muted, desk), or the paper. A third hue breaks the print.",
         "section": "colors"
       },
       {
-        "name": "The No Sunflower Text Rule",
-        "body": "Sunflower is a fill, never text on paper. Text on a sunflower fill uses `--on-yellow`.",
+        "name": "The Red Text Rule",
+        "body": "Red is text only where it reaches 4.5:1 on its ground (the card's contact labels on paper). Everywhere else red is a fill, an underline or a shadow, and any text on a red fill uses `--on-accent`.",
         "section": "colors"
       },
       {
@@ -452,7 +591,7 @@
       },
       {
         "name": "The Wide Not Tall Rule",
-        "body": "Hierarchy comes from Anybody's width and weight axes first. Headings are set wide (105 to 150), never condensed.",
+        "body": "Hierarchy comes from Anybody's width and weight axes first. Headings are set wide (105 to 140), never condensed.",
         "section": "typography"
       },
       {
@@ -462,7 +601,12 @@
       },
       {
         "name": "The Overprint Rule",
-        "body": "Depth is ink on ink. Shadows only exist as the second ink pass, an inset outline, or a paper fold.",
+        "body": "Depth on the page is ink on ink. Shadows there only exist as the second ink pass, an inset outline, or a paper fold.",
+        "section": "elevation"
+      },
+      {
+        "name": "The One Object Rule",
+        "body": "Only the name card lifts off its surface. Spreads, panels, the riddle card and the masthead stay flat on the sheet.",
         "section": "elevation"
       },
       {
@@ -473,22 +617,24 @@
     ],
     "dos": [
       "Do take every colour from the tokens and check both prints.",
-      "Do keep to two inks: blue (pale at night) and sunflower, plus their tints and the paper.",
-      "Do put sunflower behind text, under text or beside it, and set any text on it in `--on-yellow`.",
+      "Do keep to two inks: graphite (pale grey at night) and red, plus the lighter grey tints and the paper.",
+      "Do put red behind text, under text or beside it, and set any text on a red fill in `--on-accent`.",
       "Do make misregistration with `text-shadow` on one copy of the text, offset by `--mis-x` and `--mis-y`.",
-      "Do use print furniture for structure: cover lines with page numbers, folios, trim lines, page gutters.",
-      "Do draw numbers to scale, with the production result in sunflower and baselines or test data in halftone.",
+      "Do use print furniture for structure: the name card, cover lines with page numbers, folios, trim lines, page gutters.",
+      "Do draw numbers to scale, with the production result in red and baselines or test data in halftone.",
       "Do keep every corner square and every touch target at 44px or more.",
-      "Do let motion answer the user, apart from the print run on load, and show final states under `prefers-reduced-motion`."
+      "Do drive scroll motion with one value rendered into CSS variables, so hover, focus, `:target` and reduced motion keep working and the page looks finished without GSAP.",
+      "Do let motion answer the user, apart from the hand-over on load, and show final states under `prefers-reduced-motion`."
     ],
     "donts": [
-      "Don't set sunflower text on paper.",
+      "Don't set red text on paper below 4.5:1.",
       "Don't duplicate text to fake a second ink pass.",
       "Don't add a third hue, a gradient sky, or a glow.",
       "Don't distress the paper: one static grain layer, no torn edges or fake grunge.",
-      "Don't round corners or add drop shadows to cards.",
+      "Don't round corners, and don't give any container but the name card a drop shadow.",
+      "Don't show the Azbil logo; the organisation is text.",
       "Don't use monospace for labels, dates or values; it is for code only.",
-      "Don't add automatic motion beyond the print run.",
+      "Don't add automatic motion beyond the hand-over.",
       "Don't let the test-data strip outweigh production results."
     ]
   }
