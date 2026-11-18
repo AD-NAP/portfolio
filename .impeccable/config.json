@@ -3,34 +3,6 @@
   "detector": {
     "ignoreRules": [],
     "ignoreFiles": [],
-    "ignoreValues": [
-      {
-        "rule": "cramped-padding",
-        "value": "*",
-        "files": [
-          "index.html"
-        ],
-        "createdAt": "2026-11-17T09:09:16.283Z",
-        "reason": "Source-only scan without CSS; floors have 48-80px padding and the rendered scan passes"
-      },
-      {
-        "rule": "dark-glow",
-        "value": "*",
-        "files": [
-          "index.html"
-        ],
-        "createdAt": "2026-11-17T09:09:20.319Z",
-        "reason": "The only glows are light sources (sun halo, moon glow, result bar) and the night text halo that hides stars behind letters: DESIGN.md light-source glow rule"
-      },
-      {
-        "rule": "low-contrast",
-        "value": "*",
-        "files": [
-          "index.html"
-        ],
-        "createdAt": "2026-11-17T09:09:20.326Z",
-        "reason": "Source-only scan reads the contact email's 2px amber underline as its background; the rendered scan and axe pass"
-      }
-    ]
+    "ignoreValues": []
   }
 }

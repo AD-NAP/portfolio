@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shafik Adam, Software Engineer</title>
-  <meta name="description" content="Shafik Adam: software engineer in Singapore building cloud applications, building-management platforms and LLM applications with Python, TypeScript and AWS.">
+  <meta name="description" content="Shafik Adam: software engineer in Singapore. Cloud backends and AI tools in Python, TypeScript and AWS, with the results measured.">
   <script>
-    // Set the theme before first paint so the page never flashes the wrong sky.
+    // Pick the print before first paint so the page never flashes the wrong paper.
     (function () {
       var t = null;
       try { t = localStorage.getItem("theme"); } catch (e) {}
@@ -17,346 +17,217 @@
     })();
   </script>
   <meta name="color-scheme" content="dark light">
-  <meta name="theme-color" content=""><!-- main.js fills it from --bg-deep for the current theme -->
+  <meta name="theme-color" content=""><!-- main.js fills it from --paper for the current print -->
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Shafik Adam, Software Engineer">
-  <meta property="og:description" content="Software engineer in Singapore building cloud applications, building-management platforms and LLM applications with Python, TypeScript and AWS.">
+  <meta property="og:description" content="The build log, issue 1: cloud backends and AI tools, with the results measured.">
   <meta property="og:url" content="https://ad-nap.github.io/portfolio/">
   <meta property="og:image" content="https://ad-nap.github.io/portfolio/assets/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Shafik Adam, software engineer, beside an isometric building with its lights on at night">
+  <meta property="og:image:alt" content="The cover of The build log, issue 1: Shafik Adam, printed in blue and yellow ink">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,300..900&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/main.js" defer></script>
 </head>
 <body>
-  <a class="skip" href="#about">Skip to content</a>
+  <a class="skip" href="#main">Skip to content</a>
 
-  <!-- Page-wide sky: day gradient and night gradient cross-fade; stars are added by main.js -->
-  <div class="sky" aria-hidden="true">
-    <div class="sky__stars"></div>
-    <span class="shooting-star"></span>
-  </div>
-
-  <!-- File explorer: desktop sidebar, phone top bar -->
-  <aside class="explorer" aria-label="Site sections">
-    <div class="explorer__head">
-      <svg class="mini" viewBox="0 0 40 84" aria-hidden="true">
-        <rect class="mini__floor" data-floor="about" x="9" y="4" width="22" height="9"/>
-        <rect class="mini__floor" data-floor="skills" x="6" y="15" width="28" height="9"/>
-        <rect class="mini__floor" data-floor="experience" x="6" y="26" width="28" height="9"/>
-        <rect class="mini__floor" data-floor="projects" x="6" y="37" width="28" height="9"/>
-        <rect class="mini__floor" data-floor="education" x="6" y="48" width="28" height="9"/>
-        <rect class="mini__floor" data-floor="fun" x="6" y="59" width="28" height="9"/>
-        <rect class="mini__floor" data-floor="contact" x="4" y="70" width="32" height="11"/>
-      </svg>
-      <div>
-        <p class="explorer__title">shafik</p>
-        <p class="explorer__sub">building/</p>
-      </div>
-      <button class="theme-toggle" type="button" aria-label="Night mode" aria-pressed="true">
-        <svg class="theme-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
-          <g class="theme-toggle__sun">
-            <circle cx="12" cy="12" r="4.5"/>
-            <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>
-          </g>
-          <path class="theme-toggle__moon" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/>
-        </svg>
-      </button>
-      <button class="explorer__toggle" type="button" aria-expanded="false" aria-controls="files">Sections</button>
-    </div>
-    <nav id="files" class="files">
-      <ul>
-        <li><a href="#top" data-target="top"><span class="ext ext--ttl"></span>shafik.ttl</a></li>
-        <li><a href="#about" data-target="about"><span class="ext ext--ttl"></span>about.ttl</a></li>
-        <li><a href="#skills" data-target="skills"><span class="ext ext--ttl"></span>skills.ttl</a></li>
-        <li class="dir"><a href="#experience" data-target="experience"><span class="ext ext--dir"></span>experience/</a>
-          <ul>
-            <li><a href="#azbil-engineer" data-target="experience"><span class="ext ext--md"></span>azbil-engineer.md</a></li>
-            <li><a href="#azbil-intern" data-target="experience"><span class="ext ext--md"></span>azbil-intern.md</a></li>
-            <li><a href="#ground-labs" data-target="experience"><span class="ext ext--md"></span>ground-labs.md</a></li>
-          </ul>
-        </li>
-        <li class="dir"><a href="#projects" data-target="projects"><span class="ext ext--dir"></span>projects/</a>
-          <ul>
-            <li><a href="#cumulus-coach" data-target="projects"><span class="ext ext--md"></span>cumulus-coach.md</a></li>
-            <li><a href="#edge-energy-optimizer" data-target="projects"><span class="ext ext--md"></span>edge-energy-optimizer.md</a></li>
-          </ul>
-        </li>
-        <li><a href="#education" data-target="education"><span class="ext ext--md"></span>education.md</a></li>
-        <li><a href="#fun" data-target="fun"><span class="ext ext--md"></span>fun-facts.md</a></li>
-        <li><a href="#contact" data-target="contact"><span class="ext ext--ttl"></span>contact.ttl</a></li>
-        <li class="b1-entry" hidden><a href="#b1" data-target="b1"><span class="ext ext--md"></span>b1/cake.md</a></li>
-      </ul>
+  <!-- Masthead: the zine's title, its contents, and which print you are reading -->
+  <header class="mast">
+    <a class="mast__title" href="#top">The build log<span class="mast__issue">Issue 1, November 2026</span></a>
+    <nav class="mast__nav" aria-label="Contents">
+      <ol>
+        <li><a href="#projects">Now building</a></li>
+        <li><a href="#experience">Day job</a></li>
+        <li class="centrefold-entry" hidden><a href="#centrefold">Centrefold</a></li>
+        <li><a href="#notes">Notes</a></li>
+        <li><a href="#skills">Toolbox</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ol>
     </nav>
-  </aside>
+    <button class="print-toggle" type="button" aria-pressed="false">
+      <svg class="print-toggle__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 3.5a8.5 8.5 0 1 0 5 15.2A9 9 0 0 1 15.5 3.5z"/></svg>
+      <span>Night print</span>
+    </button>
+  </header>
 
-  <main>
-    <!-- Hero -->
-    <header id="top" class="hero" data-section="top">
-      <div class="celestial" aria-hidden="true">
-        <div class="sun"></div>
-        <div class="moon"></div>
-        <svg class="cloud cloud--a" viewBox="0 0 120 44"><path d="M18 40h86a14 14 0 0 0 0-28 22 22 0 0 0-41-6 16 16 0 0 0-27 10A12 12 0 0 0 18 40z"/></svg>
-        <svg class="cloud cloud--b" viewBox="0 0 120 44"><path d="M18 40h86a14 14 0 0 0 0-28 22 22 0 0 0-41-6 16 16 0 0 0-27 10A12 12 0 0 0 18 40z"/></svg>
-      </div>
-
-      <div class="hero__text">
-        <h1 class="name">Shafik Adam</h1>
-        <p class="hero__role">Software engineer building cloud applications, building&#8209;management platforms and LLM applications with Python, TypeScript and AWS.</p>
-        <p class="hero__proof">Cut config preparation from <strong>~3 days to under 5 minutes</strong>. Helped build a Cloud BMS MVP <strong>approved by Azbil Japan leadership</strong>.</p>
-        <p class="hero__status"><span class="dot" aria-hidden="true"></span><span>Systems and Application Engineer at Azbil<span class="hero__where">, Singapore</span></span></p>
-        <ul class="hero__links" aria-label="Contact">
-          <li><a href="mailto:shafik.adam98@gmail.com">Email</a></li>
-          <li><a href="https://github.com/ad-nap">GitHub</a></li>
-          <li><a href="https://www.linkedin.com/in/shafikadam/">LinkedIn</a></li>
-          <li><a href="assets/Shafik-Adam-Resume.pdf" type="application/pdf">Resume (PDF)</a></li>
-        </ul>
-      </div>
-
-      <figure class="tower" aria-label="A building whose floors are the sections of this site">
-        <svg viewBox="0 28 300 396">
-          <defs aria-hidden="true">
-            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-              <path d="M10 0H0V10" fill="none" class="tower__gridline"/>
-            </pattern>
-          </defs>
-          <rect class="tower__grid" x="0" y="60" width="300" height="364" fill="url(#grid)" aria-hidden="true"/>
-          <!-- Storeys, mast and street level are drawn by main.js -->
-          <g class="tower__floors"></g>
+  <main id="main">
+    <!-- Cover -->
+    <header id="top" class="cover">
+      <div class="cover__name-wrap">
+        <h1 class="ink cover__name">
+          Shafik<br>Adam
+        </h1>
+        <svg class="perch-cat" viewBox="0 0 60 60" aria-hidden="true">
+          <path class="perch-cat__tail" d="M37 57c11 0 16-7 13-17-.8-2.6-4.2-2-3.5.8 1.9 7.2-1.6 11.7-9.5 11.7z"/>
+          <path d="M11.5 17.5 12 5l6.5 8.5h1L26 5l.5 12.5c1.7 2.3 2.5 5 2.3 7.8 6.6 3.4 11.2 13 10.7 32.7H12c-2.4-12.7-1.2-22.6 1-27.2-1.8-3.6-2.4-9.3-1.5-13.3z"/>
         </svg>
-        <figcaption class="tower__caption">Select a floor to visit that section.</figcaption>
-      </figure>
+      </div>
+      <div class="cover__body">
+        <div class="cover__intro">
+          <p class="cover__line">Software engineer in Singapore. I build cloud backends and AI tools in Python, TypeScript and AWS, and I keep a dev log of what each project teaches me.</p>
+          <ul class="links" aria-label="Contact">
+            <li><a href="mailto:shafik.adam98@gmail.com">Email</a></li>
+            <li><a href="https://github.com/ad-nap">GitHub</a></li>
+            <li><a href="https://www.linkedin.com/in/shafikadam/">LinkedIn</a></li>
+            <li><a href="assets/Shafik-Adam-Resume.pdf" type="application/pdf">Resume (PDF)</a></li>
+          </ul>
+        </div>
+        <nav class="coverlines" aria-labelledby="coverlines-title">
+          <h2 id="coverlines-title" class="coverlines__title">In this issue</h2>
+          <ol>
+            <li class="coverlines__lead"><a href="#azbil-intern"><span>Config prep at Azbil: from about 3 days to under 5 minutes</span><span class="coverlines__page">p. 5</span></a></li>
+            <li><a href="#cumulus-coach"><span>An AWS study coach that says so instead of guessing</span><span class="coverlines__page">p. 2</span></a></li>
+            <li><a href="#edge-energy-optimizer"><span>A load forecast 24.5% better than the baseline</span><span class="coverlines__page">p. 3</span></a></li>
+            <li><a href="#notes"><span>Nine notes from the dev log</span><span class="coverlines__page">p. 6</span></a></li>
+          </ol>
+        </nav>
+      </div>
     </header>
 
-    <!-- About / roof -->
-    <section id="about" class="floor" data-section="about">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">R</span>About</h2>
-      <div class="about">
-        <p class="lede">Software engineer with experience building internal tooling and cloud applications across Python, TypeScript, and AWS. NUS Computer Science graduate currently developing building-management platforms and semantic-metadata tooling at Azbil.</p>
-        <details class="about__ttl" open>
-        <summary>View as shafik.ttl</summary>
-        <pre class="code" aria-label="The same summary written as Turtle, the format Brick Schema building metadata is stored in"><code><span class="c"># shafik.ttl</span>
-<span class="k">@prefix</span> : <span class="s">&lt;#&gt;</span> .
+    <!-- pp. 2-3: Now building -->
+    <section id="projects" class="spread" aria-labelledby="projects-title">
+      <h2 id="projects-title" class="ink spread__title">Now building</h2>
+      <div class="spread__pages">
+        <article id="cumulus-coach" class="page">
+          <h3 class="page__title">cumulus-coach</h3>
+          <p class="page__meta">Personal project, in progress. Started Oct 2026</p>
+          <p>An AWS study coach. It answers from public AWS documentation with citations, looks up a service with a tool when the excerpts are not enough, and says so instead of guessing when the documents do not cover a question.</p>
+          <figure class="chart chart--range" aria-label="Best-match distance on 18 test questions, drawn to scale from 0 to 2.1: on-topic 0.53 to 1.04, near-topic 0.79 to 1.34, off-topic 1.74 to 2.06. The cutoff is 1.1.">
+            <div class="chart__plot" style="--cut:52.38%">
+              <div class="chart__row chart__row--result">
+                <span class="chart__label">On-topic questions</span>
+                <span class="chart__track"><span class="chart__bar" style="--from:25.14%; --to:49.62%"></span></span>
+                <span class="chart__value">0.53 to 1.04</span>
+              </div>
+              <div class="chart__row">
+                <span class="chart__label">Near-topic questions</span>
+                <span class="chart__track"><span class="chart__bar" style="--from:37.81%; --to:63.90%"></span></span>
+                <span class="chart__value">0.79 to 1.34</span>
+              </div>
+              <div class="chart__row">
+                <span class="chart__label">Off-topic questions</span>
+                <span class="chart__track"><span class="chart__bar" style="--from:82.67%; --to:98.19%"></span></span>
+                <span class="chart__value">1.74 to 2.06</span>
+              </div>
+              <div class="chart__row chart__axis" aria-hidden="true"><span></span><span class="chart__track"><span class="chart__cut">cutoff 1.1</span></span><span></span></div>
+            </div>
+            <figcaption>Best-match distance on 18 test questions; smaller is closer. Above the 1.1 cutoff, a question is refused without an API call. Below it, Claude answers from the excerpts, and the system prompt refuses what they do not support.</figcaption>
+          </figure>
+          <ul class="points">
+            <li>RAG over 10 public AWS doc pages: chunked with overlap and embedded locally into Chroma. The top 3 chunks go to Claude as numbered excerpts, and every claim cites one.</li>
+            <li>A tool-using agent: a Claude tool-use loop calls <code>lookup_service</code>, feeds the result back as a citable source, and stops after 5 rounds. Every answer is structured: text, a refused flag and the cited sources.</li>
+            <li>18 pytest tests with Claude and Chroma replaced by fakes, so they need no API key, run in GitHub Actions on every push.</li>
+          </ul>
+          <p class="page__status">Minimum demo done. Next: an eval set of about 20 questions comparing the plain RAG agent with the tool-using one.</p>
+          <p class="page__stack">Python, Claude API, Chroma, pytest, GitHub Actions</p>
+          <p class="page__link"><a href="https://github.com/AD-NAP/cumulus-coach">Code on GitHub</a></p>
+          <span class="folio" aria-hidden="true">2</span>
+        </article>
 
-<span class="n">:shafik</span> <span class="k">a</span> <span class="n">:SoftwareEngineer</span> ;
-  <span class="p">:basedIn</span>     <span class="s">"Singapore"</span> ;
-  <span class="p">:worksAt</span>     <span class="n">:Azbil</span> ;
-  <span class="p">:graduatedFrom</span> <span class="n">:NUS</span> ;
-  <span class="p">:builds</span>      <span class="n">:BuildingManagementPlatforms</span> ,
-               <span class="n">:SemanticMetadataTooling</span> ;
-  <span class="p">:writes</span>      <span class="s">"Python"</span>, <span class="s">"TypeScript"</span> ;
-  <span class="p">:deploysTo</span>   <span class="n">:AWS</span> .</code></pre>
-        </details>
+        <article id="edge-energy-optimizer" class="page">
+          <h3 class="page__title">edge-energy-optimizer</h3>
+          <p class="page__meta">Personal project. Phases 1 and 2 done, Oct to Nov 2026</p>
+          <p>Forecasts a real office building's energy load a day ahead, then controls a simulated heat pump home to cut its heating cost. Two of five planned phases are done.</p>
+          <figure class="chart" aria-label="Forecast error: 45.7 kWh for the same-hour-last-week baseline compared with 34.5 kWh for the forecast model, drawn to scale">
+            <div class="chart__plot">
+              <div class="chart__row">
+                <span class="chart__label">Same hour last week (baseline)</span>
+                <span class="chart__track"><span class="chart__bar chart__bar--before" style="--to:100%"></span></span>
+                <span class="chart__value">45.7 kWh</span>
+              </div>
+              <div class="chart__row chart__row--result">
+                <span class="chart__label">Forecast model</span>
+                <span class="chart__track"><span class="chart__bar" style="--to:75.49%"></span></span>
+                <span class="chart__value">34.5 kWh</span>
+              </div>
+            </div>
+            <figcaption>Phase 1 forecast: mean absolute error on the 2017 test year. Lower is better: 24.5% better than the baseline.</figcaption>
+          </figure>
+          <ul class="points">
+            <li>Phase 1: hourly forecast with gradient boosted trees on real meter data (Building Data Genome Project 2). Trained on 2016, tested on all of 2017, split by time.</li>
+            <li>Phase 2: controls a simulated heat pump home in the BOPTEST simulator (Docker). A look-ahead heuristic cut heating cost 10% to 16% against a fixed thermostat.</li>
+            <li>Then a model predictive controller: a thermal model fitted from a system identification experiment, plus a 24-hour linear program re-solved every hour. On two unseen test periods it cut cost 14% to 20% against the thermostat and 3% to 8% against the heuristic, with similar comfort.</li>
+          </ul>
+          <p class="page__status">Phases 1 and 2 are done. Phases 3 to 5 are parked.</p>
+          <p class="page__stack">Python, scikit-learn, SciPy, BOPTEST, Docker, pytest, uv</p>
+          <p class="page__link"><a href="https://github.com/AD-NAP/edge-energy-optimizer">Code on GitHub</a></p>
+          <span class="folio" aria-hidden="true">3</span>
+        </article>
       </div>
     </section>
 
-    <!-- Skills / L6 -->
-    <section id="skills" class="floor" data-section="skills">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L6</span>Skills</h2>
-      <dl class="skills">
-        <div><dt>Languages</dt><dd>Python, SQL, JavaScript, TypeScript; familiar with Java</dd></div>
-        <div><dt>Frontend</dt><dd>Streamlit, Svelte, React, HTML/CSS</dd></div>
-        <div class="skills__wide"><dt>Cloud &amp; infrastructure</dt><dd>AWS (Lambda, AppSync, DynamoDB, S3, CloudFront, CloudWatch), Docker, GitHub Actions</dd></div>
-        <div><dt>Data &amp; APIs</dt><dd>DynamoDB, GraphQL, SPARQL, RDF/Brick Schema</dd></div>
-        <div><dt>AI &amp; LLM</dt><dd>Claude API (function calling, structured outputs), RAG, embeddings, Chroma</dd></div>
-        <div class="skills__wide"><dt>Practices &amp; tools</dt><dd>Git, Clean Architecture, pytest, MSW, GitHub Copilot</dd></div>
-      </dl>
-    </section>
-
-    <!-- Experience / L5 -->
-    <section id="experience" class="floor" data-section="experience">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L5</span>Experience</h2>
-      <ol class="timeline">
-        <li id="azbil-engineer" class="role">
-          <p class="role__when"><time datetime="2026-01">Jan 2026</time> to present</p>
-          <h3 class="role__title">Systems and Application Engineer, Software Development</h3>
-          <p class="role__org">Azbil ASPO, Singapore. Converted to full-time from the internship below.</p>
-          <p class="role__headline">Cloud BMS MVP approved by Azbil Japan leadership for continued development toward commercial release.</p>
-          <ul class="role__points">
+    <!-- pp. 4-5: Day job -->
+    <section id="experience" class="spread" aria-labelledby="experience-title">
+      <h2 id="experience-title" class="ink spread__title">Day job</h2>
+      <div class="spread__pages">
+        <article id="azbil-engineer" class="page">
+          <p class="page__when"><time datetime="2026-01">Jan 2026</time> to present</p>
+          <h3 class="page__title">Systems and Application Engineer, Software Development</h3>
+          <p class="page__meta">Azbil ASPO, Singapore. Converted to full-time from the internship.</p>
+          <p class="page__headline">Cloud BMS MVP approved by Azbil Japan leadership for continued development toward commercial release.</p>
+          <ul class="points">
             <li>Delivered the Event Log feature end to end for Cloud BMS, a cloud-native building management platform: designed a GraphQL <code>eventLogs</code> query on AWS AppSync with cursor-based pagination over DynamoDB (ULID-ordered, configurable page size), structured across adapter, application, and infrastructure layers following Clean Architecture.</li>
             <li>Built the matching Svelte frontend with an expandable table view and infinite scroll, batching 100 records per request to handle large datasets. Wrote MSW mocks simulating 330 records and network latency to verify pagination and loading states.
-              <figure class="pages" aria-label="330 mocked records loaded in four requests: 100, 100, 100, then the last 30">
-                <div class="pages__bar" aria-hidden="true">
-                  <span style="--n:100"></span><span style="--n:100"></span><span style="--n:100"></span><span style="--n:30"></span>
-                </div>
-                <figcaption><span class="pages__total">330</span> mocked records in 4 requests: 100, 100, 100, 30</figcaption>
+              <figure class="batches" aria-label="330 mocked records loaded in four requests: 100, 100, 100, then the last 30">
+                <span class="batches__bar" aria-hidden="true"><span style="--n:100"></span><span style="--n:100"></span><span style="--n:100"></span><span style="--n:30"></span></span>
+                <figcaption>Test data: 330 mocked records in 4 requests of up to 100</figcaption>
               </figure>
             </li>
             <li>Contributed to the Cloud BMS MVP over 9 months in a 3-developer team using AWS Lambda, AppSync, DynamoDB, S3, CloudFront, and CloudWatch: owned the Event Log and assisted with other small features and bug fixes.</li>
             <li>Designed and built an internal Streamlit application that generates Brick Schema building-metadata files from BMS point lists, owning UI/UX, workflow design, and implementation across a 5-month cycle. It completes the metadata pipeline feeding downstream configuration tooling, with planned integration into Cloud BMS deployments.</li>
             <li>Authored a developer onboarding guide for Cloud BMS environment setup (Docker, AWS configuration). A new junior engineer used it and, with minimal guidance, set up his environment and started development on the same day.</li>
           </ul>
-        </li>
-
-        <li id="azbil-intern" class="role">
-          <p class="role__when"><time datetime="2025-06">Jun 2025</time> to <time datetime="2025-12">Dec 2025</time></p>
-          <h3 class="role__title">Software Engineer Intern</h3>
-          <p class="role__org">Azbil ASPO, Singapore</p>
-          <figure class="compare compare--headline" aria-label="Preparation time: about 3 days by hand compared with under 5 minutes with the tool, drawn to scale">
-            <div class="compare__row">
-              <span class="compare__label">By hand</span>
-              <span class="compare__track"><span class="compare__bar compare__bar--before"></span></span>
-              <span class="compare__value">~3 days</span>
-            </div>
-            <div class="compare__row compare__row--result">
-              <span class="compare__label">With the tool</span>
-              <span class="compare__track"><span class="compare__bar compare__bar--after"></span></span>
-              <span class="compare__value">&lt; 5 min</span>
-            </div>
-            <figcaption>Drawn to scale. The second bar is 0.1% of the first.</figcaption>
-          </figure>
-          <ul class="role__points">
-            <li>Built a Python tool that parses Brick Schema TTL building-metadata files and runs SPARQL queries to auto-generate customer product configuration files, reducing preparation time from approximately 3 days of manual engineering work to under 5 minutes.</li>
-          </ul>
-        </li>
-
-        <li id="ground-labs" class="role">
-          <p class="role__when"><time datetime="2022-05">May 2022</time> to <time datetime="2022-08">Aug 2022</time></p>
-          <h3 class="role__title">Software Developer Intern</h3>
-          <p class="role__org">Ground Labs, Singapore</p>
-          <ul class="role__points">
-            <li>Developed frontend features for a desktop data-discovery product, including a four-pane resizable window layout and match highlighting within search results.</li>
-          </ul>
-        </li>
-      </ol>
-    </section>
-
-    <!-- Projects / L4 -->
-    <section id="projects" class="floor" data-section="projects">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L4</span>Projects</h2>
-      <article id="cumulus-coach" class="project">
-        <div class="project__head">
-          <h3 class="project__name">cumulus-coach</h3>
-          <p class="project__meta">Personal project, in progress. Started Oct 2026</p>
-        </div>
-        <p>An AWS study coach. It answers from public AWS documentation with citations, looks up a service with a tool when the excerpts are not enough, and says so instead of guessing when the documents do not cover a question.</p>
-        <figure class="compare compare--range" aria-label="Best-match distance on 18 test questions, drawn to scale from 0 to 2.1: on-topic 0.53 to 1.04, near-topic 0.79 to 1.34, off-topic 1.74 to 2.06. The cutoff is 1.1.">
-          <div class="range__rows">
-            <div class="compare__row compare__row--result">
-              <span class="compare__label">On-topic questions</span>
-              <span class="compare__track"><span class="compare__bar compare__bar--range" style="--from:25.14%; --to:49.62%"></span></span>
-              <span class="compare__value">0.53 to 1.04</span>
-            </div>
-            <div class="compare__row">
-              <span class="compare__label">Near-topic questions</span>
-              <span class="compare__track"><span class="compare__bar compare__bar--range" style="--from:37.81%; --to:63.90%"></span></span>
-              <span class="compare__value">0.79 to 1.34</span>
-            </div>
-            <div class="compare__row">
-              <span class="compare__label">Off-topic questions</span>
-              <span class="compare__track"><span class="compare__bar compare__bar--range" style="--from:82.67%; --to:98.19%"></span></span>
-              <span class="compare__value">1.74 to 2.06</span>
-            </div>
-            <div class="compare__row range__axis" aria-hidden="true"><span class="range__scale"><span class="range__cut">cutoff 1.1</span></span></div>
-          </div>
-          <figcaption>Best-match distance on 18 test questions; smaller is closer. Above the 1.1 cutoff, a question is refused without an API call. Below it, Claude answers from the excerpts, and the system prompt refuses what they do not support.</figcaption>
-        </figure>
-        <ul class="role__points">
-          <li>RAG over 10 public AWS doc pages: chunked with overlap and embedded locally into Chroma. The top 3 chunks go to Claude as numbered excerpts, and every claim cites one.</li>
-          <li>A tool-using agent: a Claude tool-use loop calls <code>lookup_service</code>, feeds the result back as a citable source, and stops after 5 rounds. Every answer is structured: text, a refused flag and the cited sources.</li>
-          <li>18 pytest tests with Claude and Chroma replaced by fakes, so they need no API key, run in GitHub Actions on every push.</li>
-        </ul>
-        <p class="project__status">Minimum demo done. Next: an eval set of about 20 questions comparing the plain RAG agent with the tool-using one.</p>
-        <p class="project__stack">Python, Claude API, Chroma, pytest, GitHub Actions</p>
-        <p class="project__link"><a href="https://github.com/AD-NAP/cumulus-coach">Code on GitHub</a></p>
-      </article>
-
-      <article id="edge-energy-optimizer" class="project">
-        <div class="project__head">
-          <h3 class="project__name">edge-energy-optimizer</h3>
-          <p class="project__meta">Personal project. Phases 1 and 2 done, Oct to Nov 2026</p>
-        </div>
-        <p>Forecasts a real office building's energy load a day ahead, then controls a simulated heat pump home to cut its heating cost. Two of five planned phases are done.</p>
-        <figure class="compare compare--stack" aria-label="Forecast error: 45.7 kWh for the same-hour-last-week baseline compared with 34.5 kWh for the forecast model, drawn to scale">
-          <div class="compare__row">
-            <span class="compare__label">Same hour last week (baseline)</span>
-            <span class="compare__track"><span class="compare__bar compare__bar--before"></span></span>
-            <span class="compare__value">45.7 kWh</span>
-          </div>
-          <div class="compare__row compare__row--result">
-            <span class="compare__label">Forecast model</span>
-            <span class="compare__track"><span class="compare__bar compare__bar--model"></span></span>
-            <span class="compare__value">34.5 kWh</span>
-          </div>
-          <figcaption>Phase 1 forecast: mean absolute error on the 2017 test year. Lower is better: 24.5% better than the baseline.</figcaption>
-        </figure>
-        <ul class="role__points">
-          <li>Phase 1: hourly forecast with gradient boosted trees on real meter data (Building Data Genome Project 2). Trained on 2016, tested on all of 2017, split by time. It guesses high (bias +13.8 kWh) because the building used about 8% less in 2017.</li>
-          <li>Phase 2: controls a simulated heat pump home in the BOPTEST simulator (Docker). A look-ahead heuristic cut heating cost 10% to 16% against a fixed thermostat.</li>
-          <li>Then a model predictive controller: a thermal model fitted from a system identification experiment, plus a 24-hour linear program re-solved every hour. On two unseen test periods it cut cost 14% to 20% against the thermostat and 3% to 8% against the heuristic, with similar comfort.</li>
-        </ul>
-        <p class="project__status">Phases 1 and 2 are done. Phases 3 to 5 are parked.</p>
-        <p class="project__stack">Python, scikit-learn, SciPy, BOPTEST, Docker, pytest, uv</p>
-        <p class="project__link"><a href="https://github.com/AD-NAP/edge-energy-optimizer">Code on GitHub</a></p>
-      </article>
-    </section>
-
-    <!-- Education / L3 -->
-    <section id="education" class="floor" data-section="education">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L3</span>Education</h2>
-      <div class="edu">
-        <article>
-          <h3>National University of Singapore</h3>
-          <p class="edu__what">Bachelor of Computing (Computer Science), Honours (Merit), School of Computing, 2021 to Jan 2026</p>
-          <p class="edu__more">Coursework: Software Engineering; Data Structures and Algorithms; Design and Analysis of Algorithms; Programming Methodology I &amp; II; Computer Organisation; Introduction to AI.</p>
+          <span class="folio" aria-hidden="true">4</span>
         </article>
-        <article>
-          <h3>Singapore Polytechnic</h3>
-          <p class="edu__what">Diploma in Electrical and Electronic Engineering (Computer and Power specialisation), Apr 2015 to May 2018</p>
-        </article>
+
+        <div class="page">
+          <article id="azbil-intern">
+            <p class="page__when"><time datetime="2025-06">Jun 2025</time> to <time datetime="2025-12">Dec 2025</time></p>
+            <h3 class="page__title">Software Engineer Intern</h3>
+            <p class="page__meta">Azbil ASPO, Singapore</p>
+            <figure class="chart chart--headline" aria-label="Preparation time: about 3 days by hand compared with under 5 minutes with the tool, drawn to scale">
+              <div class="chart__plot">
+                <div class="chart__row">
+                  <span class="chart__label">By hand</span>
+                  <span class="chart__track"><span class="chart__bar chart__bar--before" style="--to:100%"></span></span>
+                  <span class="chart__value">~3 days</span>
+                </div>
+                <div class="chart__row chart__row--result">
+                  <span class="chart__label">With the tool</span>
+                  <span class="chart__track"><span class="chart__bar chart__bar--sliver" style="--to:0.12%"></span></span>
+                  <span class="chart__value">&lt; 5 min</span>
+                </div>
+              </div>
+              <figcaption>Drawn to scale. The second bar is 0.1% of the first, so it is only a line.</figcaption>
+            </figure>
+            <ul class="points">
+              <li>Built a Python tool that parses Brick Schema TTL building-metadata files and runs SPARQL queries to auto-generate customer product configuration files, reducing preparation time from approximately 3 days of manual engineering work to under 5 minutes.</li>
+            </ul>
+          </article>
+
+          <article id="ground-labs">
+            <p class="page__when"><time datetime="2022-05">May 2022</time> to <time datetime="2022-08">Aug 2022</time></p>
+            <h3 class="page__title">Software Developer Intern</h3>
+            <p class="page__meta">Ground Labs, Singapore</p>
+            <ul class="points">
+              <li>Developed frontend features for a desktop data-discovery product, including a four-pane resizable window layout and match highlighting within search results.</li>
+            </ul>
+          </article>
+          <span class="folio" aria-hidden="true">5</span>
+        </div>
       </div>
     </section>
 
-    <!-- Fun facts / L2 -->
-    <section id="fun" class="floor" data-section="fun">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L2</span>Fun facts</h2>
-      <div class="fun">
-        <div class="riddle">
-          <svg class="perch-cat" viewBox="0 0 60 60" aria-hidden="true">
-            <path class="perch-cat__tail" d="M37 57c11 0 16-7 13-17-.8-2.6-4.2-2-3.5.8 1.9 7.2-1.6 11.7-9.5 11.7z"/>
-            <path d="M11.5 17.5 12 5l6.5 8.5h1L26 5l.5 12.5c1.7 2.3 2.5 5 2.3 7.8 6.6 3.4 11.2 13 10.7 32.7H12c-2.4-12.7-1.2-22.6 1-27.2-1.8-3.6-2.4-9.3-1.5-13.3z"/>
-          </svg>
-          <form class="riddle__form" novalidate>
-            <label class="riddle__q" for="guess">Guess my favourite animal.</label>
-            <p id="guess-hint" class="riddle__hint">Hint: it is hiding in my GitHub name.</p>
-            <div class="riddle__row">
-              <input id="guess" class="riddle__input" type="text" name="guess" aria-describedby="guess-hint" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="24">
-              <button class="riddle__btn" type="submit">Check</button>
-            </div>
-          </form>
-          <p class="riddle__status" role="status"></p>
-          <div id="riddle-answer" class="riddle__a" hidden>
-            <p class="flip"><span class="visually-hidden">ad-nap read backwards is pan-da</span><span class="flip__word" aria-hidden="true"></span></p>
-            <p>My GitHub username is <code>ad-nap</code>. Read it backwards. I love pandas, and cats too: GitHub's logo is a cat, so that covers both.</p>
-            <p class="riddle__reward"><a href="#b1">Take the lift down to B1</a></p>
-          </div>
-        </div>
-        <p class="fun__hint">There's a cat somewhere else on this page. It only comes out at night.</p>
-      </div>
-    </section>
-
-    <!-- Contact / L1 -->
-    <section id="contact" class="floor floor--last" data-section="contact">
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">L1</span>Contact</h2>
-      <p class="contact__lede">Open to backend software development and AI engineering roles. The fastest way to reach me is email.</p>
-      <a class="contact__email" href="mailto:shafik.adam98@gmail.com">shafik.adam98@gmail.com</a>
-      <ul class="contact__links">
-        <li><a href="https://github.com/ad-nap">GitHub</a></li>
-        <li><a href="https://www.linkedin.com/in/shafikadam/">LinkedIn</a></li>
-        <li><a href="assets/Shafik-Adam-Resume.pdf" type="application/pdf">Resume (PDF)</a></li>
-      </ul>
-    </section>
-
-    <!-- Basement / B1: hidden until the riddle on L2 is solved (main.js) -->
-    <section id="b1" class="floor" data-section="b1" hidden>
-      <h2 class="floor__title"><span class="floor__level" aria-hidden="true">B1</span>Basement</h2>
-      <div class="b1">
+    <!-- Centrefold: hidden until the riddle on the back page is solved (main.js) -->
+    <section id="centrefold" class="spread centrefold" aria-labelledby="centrefold-title" hidden>
+      <h2 id="centrefold-title" class="ink spread__title">Centrefold</h2>
+      <div class="centrefold__body">
         <svg class="cake" viewBox="0 0 140 122" aria-hidden="true">
           <ellipse class="cake__plate" cx="70" cy="100" rx="64" ry="15"/>
           <path class="cake__body" d="M22 60v32a48 12 0 0 0 96 0V60"/>
@@ -365,14 +236,115 @@
           <rect class="cake__candle" x="67" y="30" width="6" height="28" rx="1"/>
           <path class="cake__flame" d="M70 10c5 6 7 9 7 13a7 7 0 0 1-14 0c0-4 2-7 7-13z"/>
         </svg>
-        <p class="b1__lede">You found the basement.</p>
-        <p class="b1__more">Nothing down here yet, so have some cake.</p>
+        <p class="centrefold__lede">You found the centrefold.</p>
+        <p>Nothing printed here yet, so have some cake.</p>
       </div>
     </section>
 
-    <footer class="foot">
-      <p>Built with plain HTML, CSS and JavaScript. Hosted on GitHub Pages.</p>
-    </footer>
+    <!-- pp. 6-7: Notes I took -->
+    <section id="notes" class="spread" aria-labelledby="notes-title">
+      <h2 id="notes-title" class="ink spread__title">Notes I took</h2>
+      <p class="spread__lede">What the projects and the day job taught me, pulled from my dev log.</p>
+      <div class="spread__pages">
+        <div class="page">
+          <h3 class="page__title">From edge-energy-optimizer</h3>
+          <ul class="notes">
+            <li><strong>Split by time, never shuffle.</strong> The model trained on 2016 and was tested on all of 2017, so it never saw the future it was predicting.</li>
+            <li><strong>Read the bias, not only the error.</strong> The forecast ran high by 13.8 kWh because the building used about 8% less in 2017 than in 2016.</li>
+            <li><strong>Find the weak spot.</strong> Holidays were it: 61.9 kWh error on holidays against 32.6 on weekdays.</li>
+            <li><strong>Beat the simple option first.</strong> The look-ahead heuristic already cut 10% to 16%. The predictive controller had to beat that too, and did, by 3% to 8%.</li>
+          </ul>
+          <span class="folio" aria-hidden="true">6</span>
+        </div>
+        <div class="page">
+          <h3 class="page__title">From cumulus-coach and the day job</h3>
+          <ul class="notes">
+            <li><strong>Refuse in code before calling the model.</strong> A distance cutoff turns away far-off questions, so they cost nothing.</li>
+            <li><strong>Pick thresholds from measurements.</strong> The 1.1 cutoff came from best-match distances on 18 questions, not a guess.</li>
+            <li><strong>Fakes make tests free.</strong> With Claude and Chroma faked, all 18 tests run on every push without an API key.</li>
+            <li><strong>Test the slow path on purpose.</strong> Mocks with 330 records and fake latency showed how pagination and loading states behave.</li>
+            <li><strong>Write the guide you wished you had.</strong> A new junior engineer set up and started development on the same day.</li>
+          </ul>
+          <span class="folio" aria-hidden="true">7</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- pp. 8-9: Toolbox and school -->
+    <section id="skills" class="spread" aria-labelledby="skills-title">
+      <h2 id="skills-title" class="ink spread__title">Toolbox</h2>
+      <div class="spread__pages">
+        <div class="page">
+          <dl class="skills">
+            <div><dt>Languages</dt><dd>Python, SQL, JavaScript, TypeScript; familiar with Java</dd></div>
+            <div><dt>Cloud and infrastructure</dt><dd>AWS (Lambda, AppSync, DynamoDB, S3, CloudFront, CloudWatch), Docker, GitHub Actions</dd></div>
+            <div><dt>Data and APIs</dt><dd>DynamoDB, GraphQL, SPARQL, RDF/Brick Schema</dd></div>
+            <div><dt>AI and LLM</dt><dd>Claude API (function calling, structured outputs), RAG, embeddings, Chroma</dd></div>
+            <div><dt>Frontend</dt><dd>Streamlit, Svelte, React, HTML/CSS</dd></div>
+            <div><dt>Practices and tools</dt><dd>Git, Clean Architecture, pytest, MSW, GitHub Copilot</dd></div>
+          </dl>
+          <span class="folio" aria-hidden="true">8</span>
+        </div>
+        <div id="education" class="page">
+          <h3 class="page__title page__title--section">School</h3>
+          <article class="school">
+            <h4>National University of Singapore</h4>
+            <p>Bachelor of Computing (Computer Science), Honours (Merit), School of Computing, 2021 to Jan 2026</p>
+            <p class="school__more">Coursework: Software Engineering; Data Structures and Algorithms; Design and Analysis of Algorithms; Programming Methodology I and II; Computer Organisation; Introduction to AI.</p>
+          </article>
+          <article class="school">
+            <h4>Singapore Polytechnic</h4>
+            <p>Diploma in Electrical and Electronic Engineering (Computer and Power specialisation), Apr 2015 to May 2018</p>
+          </article>
+          <span class="folio" aria-hidden="true">9</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Back page: contact and the riddle -->
+    <section id="contact" class="spread backpage" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="ink spread__title">Say hello</h2>
+      <div class="spread__pages">
+        <div class="page">
+          <p class="backpage__lede">Open to backend software development and AI engineering roles. The fastest way to reach me is email.</p>
+          <p class="backpage__email"><a href="mailto:shafik.adam98@gmail.com">shafik.adam98@gmail.com</a></p>
+          <ul class="links" aria-label="More links">
+            <li><a href="https://github.com/ad-nap">GitHub</a></li>
+            <li><a href="https://www.linkedin.com/in/shafikadam/">LinkedIn</a></li>
+            <li><a href="assets/Shafik-Adam-Resume.pdf" type="application/pdf">Resume (PDF)</a></li>
+          </ul>
+        </div>
+        <div class="page">
+          <div class="riddle">
+            <span class="riddle__fold" aria-hidden="true"></span>
+            <form class="riddle__form" novalidate>
+              <label class="riddle__q" for="guess">Guess my favourite animal.</label>
+              <p id="guess-hint" class="riddle__hint">Hint: it is hiding in my GitHub name.</p>
+              <div class="riddle__row">
+                <input id="guess" class="riddle__input" type="text" name="guess" aria-describedby="guess-hint" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="24">
+                <button class="riddle__btn" type="submit">Check</button>
+              </div>
+            </form>
+            <p class="riddle__status" role="status"></p>
+            <div id="riddle-answer" class="riddle__a" hidden>
+              <p class="flip"><span class="visually-hidden">ad-nap read backwards is pan-da</span><span class="flip__word" aria-hidden="true"></span></p>
+              <p>My GitHub username is <code>ad-nap</code>. Read it backwards. I love pandas, and cats too: GitHub's logo is a cat, so that covers both.</p>
+              <p class="riddle__reward"><a href="#centrefold">Open the centrefold</a></p>
+            </div>
+          </div>
+          <p class="backpage__hint">There's a cat somewhere else on this page. It only comes out in the night print.</p>
+          <svg class="night-cat" viewBox="0 0 60 60" aria-hidden="true">
+            <path d="M8 58c-1-14 2-24 8-29-2-4-2-10-1-14L17 4l6 8h6l6-8 2 11c1 4 1 10-1 14 6 5 9 15 8 29z"/>
+            <circle class="night-cat__eye" cx="21" cy="21" r="2"/><circle class="night-cat__eye" cx="31" cy="21" r="2"/>
+            <path class="night-cat__tail" d="M44 57c9 0 13-6 11-14-.6-2.2-3.4-1.8-2.9.6 1.4 5.8-1.3 9.4-8.1 9.4z"/>
+          </svg>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer class="colophon">
+    <p>The build log, issue 1. Printed in two inks with plain HTML, CSS and JavaScript, and hosted on GitHub Pages. Issue 1 is version 1.0.0 of this site.</p>
+  </footer>
 </body>
 </html>
