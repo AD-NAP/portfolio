@@ -14,7 +14,8 @@ One page, three files, no build step:
 |---|---|
 | `index.html` | All content and structure, in zine order: masthead, cover, spreads (Experience, Projects, the hidden centrefold, Lessons learned, Skills and Education), back page (Contact), colophon. |
 | `assets/styles.css` | Layout, both prints, the two-ink effect and the print run. Colours come from tokens in `:root` and `[data-theme]`. |
-| `assets/main.js` | Behaviour: print toggle, contents highlight, the riddle and centrefold, the `ad-nap` flip, the cat's tail. |
+| `assets/main.js` | Behaviour: print toggle, contents highlight, the riddle and centrefold, the `ad-nap` flip, the cat's tail, and the scroll print of section titles. |
+| `assets/vendor/` | GSAP 3.15.0 (`gsap.min.js`, `ScrollTrigger.min.js`), self-hosted. Licence and source in `.claude/skills/THIRD_PARTY.md`. |
 
 Also in `assets/`: `favicon.svg` (a two-ink "SA" stamp) and `og.png`, the 1200x630 link preview. `og.png` is a screenshot of the cover in the day print with the masthead hidden; re-render it with Playwright if the cover changes.
 
@@ -28,6 +29,7 @@ Since v1.0.0 the site is "The build log", a two-ink riso zine ([decisions/0002-r
 
 - **Two inks.** Headings with the class `ink` get the sunflower pass as a `text-shadow`, offset a few pixels (`--mis-x`, `--mis-y`). There is only one copy of the text. Hovering or focusing a section brings its title into register.
 - **The print run.** On load, the cover name animates once (`@keyframes print-run`): the sunflower pass rolls across, then the blue ink comes in. Reduced motion shows the finished print.
+- **The scroll print.** Each `.spread__title` gets a GSAP timeline with a ScrollTrigger (`top 90%` to `top 60%`, scrubbed). It tweens two CSS variables, `--print` (clip-path roll) and `--mis-x` (yellow pass into register). Created inside `gsap.matchMedia("(prefers-reduced-motion: no-preference)")`; `ScrollTrigger.refresh()` runs when the centrefold opens or closes.
 - **Paper.** One static SVG noise layer (`body::after`) blends into both prints.
 - **Charts.** Bars are drawn to scale with CSS custom properties (`--from`, `--to`). Results print in solid sunflower; baselines print as a blue halftone.
 

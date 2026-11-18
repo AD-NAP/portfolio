@@ -97,6 +97,17 @@ mark { background: var(--yellow); color: var(--on-yellow); padding: 0 .2em; box-
 .spread:target .ink,
 .spread:focus-within .ink { text-shadow: 0 0 0 var(--yellow); }
 
+/* Section titles print as they scroll into view (main.js, GSAP ScrollTrigger, scrubbed).
+   GSAP only moves two variables: --print rolls the inks across, --mis-x slides the sunflower pass
+   into place. Without GSAP, or with reduced motion, the class is never added and titles show printed. */
+.spread__title.is-scroll-print {
+  clip-path: inset(-12px calc(100% - var(--print, 100%)) -12px 0);
+  transition: none;   /* the scroll drives the shadow; a transition would make it lag */
+}
+.spread__title.is-scroll-print:hover,
+.spread:target .spread__title.is-scroll-print,
+.spread:focus-within .spread__title.is-scroll-print { transition: text-shadow .45s var(--ease-out); }
+
 /* ---------- Masthead ---------- */
 .mast {
   position: sticky; top: 0; z-index: 40;

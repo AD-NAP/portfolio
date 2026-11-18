@@ -21,7 +21,7 @@ The concept (since v1.0.0, 2026-11-18): the site is **The build log**, a self-pu
 
 ## Design
 - Use the `frontend-design` skill for design work, and say how it shaped your choices.
-- Third-party design skills live in `.claude/skills/` (sources in `THIRD_PARTY.md`). Use **Impeccable** (`/impeccable critique`, `audit`, `polish`, …) for design reviews and refinements, and **Emil Kowalski's skills** (`improve-animations`, `review-animations`, `animate`, `mobile-native`, …) for motion and phone feel. `PRODUCT.md` and `DESIGN.md` feed Impeccable; CLAUDE.md wins wherever they or any skill disagree. Keep Impeccable telemetry off. (Shafik, 2026-11-17)
+- Third-party design skills live in `.claude/skills/` (sources in `.claude/skills/THIRD_PARTY.md`). Use **Impeccable** (`/impeccable critique`, `audit`, `polish`, …) for design reviews and refinements, and **Emil Kowalski's skills** (`improve-animations`, `review-animations`, `animate`, `mobile-native`, …) for motion and phone feel. GreenSock's **GSAP skills** (`gsap-scrolltrigger`, `gsap-timeline`, `gsap-core`, …) cover GSAP code. `PRODUCT.md` and `DESIGN.md` feed Impeccable; CLAUDE.md wins wherever they or any skill disagree. Keep Impeccable telemetry off. (Shafik, 2026-11-17)
 - Two prints, both required (the theme toggle reads "Night print"):
   - **Day print:** cool white stock, riso blue ink, sunflower ink for fills and charts. Never sunflower text on paper.
   - **Night print:** dark blue stock, pale ink, sunflower ink.
@@ -36,9 +36,11 @@ The concept (since v1.0.0, 2026-11-18): the site is **The build log**, a self-pu
 - Production results get the visual weight. Test data (e.g. the 330 mocked records) stays small.
 - Phones: the cover fits the name, the line, the contact links and the lead cover line on the first screen.
 - Fonts: Anybody (display, set wide and heavy) and Literata (body). Code uses the system monospace, and only for code. (2026-11-18)
+- GSAP (core and ScrollTrigger) is self-hosted in `assets/vendor/`, pinned to one version; the page loads no third-party scripts. Use the `gsap-*` skills for GSAP work, but prefer plain CSS where it is enough. Animate CSS variables rather than inline styles, so the CSS states (hover, focus, `:target`, reduced motion) keep working, and the page must look finished if GSAP fails to load. (2026-11-18)
 
 ## Motion
 - Allowed automatic motion: only the print run on page load (the sunflower pass rolls across the cover name, then the blue ink comes in; under 1s).
+- Scroll motion: section titles print as they scroll into view (GSAP ScrollTrigger, scrubbed to the scrollbar, so it answers the visitor and un-prints when they scroll back). Any other scroll motion needs Shafik's approval first. (Shafik, 2026-11-18)
 - Everything else answers the user: the print toggle, section titles snapping into register on hover or focus, the riddle corner unfolding and the `ad-nap` letters flipping, the cat's tail flick when the riddle card comes into view.
 - `prefers-reduced-motion` shows final states with no animation.
 

@@ -72,6 +72,7 @@
     else flip?.classList.add("is-static");
     centrefold.hidden = false;
     document.querySelectorAll(".centrefold-entry").forEach(el => { el.hidden = false; });
+    window.ScrollTrigger?.refresh();   // the page got taller: re-measure the scroll prints
   };
 
   // Put everything back the way a first-time visitor sees it.
@@ -85,6 +86,7 @@
     riddleForm.hidden = false;
     guess.value = "";
     riddleStatus.textContent = "";
+    window.ScrollTrigger?.refresh();
     riddle?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
     guess.focus({ preventScroll: true });
   };
@@ -114,6 +116,22 @@
     let solved = false;
     try { solved = localStorage.getItem("centrefold") === "open" || localStorage.getItem("b1") === "open"; } catch (e) {}
     if (solved) openCentrefold(false);
+  }
+
+  /* ---------- Section titles print as they scroll into view ----------
+     GSAP ScrollTrigger, scrubbed: the print follows the scrollbar, so scrolling back un-prints it.
+     Only CSS variables move (see .is-scroll-print in styles.css). Skipped under reduced motion. */
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.utils.toArray(".spread__title").forEach(title => {   // top to bottom, as ScrollTrigger expects
+        title.classList.add("is-scroll-print");
+        gsap.timeline({ scrollTrigger: { trigger: title, start: "top 90%", end: "top 60%", scrub: 0.4 } })
+          .fromTo(title, { "--print": "0%" }, { "--print": "100%", ease: "none", duration: 0.55 })
+          .fromTo(title, { "--mis-x": "-18px" }, { "--mis-x": "3px", ease: "power2.out", duration: 0.45 }, 0.3);
+      });
+      return () => document.querySelectorAll(".is-scroll-print").forEach(t => t.classList.remove("is-scroll-print"));
+    });
   }
 
   /* ---------- The cat on the riddle card flicks its tail when the card comes into view ---------- */
