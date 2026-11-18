@@ -20,6 +20,10 @@ Shafik's vault note `ideas/business-card-idea.md` described a better idea: a min
 - **Personality: the riddle only.** The riddle and its cake reward (now "Bonus", with its reset) stay. Both cats go.
 - **Order.** About, Experience, Projects, Lessons learned, Skills and Education, Contact. Experience still comes before Projects (Shafik's rule), although the idea note listed Projects first.
 
+## Revised in v1.2.1 (2026-11-18)
+
+Shafik found "Open the portfolio" far too fast (the browser's smooth scroll crossed the pinned distance in about 0.4s), and asked that any amount of scroll take the page from the card to the portfolio, at the same pace as the button. The transition is now two states instead of scrubbed and pinned: any downward scroll, swipe or key on the card, or the button, plays the whole transition in 1.5s; at the very top of the page, moving up plays it back. The page does not scroll while the card is closed or moving. The snap is gone, because a two-state switch can't rest half-open. Dark also became the default theme for first-time visitors.
+
 ## Consequences
 
 - Text never scales up during the transition, so it stays crisp. The name's landing spot is measured and corrected against the bar's text box, and the checker fails if it is more than 1px off.

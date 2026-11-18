@@ -127,20 +127,22 @@
   }
 
   /* ---------- The card opens into the portfolio ----------
-     The card lies over About; both are pinned for a screen. One number, p (0 to 1), follows the
-     scroll and render(p) turns it into CSS variables: the card's paper grows into the sheet, its
-     name walks to the bar, the nav arrives, and About, already laid out underneath, fades in.
-     Scrolling back plays it in reverse; letting go mid-way snaps to the card or the portfolio.
-     Only transforms and opacity move, so no text is ever scaled up or repainted. */
+     Two states: the card (1) and the portfolio (2). Any scroll, swipe or key that moves down,
+     or "Open the portfolio", plays one 1.5s transition from 1 to 2; at the very top of the page,
+     moving up plays it back. One number, p (0 to 1), drives render(p), which turns it into CSS
+     variables: the card's paper grows into the sheet, its name walks to the bar, the nav arrives,
+     and About, already laid out underneath, fades in. Only transforms and opacity move, so no
+     text is ever scaled up or repainted. The page does not scroll while the card is closed or moving. */
   const stage = document.getElementById("card");
-  const opening = document.querySelector(".opening");
   const about = document.getElementById("about");
   const aboutTitle = document.getElementById("about-title");
   const bar = document.querySelector(".bar");
   const name = document.getElementById("card-name");
   const card = document.querySelector(".card");
   const lift = document.querySelector(".card-lift");
-  let cardTrigger = null;
+  const openButton = document.querySelector(".card-open");
+  const DURATION = 1.5;   // seconds, the same for every way of opening or closing
+  let ctl = null;         // the two-state controller, while motion is on
   const cardSeen = () => { try { return localStorage.getItem("card") === "seen"; } catch (e) { return false; } };
   const markCardSeen = () => { try { localStorage.setItem("card", "seen"); } catch (e) {} };
   const afterScroll = fn => {
@@ -149,30 +151,28 @@
     window.addEventListener("scrollend", go, { once: true });
     setTimeout(go, 1400);   // no scroll needed, or no scrollend support
   };
-  const openTop = () => cardTrigger ? cardTrigger.end : about.getBoundingClientRect().top + window.scrollY - bar.offsetHeight;
-  const finish = () => {     // jump to the open state without easing into it
-    if (!cardTrigger || window.scrollY >= cardTrigger.end - 1) return;
-    window.scrollTo({ top: cardTrigger.end, behavior: "instant" });
-    cardTrigger.getTween()?.progress(1);
-  };
 
-  document.querySelector(".card-open")?.addEventListener("click", e => {
+  openButton?.addEventListener("click", e => {
     e.preventDefault();
     markCardSeen();
-    window.scrollTo({ top: openTop(), behavior: reduceMotion ? "auto" : "smooth" });
-    afterScroll(() => aboutTitle?.focus({ preventScroll: true }));
+    if (ctl) return ctl.open(true);
+    about.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+    aboutTitle?.focus({ preventScroll: true });
+  });
+  document.querySelector(".card-replay")?.addEventListener("click", e => {
+    e.preventDefault();
+    const back = () => ctl ? ctl.close(true) : openButton?.focus({ preventScroll: true });
+    if (window.scrollY <= 0) return back();
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    afterScroll(back);
   });
   // Keyboard: if focus moves past the card while it is still closed, open it at once,
   // so the focused link is never hidden under the card.
   document.addEventListener("focusin", e => {
-    if (!cardTrigger || stage.contains(e.target) || e.target.matches?.(".skip")) return;
-    requestAnimationFrame(finish);             // after the browser's own scroll-to-focus
+    if (!ctl || ctl.isOpen() || stage.contains(e.target) || e.target.matches?.(".skip")) return;
+    ctl.finish();
   });
-  document.querySelector(".card-replay")?.addEventListener("click", e => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
-    afterScroll(() => document.querySelector(".card-open")?.focus({ preventScroll: true }));
-  });
+  document.querySelector(".skip")?.addEventListener("click", () => ctl?.finish());
 
   if (window.gsap && window.ScrollTrigger && stage && card && name && about && bar) {
     gsap.registerPlugin(ScrollTrigger);
@@ -191,7 +191,7 @@
         for (let n = el; n && n !== ancestor; n = n.offsetParent) { x += n.offsetLeft; y += n.offsetTop; }
         return { x, y };
       };
-      let m = null;   // measurements, refreshed with ScrollTrigger
+      let m = null;   // measurements, refreshed on resize, font load and the end of the lift
       const measure = () => {
         const W = stage.clientWidth, H = stage.clientHeight;
         const c = offsetIn(card, stage), w = card.offsetWidth, h = card.offsetHeight;
@@ -211,8 +211,7 @@
         const keep = ["--name-x", "--name-y", "--name-s"].map(k => [k, stage.style.getPropertyValue(k)]);
         stage.style.setProperty("--name-x", `${m.nx}px`); stage.style.setProperty("--name-y", `${m.ny}px`); stage.style.setProperty("--name-s", m.ns);
         const landed = textBox(name), target = textBox(brand), s = stage.getBoundingClientRect();
-        // The stage sits at the window's top-left while pinned; it may be scrolled elsewhere right now.
-        // The card may also still be lifting into place on load: take its current offset out.
+        // The card may still be lifting into place on load: take its current offset out.
         const t = getComputedStyle(lift).transform, liftY = t && t !== "none" ? new DOMMatrixReadOnly(t).m42 : 0;
         m.nx += target.left - (landed.left - s.left); m.ny += target.top - (landed.top - s.top - liftY);
         keep.forEach(([k, v]) => stage.style.setProperty(k, v));
@@ -247,37 +246,83 @@
         });
       };
 
+      /* The two states. "card" and "open" rest; "opening" and "closing" move. */
+      let state = "card", focusAfter = null, topSince = 0;
+      const lock = on => root.classList.toggle("is-card-locked", on);
       const progress = { p: 0 };
+      const opened = () => {
+        state = "open"; lock(false); markCardSeen(); topSince = performance.now();
+        focusAfter?.focus({ preventScroll: true }); focusAfter = null;
+      };
+      const closed = () => {
+        state = "card";
+        focusAfter?.focus({ preventScroll: true }); focusAfter = null;
+      };
       const tween = gsap.to(progress, {
-        p: 1, ease: "none", onUpdate: () => render(progress.p),
-        scrollTrigger: {
-          trigger: opening, start: "top top", end: "+=110%",
-          pin: true, scrub: .8, invalidateOnRefresh: true,
-          // Let go mid-way and it settles, in the direction you were scrolling: the card or the portfolio.
-          snap: { snapTo: [0, 1], duration: { min: .25, max: .6 }, delay: .06, ease: "power2.inOut" },
-          onRefresh: () => { measure(); render(progress.p); },
-          onLeave: markCardSeen,
-        },
+        p: 1, duration: DURATION, ease: "sine.inOut", paused: true,
+        onUpdate: () => render(progress.p), onComplete: opened, onReverseComplete: closed,
       });
-      measure();
-      render(0);
-      cardTrigger = tween.scrollTrigger;
-      document.fonts?.ready.then(() => ScrollTrigger.refresh());   // Archivo changes the name's size
-      lift.addEventListener("animationend", () => { measure(); render(progress.p); }, { once: true });
+      const open = focus => {
+        if (state === "open" || state === "opening") return;
+        window.scrollTo({ top: 0, behavior: "instant" });
+        lock(true); state = "opening"; focusAfter = focus ? aboutTitle : null;
+        tween.play();
+      };
+      const close = focus => {
+        if (state === "card" || state === "closing") return;
+        window.scrollTo({ top: 0, behavior: "instant" });
+        lock(true); state = "closing"; focusAfter = focus ? openButton : null;
+        tween.reverse().paused(false);   // reverse() alone leaves a paused tween paused (after finish())
+      };
+      // Jump straight to the open state. Let the tween set p itself: setting it by hand before the tween
+      // first runs would make GSAP record 1 as the start value, and closing would then animate 1 to 1.
+      const finish = () => { tween.pause(); tween.progress(1, true); render(progress.p); opened(); };
+      ctl = { open, close, finish, isOpen: () => state === "open" };
+
+      // At the top, an upward move closes the card again. Not straight after arriving there by
+      // scrolling, though: the tail of a flick up the page should stop at About, not keep going.
+      const atTop = () => window.scrollY <= 0 && performance.now() - topSince > 400;
+      const onScroll = () => { if (window.scrollY > 0) topSince = 0; else if (!topSince) topSince = performance.now(); };
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      // Wheel, trackpad and touch. With wheelSpeed -1, scrolling down and swiping up both call onUp.
+      const watcher = ScrollTrigger.observe({
+        target: window, type: "wheel,touch", wheelSpeed: -1, tolerance: 10,
+        onUp: () => { if (state === "card" || state === "closing") open(false); },
+        onDown: () => { if (state === "opening" || (state === "open" && atTop())) close(false); },
+      });
+      // Keys that scroll the page do the same. Typing in the riddle, or Space on a button, is left alone.
+      const onKey = e => {
+        if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+        if (e.target.closest?.("input, textarea, select, button, a, [contenteditable]") && e.key === " ") return;
+        if (e.target.closest?.("input, textarea, select, [contenteditable]")) return;
+        const down = ["PageDown", "ArrowDown", "End"].includes(e.key) || (e.key === " " && !e.shiftKey);
+        const up = ["PageUp", "ArrowUp", "Home"].includes(e.key) || (e.key === " " && e.shiftKey);
+        if (down && (state === "card" || state === "closing")) { e.preventDefault(); open(false); }
+        else if (up && (state === "opening" || (state === "open" && window.scrollY <= 0))) { e.preventDefault(); close(false); }
+      };
+      document.addEventListener("keydown", onKey);
+
+      const remeasure = () => { measure(); render(progress.p); };
+      window.addEventListener("resize", remeasure);
+      document.fonts?.ready.then(remeasure);                     // Archivo changes the name's size
+      lift.addEventListener("animationend", remeasure, { once: true });
+
+      // Returning visitors, and visitors following a #link, start on the portfolio.
+      if (cardSeen() || location.hash) finish();
+      else { lock(true); measure(); render(0); }
+
       return () => {
+        watcher.kill();
+        document.removeEventListener("keydown", onKey);
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", remeasure);
+        tween.kill(); lock(false);
         root.classList.remove("has-card-motion");
         [stage, about, bar].forEach(el => el.removeAttribute("style"));
         arrivals.forEach(el => el.style.removeProperty("--d"));
-        cardTrigger = null;
+        ctl = null;
       };
     });
-  }
-  // Returning visitors (with no #link to follow) open straight on the portfolio. Wait for "load":
-  // a jump made earlier is undone when the browser settles the page's scroll position.
-  if (stage && cardSeen() && !location.hash) {
-    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    const jump = () => requestAnimationFrame(() => window.scrollTo({ top: openTop(), behavior: "instant" }));
-    if (document.readyState === "complete") jump();
-    else window.addEventListener("load", jump, { once: true });
   }
 })();

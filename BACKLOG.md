@@ -29,6 +29,14 @@ From `vault/ideas/business-card-idea.md`: each project told as Problem, Constrai
 - [ ] Pull each step's facts for cumulus-coach and edge-energy-optimizer from the vault dev logs into `content/resume.md` ("From AD-NAP/vault"), and have Shafik check them
 - [ ] Restructure the two project entries; gaps get visible PLACEHOLDERs
 
+## v1.2.1: one pace for the card, dark by default (2026-11-19)
+
+- [x] Any scroll, swipe or scrolling key on the card plays the whole transition; the button plays the same 1.5s (it was far too fast) (Shafik)
+- [x] Moving up at the very top plays it back; the page scrolls normally everywhere else
+- [x] Dark is the default theme for first-time visitors (Shafik)
+- [x] Checker: paced button and wheel, closing at the top, normal scrolling once open, dark default
+- [ ] Try it on a phone: one swipe up should open it, a swipe down at the top should close it
+
 ## v1.2.0: the business card opens into a drawing sheet (2026-11-18)
 
 Decision: `docs/decisions/0004-card-into-portfolio.md`. Shafik kept it on v1 as an iteration (not v2).
