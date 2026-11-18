@@ -7,7 +7,7 @@
 
 From v0.2.0 to v0.5.0 the site was an isometric building, one floor per section. It fit Shafik's day job (software for building-management systems), but that was the problem: it tied him to one domain while he aims at backend and AI engineering roles more broadly. He wanted to be remembered as a builder and learner.
 
-The direction came from a brainstorm with the frontend-design and Impeccable `shape` skills. Seven candidate worlds were drawn from his own world (lab notebook, MRT map, NUSMods-style module catalogue, school exercise book, research poster, personal changelog, riso zine). Impeccable's concept roll picked the riso zine, and Shafik chose it.
+The direction came from a brainstorm with the frontend-design and Impeccable `shape` skills. Seven candidate worlds were drawn from his own world (lab notebook, MRT map, NUSMods-style module catalogue, school exercise book, research poster, personal changelog, riso zine). Impeccable's concept roll (seed `seed:e4c83ff7a6b64abf`, run degraded because impeccable.style is blocked in cloud sessions) picked the riso zine, and Shafik chose it.
 
 ## Decision
 

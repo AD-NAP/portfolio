@@ -93,7 +93,8 @@ mark { background: var(--yellow); color: var(--on-yellow); padding: 0 .2em; box-
    the way two riso drums never quite line up. One copy of the text, so find and copy stay clean. */
 .ink { text-shadow: var(--mis-x) var(--mis-y) 0 var(--yellow); transition: text-shadow .45s var(--ease-out); }
 /* Hover or focus anywhere in a section and its title snaps into register. */
-.spread:hover .ink,
+.ink:hover,
+.spread:target .ink,
 .spread:focus-within .ink { text-shadow: 0 0 0 var(--yellow); }
 
 /* ---------- Masthead ---------- */
@@ -220,7 +221,6 @@ main { padding: 0 var(--gutter); }
 .page__title { font-size: clamp(1.45rem, 2.4vw, 1.85rem); font-weight: 750; font-variation-settings: "wdth" 105; line-height: 1.15; margin-bottom: 6px; }
 .page__title--section { font-size: clamp(1.9rem, 3.4vw, 2.6rem); font-weight: 850; font-variation-settings: "wdth" 125; margin-bottom: 24px; }
 .page__meta { color: var(--muted); font-style: italic; }
-.page__when { margin-bottom: 4px; font: 650 1rem var(--font-display); color: var(--ink); }
 .page__headline {
   margin: 18px 0 20px; padding: 14px 18px;
   background: var(--yellow); color: var(--on-yellow);
@@ -229,7 +229,14 @@ main { padding: 0 var(--gutter); }
 .page__status { color: var(--text); font-weight: 600; }
 .page__stack { color: var(--muted); font-style: italic; margin-bottom: 4px; }
 .page__link a { display: inline-flex; align-items: center; min-height: 44px; font: 700 1.05rem var(--font-display); text-decoration-color: var(--yellow); text-decoration-thickness: .28em; text-underline-offset: .12em; text-decoration-skip-ink: none; }
-.page article + article { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--rule); }
+.nowrap { white-space: nowrap; }
+
+/* Day job: the full-time role runs across the spread, the internships are the page pair below. */
+.job__lead .page__title, .job__lead .page__meta { max-width: var(--measure); }
+.job__lead .page__headline { max-width: 52rem; }
+.points--cols { columns: 2; column-gap: clamp(40px, 6vw, 88px); column-rule: 1px solid var(--rule); }
+.points--cols li { break-inside: avoid; }
+.job__pair { margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--rule); }
 
 .points { margin: 0 0 20px; padding-left: 1.1em; list-style: square; }
 .points li { margin-bottom: 10px; }
@@ -261,6 +268,8 @@ main { padding: 0 var(--gutter); }
 }
 .chart__axis .chart__track { height: 22px; }
 .chart__axis .chart__track::after { bottom: auto; height: 6px; }
+.chart__end { position: absolute; left: 0; top: 6px; font: 600 .85rem var(--font-display); color: var(--muted); }
+.chart__end--max { left: auto; right: 0; }
 .chart__cut { position: absolute; left: var(--cut); top: 6px; translate: -50% 0; white-space: nowrap; font: 650 .85rem var(--font-display); color: var(--ink); }
 
 /* Test data stays small. */
@@ -368,10 +377,11 @@ main { padding: 0 var(--gutter); }
 @media (max-width: 900px) {
   .cover__body { grid-template-columns: 1fr; }
   .spread__pages { grid-template-columns: 1fr; background: none; gap: 40px; }
+  .points--cols { columns: 1; }
   .spread__pages > .page:nth-child(2) .folio { left: 0; right: auto; }
   .mast { flex-wrap: wrap; gap: 0 12px; }
-  .mast__nav { order: 3; flex-basis: 100%; margin: 0 calc(var(--gutter) * -1); overflow-x: auto; scrollbar-width: none; }
-  .mast__nav ol { padding: 0 calc(var(--gutter) - 10px); width: max-content; }
+  .mast__nav { order: 3; flex-basis: 100%; margin: 0 -10px; }
+  .mast__nav ol { flex-wrap: wrap; column-gap: 0; }
   .print-toggle { margin-left: auto; }
 }
 @media (max-width: 600px) {
@@ -379,7 +389,7 @@ main { padding: 0 var(--gutter); }
   .mast { position: static; padding-top: 6px; padding-bottom: 2px; }
   .mast__issue { display: none; }
   .cover { padding: 52px 0 36px; }
-  .cover__name { font-size: clamp(3rem, 16vw, 4.4rem); font-variation-settings: "wdth" 100; --mis-x: 4px; --mis-y: 3px; }
+  .cover__name { font-size: clamp(3rem, 16.5vw, 5rem); font-variation-settings: "wdth" 125; --mis-x: 4px; --mis-y: 3px; }
   .perch-cat { width: 44px; height: 44px; }
   .cover__body { margin-top: 20px; grid-template-columns: 1fr; gap: 24px; }
   .coverlines a { font-size: 1rem; padding: 8px 0; }
