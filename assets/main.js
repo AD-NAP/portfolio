@@ -74,6 +74,21 @@
     document.querySelectorAll(".centrefold-entry").forEach(el => { el.hidden = false; });
   };
 
+  // Put everything back the way a first-time visitor sees it.
+  const closeCentrefold = () => {
+    try { localStorage.removeItem("centrefold"); localStorage.removeItem("b1"); } catch (e) {}
+    centrefold.hidden = true;
+    document.querySelectorAll(".centrefold-entry").forEach(el => { el.hidden = true; });
+    answer.hidden = true;
+    riddle?.classList.remove("is-open");
+    flip?.classList.remove("is-flipped", "is-static");
+    riddleForm.hidden = false;
+    guess.value = "";
+    riddleStatus.textContent = "";
+    riddle?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+    guess.focus({ preventScroll: true });
+  };
+
   if (riddleForm && guess && answer && centrefold) {
     let misses = 0;
     riddleForm.addEventListener("submit", e => {
@@ -92,19 +107,23 @@
       riddleStatus.textContent = misses === 1 ? "Not quite. Look at my GitHub username." : "Not quite. Try reading it backwards.";
     });
 
-    // Solved on an earlier visit: the centrefold stays open.
+    document.querySelector(".riddle-reset")?.addEventListener("click", closeCentrefold);
+
+    // Solved on an earlier visit: the centrefold stays open. "b1" is the key the
+    // building version (before v1.0.0) used for its basement, so those visitors keep their reward.
     let solved = false;
-    try { solved = localStorage.getItem("centrefold") === "open"; } catch (e) {}
+    try { solved = localStorage.getItem("centrefold") === "open" || localStorage.getItem("b1") === "open"; } catch (e) {}
     if (solved) openCentrefold(false);
   }
 
-  /* ---------- The perched cat flicks its tail once you start scrolling ---------- */
+  /* ---------- The cat on the riddle card flicks its tail when the card comes into view ---------- */
   const perchCat = document.querySelector(".perch-cat");
   if (perchCat && !reduceMotion) {
-    const flick = () => {
-      perchCat.classList.add("is-flicking");
-      window.removeEventListener("scroll", flick);
-    };
-    window.addEventListener("scroll", flick, { passive: true });
+    new IntersectionObserver((entries, obs) => {
+      if (entries.some(e => e.isIntersecting)) {
+        setTimeout(() => perchCat.classList.add("is-flicking"), 300);
+        obs.disconnect();
+      }
+    }, { threshold: 0.6 }).observe(riddle || perchCat);
   }
 })();

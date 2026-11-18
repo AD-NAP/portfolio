@@ -147,7 +147,7 @@ A two-ink riso palette: one blue family and one sunflower, swapped between a day
 
 ### Hierarchy
 - **Display** (900, width 150, line-height 0.9): the cover name only. On phones it drops to width 125.
-- **Headline** (850, width 125, line-height 0.95): spread titles ("Now building", "Day job"). Always `.ink`, so they carry the misregistration.
+- **Headline** (850, width 125, line-height 0.95): spread titles ("Experience", "Projects"). Always `.ink`, so they carry the misregistration.
 - **Title** (750, width 105, line-height 1.15): article titles on a page. A section-sized variant (850, width 125, clamp 1.9–2.6rem) heads page-level sections.
 - **Body** (Literata 400, line-height 1.65, held to 65ch): paragraphs and points. Ledes, meta lines, captions and the colophon are Literata italic in `--muted`.
 - **Label** (Anybody 600–800, about 0.85–1.1rem): masthead contents, the print toggle, folios, chart values (tabular numbers), cover lines, contact links.
@@ -179,7 +179,7 @@ Flat, as paper is. Depth comes from overprinting, not lifting: the misregistered
 
 ## Shapes
 
-Square. Radius is 0 on buttons, inputs, panels and bars. Borders are 2px solid ink for frames (masthead rule, print toggle, riddle card, input, cover lines rule) and 1px `--rule` for dividers. The trim line between spreads is 2px dashed. The range chart's cutoff is a 2px dashed ink line. The riddle has a folded corner drawn as a diagonal two-colour gradient. The centrefold has two 3px staples down its middle. Small SVGs (the perched cat, the night cat, the cake, the moon in the toggle) are flat ink fills with 2px ink strokes where outlined.
+Square. Radius is 0 on buttons, inputs, panels and bars. Borders are 2px solid ink for frames (masthead rule, print toggle, riddle card, input, cover lines rule) and 1px `--rule` for dividers. The trim line between spreads is 2px dashed. The range chart's cutoff is a 2px dashed ink line. The riddle has a folded corner drawn as a diagonal two-colour gradient. The centrefold has two 3px staples down its middle. Small SVGs (the cat on the riddle card, the night cat on the colophon rule, the cake, the moon in the toggle) are flat ink fills with 2px ink strokes where outlined.
 
 ## Components
 

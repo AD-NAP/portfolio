@@ -7,7 +7,7 @@
 //   - token contrast (text ≥ 4.5:1, focus ≥ 3:1) per theme
 //   - touch targets under 44px at phone widths
 //   - the same checks again with the hidden centrefold open
-//   - the riddle: wrong guesses keep the centrefold shut, "panda" opens it, a reload keeps it open
+//   - the riddle: wrong guesses keep the centrefold shut, "panda" opens it, a reload keeps it open, the reset shuts it again
 // Usage: node .claude/skills/design-review/scripts/check.js [--out DIR] [--widths 390,1280] [--themes dark,light]
 // Exit code 1 when any check fails, so it can gate hooks and CI.
 
@@ -189,6 +189,11 @@ const audit = async (page, phone) => {
   riddle.contentsLinkShown = await rp.evaluate(() => !!document.querySelector(".centrefold-entry a")?.getBoundingClientRect().width);
   await rp.reload({ waitUntil: "networkidle" });
   riddle.openAfterReload = await cfShown();
+  await rp.click(".riddle-reset");
+  await rp.waitForTimeout(200);
+  riddle.shutAfterReset = !(await cfShown()) && await rp.evaluate(() => !document.querySelector(".riddle__form").hidden && document.activeElement?.id === "guess");
+  await rp.reload({ waitUntil: "networkidle" });
+  riddle.shutAfterResetReload = !(await cfShown());
   await rp.close();
 
   // Reduced motion: the cover must show the finished print immediately, with nothing animating.
@@ -225,6 +230,8 @@ const audit = async (page, phone) => {
   if (!riddle.hiddenAfterWrong || !riddle.hintAfterWrong) fails.push("riddle: a wrong guess should show a hint and keep the centrefold shut");
   if (!riddle.openAfterRight || !riddle.contentsLinkShown) fails.push('riddle: "panda" should open the centrefold and add it to the contents');
   if (!riddle.openAfterReload) fails.push("riddle: the centrefold should stay open after a reload");
+  if (!riddle.shutAfterReset) fails.push('riddle: "Reset the riddle" should hide the centrefold, show the form again and focus the input');
+  if (!riddle.shutAfterResetReload) fails.push("riddle: after a reset the centrefold should stay shut on reload");
   if (reducedMotion.inkPrinted !== reducedMotion.inkLayers || reducedMotion.running > 0)
     fails.push(`reduced motion: ${reducedMotion.inkPrinted}/${reducedMotion.inkLayers} ink layers printed, ${reducedMotion.running} animations running`);
 
