@@ -18,9 +18,11 @@ A single-page portfolio for Shafik Adam, a software engineer in Singapore (Azbil
 ## Positioning
 Since v1.0.0 (2026-11-18) the page is **The build log**, a self-published two-ink riso zine. Each release is an issue. The cover sells the issue with cover lines that link to the proof, and the spreads follow with plain names: Experience, Projects, Lessons learned (from the dev log), Skills and Education, and a back page, Contact, with the riddle. A hidden centrefold opens when a visitor solves the riddle. The zine fits a builder and learner: people make zines to share what they built and what they learned, which is what Shafik's dev log already does. It replaced the isometric building (v0.2.0 to v0.5.0) because that tied him to building-management systems.
 
+Since v1.1.0 (Issue 2) the page opens on a meishi-style name card naming his role at Azbil (as text, no logo). Scrolling, or "Open the build log", flips the card and grows its back into the zine cover. The card is the polite first meeting; the zine is the conversation after it.
+
 ## Operating Context
 - Hosted on GitHub Pages from `main`. Plain HTML, CSS and JS, with no build step and no framework (`index.html`, `assets/styles.css`, `assets/main.js`). Keep it that way.
-- Two required prints: Day (blue and sunflower ink on cool white stock) and Night (pale and sunflower ink on dark blue stock).
+- Two required prints: Day (dark grey and red ink on white stock) and Night (light grey and red ink on dark grey stock), with a lighter grey as the third tone.
 - Checks: `npm run -s check` (the design-review skill) must pass before any change is done. It screenshots both themes at 390px and 1280px and runs axe.
 
 ## Capabilities and Constraints
@@ -28,13 +30,13 @@ Since v1.0.0 (2026-11-18) the page is **The build log**, a self-published two-in
 - The masthead contents and the cover lines are real links with a visible focus state.
 - Personality to keep: the riddle on the back page, the hidden centrefold (it holds a cake), the cat on the riddle card, and the cat that only appears in the night print (on the colophon). Visitors can reset the riddle from the centrefold.
 - The centrefold is a reward, not content: nothing a recruiter needs may live only there.
-- Motion rules (from CLAUDE.md): the only automatic motion is the print run on load (under 1s). All other motion answers the user. `prefers-reduced-motion` shows the final states.
+- Motion rules (from CLAUDE.md): the only automatic motion is the name card being handed over on load (under 1s). The card flip and the section-title print follow the scroll. All other motion answers the user. `prefers-reduced-motion` shows the final states.
 - Open decisions: where SQL and React were used (no evidence on the page yet).
 
 ## Brand Commitments
 - Name "Shafik Adam". Email shafik.adam98@gmail.com. No phone number, no photo.
 - Fonts: Anybody (display) and Literata (body).
-- Colours only from the tokens in `assets/styles.css`. Two inks: blue (pale at night) and sunflower.
+- Colours only from the tokens in `assets/styles.css`. Two inks: dark grey (light grey at night) and red, plus a lighter grey.
 - Voice *(inferred from the site copy)*: plain, short, specific sentences; numbers over adjectives; light humour kept to the back page and the centrefold.
 
 ## Evidence on Hand
