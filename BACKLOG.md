@@ -9,7 +9,7 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
-- [?] Tag and publish v1.0.0 (the cloud session could push `main` but not tags; v1.0.0 now includes the 2026-11-18 follow-ups, so tag the latest `main`). On your PC: `git fetch origin && git tag -a v1.0.0 origin/main -m "v1.0.0: The build log, Issue 1" && git push origin v1.0.0`, then create the GitHub Release from `docs/releases/v1.0.0.md` with the four screenshots in `docs/releases/v1.0.0/`
+- [?] Delete the two merged branches on GitHub (Branches → bin icon): `claude/ecstatic-dijkstra-wwvvi2` and `claude/beautiful-meitner-lxxr21`. Cloud sessions can't delete remote branches
 - [x] Page order: Experience now comes before Projects (Shafik, 2026-11-18)
 - [x] Section names are plain: Experience, Projects, Lessons learned, Skills, Education, Contact (Shafik, 2026-11-18)
 - [x] TypeScript: Cloud BMS is Svelte and AWS CDK in TypeScript; shown on the page and in Skills (Shafik, 2026-11-18)
@@ -29,6 +29,7 @@ Brainstormed with frontend-design and Impeccable `shape`; Shafik chose the riso 
 - [x] Design checker retargeted (centrefold, ink tokens, finished print under reduced motion)
 - [x] Recruiter critic and Impeccable finish review: all material fixes applied
 - [x] CLAUDE.md, PRODUCT.md, DESIGN.md, architecture, README rewritten; favicon and og.png redone
+- [x] v1.0.0 published 2026-11-18 by Shafik on github.com (the release form created a lightweight tag on `2955bce`; cloud sessions can't push tags)
 - [x] GSAP skills installed (6 of GreenSock's official skills) and a trial feature: section titles print on scroll, scrubbed (2026-11-18)
 - [ ] Decide after trying it: keep the scroll print, tune it, or remove it. Other scroll ideas, each needing Shafik's approval: charts filling to scale as they come into view, cover-line page numbers ticking as you move through the issue
 - [ ] Ceiling ideas from the finish review: a cover-scale nameplate, page furniture (edges, fold, bigger folios), real overprint on chart fills, crop marks on trim lines, a two-ink cake

@@ -21,3 +21,4 @@ Keep one repo, `AD-NAP/portfolio`. Mark each version with an annotated tag on `m
 - Only the latest version is live. Older versions are viewed by checking out their tag or from release screenshots.
 - The rename moved the live site from `/portfolio-v0.1/` to `/portfolio/`. The old Pages URL no longer works.
 - Version branches and per-version repos are not used.
+- From v1.0.0 (2026-11-18): Claude Code cloud sessions can push branches but not tags. Release notes and screenshots are prepared in `docs/releases/`, and Shafik publishes the release on github.com, which creates a lightweight tag instead of an annotated one.

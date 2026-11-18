@@ -60,3 +60,4 @@ Impeccable's design hook (same settings file) is a second gate: it scans each ed
 - Small changes (docs, backlog, fixes) go straight to `main`. Bigger changes go on a short-lived branch (or the session's assigned `claude/…` branch), merged into `main` once the check passes, then deleted.
 - Versions are annotated tags on `main` with a GitHub Release each (notes and screenshots). Major bump (`v1.0.0`) for a new visual world, minor bump (`v0.2.0`) for a visible milestone, patch bump (`v0.1.1`) for fixes to a release. Update the versions table in `README.md` with each release. No version branches or per-version repos.
 - Never force-push, rewrite pushed history, or move a published tag.
+- Cloud sessions can't push tags. Claude prepares the release notes and screenshots in `docs/releases/`; Shafik publishes the release on github.com, which creates the tag (a lightweight tag, accepted). (Shafik, 2026-11-18)
