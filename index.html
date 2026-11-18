@@ -21,12 +21,12 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Shafik Adam, Software Engineer">
-  <meta property="og:description" content="The build log, issue 1: cloud backends and AI tools, with the results measured.">
+  <meta property="og:description" content="The build log, issue 2: cloud backends and AI tools, with the results measured.">
   <meta property="og:url" content="https://ad-nap.github.io/portfolio/">
   <meta property="og:image" content="https://ad-nap.github.io/portfolio/assets/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="The cover of The build log, issue 1: Shafik Adam, printed in blue and yellow ink">
+  <meta property="og:image:alt" content="Shafik Adam's name card: Systems and Application Engineer at Azbil ASPO, Singapore, printed in grey and red ink">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,7 +41,7 @@
 
   <!-- Masthead: the zine's title, its contents, and which print you are reading -->
   <header class="mast">
-    <a class="mast__title" href="#top">Shafik Adam<span class="mast__issue">The build log, issue 1, November 2026</span></a>
+    <a class="mast__title" href="#top">Shafik Adam<span class="mast__issue">The build log, issue 2, November 2026</span></a>
     <nav class="mast__nav" aria-label="Contents">
       <ol>
         <li><a href="#experience">Experience</a></li>
@@ -59,9 +59,38 @@
   </header>
 
   <main id="main">
+    <!-- Name card (meishi): handed over on load. Scrolling, or "Open the build log",
+         flips it and grows its back into the cover below (main.js, GSAP ScrollTrigger). -->
+    <section id="card" class="card-stage" aria-labelledby="card-name">
+      <div class="card-stage__desk" aria-hidden="true"></div>
+      <div class="card-stage__inner">
+        <div class="meishi-hand">
+          <div class="meishi">
+            <div class="meishi__face meishi__front">
+              <p class="meishi__org"><span class="meishi__mark" aria-hidden="true"></span>Azbil ASPO, Singapore</p>
+              <h1 id="card-name" class="ink meishi__name">Shafik Adam</h1>
+              <p class="meishi__title">Systems and Application Engineer, Software Development</p>
+              <p class="meishi__email"><a href="mailto:shafik.adam98@gmail.com">shafik.adam98@gmail.com</a></p>
+            </div>
+            <!-- The back is a picture of the contact details; the same links are real on the cover. -->
+            <div class="meishi__face meishi__back" aria-hidden="true" inert>
+              <p class="meishi__back-name">Shafik Adam</p>
+              <dl class="meishi__contacts">
+                <div><dt>Email</dt><dd>shafik.adam98@gmail.com</dd></div>
+                <div><dt>GitHub</dt><dd>github.com/ad-nap</dd></div>
+                <div><dt>LinkedIn</dt><dd>linkedin.com/in/shafikadam</dd></div>
+                <div><dt>Resume</dt><dd>PDF on the cover</dd></div>
+              </dl>
+            </div>
+          </div>
+        </div>
+        <p class="card-stage__cta"><a class="card-open" href="#top">Open the build log</a><span class="card-stage__or">or just scroll</span></p>
+      </div>
+    </section>
+
     <!-- Cover -->
     <header id="top" class="cover">
-      <h1 class="ink cover__name">Shafik<br>Adam</h1>
+      <h2 id="cover-title" class="ink cover__name" tabindex="-1">The build log<span class="cover__issue">Issue 2</span></h2>
       <div class="cover__body">
         <div class="cover__intro">
           <p class="cover__line">Software engineer at Azbil in Singapore. I build cloud backends and AI tools in Python, TypeScript and AWS, and I keep a dev log of what each project teaches me.</p>
@@ -71,6 +100,7 @@
             <li><a href="https://www.linkedin.com/in/shafikadam/">LinkedIn</a></li>
             <li><a href="assets/Shafik-Adam-Resume.pdf" type="application/pdf">Resume (PDF)</a></li>
           </ul>
+          <p class="cover__replay"><a class="card-replay" href="#card">See my card again</a></p>
         </div>
         <nav class="coverlines" aria-labelledby="coverlines-title">
           <h2 id="coverlines-title" class="coverlines__title">In this issue</h2>
@@ -338,7 +368,7 @@
       <circle class="night-cat__eye" cx="21" cy="21" r="2"/><circle class="night-cat__eye" cx="31" cy="21" r="2"/>
       <path class="night-cat__tail" d="M44 57c9 0 13-6 11-14-.6-2.2-3.4-1.8-2.9.6 1.4 5.8-1.3 9.4-8.1 9.4z"/>
     </svg>
-    <p>The build log, issue 1. Printed in two inks with plain HTML, CSS and JavaScript, and hosted on GitHub Pages. Issue 1 is version 1.0.0 of this site.</p>
+    <p>The build log, issue 2. Printed in two inks with plain HTML, CSS and JavaScript, and hosted on GitHub Pages. Issue 2 is version 1.1.0 of this site.</p>
   </footer>
 </body>
 </html>

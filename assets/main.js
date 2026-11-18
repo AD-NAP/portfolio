@@ -118,12 +118,78 @@
     if (solved) openCentrefold(false);
   }
 
-  /* ---------- Section titles print as they scroll into view ----------
-     GSAP ScrollTrigger, scrubbed: the print follows the scrollbar, so scrolling back un-prints it.
-     Only CSS variables move (see .is-scroll-print in styles.css). Skipped under reduced motion. */
-  if (window.gsap && window.ScrollTrigger) {
+  /* ---------- The name card ----------
+     First visit: the card is handed over (CSS), then scrolling, or "Open the build log", flips it
+     and grows its back into the cover. GSAP ScrollTrigger pins the card over the page and scrubs
+     the flip to the scroll, so scrolling back up plays it in reverse. Returning visitors open on
+     the cover, and "See my card again" scrolls back up to it. */
+  const stage = document.getElementById("card");
+  const meishi = document.querySelector(".meishi");
+  const cover = document.getElementById("top");
+  const coverTitle = document.getElementById("cover-title");
+  let cardTrigger = null;
+  const cardSeen = () => { try { return localStorage.getItem("card") === "seen"; } catch (e) { return false; } };
+  const markCardSeen = () => { try { localStorage.setItem("card", "seen"); } catch (e) {} };
+  const afterScroll = fn => {
+    let done = false;
+    const go = () => { if (!done) { done = true; fn(); } };
+    window.addEventListener("scrollend", go, { once: true });
+    setTimeout(go, 1400);   // no scroll needed, or no scrollend support
+  };
+  const coverTop = () => cardTrigger ? cardTrigger.end : cover.getBoundingClientRect().top + window.scrollY;
+
+  document.querySelector(".card-open")?.addEventListener("click", e => {
+    e.preventDefault();
+    markCardSeen();
+    window.scrollTo({ top: coverTop(), behavior: reduceMotion ? "auto" : "smooth" });
+    afterScroll(() => coverTitle?.focus({ preventScroll: true }));
+  });
+  document.querySelector(".card-replay")?.addEventListener("click", e => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    afterScroll(() => document.querySelector(".card-open")?.focus({ preventScroll: true }));
+  });
+
+  if (window.gsap && window.ScrollTrigger && stage && meishi) {
     gsap.registerPlugin(ScrollTrigger);
-    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+    const mm = gsap.matchMedia();
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      root.classList.add("has-card-motion");
+      // How far the card must grow, from where it sits in the pinned stage, for its back to cover the screen.
+      const hand = document.querySelector(".meishi-hand");
+      const fillScale = () => {
+        const w = meishi.offsetWidth, h = meishi.offsetHeight;
+        const hr = hand.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+        const cx = hr.left - sr.left + w / 2, cy = hr.top - sr.top + h / 2;   // card centre within the stage
+        const sx = 2 * Math.max(cx, innerWidth - cx) / w;
+        const sy = 2 * Math.max(cy, innerHeight - cy) / h;
+        return Math.max(sx, sy) * 1.08;
+      };
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: stage, start: "top top", end: "+=100%",
+          pin: true, pinSpacing: false, scrub: 0.5, invalidateOnRefresh: true,
+          onLeave: markCardSeen,
+        },
+      });
+      tl.to(".card-stage__cta", { autoAlpha: 0, y: 12, duration: 0.12, ease: "none" }, 0)
+        .to(meishi, { rotationY: 180, scale: 1.12, duration: 0.42, ease: "power1.inOut" }, 0)
+        .to(".meishi__back > *", { autoAlpha: 0, duration: 0.12, ease: "none" }, 0.5)
+        .to(meishi, { scale: fillScale, duration: 0.3, ease: "power2.in" }, 0.45)
+        .set(".card-stage__desk", { autoAlpha: 0 }, 0.72)
+        // Once the cover shows through, let clicks reach it instead of the (fading) card stage.
+        .set(stage, { pointerEvents: "none" }, 0.72)
+        // Fade the faces, not the card: opacity on the card itself would flatten its 3D and show the front mirrored.
+        .to(".meishi__face", { autoAlpha: 0, duration: 0.28, ease: "none" }, 0.72);
+      cardTrigger = tl.scrollTrigger;
+      return () => { root.classList.remove("has-card-motion"); cardTrigger = null; };
+    });
+
+    /* ---------- Section titles print as they scroll into view ----------
+       Scrubbed: the print follows the scrollbar, so scrolling back un-prints it.
+       Only CSS variables move (see .is-scroll-print in styles.css). Skipped under reduced motion. */
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.utils.toArray(".spread__title").forEach(title => {   // top to bottom, as ScrollTrigger expects
         title.classList.add("is-scroll-print");
         gsap.timeline({ scrollTrigger: { trigger: title, start: "top 90%", end: "top 60%", scrub: 0.4 } })
@@ -132,6 +198,13 @@
       });
       return () => document.querySelectorAll(".is-scroll-print").forEach(t => t.classList.remove("is-scroll-print"));
     });
+  }
+  // Returning visitors (with no #link to follow) open straight on the cover. Wait for "load":
+  // a jump made earlier is undone when the browser settles the page's scroll position.
+  if (stage && cardSeen() && !location.hash) {
+    const jump = () => requestAnimationFrame(() => window.scrollTo(0, coverTop()));
+    if (document.readyState === "complete") jump();
+    else window.addEventListener("load", jump, { once: true });
   }
 
   /* ---------- The cat on the riddle card flicks its tail when the card comes into view ---------- */
