@@ -1,33 +1,33 @@
-// The build log: print toggle, contents highlight, the riddle and its centrefold, the cat.
+// Shafik Adam: theme toggle, section highlight, the card that opens into the portfolio, the riddle.
 (() => {
   const root = document.documentElement;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- Day print / night print ---------- */
-  const toggle = document.querySelector(".print-toggle");
+  /* ---------- Light and dark ---------- */
+  const toggle = document.querySelector(".theme-toggle");
   const themeMeta = document.querySelector('meta[name="theme-color"]');
-  const isNight = () => root.dataset.theme === "dark";
+  const isDark = () => root.dataset.theme === "dark";
   const sync = () => {
-    toggle?.setAttribute("aria-pressed", String(isNight()));
+    toggle?.setAttribute("aria-pressed", String(isDark()));
     if (themeMeta) themeMeta.content = getComputedStyle(root).getPropertyValue("--paper").trim();
   };
   sync();
 
   let switchTimer;
   toggle?.addEventListener("click", () => {
-    const next = isNight() ? "light" : "dark";
+    const next = isDark() ? "light" : "dark";
     if (!reduceMotion) {
       root.classList.add("is-switching");
       clearTimeout(switchTimer);
-      switchTimer = setTimeout(() => root.classList.remove("is-switching"), 400);
+      switchTimer = setTimeout(() => root.classList.remove("is-switching"), 350);
     }
     root.dataset.theme = next;
     try { localStorage.setItem("theme", next); } catch (e) {}
     sync();
   });
 
-  /* ---------- Contents: mark the page you are reading ---------- */
-  const navLinks = [...document.querySelectorAll(".mast__nav a")];
+  /* ---------- The bar: mark the section you are reading ---------- */
+  const navLinks = [...document.querySelectorAll(".bar__nav a")];
   const byId = new Map(navLinks.map(a => [a.hash.slice(1), a]));
   const watched = [...byId.keys()].map(id => document.getElementById(id)).filter(Boolean);
   const setCurrent = id => navLinks.forEach(a => {
@@ -41,6 +41,12 @@
     setCurrent(first ? first.id : "");
   }, { rootMargin: "-30% 0px -60% 0px" });
   watched.forEach(s => spy.observe(s));
+  // Phones: fade the links at the edge only when they actually run past it.
+  const barNav = document.querySelector(".bar__nav");
+  const markClipped = () => barNav?.classList.toggle("is-clipped", barNav.scrollWidth > barNav.clientWidth + 1);
+  window.addEventListener("resize", markClipped);
+  document.fonts?.ready.then(markClipped);
+  markClipped();
 
   /* ---------- ad-nap, read backwards ---------- */
   const word = "ad-nap";
@@ -56,30 +62,34 @@
     });
   }
 
-  /* ---------- Guess the animal to open the centrefold ---------- */
+  /* ---------- Guess the animal to open the bonus ---------- */
   const riddle = document.querySelector(".riddle");
   const riddleForm = document.querySelector(".riddle__form");
   const guess = document.getElementById("guess");
   const riddleStatus = document.querySelector(".riddle__status");
   const answer = document.getElementById("riddle-answer");
-  const centrefold = document.getElementById("centrefold");
+  const bonus = document.getElementById("bonus");
+  // "centrefold" (v1.x zine) and "b1" (the building, before v1.0.0) are older names for the same reward.
+  const OLD_KEYS = ["centrefold", "b1"];
 
-  const openCentrefold = animate => {
+  const openBonus = animate => {
     riddleForm.hidden = true;
     answer.hidden = false;
     riddle?.classList.add("is-open");
     if (animate && !reduceMotion) requestAnimationFrame(() => requestAnimationFrame(() => flip?.classList.add("is-flipped")));
     else flip?.classList.add("is-static");
-    centrefold.hidden = false;
-    document.querySelectorAll(".centrefold-entry").forEach(el => { el.hidden = false; });
-    window.ScrollTrigger?.refresh();   // the page got taller: re-measure the scroll prints
+    bonus.hidden = false;
+    document.querySelectorAll(".bonus-entry").forEach(el => { el.hidden = false; });
+    markClipped();
+    window.ScrollTrigger?.refresh();   // the page got taller
   };
 
   // Put everything back the way a first-time visitor sees it.
-  const closeCentrefold = () => {
-    try { localStorage.removeItem("centrefold"); localStorage.removeItem("b1"); } catch (e) {}
-    centrefold.hidden = true;
-    document.querySelectorAll(".centrefold-entry").forEach(el => { el.hidden = true; });
+  const closeBonus = () => {
+    try { ["bonus", ...OLD_KEYS].forEach(k => localStorage.removeItem(k)); } catch (e) {}
+    bonus.hidden = true;
+    document.querySelectorAll(".bonus-entry").forEach(el => { el.hidden = true; });
+    markClipped();
     answer.hidden = true;
     riddle?.classList.remove("is-open");
     flip?.classList.remove("is-flipped", "is-static");
@@ -91,16 +101,16 @@
     guess.focus({ preventScroll: true });
   };
 
-  if (riddleForm && guess && answer && centrefold) {
+  if (riddleForm && guess && answer && bonus) {
     let misses = 0;
     riddleForm.addEventListener("submit", e => {
       e.preventDefault();
       const said = guess.value.toLowerCase().replace(/[^a-z]/g, "").replace(/^(a|the)(?=.)/, "");
       if (!said) { riddleStatus.textContent = "Type an animal first."; return; }
       if (/^(giant)?pandas?$/.test(said)) {
-        try { localStorage.setItem("centrefold", "open"); } catch (e) {}
-        riddleStatus.textContent = "Correct. The centrefold is open.";
-        openCentrefold(true);
+        try { localStorage.setItem("bonus", "open"); } catch (e) {}
+        riddleStatus.textContent = "Correct. The bonus is open.";
+        openBonus(true);
         answer.querySelector(".riddle__reward a")?.focus({ preventScroll: true });
         return;
       }
@@ -109,24 +119,27 @@
       riddleStatus.textContent = misses === 1 ? "Not quite. Look at my GitHub username." : "Not quite. Try reading it backwards.";
     });
 
-    document.querySelector(".riddle-reset")?.addEventListener("click", closeCentrefold);
+    document.querySelector(".riddle-reset")?.addEventListener("click", closeBonus);
 
-    // Solved on an earlier visit: the centrefold stays open. "b1" is the key the
-    // building version (before v1.0.0) used for its basement, so those visitors keep their reward.
     let solved = false;
-    try { solved = localStorage.getItem("centrefold") === "open" || localStorage.getItem("b1") === "open"; } catch (e) {}
-    if (solved) openCentrefold(false);
+    try { solved = ["bonus", ...OLD_KEYS].some(k => localStorage.getItem(k) === "open"); } catch (e) {}
+    if (solved) openBonus(false);
   }
 
-  /* ---------- The name card ----------
-     First visit: the card is handed over (CSS), then scrolling, or "Open the build log", flips it
-     and grows its back into the cover. GSAP ScrollTrigger pins the card over the page and scrubs
-     the flip to the scroll, so scrolling back up plays it in reverse. Returning visitors open on
-     the cover, and "See my card again" scrolls back up to it. */
+  /* ---------- The card opens into the portfolio ----------
+     The card lies over About; both are pinned for a screen. One number, p (0 to 1), follows the
+     scroll and render(p) turns it into CSS variables: the card's paper grows into the sheet, its
+     name walks to the bar, the nav arrives, and About, already laid out underneath, fades in.
+     Scrolling back plays it in reverse; letting go mid-way snaps to the card or the portfolio.
+     Only transforms and opacity move, so no text is ever scaled up or repainted. */
   const stage = document.getElementById("card");
-  const meishi = document.querySelector(".meishi");
-  const cover = document.getElementById("top");
-  const coverTitle = document.getElementById("cover-title");
+  const opening = document.querySelector(".opening");
+  const about = document.getElementById("about");
+  const aboutTitle = document.getElementById("about-title");
+  const bar = document.querySelector(".bar");
+  const name = document.getElementById("card-name");
+  const card = document.querySelector(".card");
+  const lift = document.querySelector(".card-lift");
   let cardTrigger = null;
   const cardSeen = () => { try { return localStorage.getItem("card") === "seen"; } catch (e) { return false; } };
   const markCardSeen = () => { try { localStorage.setItem("card", "seen"); } catch (e) {} };
@@ -136,22 +149,24 @@
     window.addEventListener("scrollend", go, { once: true });
     setTimeout(go, 1400);   // no scroll needed, or no scrollend support
   };
-  const coverTop = () => cardTrigger ? cardTrigger.end : cover.getBoundingClientRect().top + window.scrollY;
+  const openTop = () => cardTrigger ? cardTrigger.end : about.getBoundingClientRect().top + window.scrollY - bar.offsetHeight;
+  const finish = () => {     // jump to the open state without easing into it
+    if (!cardTrigger || window.scrollY >= cardTrigger.end - 1) return;
+    window.scrollTo({ top: cardTrigger.end, behavior: "instant" });
+    cardTrigger.getTween()?.progress(1);
+  };
 
   document.querySelector(".card-open")?.addEventListener("click", e => {
     e.preventDefault();
     markCardSeen();
-    window.scrollTo({ top: coverTop(), behavior: reduceMotion ? "auto" : "smooth" });
-    afterScroll(() => coverTitle?.focus({ preventScroll: true }));
+    window.scrollTo({ top: openTop(), behavior: reduceMotion ? "auto" : "smooth" });
+    afterScroll(() => aboutTitle?.focus({ preventScroll: true }));
   });
-  // Keyboard users: if focus moves into the cover while the card still lies over it, go to the
-  // cover first, so the focused link is never hidden under the card.
-  cover?.addEventListener("focusin", () => {
-    if (!cardTrigger || window.scrollY >= cardTrigger.end - 1) return;
-    requestAnimationFrame(() => {             // after the browser's own scroll-to-focus
-      window.scrollTo({ top: cardTrigger.end, behavior: "instant" });
-      cardTrigger.getTween()?.progress(1);    // finish the scrub at once instead of easing into place
-    });
+  // Keyboard: if focus moves past the card while it is still closed, open it at once,
+  // so the focused link is never hidden under the card.
+  document.addEventListener("focusin", e => {
+    if (!cardTrigger || stage.contains(e.target) || e.target.matches?.(".skip")) return;
+    requestAnimationFrame(finish);             // after the browser's own scroll-to-focus
   });
   document.querySelector(".card-replay")?.addEventListener("click", e => {
     e.preventDefault();
@@ -159,95 +174,110 @@
     afterScroll(() => document.querySelector(".card-open")?.focus({ preventScroll: true }));
   });
 
-  if (window.gsap && window.ScrollTrigger && stage && meishi) {
+  if (window.gsap && window.ScrollTrigger && stage && card && name && about && bar) {
     gsap.registerPlugin(ScrollTrigger);
     const mm = gsap.matchMedia();
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       root.classList.add("has-card-motion");
-      const opening = document.querySelector(".opening");
-      const hand = document.querySelector(".meishi-hand");
-      // How far the card must grow, from where it sits on the stage, for its back to cover the screen.
-      const fillScale = () => {
-        const w = meishi.offsetWidth, h = meishi.offsetHeight;
-        const hr = hand.getBoundingClientRect(), sr = stage.getBoundingClientRect();
-        const cx = hr.left - sr.left + w / 2, cy = hr.top - sr.top + h / 2;   // card centre within the stage
-        return Math.max(2 * Math.max(cx, innerWidth - cx) / w, 2 * Math.max(cy, innerHeight - cy) / h) * 1.08;
+      // The nav arrives from the right in uneven steps, the theme button last.
+      const arrivals = [...bar.querySelectorAll(".bar__nav li"), bar.querySelector(".theme-toggle")];
+      const steps = [0, .09, .16, .21, .25, .28, .30, .31];
+      arrivals.forEach((el, i) => el.style.setProperty("--d", steps[Math.min(i, steps.length - 1)]));
+
+      // Layout position within the stage, ignoring transforms (the card's lift may still be running).
+      const offsetIn = (el, ancestor) => {
+        let x = 0, y = 0;
+        for (let n = el; n && n !== ancestor; n = n.offsetParent) { x += n.offsetLeft; y += n.offsetTop; }
+        return { x, y };
       };
-      // One number, p (0 to 1), follows the scroll; render() turns it into the CSS variables the stage
-      // reads (see .card-stage in styles.css). Same p, same picture, in both directions.
-      const turnEase = gsap.parseEase("power1.inOut"), growEase = gsap.parseEase("power2.in");
-      const span = (p, a, b) => gsap.utils.clamp(0, 1, (p - a) / (b - a));
-      let fill = 1;
-      const render = p => {
-        const turn = turnEase(span(p, 0, 0.42));          // 0 to 0.42: the card turns over
-        const grow = growEase(span(p, 0.45, 0.75));       // 0.45 to 0.75: its back grows over the screen
-        const after = 1 - span(p, 0, 0.12);               // the lines under the card step aside first
-        const landed = p >= 0.75;                         // the back is now the cover's paper
-        const ink = span(p, 0.76, 0.96);                  // and the cover title receives its ink
-        const v = {
-          "--card-turn": `${180 * turn}deg`,
-          "--card-scale": p < 0.45 ? 1 + 0.12 * turn : 1.12 + (fill - 1.12) * grow,
-          "--back-ink": 1 - span(p, 0.45, 0.57),
-          "--after-alpha": after, "--after-y": `${12 * (1 - after)}px`, "--after-vis": after > 0 ? "visible" : "hidden",
-          "--face-alpha": landed ? 0 : 1, "--desk-alpha": landed ? 0 : 1, "--stage-events": landed ? "none" : "auto",
+      let m = null;   // measurements, refreshed with ScrollTrigger
+      const measure = () => {
+        const W = stage.clientWidth, H = stage.clientHeight;
+        const c = offsetIn(card, stage), w = card.offsetWidth, h = card.offsetHeight;
+        const n = offsetIn(name, stage);
+        const brand = bar.querySelector(".bar__name");
+        const b = brand.getBoundingClientRect();
+        // Line height is 1 on both, so the boxes' heights are the type sizes.
+        const bText = { x: b.left + parseFloat(getComputedStyle(brand).paddingLeft), y: b.top + (b.height - parseFloat(getComputedStyle(brand).fontSize)) / 2 };
+        m = {
+          sx: W / w * 1.02, sy: H / h * 1.02,
+          tx: W / 2 - (c.x + w / 2), ty: H / 2 - (c.y + h / 2),
+          nx: bText.x - n.x, ny: bText.y - n.y,
+          ns: parseFloat(getComputedStyle(brand).fontSize) / parseFloat(getComputedStyle(name).fontSize),
         };
-        for (const k in v) stage.style.setProperty(k, v[k]);
-        coverTitle.style.setProperty("--print", `${100 * ink}%`);
-        coverTitle.style.setProperty("--mis-x", `${-18 + 24 * ink}px`);
+        // Correct for rounding: put the name at its landing spot, compare the two lines of text, nudge.
+        const textBox = el => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect(); };
+        const keep = ["--name-x", "--name-y", "--name-s"].map(k => [k, stage.style.getPropertyValue(k)]);
+        stage.style.setProperty("--name-x", `${m.nx}px`); stage.style.setProperty("--name-y", `${m.ny}px`); stage.style.setProperty("--name-s", m.ns);
+        const landed = textBox(name), target = textBox(brand), s = stage.getBoundingClientRect();
+        // The stage sits at the window's top-left while pinned; it may be scrolled elsewhere right now.
+        // The card may also still be lifting into place on load: take its current offset out.
+        const t = getComputedStyle(lift).transform, liftY = t && t !== "none" ? new DOMMatrixReadOnly(t).m42 : 0;
+        m.nx += target.left - (landed.left - s.left); m.ny += target.top - (landed.top - s.top - liftY);
+        keep.forEach(([k, v]) => stage.style.setProperty(k, v));
       };
-      coverTitle.classList.add("is-scroll-print");
+
+      const span = (p, a, b) => gsap.utils.clamp(0, 1, (p - a) / (b - a));
+      const growEase = gsap.parseEase("power2.inOut"), walkEase = gsap.parseEase("power3.inOut"), inEase = gsap.parseEase("power2.out");
+      const set = (el, vars) => { for (const k in vars) el.style.setProperty(k, vars[k]); };
+      const px = v => `${v.toFixed(2)}px`;
+      const render = p => {
+        if (!m) measure();
+        const front = 1 - span(p, 0, .16);            // card lines, dimensions and the links under it step aside
+        const grow = growEase(span(p, .05, .6));      // the paper grows into the sheet
+        const walk = walkEase(span(p, .1, .64));      // the name walks to the bar
+        const landed = p >= .64;                      // the bar's name takes over in the same frame
+        const fade = inEase(span(p, .58, .86));       // About, already in place, fades in as the name lands
+        set(stage, {
+          "--front-alpha": front, "--after-alpha": front, "--after-vis": front > 0 ? "visible" : "hidden",
+          "--shadow-alpha": 1 - span(p, .05, .4),
+          "--paper-sx": 1 + (m.sx - 1) * grow, "--paper-sy": 1 + (m.sy - 1) * grow,
+          "--paper-x": px(m.tx * grow), "--paper-y": px(m.ty * grow),
+          "--paper-alpha": 1 - span(p, .6, .8),      // the sheet's grid shows through as it lands
+          "--desk-alpha": p < .6 ? 1 : 0,            // hidden under the grown paper by then
+          "--name-x": px(m.nx * walk), "--name-y": px(m.ny * walk), "--name-s": 1 + (m.ns - 1) * walk,
+          "--name-alpha": landed ? 0 : 1,
+          "--stage-vis": p >= .9 ? "hidden" : "visible", "--stage-events": front > .5 ? "auto" : "none",
+        });
+        set(about, { "--about-alpha": fade, "--about-y": px(10 * (1 - fade)), "--about-events": fade > .5 ? "auto" : "none" });
+        set(bar, {
+          "--nav-p": span(p, .44, .7), "--bar-vis": p > .4 ? "visible" : "hidden",
+          "--bar-bg": landed ? 1 : 0, "--brand-alpha": landed ? 1 : 0,
+        });
+      };
+
       const progress = { p: 0 };
       const tween = gsap.to(progress, {
         p: 1, ease: "none", onUpdate: () => render(progress.p),
         scrollTrigger: {
-          trigger: opening, start: "top top", end: "+=100%",
-          pin: true, scrub: 0.5, invalidateOnRefresh: true,   // card and cover pinned together
-          onRefresh: () => { fill = fillScale(); render(progress.p); },
+          trigger: opening, start: "top top", end: "+=110%",
+          pin: true, scrub: .8, invalidateOnRefresh: true,
+          // Let go mid-way and it settles, in the direction you were scrolling: the card or the portfolio.
+          snap: { snapTo: [0, 1], duration: { min: .25, max: .6 }, delay: .06, ease: "power2.inOut" },
+          onRefresh: () => { measure(); render(progress.p); },
           onLeave: markCardSeen,
         },
       });
-      fill = fillScale();
+      measure();
       render(0);
       cardTrigger = tween.scrollTrigger;
-      if (cardSeen() && !location.hash) window.scrollTo({ top: cardTrigger.end, behavior: "instant" });
+      document.fonts?.ready.then(() => ScrollTrigger.refresh());   // Archivo changes the name's size
+      lift.addEventListener("animationend", () => { measure(); render(progress.p); }, { once: true });
       return () => {
-        root.classList.remove("has-card-motion"); coverTitle.classList.remove("is-scroll-print");
-        stage.removeAttribute("style"); coverTitle.style.removeProperty("--print"); coverTitle.style.removeProperty("--mis-x");
+        root.classList.remove("has-card-motion");
+        [stage, about, bar].forEach(el => el.removeAttribute("style"));
+        arrivals.forEach(el => el.style.removeProperty("--d"));
         cardTrigger = null;
       };
     });
-
-    /* ---------- Section titles print as they scroll into view ----------
-       Scrubbed: the print follows the scrollbar, so scrolling back un-prints it.
-       Only CSS variables move (see .is-scroll-print in styles.css). Skipped under reduced motion. */
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.utils.toArray(".spread__title").forEach(title => {   // top to bottom, as ScrollTrigger expects
-        title.classList.add("is-scroll-print");
-        gsap.timeline({ scrollTrigger: { trigger: title, start: "top 90%", end: "top 72%", scrub: 0.4 } })
-          .fromTo(title, { "--print": "0%" }, { "--print": "100%", ease: "none", duration: 0.55 })
-          .fromTo(title, { "--mis-x": "-18px" }, { "--mis-x": "3px", ease: "power2.out", duration: 0.45 }, 0.3);
-      });
-      return () => document.querySelectorAll(".is-scroll-print").forEach(t => t.classList.remove("is-scroll-print"));
-    });
   }
-  // Returning visitors (with no #link to follow) open straight on the cover. Wait for "load":
+  // Returning visitors (with no #link to follow) open straight on the portfolio. Wait for "load":
   // a jump made earlier is undone when the browser settles the page's scroll position.
   if (stage && cardSeen() && !location.hash) {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    const jump = () => requestAnimationFrame(() => window.scrollTo({ top: coverTop(), behavior: "instant" }));
+    const jump = () => requestAnimationFrame(() => window.scrollTo({ top: openTop(), behavior: "instant" }));
     if (document.readyState === "complete") jump();
     else window.addEventListener("load", jump, { once: true });
-  }
-
-  /* ---------- The cat on the riddle card flicks its tail when the card comes into view ---------- */
-  const perchCat = document.querySelector(".perch-cat");
-  if (perchCat && !reduceMotion) {
-    new IntersectionObserver((entries, obs) => {
-      if (entries.some(e => e.isIntersecting)) {
-        setTimeout(() => perchCat.classList.add("is-flicking"), 300);
-        obs.disconnect();
-      }
-    }, { threshold: 0.6 }).observe(riddle || perchCat);
   }
 })();

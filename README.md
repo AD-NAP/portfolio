@@ -1,6 +1,6 @@
 # Shafik Adam portfolio
 
-Single-page portfolio, printed as a two-ink zine called The build log, one issue per release. Since Issue 2 it opens on a name card that turns into the cover. Plain HTML, CSS and JavaScript with no build step.
+Single-page portfolio. It opens on a business card that grows into a technical drawing sheet as you scroll: the name moves to the top bar, the links arrive, and the portfolio was inside the card all along. Plain HTML, CSS and JavaScript with no build step.
 
 Live site: https://ad-nap.github.io/portfolio/
 
@@ -25,6 +25,7 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
+| [v1.2.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.2.0) | 2026-11-18 | The business card opens into a drawing sheet. Crisp, snapped card-to-portfolio transition, warm-grey sheet with a hairline grid, Archivo, one red accent, title block footer; the riddle stays, the zine and the cats retire |
 | [v1.1.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.1.0) | 2026-11-18 | Issue 2: opens on a meishi-style name card that turns over into the zine cover as you scroll; grey and red inks |
 | [v1.0.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.0.0) | 2026-11-18 | Redesign: The build log, Issue 1. A two-ink riso zine replaces the building: cover lines that link to the proof, Experience first, Lessons learned, day and night prints, section titles that print on scroll, a resettable riddle that opens a centrefold |
 | [v0.5.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.5.0) | 2026-11-17 | Design skills (Impeccable, Emil Kowalski) installed and run: phone fixes, shorter lines, flatter project charts, press feedback, calmer automatic motion |

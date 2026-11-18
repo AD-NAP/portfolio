@@ -5,13 +5,58 @@
     "ignoreFiles": [],
     "ignoreValues": [
       {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "assets/styles.css"
+        ],
+        "createdAt": "2026-11-18T15:24:31.198Z",
+        "reason": "Pinned by the brief (vault/ideas/business-card-idea.md: thin technical or grid lines). The sheet's 12-column hairlines and the drafting desk's grid are the drawing-sheet world, not decoration"
+      },
+      {
+        "rule": "repeating-stripes-gradient",
+        "value": "*",
+        "files": [
+          "assets/styles.css"
+        ],
+        "createdAt": "2026-11-18T15:24:31.277Z",
+        "reason": "Hatching on baseline chart bars and test-data bars: the section-cut convention of technical drawings, marking the quieter comparison; the sheet's column hairlines"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-18T15:24:31.355Z",
+        "reason": "Source-only scan reads the small Highlights list heading as the h3 role; entry h3s are 1.35-1.7rem and section h2s 2-3.25rem, a clear scale in the rendered page"
+      },
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-18T15:25:15.921Z",
+        "reason": "Pinned by the brief (thin technical or grid lines): the sheet's column hairlines and the drafting desk grid are the drawing-sheet world"
+      },
+      {
+        "rule": "repeating-stripes-gradient",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-18T15:25:15.995Z",
+        "reason": "Section-cut hatching on baseline and test-data bars, a technical-drawing convention for the quieter comparison"
+      },
+      {
         "rule": "cramped-padding",
         "value": "*",
         "files": [
           "index.html"
         ],
-        "createdAt": "2026-11-18T00:38:10.646Z",
-        "reason": "Source-only scan without CSS: spreads have 56-104px top padding below the dashed trim line; the rendered scan (detect --cdp) passes"
+        "createdAt": "2026-11-18T15:25:16.069Z",
+        "reason": "Source-only scan without the stylesheet: every bordered block (skills rows, notes, highlights, title block cells) has 10-16px inset in CSS; the first skills row has no border"
       },
       {
         "rule": "tight-leading",
@@ -19,8 +64,17 @@
         "files": [
           "index.html"
         ],
-        "createdAt": "2026-11-18T03:24:58.393Z",
-        "reason": "Source-only scan (no real fonts) flags the v1.1 name card at 1.27x without naming an element; every multi-line text has explicit leading >= 1.3 and the rendered scan (detect --cdp, real layout) reports no tight leading"
+        "createdAt": "2026-11-18T15:25:19.854Z",
+        "reason": "Source-only scan (no real fonts or stylesheet) reports 1.27x without naming an element; a rendered check at 390px and 1280px finds every multi-line text at 1.3x or more"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#000",
+        "files": [
+          "assets/styles.css"
+        ],
+        "createdAt": "2026-11-18T15:30:56.320Z",
+        "reason": "Mask-image alpha stop for the phone bar's edge fade; black here is opacity, not a colour"
       }
     ]
   }
