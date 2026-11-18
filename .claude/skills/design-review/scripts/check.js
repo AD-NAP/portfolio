@@ -6,8 +6,8 @@
 //   - axe-core WCAG 2.1 AA violations
 //   - token contrast (text ≥ 4.5:1, focus ≥ 3:1) per theme
 //   - touch targets under 44px at phone widths
-//   - the same checks again with the hidden basement (B1) open
-//   - the riddle: wrong guesses keep B1 shut, "panda" opens it, a reload keeps it open
+//   - the same checks again with the hidden centrefold open
+//   - the riddle: wrong guesses keep the centrefold shut, "panda" opens it, a reload keeps it open
 // Usage: node .claude/skills/design-review/scripts/check.js [--out DIR] [--widths 390,1280] [--themes dark,light]
 // Exit code 1 when any check fails, so it can gate hooks and CI.
 
@@ -53,9 +53,9 @@ const lum = hex => {
 const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
 // Token pairs that must pass in every theme: [foreground, background, minimum].
 const TOKEN_PAIRS = [
-  ["--text", "--bg", 4.5], ["--body", "--bg", 4.5], ["--muted", "--bg", 4.5], ["--muted", "--bg-deep", 4.5],
-  ["--accent-text", "--bg", 4.5], ["--code-c", "--bg-deep", 4.5], ["--placeholder", "--bg-deep", 4.5],
-  ["--focus", "--bg", 3], ["--focus", "--facade", 3],
+  ["--text", "--paper", 4.5], ["--ink", "--paper", 4.5], ["--muted", "--paper", 4.5],
+  ["--text", "--paper-deep", 4.5], ["--muted", "--paper-deep", 4.5], ["--on-yellow", "--yellow", 4.5],
+  ["--paper", "--ink", 4.5], ["--focus", "--paper", 3], ["--focus", "--paper-deep", 3],
 ];
 
 // Checks that read the page as it stands: overflow, axe, small touch targets.
@@ -69,7 +69,6 @@ const audit = async (page, phone) => {
   });
   const smallTargets = phone ? await page.evaluate(() =>
     [...document.querySelectorAll("a[href], button, input")]
-      .filter(el => !el.closest(".storey"))              // floors: equivalent links exist in the Files menu
       .map(el => { const r = el.getBoundingClientRect(); return { el, r }; })
       .filter(({ el, r }) => r.width > 0 && getComputedStyle(el).visibility !== "hidden" && !el.classList.contains("skip"))
       .filter(({ r }) => r.width < 44 || r.height < 44)
@@ -87,7 +86,7 @@ const audit = async (page, phone) => {
   const CLOUD_CHROMIUM = "/opt/pw-browsers/chromium";
   const browser = await chromium.launch(fs.existsSync(CLOUD_CHROMIUM) ? { executablePath: CLOUD_CHROMIUM } : {});
   const results = [];
-  const b1Results = [];
+  const cfResults = [];
 
   for (const theme of THEMES) for (const width of WIDTHS) {
     const tag = `${theme}-${width}`;
@@ -104,7 +103,7 @@ const audit = async (page, phone) => {
     await page.waitForTimeout(2500);                      // let the load animation finish
 
     // Warm-up pass: scroll the whole page once so every scroll-triggered animation
-    // (request log, cat flick, timeline) runs to its final state before screenshots.
+    // (cat flick) runs to its final state before screenshots.
     const height = await page.evaluate(() => document.documentElement.scrollHeight);
     const vh = page.viewportSize().height;
     for (let y = 0; y < height; y += vh / 2) {
@@ -117,7 +116,7 @@ const audit = async (page, phone) => {
     const screens = [];
     for (let i = 0, y = 0; y < height && i < MAX_SCREENS; i++, y += vh) {
       await page.evaluate(top => window.scrollTo({ top, behavior: "instant" }), y);
-      await page.waitForTimeout(300);                      // timeline fill follows scroll position
+      await page.waitForTimeout(300);
       const file = path.join(OUT, `${tag}-${String(i + 1).padStart(2, "0")}.png`);
       await page.screenshot({ path: file });
       screens.push(path.relative(ROOT, file));
@@ -150,55 +149,55 @@ const audit = async (page, phone) => {
     results.push({ theme, width, sheet: path.relative(ROOT, sheet), screens, overflow, errors, axe, contrast, smallTargets });
     await page.close();
 
-    // Same theme and width with the basement already open (as on a return visit).
-    const b1Page = await browser.newPage({
+    // Same theme and width with the centrefold already open (as on a return visit).
+    const cfPage = await browser.newPage({
       viewport: { width, height: phone ? 844 : 800 },
       deviceScaleFactor: phone ? 2 : 1,
       colorScheme: theme === "light" ? "light" : "dark",
     });
-    const b1Errors = [];
-    b1Page.on("pageerror", e => b1Errors.push(e.message));
-    b1Page.on("console", m => { if (m.type() === "error") b1Errors.push(m.text()); });
-    await b1Page.addInitScript(() => { try { localStorage.setItem("b1", "open"); } catch (e) {} });
-    await b1Page.goto(url, { waitUntil: "networkidle" });
-    await b1Page.waitForTimeout(2500);
-    const b1Screens = [];
-    for (const [name, sel] of [["hero", "#top"], ["fun", "#fun"], ["basement", "#b1"]]) {
-      await b1Page.evaluate(s => document.querySelector(s).scrollIntoView({ behavior: "instant", block: "start" }), sel);
-      await b1Page.waitForTimeout(700);
-      const file = path.join(OUT, `${tag}-b1-${name}.png`);
-      await b1Page.screenshot({ path: file });
-      b1Screens.push(path.relative(ROOT, file));
+    const cfErrors = [];
+    cfPage.on("pageerror", e => cfErrors.push(e.message));
+    cfPage.on("console", m => { if (m.type() === "error") cfErrors.push(m.text()); });
+    await cfPage.addInitScript(() => { try { localStorage.setItem("centrefold", "open"); } catch (e) {} });
+    await cfPage.goto(url, { waitUntil: "networkidle" });
+    await cfPage.waitForTimeout(2500);
+    const cfScreens = [];
+    for (const [name, sel] of [["cover", "#top"], ["contact", "#contact"], ["centrefold", "#centrefold"]]) {
+      await cfPage.evaluate(s => document.querySelector(s).scrollIntoView({ behavior: "instant", block: "start" }), sel);
+      await cfPage.waitForTimeout(700);
+      const file = path.join(OUT, `${tag}-cf-${name}.png`);
+      await cfPage.screenshot({ path: file });
+      cfScreens.push(path.relative(ROOT, file));
     }
-    await b1Page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
-    const b1Visible = await b1Page.evaluate(() => !document.getElementById("b1").hidden && !!document.querySelector(".storey--b1")?.getBoundingClientRect().width);
-    b1Results.push({ theme, width, screens: b1Screens, errors: b1Errors, visible: b1Visible, ...(await audit(b1Page, phone)) });
-    await b1Page.close();
+    await cfPage.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    const cfVisible = await cfPage.evaluate(() => !document.getElementById("centrefold").hidden && !!document.querySelector(".centrefold-entry a")?.getBoundingClientRect().width);
+    cfResults.push({ theme, width, screens: cfScreens, errors: cfErrors, visible: cfVisible, ...(await audit(cfPage, phone)) });
+    await cfPage.close();
   }
 
-  // The riddle itself: wrong guesses keep the basement shut, the right one opens it for good.
+  // The riddle itself: wrong guesses keep the centrefold shut, the right one opens it for good.
   const rp = await browser.newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" });
   await rp.goto(url, { waitUntil: "networkidle" });
-  const b1Shown = () => rp.evaluate(() => !document.getElementById("b1").hidden);
+  const cfShown = () => rp.evaluate(() => !document.getElementById("centrefold").hidden);
   const tryGuess = async word => { await rp.fill("#guess", word); await rp.click(".riddle__btn"); await rp.waitForTimeout(200); };
-  const riddle = { hiddenAtStart: !(await b1Shown()) };
+  const riddle = { hiddenAtStart: !(await cfShown()) };
   await tryGuess("cat");
   riddle.hintAfterWrong = await rp.textContent(".riddle__status");
-  riddle.hiddenAfterWrong = !(await b1Shown());
+  riddle.hiddenAfterWrong = !(await cfShown());
   await tryGuess(" Panda ");
-  riddle.openAfterRight = await b1Shown();
-  riddle.floorLinkShown = await rp.evaluate(() => !!document.querySelector(".storey--b1")?.getBoundingClientRect().width);
+  riddle.openAfterRight = await cfShown();
+  riddle.contentsLinkShown = await rp.evaluate(() => !!document.querySelector(".centrefold-entry a")?.getBoundingClientRect().width);
   await rp.reload({ waitUntil: "networkidle" });
-  riddle.openAfterReload = await b1Shown();
+  riddle.openAfterReload = await cfShown();
   await rp.close();
 
-  // Reduced motion: windows must be in their final state immediately, with nothing animating.
+  // Reduced motion: the cover must show the finished print immediately, with nothing animating.
   const rm = await browser.newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark", reducedMotion: "reduce" });
   await rm.goto(url, { waitUntil: "networkidle" });
   await rm.waitForTimeout(300);
   const reducedMotion = await rm.evaluate(() => ({
-    windowsLit: document.querySelectorAll(".storey__win.is-on").length,
-    windowsTotal: document.querySelectorAll(".storey__win").length,
+    inkLayers: document.querySelectorAll(".ink").length,
+    inkPrinted: [...document.querySelectorAll(".ink")].filter(el => { const cs = getComputedStyle(el); return cs.clipPath === "none" && cs.color !== "rgba(0, 0, 0, 0)"; }).length,
     running: document.getAnimations().filter(a => a.playState === "running").length,
   }));
   await browser.close();
@@ -214,28 +213,28 @@ const audit = async (page, phone) => {
     r.contrast.filter(c => c.pass === false).forEach(c => fails.push(`${t}: contrast ${c.pair} = ${c.ratio}:1 (needs ${c.min}:1)`));
     r.smallTargets.forEach(s => fails.push(`${t}: touch target "${s.name}" is ${s.w}×${s.h}px (needs 44×44)`));
   }
-  for (const r of b1Results) {
-    const t = `${r.theme} @ ${r.width}px, B1 open`;
-    if (!r.visible) fails.push(`${t}: the basement is not shown`);
+  for (const r of cfResults) {
+    const t = `${r.theme} @ ${r.width}px, centrefold open`;
+    if (!r.visible) fails.push(`${t}: the centrefold is not shown`);
     if (r.overflow > 0) fails.push(`${t}: horizontal overflow ${r.overflow}px`);
     r.errors.forEach(e => fails.push(`${t}: JS error: ${e}`));
     r.axe.forEach(v => fails.push(`${t}: axe ${v.impact} ${v.id} (${v.help}) at ${v.targets.join(", ")}`));
     r.smallTargets.forEach(s => fails.push(`${t}: touch target "${s.name}" is ${s.w}×${s.h}px (needs 44×44)`));
   }
-  if (!riddle.hiddenAtStart) fails.push("riddle: the basement is visible before the riddle is solved");
-  if (!riddle.hiddenAfterWrong || !riddle.hintAfterWrong) fails.push("riddle: a wrong guess should show a hint and keep the basement shut");
-  if (!riddle.openAfterRight || !riddle.floorLinkShown) fails.push('riddle: "panda" should open the basement and add its floor to the building');
-  if (!riddle.openAfterReload) fails.push("riddle: the basement should stay open after a reload");
-  if (reducedMotion.windowsLit !== reducedMotion.windowsTotal || reducedMotion.running > 0)
-    fails.push(`reduced motion: ${reducedMotion.windowsLit}/${reducedMotion.windowsTotal} windows lit, ${reducedMotion.running} animations running`);
+  if (!riddle.hiddenAtStart) fails.push("riddle: the centrefold is visible before the riddle is solved");
+  if (!riddle.hiddenAfterWrong || !riddle.hintAfterWrong) fails.push("riddle: a wrong guess should show a hint and keep the centrefold shut");
+  if (!riddle.openAfterRight || !riddle.contentsLinkShown) fails.push('riddle: "panda" should open the centrefold and add it to the contents');
+  if (!riddle.openAfterReload) fails.push("riddle: the centrefold should stay open after a reload");
+  if (reducedMotion.inkPrinted !== reducedMotion.inkLayers || reducedMotion.running > 0)
+    fails.push(`reduced motion: ${reducedMotion.inkPrinted}/${reducedMotion.inkLayers} ink layers printed, ${reducedMotion.running} animations running`);
 
-  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, reducedMotion, riddle, results, b1Results };
+  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, reducedMotion, riddle, results, cfResults };
   fs.writeFileSync(path.join(OUT, "report.json"), JSON.stringify(report, null, 2));
 
   console.log(`Design check: ${report.pass ? "PASS" : `FAIL (${fails.length})`}`);
   fails.forEach(f => console.log(`  ✗ ${f}`));
   for (const r of results) console.log(`  ${r.theme} @ ${r.width}px: ${r.screens.length} screens, contact sheet ${r.sheet}`);
-  console.log(`  B1 open: ${b1Results.length} passes, screenshots .review${path.sep}<theme>-<width>-b1-{hero,fun,basement}.png`);
+  console.log(`  Centrefold open: ${cfResults.length} passes, screenshots .review${path.sep}<theme>-<width>-cf-{cover,contact,centrefold}.png`);
   console.log(`  report: ${path.relative(ROOT, path.join(OUT, "report.json"))}`);
   process.exit(report.pass ? 0 : 1);
 })().catch(e => { console.error(e); server.close(); process.exit(2); });

@@ -9,9 +9,25 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
+- [?] v1.0.0 page order: projects come before Day job, as approved in the brief. The recruiter critic suggests Day job first for backend roles. Keep, or swap?
+- [?] Section names: keep the zine voice ("Day job", "Toolbox", "Now building") or switch to plain "Experience", "Skills", "Projects"?
+- [?] Was any Cloud BMS work written in TypeScript (resolvers, Lambdas, the Svelte frontend)? The cover claims TypeScript but no bullet shows it
+- [?] Shareable numbers: Event Log page size or volumes, tests or IaC for Cloud BMS, how much the metadata generator and config tool are used
+- [?] cumulus-coach eval results (RAG agent vs tool agent), to add to the chart and a cover line
 - [?] Where SQL and React were used (both are in Skills with no evidence on the page). GitHub Actions answered 2026-10-22: he worked with the team's pipeline, set up by a senior; cumulus-coach will add CI/CD he builds himself
 - [~] LLM or AI engineering work to show: cumulus-coach (the AWS study agent: RAG, tool calling, eval, Docker, CI) will cover it, after the demo ships around 2026-10-30
 - [?] Enable the Design plugin (install card shown 2026-10-09 and again 2026-10-22) so `design-critique` and `accessibility-review` are available
+
+## v1.0.0: The build log, a riso zine (2026-11-18)
+
+Brainstormed with frontend-design and Impeccable `shape`; Shafik chose the riso zine. Decision: `docs/decisions/0002-riso-zine-redesign.md`. Reviews: `reviews/2026-11-18-recruiter-critic-v1.0.md`, `reviews/2026-11-18-finish-review-v1.0.md`.
+
+- [x] Rebuild the page as a two-ink zine: cover with cover lines, spreads, back page, hidden centrefold
+- [x] Day and night prints, Anybody + Literata, text-shadow misregistration, print run on load
+- [x] Design checker retargeted (centrefold, ink tokens, finished print under reduced motion)
+- [x] Recruiter critic and Impeccable finish review: all material fixes applied
+- [x] CLAUDE.md, PRODUCT.md, DESIGN.md, architecture, README rewritten; favicon and og.png redone
+- [ ] Ceiling ideas from the finish review: a cover-scale nameplate, page furniture (edges, fold, bigger folios), real overprint on chart fills, crop marks on trim lines, a two-ink cake
 
 ## Site: design and content
 
