@@ -28,3 +28,13 @@ The site becomes **The build log**, a self-published two-ink riso zine.
 - The design checker tests the centrefold instead of B1, and the finished print instead of lit windows.
 - Visitors who solved the riddle before will see it shut again: the storage key changed from `b1` to `centrefold`.
 - The masthead and colophon name the issue, so the Releases page and the zine tell the same story. Update both with each minor or major release.
+
+## Follow-ups before release (2026-11-18)
+
+Shafik reviewed the build before v1.0.0 was published and decided:
+
+- Experience comes before Projects, as the recruiter critic suggested for backend roles.
+- Section names are plain (Experience, Projects, Lessons learned, Skills, Education, Contact). The zine voice stays in the look, the masthead and the cover lines.
+- The cat moved from the cover name, where it looked out of place, onto the riddle card. The night cat sits on the colophon rule.
+- Visitors can reset the riddle from the centrefold. Visitors who solved the old basement riddle (`b1`) keep their reward.
+

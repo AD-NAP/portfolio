@@ -16,7 +16,7 @@ web
 A single-page portfolio for Shafik Adam, a software engineer in Singapore (Azbil, NUS Computer Science). Success: a recruiter finds the proof and a contact link within the first screen, and remembers the site afterwards.
 
 ## Positioning
-Since v1.0.0 (2026-11-18) the page is **The build log**, a self-published two-ink riso zine. Each release is an issue. The cover sells the issue with cover lines that link to the proof, and the spreads follow: Now building (projects), Day job (experience), Notes I took (lessons from the dev log), Toolbox and School, and a back page with contact and the riddle. A hidden centrefold opens when a visitor solves the riddle. The zine fits a builder and learner: people make zines to share what they built and what they learned, which is what Shafik's dev log already does. It replaced the isometric building (v0.2.0 to v0.5.0) because that tied him to building-management systems.
+Since v1.0.0 (2026-11-18) the page is **The build log**, a self-published two-ink riso zine. Each release is an issue. The cover sells the issue with cover lines that link to the proof, and the spreads follow with plain names: Experience, Projects, Lessons learned (from the dev log), Skills and Education, and a back page, Contact, with the riddle. A hidden centrefold opens when a visitor solves the riddle. The zine fits a builder and learner: people make zines to share what they built and what they learned, which is what Shafik's dev log already does. It replaced the isometric building (v0.2.0 to v0.5.0) because that tied him to building-management systems.
 
 ## Operating Context
 - Hosted on GitHub Pages from `main`. Plain HTML, CSS and JS, with no build step and no framework (`index.html`, `assets/styles.css`, `assets/main.js`). Keep it that way.
@@ -26,7 +26,7 @@ Since v1.0.0 (2026-11-18) the page is **The build log**, a self-published two-in
 ## Capabilities and Constraints
 - Contact links (Email, GitHub, LinkedIn, Resume PDF) appear on the cover and again on the back page.
 - The masthead contents and the cover lines are real links with a visible focus state.
-- Personality to keep: the riddle on the back page, the hidden centrefold (it holds a cake), the cat perched on the cover name, and the cat that only appears in the night print.
+- Personality to keep: the riddle on the back page, the hidden centrefold (it holds a cake), the cat on the riddle card, and the cat that only appears in the night print (on the colophon). Visitors can reset the riddle from the centrefold.
 - The centrefold is a reward, not content: nothing a recruiter needs may live only there.
 - Motion rules (from CLAUDE.md): the only automatic motion is the print run on load (under 1s). All other motion answers the user. `prefers-reduced-motion` shows the final states.
 - Open decisions: where SQL and React were used (no evidence on the page yet).

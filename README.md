@@ -25,7 +25,7 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
-| [v1.0.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.0.0) | 2026-11-18 | Redesign: The build log, Issue 1. A two-ink riso zine replaces the building: cover lines that link to the proof, Notes I took, day and night prints, the riddle opens a centrefold |
+| [v1.0.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.0.0) | 2026-11-18 | Redesign: The build log, Issue 1. A two-ink riso zine replaces the building: cover lines that link to the proof, Experience first, Lessons learned, day and night prints, a resettable riddle that opens a centrefold |
 | [v0.5.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.5.0) | 2026-11-17 | Design skills (Impeccable, Emil Kowalski) installed and run: phone fixes, shorter lines, flatter project charts, press feedback, calmer automatic motion |
 | [v0.4.1](https://github.com/AD-NAP/portfolio/releases/tag/v0.4.1) | 2026-11-16 | edge-energy-optimizer card: phases 1 and 2 done, phases 3 to 5 parked. Resume PDF rebuilt from the updated master CV |
 | [v0.4.0](https://github.com/AD-NAP/portfolio/releases/tag/v0.4.0) | 2026-10-31 | cumulus-coach project with a to-scale cutoff chart, AI and LLM skills, rebuilt resume PDF, sidebar and chart fixes |

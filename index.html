@@ -42,11 +42,11 @@
     <a class="mast__title" href="#top">Shafik Adam<span class="mast__issue">The build log, issue 1, November 2026</span></a>
     <nav class="mast__nav" aria-label="Contents">
       <ol>
-        <li><a href="#projects">Now building</a></li>
-        <li><a href="#experience">Day job</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
         <li class="centrefold-entry" hidden><a href="#centrefold">Centrefold</a></li>
-        <li><a href="#notes">Notes</a></li>
-        <li><a href="#skills">Toolbox</a></li>
+        <li><a href="#notes">Lessons</a></li>
+        <li><a href="#skills">Skills</a></li>
         <li><a href="#contact">Contact</a></li>
       </ol>
     </nav>
@@ -59,15 +59,7 @@
   <main id="main">
     <!-- Cover -->
     <header id="top" class="cover">
-      <div class="cover__name-wrap">
-        <h1 class="ink cover__name">
-          Shafik<br>Adam
-        </h1>
-        <svg class="perch-cat" viewBox="0 0 60 60" aria-hidden="true">
-          <path class="perch-cat__tail" d="M37 57c11 0 16-7 13-17-.8-2.6-4.2-2-3.5.8 1.9 7.2-1.6 11.7-9.5 11.7z"/>
-          <path d="M11.5 17.5 12 5l6.5 8.5h1L26 5l.5 12.5c1.7 2.3 2.5 5 2.3 7.8 6.6 3.4 11.2 13 10.7 32.7H12c-2.4-12.7-1.2-22.6 1-27.2-1.8-3.6-2.4-9.3-1.5-13.3z"/>
-        </svg>
-      </div>
+      <h1 class="ink cover__name">Shafik<br>Adam</h1>
       <div class="cover__body">
         <div class="cover__intro">
           <p class="cover__line">Software engineer at Azbil in Singapore. I build cloud backends and AI tools in Python, TypeScript and AWS, and I keep a dev log of what each project teaches me.</p>
@@ -81,19 +73,78 @@
         <nav class="coverlines" aria-labelledby="coverlines-title">
           <h2 id="coverlines-title" class="coverlines__title">In this issue</h2>
           <ol>
-            <li class="coverlines__lead"><a href="#azbil-intern"><span>Config prep at Azbil: from about 3 days to under 5 minutes</span><span class="coverlines__page">p. 4</span></a></li>
-            <li><a href="#azbil-engineer"><span>Event Log for Cloud BMS: GraphQL on AppSync, paginated over DynamoDB</span><span class="coverlines__page">p. 4</span></a></li>
-            <li><a href="#cumulus-coach"><span>An AWS study coach that says so instead of guessing</span><span class="coverlines__page">p. 2</span></a></li>
-            <li><a href="#edge-energy-optimizer"><span>A load forecast 24.5% better than the baseline</span><span class="coverlines__page">p. 3</span></a></li>
-            <li><a href="#notes"><span>Six notes from the dev log</span><span class="coverlines__page">p. 6</span></a></li>
+            <li class="coverlines__lead"><a href="#azbil-intern"><span>Config prep at Azbil: from about 3 days to under 5 minutes</span><span class="coverlines__page">p. 2</span></a></li>
+            <li><a href="#azbil-engineer"><span>Event Log for Cloud BMS: GraphQL on AppSync, paginated over DynamoDB</span><span class="coverlines__page">p. 2</span></a></li>
+            <li><a href="#cumulus-coach"><span>An AWS study coach that says so instead of guessing</span><span class="coverlines__page">p. 4</span></a></li>
+            <li><a href="#edge-energy-optimizer"><span>A load forecast 24.5% better than the baseline</span><span class="coverlines__page">p. 5</span></a></li>
+            <li><a href="#notes"><span>Six lessons from the dev log</span><span class="coverlines__page">p. 6</span></a></li>
           </ol>
         </nav>
       </div>
     </header>
 
-    <!-- pp. 2-3: Now building -->
+    <!-- pp. 2-3: Experience -->
+    <section id="experience" class="spread" aria-labelledby="experience-title">
+      <h2 id="experience-title" class="ink spread__title">Experience</h2>
+      <div class="job">
+        <article id="azbil-engineer" class="job__lead">
+          <h3 class="page__title">Systems and Application Engineer, Software Development</h3>
+          <p class="page__meta">Azbil ASPO, Singapore. <time datetime="2026-01">Jan 2026</time> to present. Converted to full-time from the internship.</p>
+          <p class="page__headline">Owned the Event Log in a 3-developer team on the Cloud BMS MVP, which Azbil Japan leadership approved for continued development toward commercial release.</p>
+          <ul class="points points--cols">
+            <li><strong>Event Log API.</strong> Delivered the Event Log feature end to end for Cloud BMS, a cloud-native building management platform: designed a GraphQL <code>eventLogs</code> query on AWS AppSync with cursor-based pagination over DynamoDB (ULID-ordered, configurable page size), structured across adapter, application, and infrastructure layers following Clean Architecture.</li>
+            <li><strong>Event Log frontend.</strong> Built the matching Svelte frontend in TypeScript with an expandable table view and infinite scroll, batching 100 records per request to handle large datasets. Wrote MSW mocks simulating 330 records and network latency to verify pagination and loading states.
+              <figure class="batches" aria-label="330 mocked records loaded in four requests: 100, 100, 100, then the last 30">
+                <span class="batches__bar" aria-hidden="true"><span style="--n:100"></span><span style="--n:100"></span><span style="--n:100"></span><span style="--n:30"></span></span>
+                <figcaption>Test data: 330 mocked records in 4 requests of up to 100</figcaption>
+              </figure>
+            </li>
+            <li><strong>Cloud BMS MVP.</strong> Contributed over 9 months in a 3-developer team using AWS Lambda, AppSync, DynamoDB, S3, CloudFront, and CloudWatch: owned the Event Log and assisted with other small features and bug fixes. Written in TypeScript: a Svelte frontend and an AWS CDK backend.</li>
+            <li><strong>Metadata generator.</strong> Designed and built an internal Streamlit application that generates Brick Schema building-metadata files from BMS point lists, owning UI/UX, workflow design, and implementation across a 5-month cycle. It completes the metadata pipeline feeding downstream configuration tooling, with planned integration into Cloud BMS deployments.</li>
+            <li><strong>Onboarding guide.</strong> Authored a developer onboarding guide for Cloud BMS environment setup (Docker, AWS configuration). A new junior engineer used it and, with minimal guidance, set up his environment and started development on the same day.</li>
+          </ul>
+        </article>
+
+        <div class="spread__pages job__pair">
+          <article id="azbil-intern" class="page">
+            <h3 class="page__title">Software Engineer Intern</h3>
+            <p class="page__meta">Azbil ASPO, Singapore. <time datetime="2025-06">Jun 2025</time> to <time datetime="2025-12">Dec 2025</time></p>
+            <figure class="chart chart--headline" aria-label="Preparation time: about 3 days by hand compared with under 5 minutes with the tool, drawn to scale">
+              <div class="chart__plot">
+                <div class="chart__row">
+                  <span class="chart__label">By hand</span>
+                  <span class="chart__track"><span class="chart__bar chart__bar--before" style="--to:100%"></span></span>
+                  <span class="chart__value">~3 days</span>
+                </div>
+                <div class="chart__row chart__row--result">
+                  <span class="chart__label">With the tool</span>
+                  <span class="chart__track"><span class="chart__bar chart__bar--sliver" style="--to:0.12%"></span></span>
+                  <span class="chart__value">&lt; 5 min</span>
+                </div>
+              </div>
+              <figcaption>Drawn to scale. The second bar is 0.1% of the first, so it is only a line.</figcaption>
+            </figure>
+            <ul class="points">
+              <li><strong>Configuration tool.</strong> Built a Python tool that parses Brick Schema TTL building-metadata files and runs SPARQL queries to auto-generate customer product configuration files, reducing preparation time from approximately 3 days of manual engineering work to under 5 minutes.</li>
+            </ul>
+            <span class="folio" aria-hidden="true">2</span>
+          </article>
+
+          <article id="ground-labs" class="page">
+            <h3 class="page__title">Software Developer Intern</h3>
+            <p class="page__meta">Ground Labs, Singapore. <time datetime="2022-05">May 2022</time> to <time datetime="2022-08">Aug 2022</time></p>
+            <ul class="points">
+              <li>Developed frontend features for a desktop data-discovery product, including a four-pane resizable window layout and match highlighting within search results.</li>
+            </ul>
+            <span class="folio" aria-hidden="true">3</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- pp. 4-5: Projects -->
     <section id="projects" class="spread" aria-labelledby="projects-title">
-      <h2 id="projects-title" class="ink spread__title">Now building</h2>
+      <h2 id="projects-title" class="ink spread__title">Projects</h2>
       <div class="spread__pages">
         <article id="cumulus-coach" class="page">
           <h3 class="page__title">cumulus-coach</h3>
@@ -128,7 +179,7 @@
           <p class="page__status">Minimum demo done. Next: an eval set of about 20 questions comparing the plain RAG agent with the tool-using one.</p>
           <p class="page__stack">Python, Claude API, Chroma, pytest, GitHub Actions</p>
           <p class="page__link"><a href="https://github.com/AD-NAP/cumulus-coach">Code on GitHub</a></p>
-          <span class="folio" aria-hidden="true">2</span>
+          <span class="folio" aria-hidden="true">4</span>
         </article>
 
         <article id="edge-energy-optimizer" class="page">
@@ -158,67 +209,8 @@
           <p class="page__status">Phases 1 and 2 are done. Phases 3 to 5 are parked.</p>
           <p class="page__stack">Python, scikit-learn, SciPy, BOPTEST, Docker, pytest, uv</p>
           <p class="page__link"><a href="https://github.com/AD-NAP/edge-energy-optimizer">Code on GitHub</a></p>
-          <span class="folio" aria-hidden="true">3</span>
+          <span class="folio" aria-hidden="true">5</span>
         </article>
-      </div>
-    </section>
-
-    <!-- pp. 4-5: Day job -->
-    <section id="experience" class="spread" aria-labelledby="experience-title">
-      <h2 id="experience-title" class="ink spread__title">Day job</h2>
-      <div class="job">
-        <article id="azbil-engineer" class="job__lead">
-          <h3 class="page__title">Systems and Application Engineer, Software Development</h3>
-          <p class="page__meta">Azbil ASPO, Singapore. <time datetime="2026-01">Jan 2026</time> to present. Converted to full-time from the internship.</p>
-          <p class="page__headline">Owned the Event Log in a 3-developer team on the Cloud BMS MVP, which Azbil Japan leadership approved for continued development toward commercial release.</p>
-          <ul class="points points--cols">
-            <li><strong>Event Log API.</strong> Delivered the Event Log feature end to end for Cloud BMS, a cloud-native building management platform: designed a GraphQL <code>eventLogs</code> query on AWS AppSync with cursor-based pagination over DynamoDB (ULID-ordered, configurable page size), structured across adapter, application, and infrastructure layers following Clean Architecture.</li>
-            <li><strong>Event Log frontend.</strong> Built the matching Svelte frontend with an expandable table view and infinite scroll, batching 100 records per request to handle large datasets. Wrote MSW mocks simulating 330 records and network latency to verify pagination and loading states.
-              <figure class="batches" aria-label="330 mocked records loaded in four requests: 100, 100, 100, then the last 30">
-                <span class="batches__bar" aria-hidden="true"><span style="--n:100"></span><span style="--n:100"></span><span style="--n:100"></span><span style="--n:30"></span></span>
-                <figcaption>Test data: 330 mocked records in 4 requests of up to 100</figcaption>
-              </figure>
-            </li>
-            <li><strong>Cloud BMS MVP.</strong> Contributed over 9 months in a 3-developer team using AWS Lambda, AppSync, DynamoDB, S3, CloudFront, and CloudWatch: owned the Event Log and assisted with other small features and bug fixes.</li>
-            <li><strong>Metadata generator.</strong> Designed and built an internal Streamlit application that generates Brick Schema building-metadata files from BMS point lists, owning UI/UX, workflow design, and implementation across a 5-month cycle. It completes the metadata pipeline feeding downstream configuration tooling, with planned integration into Cloud BMS deployments.</li>
-            <li><strong>Onboarding guide.</strong> Authored a developer onboarding guide for Cloud BMS environment setup (Docker, AWS configuration). A new junior engineer used it and, with minimal guidance, set up his environment and started development on the same day.</li>
-          </ul>
-        </article>
-
-        <div class="spread__pages job__pair">
-          <article id="azbil-intern" class="page">
-            <h3 class="page__title">Software Engineer Intern</h3>
-            <p class="page__meta">Azbil ASPO, Singapore. <time datetime="2025-06">Jun 2025</time> to <time datetime="2025-12">Dec 2025</time></p>
-            <figure class="chart chart--headline" aria-label="Preparation time: about 3 days by hand compared with under 5 minutes with the tool, drawn to scale">
-              <div class="chart__plot">
-                <div class="chart__row">
-                  <span class="chart__label">By hand</span>
-                  <span class="chart__track"><span class="chart__bar chart__bar--before" style="--to:100%"></span></span>
-                  <span class="chart__value">~3 days</span>
-                </div>
-                <div class="chart__row chart__row--result">
-                  <span class="chart__label">With the tool</span>
-                  <span class="chart__track"><span class="chart__bar chart__bar--sliver" style="--to:0.12%"></span></span>
-                  <span class="chart__value">&lt; 5 min</span>
-                </div>
-              </div>
-              <figcaption>Drawn to scale. The second bar is 0.1% of the first, so it is only a line.</figcaption>
-            </figure>
-            <ul class="points">
-              <li><strong>Configuration tool.</strong> Built a Python tool that parses Brick Schema TTL building-metadata files and runs SPARQL queries to auto-generate customer product configuration files, reducing preparation time from approximately 3 days of manual engineering work to under 5 minutes.</li>
-            </ul>
-            <span class="folio" aria-hidden="true">4</span>
-          </article>
-
-          <article id="ground-labs" class="page">
-            <h3 class="page__title">Software Developer Intern</h3>
-            <p class="page__meta">Ground Labs, Singapore. <time datetime="2022-05">May 2022</time> to <time datetime="2022-08">Aug 2022</time></p>
-            <ul class="points">
-              <li>Developed frontend features for a desktop data-discovery product, including a four-pane resizable window layout and match highlighting within search results.</li>
-            </ul>
-            <span class="folio" aria-hidden="true">5</span>
-          </article>
-        </div>
       </div>
     </section>
 
@@ -236,12 +228,13 @@
         </svg>
         <p class="centrefold__lede">You found the centrefold.</p>
         <p>Nothing printed here yet, so have some cake.</p>
+        <button class="riddle-reset" type="button">Reset the riddle</button>
       </div>
     </section>
 
-    <!-- pp. 6-7: Notes I took -->
+    <!-- pp. 6-7: Lessons learned -->
     <section id="notes" class="spread" aria-labelledby="notes-title">
-      <h2 id="notes-title" class="ink spread__title">Notes I took</h2>
+      <h2 id="notes-title" class="ink spread__title">Lessons learned</h2>
       <p class="spread__lede">What the projects taught me beyond the numbers, pulled from my dev log.</p>
       <div class="spread__pages">
         <div class="page">
@@ -265,14 +258,14 @@
       </div>
     </section>
 
-    <!-- pp. 8-9: Toolbox and school -->
+    <!-- pp. 8-9: Skills and education -->
     <section id="skills" class="spread" aria-labelledby="skills-title">
-      <h2 id="skills-title" class="ink spread__title">Toolbox</h2>
+      <h2 id="skills-title" class="ink spread__title">Skills</h2>
       <div class="spread__pages">
         <div class="page">
           <dl class="skills">
             <div><dt>Languages</dt><dd>Python, SQL, JavaScript, TypeScript; familiar with Java</dd></div>
-            <div><dt>Cloud and infrastructure</dt><dd>AWS (Lambda, AppSync, DynamoDB, S3, CloudFront, CloudWatch), Docker, GitHub Actions</dd></div>
+            <div><dt>Cloud and infrastructure</dt><dd>AWS (Lambda, AppSync, DynamoDB, S3, CloudFront, CloudWatch), AWS CDK (TypeScript), Docker, GitHub Actions</dd></div>
             <div><dt>Data and APIs</dt><dd>DynamoDB, GraphQL, SPARQL, RDF/Brick Schema</dd></div>
             <div><dt>AI and LLM</dt><dd>Claude API (function calling, structured outputs), RAG, embeddings, Chroma</dd></div>
             <div><dt>Frontend</dt><dd>Streamlit, Svelte, React, HTML/CSS</dd></div>
@@ -281,7 +274,7 @@
           <span class="folio" aria-hidden="true">8</span>
         </div>
         <div id="education" class="page">
-          <h3 class="page__title page__title--section">School</h3>
+          <h3 class="page__title page__title--section">Education</h3>
           <article class="school">
             <h4>National University of Singapore</h4>
             <p>Bachelor of Computing (Computer Science), Honours (Merit), School of Computing, 2021 to Jan 2026</p>
@@ -298,7 +291,7 @@
 
     <!-- Back page: contact and the riddle -->
     <section id="contact" class="spread backpage" aria-labelledby="contact-title">
-      <h2 id="contact-title" class="ink spread__title">Say hello</h2>
+      <h2 id="contact-title" class="ink spread__title">Contact</h2>
       <div class="spread__pages">
         <div class="page">
           <p class="backpage__lede">Open to backend software development and AI engineering roles. The fastest way to reach me is email.</p>
@@ -312,6 +305,10 @@
         <div class="page">
           <div class="riddle">
             <span class="riddle__fold" aria-hidden="true"></span>
+            <svg class="perch-cat" viewBox="0 0 60 60" aria-hidden="true">
+              <path class="perch-cat__tail" d="M37 57c11 0 16-7 13-17-.8-2.6-4.2-2-3.5.8 1.9 7.2-1.6 11.7-9.5 11.7z"/>
+              <path d="M11.5 17.5 12 5l6.5 8.5h1L26 5l.5 12.5c1.7 2.3 2.5 5 2.3 7.8 6.6 3.4 11.2 13 10.7 32.7H12c-2.4-12.7-1.2-22.6 1-27.2-1.8-3.6-2.4-9.3-1.5-13.3z"/>
+            </svg>
             <form class="riddle__form" novalidate>
               <label class="riddle__q" for="guess">Guess my favourite animal.</label>
               <p id="guess-hint" class="riddle__hint">Hint: it is hiding in my GitHub name.</p>
@@ -328,17 +325,17 @@
             </div>
           </div>
           <p class="backpage__hint">There's a cat somewhere else on this page. It only comes out in the night print.</p>
-          <svg class="night-cat" viewBox="0 0 60 60" aria-hidden="true">
-            <path d="M8 58c-1-14 2-24 8-29-2-4-2-10-1-14L17 4l6 8h6l6-8 2 11c1 4 1 10-1 14 6 5 9 15 8 29z"/>
-            <circle class="night-cat__eye" cx="21" cy="21" r="2"/><circle class="night-cat__eye" cx="31" cy="21" r="2"/>
-            <path class="night-cat__tail" d="M44 57c9 0 13-6 11-14-.6-2.2-3.4-1.8-2.9.6 1.4 5.8-1.3 9.4-8.1 9.4z"/>
-          </svg>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="colophon">
+    <svg class="night-cat" viewBox="0 0 60 60" aria-hidden="true">
+      <path d="M8 58c-1-14 2-24 8-29-2-4-2-10-1-14L17 4l6 8h6l6-8 2 11c1 4 1 10-1 14 6 5 9 15 8 29z"/>
+      <circle class="night-cat__eye" cx="21" cy="21" r="2"/><circle class="night-cat__eye" cx="31" cy="21" r="2"/>
+      <path class="night-cat__tail" d="M44 57c9 0 13-6 11-14-.6-2.2-3.4-1.8-2.9.6 1.4 5.8-1.3 9.4-8.1 9.4z"/>
+    </svg>
     <p>The build log, issue 1. Printed in two inks with plain HTML, CSS and JavaScript, and hosted on GitHub Pages. Issue 1 is version 1.0.0 of this site.</p>
   </footer>
 </body>

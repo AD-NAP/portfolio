@@ -12,7 +12,7 @@ One page, three files, no build step:
 
 | File | Job |
 |---|---|
-| `index.html` | All content and structure, in zine order: masthead, cover, spreads (Now building, Day job, the hidden centrefold, Notes I took, Toolbox and School), back page, colophon. |
+| `index.html` | All content and structure, in zine order: masthead, cover, spreads (Experience, Projects, the hidden centrefold, Lessons learned, Skills and Education), back page (Contact), colophon. |
 | `assets/styles.css` | Layout, both prints, the two-ink effect and the print run. Colours come from tokens in `:root` and `[data-theme]`. |
 | `assets/main.js` | Behaviour: print toggle, contents highlight, the riddle and centrefold, the `ad-nap` flip, the cat's tail. |
 
