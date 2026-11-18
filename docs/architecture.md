@@ -12,44 +12,44 @@ One page, three files, no build step:
 
 | File | Job |
 |---|---|
-| `index.html` | All content and structure, in zine order: masthead, the name card (`#card`), cover, spreads (Experience, Projects, the hidden centrefold, Lessons learned, Skills and Education), back page (Contact), colophon. |
-| `assets/styles.css` | Layout, both prints, the two-ink effect, the name card and its hand-over. Colours come from tokens in `:root` and `[data-theme]`. |
-| `assets/main.js` | Behaviour: the name card (button, flip, returning visitors, replay), print toggle, contents highlight, the riddle and centrefold, the `ad-nap` flip, the cat's tail, and the scroll print of section titles. |
+| `index.html` | All content and structure: the bar, the opening (the card `#card` lying over About), then Experience, Projects, the hidden Bonus, Lessons learned, Skills and Education, Contact with the riddle, and the title block footer. |
+| `assets/styles.css` | Layout, both themes, the type ramp, the card and the CSS variables the transition drives. Colours and font sizes come from tokens in `:root` and `[data-theme]`. |
+| `assets/main.js` | Behaviour: the card-to-sheet transition (button, scrub, snap, returning visitors, replay, keyboard), theme toggle, section highlight, the riddle and its bonus, the `ad-nap` flip. |
 | `assets/vendor/` | GSAP 3.15.0 (`gsap.min.js`, `ScrollTrigger.min.js`), self-hosted. Licence and source in `.claude/skills/THIRD_PARTY.md`. |
 
-Also in `assets/`: `favicon.svg` (a two-ink "SA" stamp) and `og.png`, the 1200x630 link preview. `og.png` is a screenshot of the name card in the day print with the masthead hidden; re-render it with Playwright if the cover changes.
+Also in `assets/`: `favicon.svg` (a tiny card on the desk) and `og.png`, the 1200x630 link preview: a screenshot of the closed card in the light theme. Re-render it with Playwright if the card changes.
 
 The resume download, `assets/Shafik-Adam-Resume.pdf`, is built from the vault master CV with `npm run -s resume` (`tools/build-resume.js`: drops the phone number, prints one A4 page with Playwright). Rebuild it whenever `vault/career/resume-master.md` changes.
 
 `content/resume.md` is the only source of facts. Nothing appears on the site unless it is in that file first.
 
-## The name card
+## The card opens into the sheet
 
-Since v1.1.0 the page opens on a meishi ([decisions/0003-name-card-and-new-inks.md](decisions/0003-name-card-and-new-inks.md)).
+Since v1.2.0 ([decisions/0004-card-into-portfolio.md](decisions/0004-card-into-portfolio.md)).
 
-- **Hand-over.** `@keyframes hand-over` on `.meishi-hand`: the card rises with a slight forward tilt that levels out. The only automatic motion.
-- **Flip.** `.opening` wraps the card stage and the cover. With motion, the stage lies over the cover (`position: absolute`), and GSAP ScrollTrigger pins `.opening` for one screen (`end: "+=100%"`, `scrub: 0.5`). A scrubbed tween drives one number, `p` from 0 to 1, and `render(p)` writes CSS variables on the stage (`--card-turn`, `--card-scale`, `--back-ink`, `--after-alpha`, `--face-alpha`, `--desk-alpha`, `--stage-events`) and on the cover title (`--print`, `--mis-x`). From 0 to 0.42 the card turns (perspective on `.meishi-hand`, two faces with `backface-visibility: hidden`); from 0.45 to 0.75 its back grows until it covers the screen (`fillScale()` measures from the card's real position); at 0.75 the faces and desk switch off, so the same paper becomes the cover, and the stage stops taking pointer events; from 0.76 the cover title prints in. Never set opacity on the 3D card itself: it flattens the turn and shows the front mirrored.
-- **Button and replay.** "Open the build log" scrolls to the end of the pin and focuses the cover heading; "See my card again" scrolls back to the top.
-- **Returning visitors.** `card = seen` in localStorage. The head script sets `data-card="seen"` before paint (no hand-over), and `main.js` jumps to the cover as soon as the trigger exists, and again after `load`, with scroll restoration set to manual.
-- **Keyboard.** If focus moves into the cover while the card still lies over it, the page jumps to the cover (instantly) and finishes the scrub, so a focused link is never hidden under the card.
-- **Fallback.** Without GSAP or with reduced motion, `.has-card-motion` is never set: the card is a normal section above the cover.
+- **Lift.** `@keyframes lift` on `.card-lift`: the card settles 18px onto the desk on load (0.7s). It is visible from the first frame. It is the only automatic motion.
+- **The opening.** `.opening` holds the card stage (`#card`) and the About section. With motion (`.has-card-motion`), the stage lies over About (`position: absolute`, full viewport), and GSAP ScrollTrigger pins `.opening` (`end: "+=110%"`, `scrub: 0.8`). A scrubbed tween drives one number, `p` from 0 to 1, and `render(p)` writes CSS variables on three elements only: the stage, About and the bar. Nothing is set on `:root`, so style recalculation stays local.
+- **Timeline.** 0 to 0.16: the card's lines, dimensions and the links under it fade out. 0.05 to 0.6: `.card__paper` (no text on it) scales from the card's box to the viewport (`--paper-sx/sy`, `--paper-x/y`), and its shadow fades out. 0.1 to 0.64: the name moves to the bar's name slot (`--name-x/y/s`, transform-origin top-left), then swaps with `.bar__name` in the same frame. 0.44 to 0.7: the bar's links arrive from the right, each with its own `--d` delay. 0.58 to 0.86: About fades in. 0.6 to 0.8: the paper fades out, so the sheet's grid shows through. At 0.9 the stage hides.
+- **Landing.** `measure()` (run on every ScrollTrigger refresh, after fonts load, and when the lift ends) works out the paper's scale and the name's offset from layout positions. It then puts the name at its landing spot, compares the two text boxes, and corrects the offset. It allows for the stage being scrolled away and for the card's lift still running.
+- **Snap.** `snapTo: [0, 1]`, directional: if the visitor lets go mid-way, it settles at the card or the portfolio, in the direction they were scrolling.
+- **Button and replay.** "Open the portfolio" scrolls to the end of the pin and focuses the About heading. "See my card again" scrolls back to the top.
+- **Returning visitors.** `card = seen` in localStorage. The head script sets `data-card="seen"` before paint (no lift), and `main.js` jumps to the end of the pin after `load`, with scroll restoration set to manual.
+- **Keyboard.** If focus lands anywhere outside the card (except the skip link) while the card is still closed, the page jumps to the end and finishes the scrub, so a focused link is never hidden.
+- **Fallback.** Without GSAP or with reduced motion, `.has-card-motion` is never set: the card is a plain first section, About follows, and the bar is always shown.
 
-## The zine
+## The sheet
 
-Since v1.0.0 the site is "The build log", a two-ink riso zine ([decisions/0002-riso-zine-redesign.md](decisions/0002-riso-zine-redesign.md)).
-
-- **Two inks.** Headings with the class `ink` get the red pass as a `text-shadow`, offset a few pixels (`--mis-x`, `--mis-y`). There is only one copy of the text. Hovering or focusing a section brings its title into register.
-- **The scroll print.** Each `.spread__title` gets a GSAP timeline with a ScrollTrigger (`top 90%` to `top 60%`, scrubbed). It tweens two CSS variables, `--print` (clip-path roll) and `--mis-x` (red pass into register). Created inside `gsap.matchMedia("(prefers-reduced-motion: no-preference)")`; `ScrollTrigger.refresh()` runs when the centrefold opens or closes.
-- **Paper.** One static SVG noise layer (`body::after`) blends into both prints.
-- **Charts.** Bars are drawn to scale with CSS custom properties (`--from`, `--to`). Results print in solid red; baselines print as a grey halftone.
+- **Grid.** `body::before`, fixed: twelve hairline columns across the content width.
+- **Type ramp.** Eight tokens (`--fs-label` to `--fs-name`). Every font size is one of them.
+- **Charts.** Bars are drawn to scale with CSS custom properties (`--from`, `--to`). The result is solid red, baselines are hatched, and other ranges are outlined in ink.
 
 ## Phones
 
-Below 900px each spread becomes one column and the masthead contents become a horizontal strip. Below 600px the masthead stops being sticky, so the cover (name, line, contact links, lead cover line) fills the first screen.
+Below 900px the bar grows to two rows (name and theme button, then the links in a row that scrolls sideways and fades at the edge only when it overflows). Content pairs become one column. Below 600px the About link leaves the bar (the name links there), the card's dimension marks go, and the theme button shows only its icon.
 
-## The centrefold
+## The bonus
 
-The centrefold section is in the page from the start but `hidden`, with its contents entry. Solving the riddle on the back page shows both and saves `centrefold = open` in `localStorage`, so it stays open on later visits. Nothing a recruiter needs lives there.
+The Bonus section is in the page from the start but `hidden`, along with its bar link. Solving the riddle in Contact shows both and saves `bonus = open` in `localStorage`, so it stays open on later visits. The older keys `centrefold` (v1.x) and `b1` (v0.x) also open it. Nothing a recruiter needs lives there.
 
 ## Hosting
 
@@ -63,7 +63,7 @@ edit site file ──► npm run -s check ──► pass ──► done
                         └── fail ──► fix ──► re-check
 ```
 
-- `.claude/skills/design-review/` holds the checker (`scripts/check.js`) and the review steps. The checker also runs with the centrefold open, and tests that only the right answer opens it.
+- `.claude/skills/design-review/` holds the checker (`scripts/check.js`) and the review steps. The checker also runs with the bonus open, tests the riddle, and tests the card (first screen, bar hidden then shown, the button, the name landing within 1px, the snap, returning visitors, replay, keyboard focus).
 - A Stop hook (`.claude/hooks/design-check-on-stop.js`) runs the checker when a Claude Code turn ends with changed site files.
 - `.claude/agents/recruiter-critic.md` reviews the site as a hiring manager. Reports land in `reviews/`.
 

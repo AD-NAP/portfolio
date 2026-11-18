@@ -6,10 +6,10 @@
 //   - axe-core WCAG 2.1 AA violations
 //   - token contrast (text ≥ 4.5:1, focus ≥ 3:1) per theme
 //   - touch targets under 44px at phone widths
-//   - scroll print: section titles are fully printed once scrolled past
-//   - the name card: on the first screen, the button opens the cover, returning visitors open on the cover, the replay link
-//   - the same checks again with the hidden centrefold open
-//   - the riddle: wrong guesses keep the centrefold shut, "panda" opens it, a reload keeps it open, the reset shuts it again
+//   - the card: on the first screen with no bar, the button opens the portfolio, the name lands on the bar's name,
+//     letting go mid-way snaps to an end, returning visitors open on the portfolio, the replay link, keyboard focus
+//   - the same checks again with the hidden bonus open
+//   - the riddle: wrong guesses keep the bonus shut, "panda" opens it, a reload keeps it open, the reset shuts it again
 // Usage: node .claude/skills/design-review/scripts/check.js [--out DIR] [--widths 390,1280] [--themes dark,light]
 // Exit code 1 when any check fails, so it can gate hooks and CI.
 
@@ -62,6 +62,7 @@ const TOKEN_PAIRS = [
 
 // Checks that read the page as it stands: overflow, axe, small touch targets.
 const audit = async (page, phone) => {
+  await page.waitForTimeout(1500);   // let the scrubbed card transition catch up with the last scroll
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   await page.addScriptTag({ content: axeSrc });
   const axe = await page.evaluate(async () => {
@@ -105,7 +106,7 @@ const audit = async (page, phone) => {
     await page.waitForTimeout(2500);                      // let the load animation finish
 
     // Warm-up pass: scroll the whole page once so every scroll-triggered animation
-    // (cat flick) runs to its final state before screenshots.
+    // runs to its final state before screenshots.
     const height = await page.evaluate(() => document.documentElement.scrollHeight);
     const vh = page.viewportSize().height;
     for (let y = 0; y < height; y += vh / 2) {
@@ -114,20 +115,11 @@ const audit = async (page, phone) => {
     }
     await page.waitForTimeout(4500);
 
-    // Scroll print: at the bottom of the page, every section title that has passed the
-    // print band (top above 60% of the viewport) must be fully printed.
-    await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
-    await page.waitForTimeout(1200);
-    const unprinted = await page.evaluate(() => [...document.querySelectorAll(".spread__title.is-scroll-print")]
-      .filter(t => t.offsetParent && t.getBoundingClientRect().top < innerHeight * 0.6)
-      .filter(t => parseFloat(getComputedStyle(t).getPropertyValue("--print")) < 100)
-      .map(t => `${t.textContent.trim()} (${getComputedStyle(t).getPropertyValue("--print").trim()})`));
-
     // Screens: scroll one viewport at a time so fixed UI renders as a visitor sees it.
     const screens = [];
     for (let i = 0, y = 0; y < height && i < MAX_SCREENS; i++, y += vh) {
       await page.evaluate(top => window.scrollTo({ top, behavior: "instant" }), y);
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(i < 2 ? 1800 : 300);   // the first screens hold the scrubbed card: let it settle
       const file = path.join(OUT, `${tag}-${String(i + 1).padStart(2, "0")}.png`);
       await page.screenshot({ path: file });
       screens.push(path.relative(ROOT, file));
@@ -157,10 +149,10 @@ const audit = async (page, phone) => {
     await sheetPage.screenshot({ path: sheet, fullPage: true });
     await sheetPage.close();
 
-    results.push({ theme, width, sheet: path.relative(ROOT, sheet), screens, overflow, errors, axe, contrast, smallTargets, unprinted });
+    results.push({ theme, width, sheet: path.relative(ROOT, sheet), screens, overflow, errors, axe, contrast, smallTargets });
     await page.close();
 
-    // Same theme and width with the centrefold already open (as on a return visit).
+    // Same theme and width with the bonus already open (as on a return visit).
     const cfPage = await browser.newPage({
       viewport: { width, height: phone ? 844 : 800 },
       deviceScaleFactor: phone ? 2 : 1,
@@ -169,11 +161,11 @@ const audit = async (page, phone) => {
     const cfErrors = [];
     cfPage.on("pageerror", e => cfErrors.push(e.message));
     cfPage.on("console", m => { if (m.type() === "error") cfErrors.push(m.text()); });
-    await cfPage.addInitScript(() => { try { localStorage.setItem("centrefold", "open"); } catch (e) {} });
+    await cfPage.addInitScript(() => { try { localStorage.setItem("bonus", "open"); } catch (e) {} });
     await cfPage.goto(url, { waitUntil: "networkidle" });
     await cfPage.waitForTimeout(2500);
     const cfScreens = [];
-    for (const [name, sel] of [["cover", "#top"], ["contact", "#contact"], ["centrefold", "#centrefold"]]) {
+    for (const [name, sel] of [["about", "#about"], ["contact", "#contact"], ["bonus", "#bonus"]]) {
       await cfPage.evaluate(s => document.querySelector(s).scrollIntoView({ behavior: "instant", block: "start" }), sel);
       await cfPage.waitForTimeout(700);
       const file = path.join(OUT, `${tag}-cf-${name}.png`);
@@ -181,15 +173,15 @@ const audit = async (page, phone) => {
       cfScreens.push(path.relative(ROOT, file));
     }
     await cfPage.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
-    const cfVisible = await cfPage.evaluate(() => !document.getElementById("centrefold").hidden && !!document.querySelector(".centrefold-entry a")?.getBoundingClientRect().width);
+    const cfVisible = await cfPage.evaluate(() => !document.getElementById("bonus").hidden && !!document.querySelector(".bonus-entry a")?.getBoundingClientRect().width);
     cfResults.push({ theme, width, screens: cfScreens, errors: cfErrors, visible: cfVisible, ...(await audit(cfPage, phone)) });
     await cfPage.close();
   }
 
-  // The riddle itself: wrong guesses keep the centrefold shut, the right one opens it for good.
+  // The riddle itself: wrong guesses keep the bonus shut, the right one opens it for good.
   const rp = await browser.newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" });
   await rp.goto(url, { waitUntil: "networkidle" });
-  const cfShown = () => rp.evaluate(() => !document.getElementById("centrefold").hidden);
+  const cfShown = () => rp.evaluate(() => !document.getElementById("bonus").hidden);
   const tryGuess = async word => { await rp.fill("#guess", word); await rp.click(".riddle__btn"); await rp.waitForTimeout(200); };
   const riddle = { hiddenAtStart: !(await cfShown()) };
   await tryGuess("cat");
@@ -197,7 +189,7 @@ const audit = async (page, phone) => {
   riddle.hiddenAfterWrong = !(await cfShown());
   await tryGuess(" Panda ");
   riddle.openAfterRight = await cfShown();
-  riddle.contentsLinkShown = await rp.evaluate(() => !!document.querySelector(".centrefold-entry a")?.getBoundingClientRect().width);
+  riddle.contentsLinkShown = await rp.evaluate(() => !!document.querySelector(".bonus-entry a")?.getBoundingClientRect().width);
   await rp.reload({ waitUntil: "networkidle" });
   riddle.openAfterReload = await cfShown();
   await rp.click(".riddle-reset");
@@ -207,19 +199,19 @@ const audit = async (page, phone) => {
   riddle.shutAfterResetReload = !(await cfShown());
   await rp.close();
 
-  // Reduced motion: the cover must show the finished print immediately, with nothing animating.
+  // Reduced motion: the card, the bar and About show as plain sections, with nothing animating.
   const rm = await browser.newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark", reducedMotion: "reduce" });
   await rm.goto(url, { waitUntil: "networkidle" });
   await rm.waitForTimeout(300);
   const reducedMotion = await rm.evaluate(() => ({
-    inkLayers: document.querySelectorAll(".ink").length,
-    inkPrinted: [...document.querySelectorAll(".ink")].filter(el => { const cs = getComputedStyle(el); return cs.clipPath === "none" && cs.color !== "rgba(0, 0, 0, 0)"; }).length,
     running: document.getAnimations().filter(a => a.playState === "running").length,
     cardPinned: document.documentElement.classList.contains("has-card-motion"),
-    cardAndCoverShown: !!document.querySelector("#card-name")?.getBoundingClientRect().height && !!document.querySelector("#cover-title")?.getBoundingClientRect().height,
+    cardAndAboutShown: !!document.querySelector("#card-name")?.getBoundingClientRect().height && !!document.querySelector("#about-title")?.getBoundingClientRect().height
+      && getComputedStyle(document.querySelector("#about")).opacity === "1",
+    barShown: getComputedStyle(document.querySelector(".bar")).visibility === "visible" && getComputedStyle(document.querySelector(".bar__nav li")).opacity === "1",
   }));
 
-  // The name card, at phone and desktop width: first visit, the button, a returning visitor, the replay link.
+  // The card, at phone and desktop width: first visit, the button, landing, snap, a returning visitor, the replay link.
   const card = [];
   for (const [width, height] of [[390, 844], [1280, 800]]) {
     const r = { width };
@@ -228,24 +220,40 @@ const audit = async (page, phone) => {
     await cp.waitForTimeout(1200);
     r.frontOnFirstScreen = await cp.evaluate(() => {
       const inView = el => { const b = el?.getBoundingClientRect(); return !!b && b.height > 0 && b.top >= 0 && b.bottom <= innerHeight; };
-      return inView(document.getElementById("card-name")) && inView(document.querySelector(".meishi__email a")) && inView(document.querySelector(".card-open"));
+      return inView(document.getElementById("card-name")) && inView(document.querySelector(".card__email a")) && inView(document.querySelector(".card-open"));
     });
+    r.barHiddenOnCard = await cp.evaluate(() => getComputedStyle(document.querySelector(".bar")).visibility === "hidden");
     await cp.click(".card-open");
     await cp.waitForTimeout(2200);
-    r.buttonOpensCover = await cp.evaluate(() => document.activeElement?.id === "cover-title" && document.getElementById("cover-title").getBoundingClientRect().top < innerHeight / 2);
+    r.buttonOpensPortfolio = await cp.evaluate(() => document.activeElement?.id === "about-title" && document.getElementById("about-title").getBoundingClientRect().top < innerHeight / 2);
+    r.barShownAfter = await cp.evaluate(() => getComputedStyle(document.querySelector(".bar")).visibility === "visible" && getComputedStyle(document.querySelector(".bar__nav li:last-child")).opacity === "1");
+    // The card's name, at its landing spot, must sit exactly on the bar's name (they swap in one frame).
+    r.landingOffset = await cp.evaluate(() => {
+      const box = el => { const g = document.createRange(); g.selectNodeContents(el); return g.getBoundingClientRect(); };
+      const a = box(document.getElementById("card-name")), b = box(document.querySelector(".bar__name"));
+      return Math.max(Math.abs(a.left - b.left), Math.abs(a.top - b.top), Math.abs(a.width - b.width));
+    });
     await cp.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
     await cp.waitForTimeout(600);
-    // Keyboard: tabbing from the card into the cover must never leave focus hidden under the card.
+    // Keyboard: tabbing past the card must never leave focus hidden under it.
     await cp.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
     await cp.waitForTimeout(600);
     await cp.evaluate(() => document.querySelector(".card-open").focus());
     await cp.keyboard.press("Tab");
     await cp.waitForTimeout(400);
-    r.tabIntoCoverVisible = await cp.evaluate(() => {
+    r.tabPastCardVisible = await cp.evaluate(() => {
       const a = document.activeElement, b = a.getBoundingClientRect();
       const top = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
-      return !!a.closest("#top") && (top === a || a.contains(top));
+      return !a.closest("#card") && (top === a || a.contains(top));
     });
+    // Let go a third of the way in: it must settle at the card or the portfolio, never half-open.
+    await cp.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await cp.waitForTimeout(800);
+    const third = await cp.evaluate(() => { const t = window.ScrollTrigger?.getAll()[0]; return t ? (t.end - t.start) / 3 : 0; });
+    await cp.mouse.move(width / 2, height / 2);
+    await cp.mouse.wheel(0, third);
+    await cp.waitForTimeout(2500);
+    r.snapRestsAtEnd = await cp.evaluate(() => { const t = window.ScrollTrigger?.getAll()[0]; return !!t && (t.progress < .005 || t.progress > .995); });
     const mid = await cp.evaluate(() => { const t = window.ScrollTrigger?.getAll()[0]; return t ? t.start + (t.end - t.start) / 2 : 0; });
     await cp.evaluate(y => window.scrollTo({ top: y, behavior: "instant" }), mid);
     await cp.waitForTimeout(1100);
@@ -258,7 +266,7 @@ const audit = async (page, phone) => {
     await rv.addInitScript(() => { try { localStorage.setItem("card", "seen"); } catch (e) {} });
     await rv.goto(url, { waitUntil: "networkidle" });
     await rv.waitForTimeout(1200);
-    r.returningOpensOnCover = await rv.evaluate(() => { const b = document.getElementById("cover-title").getBoundingClientRect(); return b.top >= 0 && b.top < innerHeight / 2; });
+    r.returningOpensOnPortfolio = await rv.evaluate(() => { const b = document.getElementById("about-title").getBoundingClientRect(); return b.top >= 0 && b.top < innerHeight / 2 && getComputedStyle(document.querySelector(".bar")).visibility === "visible"; });
     await rv.click(".card-replay");
     await rv.waitForTimeout(2200);
     r.replayShowsCard = await rv.evaluate(() => window.scrollY < 5);
@@ -277,33 +285,35 @@ const audit = async (page, phone) => {
     r.axe.forEach(v => fails.push(`${t}: axe ${v.impact} ${v.id} (${v.help}) at ${v.targets.join(", ")}`));
     r.contrast.filter(c => c.pass === false).forEach(c => fails.push(`${t}: contrast ${c.pair} = ${c.ratio}:1 (needs ${c.min}:1)`));
     r.smallTargets.forEach(s => fails.push(`${t}: touch target "${s.name}" is ${s.w}×${s.h}px (needs 44×44)`));
-    r.unprinted.forEach(u => fails.push(`${t}: section title not fully printed after scrolling past it: ${u}`));
   }
   for (const r of cfResults) {
-    const t = `${r.theme} @ ${r.width}px, centrefold open`;
-    if (!r.visible) fails.push(`${t}: the centrefold is not shown`);
+    const t = `${r.theme} @ ${r.width}px, bonus open`;
+    if (!r.visible) fails.push(`${t}: the bonus is not shown`);
     if (r.overflow > 0) fails.push(`${t}: horizontal overflow ${r.overflow}px`);
     r.errors.forEach(e => fails.push(`${t}: JS error: ${e}`));
     r.axe.forEach(v => fails.push(`${t}: axe ${v.impact} ${v.id} (${v.help}) at ${v.targets.join(", ")}`));
     r.smallTargets.forEach(s => fails.push(`${t}: touch target "${s.name}" is ${s.w}×${s.h}px (needs 44×44)`));
   }
-  if (!riddle.hiddenAtStart) fails.push("riddle: the centrefold is visible before the riddle is solved");
-  if (!riddle.hiddenAfterWrong || !riddle.hintAfterWrong) fails.push("riddle: a wrong guess should show a hint and keep the centrefold shut");
-  if (!riddle.openAfterRight || !riddle.contentsLinkShown) fails.push('riddle: "panda" should open the centrefold and add it to the contents');
-  if (!riddle.openAfterReload) fails.push("riddle: the centrefold should stay open after a reload");
-  if (!riddle.shutAfterReset) fails.push('riddle: "Reset the riddle" should hide the centrefold, show the form again and focus the input');
-  if (!riddle.shutAfterResetReload) fails.push("riddle: after a reset the centrefold should stay shut on reload");
-  if (reducedMotion.cardPinned || !reducedMotion.cardAndCoverShown) fails.push("reduced motion: the card should not be pinned, and the card and cover should both show as normal sections");
+  if (!riddle.hiddenAtStart) fails.push("riddle: the bonus is visible before the riddle is solved");
+  if (!riddle.hiddenAfterWrong || !riddle.hintAfterWrong) fails.push("riddle: a wrong guess should show a hint and keep the bonus shut");
+  if (!riddle.openAfterRight || !riddle.contentsLinkShown) fails.push('riddle: "panda" should open the bonus and add it to the bar');
+  if (!riddle.openAfterReload) fails.push("riddle: the bonus should stay open after a reload");
+  if (!riddle.shutAfterReset) fails.push('riddle: "Reset the riddle" should hide the bonus, show the form again and focus the input');
+  if (!riddle.shutAfterResetReload) fails.push("riddle: after a reset the bonus should stay shut on reload");
+  if (reducedMotion.cardPinned || !reducedMotion.cardAndAboutShown || !reducedMotion.barShown) fails.push("reduced motion: the card should not be pinned; the card, the bar and About should all show as plain sections");
   for (const r of card) {
-    const t = `name card @ ${r.width}px`;
-    if (!r.frontOnFirstScreen) fails.push(`${t}: the name, email and "Open the build log" should all be on the first screen`);
-    if (!r.buttonOpensCover) fails.push(`${t}: "Open the build log" should bring the cover into view and focus its heading`);
-    if (!r.returningOpensOnCover) fails.push(`${t}: a returning visitor should open on the cover`);
+    const t = `card @ ${r.width}px`;
+    if (!r.frontOnFirstScreen) fails.push(`${t}: the name, email and "Open the portfolio" should all be on the first screen`);
+    if (!r.barHiddenOnCard) fails.push(`${t}: the bar should be hidden while the card is closed`);
+    if (!r.buttonOpensPortfolio) fails.push(`${t}: "Open the portfolio" should bring About into view and focus its heading`);
+    if (!r.barShownAfter) fails.push(`${t}: the bar and all its links should be shown once the card has opened`);
+    if (!(r.landingOffset <= 1)) fails.push(`${t}: the card's name lands ${r.landingOffset?.toFixed(1)}px away from the bar's name (needs 1px or less)`);
+    if (!r.snapRestsAtEnd) fails.push(`${t}: letting go a third of the way in should settle at the card or the portfolio`);
+    if (!r.returningOpensOnPortfolio) fails.push(`${t}: a returning visitor should open on the portfolio with the bar shown`);
     if (!r.replayShowsCard) fails.push(`${t}: "See my card again" should scroll back to the card`);
-    if (!r.tabIntoCoverVisible) fails.push(`${t}: tabbing from the card into the cover should show the focused link, not leave it under the card`);
+    if (!r.tabPastCardVisible) fails.push(`${t}: tabbing past the card should show the focused link, not leave it under the card`);
   }
-  if (reducedMotion.inkPrinted !== reducedMotion.inkLayers || reducedMotion.running > 0)
-    fails.push(`reduced motion: ${reducedMotion.inkPrinted}/${reducedMotion.inkLayers} ink layers printed, ${reducedMotion.running} animations running`);
+  if (reducedMotion.running > 0) fails.push(`reduced motion: ${reducedMotion.running} animations running`);
 
   const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, reducedMotion, riddle, card, results, cfResults };
   fs.writeFileSync(path.join(OUT, "report.json"), JSON.stringify(report, null, 2));
@@ -311,7 +321,7 @@ const audit = async (page, phone) => {
   console.log(`Design check: ${report.pass ? "PASS" : `FAIL (${fails.length})`}`);
   fails.forEach(f => console.log(`  ✗ ${f}`));
   for (const r of results) console.log(`  ${r.theme} @ ${r.width}px: ${r.screens.length} screens, contact sheet ${r.sheet}`);
-  console.log(`  Centrefold open: ${cfResults.length} passes, screenshots .review${path.sep}<theme>-<width>-cf-{cover,contact,centrefold}.png`);
+  console.log(`  Bonus open: ${cfResults.length} passes, screenshots .review${path.sep}<theme>-<width>-cf-{about,contact,bonus}.png`);
   console.log(`  report: ${path.relative(ROOT, path.join(OUT, "report.json"))}`);
   process.exit(report.pass ? 0 : 1);
 })().catch(e => { console.error(e); server.close(); process.exit(2); });

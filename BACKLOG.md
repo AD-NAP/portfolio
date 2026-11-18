@@ -9,9 +9,9 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
-- [?] Publish v1.1.0 on github.com: tag `v1.1.0` on the latest `main`, title "v1.1.0: The build log, Issue 2", notes from `docs/releases/v1.1.0.md`
+- [x] Publish v1.1.0 on github.com (published 2026-11-18 from a local session with `gh`)
 - [?] Recruiter critic's questions (2026-11-18): cumulus-coach eval results; a demo, screenshot or recording of cumulus-coach; anything shareable about the metadata generator's effect; junior or mid-level target
-- [?] Delete the two merged branches on GitHub (Branches → bin icon): `claude/ecstatic-dijkstra-wwvvi2` and `claude/beautiful-meitner-lxxr21`. Cloud sessions can't delete remote branches
+- [x] Delete the two merged branches on GitHub: `claude/ecstatic-dijkstra-wwvvi2` and `claude/beautiful-meitner-lxxr21` (deleted 2026-11-18)
 - [x] Page order: Experience now comes before Projects (Shafik, 2026-11-18)
 - [x] Section names are plain: Experience, Projects, Lessons learned, Skills, Education, Contact (Shafik, 2026-11-18)
 - [x] TypeScript: Cloud BMS is Svelte and AWS CDK in TypeScript; shown on the page and in Skills (Shafik, 2026-11-18)
@@ -21,6 +21,25 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [?] Where SQL and React were used (both are in Skills with no evidence on the page). GitHub Actions answered 2026-10-22: he worked with the team's pipeline, set up by a senior; cumulus-coach will add CI/CD he builds himself
 - [~] LLM or AI engineering work to show: cumulus-coach (the AWS study agent: RAG, tool calling, eval, Docker, CI) will cover it, after the demo ships around 2026-10-30
 - [?] Enable the Design plugin (install card shown 2026-10-09 and again 2026-10-22) so `design-critique` and `accessibility-review` are available
+
+## Next: projects as engineering stories
+
+From `vault/ideas/business-card-idea.md`: each project told as Problem, Constraints, Architecture, Decisions, Implementation, Result.
+
+- [ ] Pull each step's facts for cumulus-coach and edge-energy-optimizer from the vault dev logs into `content/resume.md` ("From AD-NAP/vault"), and have Shafik check them
+- [ ] Restructure the two project entries; gaps get visible PLACEHOLDERs
+
+## v1.2.0: the business card opens into a drawing sheet (2026-11-18)
+
+Decision: `docs/decisions/0004-card-into-portfolio.md`. Shafik kept it on v1 as an iteration (not v2).
+
+- [x] New look: warm-grey drawing sheet, hairline grid, Archivo, one red, title block footer; zine furniture retired
+- [x] Card to sheet: paper scales (no text scaling), name lands on the bar's name within 1px, links arrive, About fades in; scrubbed and snapped
+- [x] Riddle and Bonus kept (`bonus` storage key, old keys still read); both cats retired
+- [x] Type ramp tokens (`--fs-label` to `--fs-name`); DESIGN.md and sidecar rewritten
+- [x] Checker: bar hidden then shown, landing within 1px, snap rests at an end
+- [ ] Motion review: Shafik can run `/review-animations` on the transition on his phone
+- [ ] Ceiling ideas: a drawing-sheet border with zone marks; leader lines from Highlights to their sections
 
 ## v1.1.0: Issue 2, the name card (2026-11-18)
 

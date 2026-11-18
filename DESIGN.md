@@ -1,282 +1,236 @@
 ---
-name: The build log
-description: Shafik Adam's portfolio as a self-published two-ink riso zine, handed over as a name card, one issue per release, in a day print and a night print.
+name: The drawing sheet
+description: Shafik Adam's portfolio as a business card that opens into a technical drawing sheet, in a light and a dark theme.
 colors:
-  day-paper: "#FAFAF8"
-  day-paper-deep: "#ECEDEE"
-  graphite-ink: "#2A2C30"
-  day-text: "#33363B"
-  day-muted: "#5D6168"
-  day-rule: "#C4C7CC"
-  day-halftone: "#6B6F76"
-  day-desk: "#E4E5E7"
-  meishi-red: "#C8202B"
-  day-on-accent: "#FFFFFF"
-  night-paper: "#232528"
-  night-paper-deep: "#2E3135"
-  night-ink: "#ECEDEF"
-  night-text: "#D9DBDE"
-  night-muted: "#A5A9AF"
-  night-rule: "#4A4E54"
-  night-halftone: "#8A8F96"
-  night-desk: "#18191B"
+  sheet: "#F4F4F1"
+  sheet-deep: "#E8E8E4"
+  drafting-desk: "#DADAD5"
+  drafting-ink: "#16171A"
+  body-ink: "#2A2C30"
+  pencil: "#595C62"
+  hairline: "#C6C6C1"
+  rule-red: "#C8202B"
+  on-red: "#FFFFFF"
+  graphite-sheet: "#1C1D1F"
+  graphite-deep: "#26282B"
+  night-desk: "#121314"
+  chalk-ink: "#EDEDEA"
+  chalk-text: "#D6D7D4"
+  night-pencil: "#A3A6AB"
+  night-hairline: "#3B3E42"
   night-red: "#F05A5F"
-  night-on-accent: "#16171A"
+  on-night-red: "#16171A"
 typography:
-  display:
-    fontFamily: "Anybody, Arial Narrow, sans-serif"
-    fontSize: "clamp(2.6rem, 7.4vw, 6rem)"
-    fontWeight: 900
-    lineHeight: 0.95
-    letterSpacing: "-0.01em"
-    fontVariation: "'wdth' 140"
   card-name:
-    fontFamily: "Anybody, Arial Narrow, sans-serif"
-    fontSize: "clamp(1.6rem, 6vw, 2.6rem)"
-    fontWeight: 850
+    fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif"
+    fontSize: "clamp(2rem, 7vw, 3.3rem)"
+    fontWeight: 800
     lineHeight: 1
-    fontVariation: "'wdth' 115"
+    letterSpacing: "-0.01em"
+    fontVariation: "'wdth' 112"
   headline:
-    fontFamily: "Anybody, Arial Narrow, sans-serif"
-    fontSize: "clamp(2.6rem, 6vw, 4.5rem)"
-    fontWeight: 850
-    lineHeight: 0.95
-    fontVariation: "'wdth' 125"
+    fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif"
+    fontSize: "clamp(2rem, 4.4vw, 3.25rem)"
+    fontWeight: 800
+    lineHeight: 1
+    letterSpacing: "-0.02em"
+    fontVariation: "'wdth' 108"
   title:
-    fontFamily: "Anybody, Arial Narrow, sans-serif"
-    fontSize: "clamp(1.45rem, 2.4vw, 1.85rem)"
-    fontWeight: 750
-    lineHeight: 1.15
-    fontVariation: "'wdth' 105"
+    fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif"
+    fontSize: "clamp(1.35rem, 2.2vw, 1.7rem)"
+    fontWeight: 700
+    lineHeight: 1.3
+    fontVariation: "'wdth' 104"
+  lede:
+    fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif"
+    fontSize: "clamp(1.25rem, 2.2vw, 1.6rem)"
+    fontWeight: 450
+    lineHeight: 1.4
+  emphasis:
+    fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif"
+    fontSize: "1.2rem"
+    fontWeight: 700
+    lineHeight: 1.3
   body:
-    fontFamily: "Literata, Georgia, serif"
+    fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif"
     fontSize: "1.0625rem"
     fontWeight: 400
-    lineHeight: 1.65
-  label:
-    fontFamily: "Anybody, Arial Narrow, sans-serif"
+    lineHeight: 1.6
+    fontVariation: "'wdth' 100"
+  small:
+    fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif"
     fontSize: "0.95rem"
-    fontWeight: 700
+    fontWeight: 550
+    lineHeight: 1.35
+  label:
+    fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif"
+    fontSize: "0.85rem"
+    fontWeight: 550
+    lineHeight: 1.3
   code:
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace"
+    fontFamily: "ui-monospace, Menlo, monospace"
     fontSize: "0.86em"
 rounded:
-  none: "0px"
+  edge: "2px"
+  card: "3px"
 spacing:
   gutter: "clamp(16px, 4vw, 56px)"
-  measure: "65ch"
-  sheet: "1200px"
-  card: "min(580px, 100%)"
-  spread: "clamp(56px, 8vw, 104px)"
-  page-gutter: "clamp(40px, 6vw, 88px)"
-  target: "44px"
+  section: "clamp(40px, 5.5vw, 72px)"
+  bar: "64px"
 components:
-  print-toggle:
+  button-primary:
+    backgroundColor: "{colors.drafting-ink}"
+    textColor: "{colors.sheet}"
+    rounded: "{rounded.edge}"
+    padding: "0 22px"
+    height: "48px"
+  button-primary-hover:
+    backgroundColor: "{colors.rule-red}"
+    textColor: "{colors.on-red}"
+  button-outline:
     backgroundColor: "transparent"
-    textColor: "{colors.graphite-ink}"
-    typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    padding: "0 14px"
-    height: "44px"
-  print-toggle-pressed:
-    backgroundColor: "{colors.graphite-ink}"
-    textColor: "{colors.day-paper}"
-  button-solid:
-    backgroundColor: "{colors.graphite-ink}"
-    textColor: "{colors.day-paper}"
-    rounded: "{rounded.none}"
+    textColor: "{colors.drafting-ink}"
+    rounded: "{rounded.edge}"
     padding: "0 20px"
     height: "44px"
-  card-open:
-    backgroundColor: "{colors.graphite-ink}"
-    textColor: "{colors.day-paper}"
-    rounded: "{rounded.none}"
-    padding: "0 24px"
-    height: "48px"
-  card-open-hover:
-    backgroundColor: "{colors.meishi-red}"
-    textColor: "{colors.day-on-accent}"
-  input:
-    backgroundColor: "{colors.day-paper-deep}"
-    textColor: "{colors.day-text}"
-    typography: "{typography.body}"
-    rounded: "{rounded.none}"
+  input-field:
+    backgroundColor: "{colors.sheet-deep}"
+    textColor: "{colors.body-ink}"
+    rounded: "{rounded.edge}"
     padding: "8px 12px"
     height: "44px"
-  headline-panel:
-    backgroundColor: "{colors.meishi-red}"
-    textColor: "{colors.day-on-accent}"
-    rounded: "{rounded.none}"
-    padding: "14px 18px"
-  meishi:
-    backgroundColor: "{colors.day-paper}"
-    textColor: "{colors.graphite-ink}"
-    rounded: "{rounded.none}"
-    width: "min(580px, 100%)"
+  business-card:
+    backgroundColor: "{colors.sheet}"
+    textColor: "{colors.drafting-ink}"
+    rounded: "{rounded.card}"
 ---
 
-# Design System: The build log
-
-> CLAUDE.md and PRODUCT.md win wherever this file disagrees with them. The tokens live in `assets/styles.css` (`:root`, `[data-theme="light"]`, `[data-theme="dark"]`). Keep Impeccable telemetry off. Values above are the day print unless named `night-`.
+# Design System: The drawing sheet
 
 ## Overview
 
-**Creative North Star: "The Build Log"**
+**Creative North Star: "The Drawing Sheet"**
 
-The page is a self-published zine, printed on a riso in two inks, and it is handed to you as a name card first. Each release is an issue (v1.0.0 was Issue 1, v1.1.0 is Issue 2; a patch is a reprint). The opening is a meishi (91 × 55) lying on a desk: it rises into your hand on load, and as you scroll it turns over, its back grows across the screen and becomes the zine's cover. From there the zine reads as before: a masthead with the title, the contents and which print you hold; a cover that sells the issue with cover lines and page numbers; spreads of two pages split by a hairline gutter and numbered with folios; a back page with contact and the riddle; and a hidden centrefold that opens when the riddle is solved.
+The page is a technical drawing sheet, and the visitor first meets it folded into a business card. The card lies on a drafting desk with faint dimension lines that mark it as 91 by 55. When it opens, the card's stock grows into the sheet, the name walks up to the top-left title slot, and the navigation arrives. The portfolio was printed on the card all along.
 
-Two inks do all the work: a dark graphite grey (pale grey in the night print) and a red. The red pass never lines up perfectly with the grey, so headings carry a few pixels of misregistration. A lighter grey is the third tone, for fields, rules, halftones and the desk. The stock is near white by day and dark grey by night, with one static layer of grain so it reads as printed rather than rendered. Nothing is distressed. Type is wide and heavy for headings and a bookish serif for reading.
+The sheet is calm, precise and editorial. It is light warm grey with almost-black ink and a faint twelve-column grid ruled in hairlines. Section titles stand on full-width rules, and the footer is a drawing title block. Restraint carries the personality. One typeface, set wide and heavy for the name and plain for reading. One red, kept for the single mark that matters in each region. There is no texture, no gradient and no decoration that a draughtsman wouldn't draw.
 
-Provenance: the zine world replaced the seeded isometric-building world at v1.0.0 (2026-11-18; see `docs/decisions/0002-riso-zine-redesign.md`). It came from direction roll `seed:e4c83ff7a6b64abf`, which ran degraded (the style catalog was unreachable from the cloud session, so there were no challengers). Issue 2 (v1.1.0) extended that world rather than replacing it: it added the name card opening and changed the inks from riso blue and sunflower to graphite and red (see `docs/decisions/0003-name-card-and-new-inks.md`). It is a code-led build with no comps, so this file is the record of what shipped. Because the world replaced the seeded one, no `world:` provenance is carried.
+The dark theme is the same sheet in graphite, with chalk-white ink and a brighter red.
 
 **Key Characteristics:**
-- Two inks only: graphite (pale grey at night) and red, plus a lighter grey and the paper.
-- Misregistration on titles and the card name, done as a `text-shadow`, one copy of the text.
-- Square everything: no radius anywhere, the name card included.
-- Print furniture as structure: a name card, masthead, cover lines with page numbers, folios, a dashed trim line between spreads, staples on the centrefold.
-- One automatic motion: the card handed over on load. The card flip and the section titles follow the scroll.
+- A drafting desk, a business card and a drawing sheet: three surfaces, one material.
+- A hairline grid of twelve columns across the content width, fixed to the window.
+- Archivo throughout, its width axis doing the work of a second face.
+- Red appears only for the key result, focus, and the card's rule.
+- Hatching marks the quieter comparison in a chart, the way a section cut does.
 
 ## Colors
 
-A two-ink riso palette, graphite and red, with a lighter grey third tone, swapped between a day print and a night print by `[data-theme]`.
+A restrained palette: tinted neutrals, one red, nothing else.
 
 ### Primary
-- **Graphite Ink** (`--ink`, day): headings, links, the masthead and cover-line rules, solid buttons, list markers, chart outlines, the cats. In the night print the same role is printed in **Pale Grey Ink** (`night-ink`).
-
-### Secondary
-- **Meishi Red** (`--accent`, day) and **Bright Red** (`night-red`): the second drum. Misregistration offsets, the rule beside "Azbil ASPO, Singapore" on the card, the contact labels on the card's back, chart result bars, the headline result panel, the lead cover line, highlighter underlines on links, `mark`, text selection, the riddle's folded corner, the night cat's eyes, the cake. Also the focus colour (`--focus`) in both prints. The night red is brighter so it still reads on dark stock.
-- **On Accent** (`--on-accent`: white by day, near-black `night-on-accent` by night): text on any red fill.
+- **Rule Red** (`rule-red`): the card's short rule, the production result's bar and headline rule, the lead highlight's marker, link underlines on hover, focus rings and the caret. Night: **Night Red** (`night-red`), brighter so it still reads on graphite. Red is text only where it reaches 4.5:1; otherwise it is a fill under **On Red** text.
 
 ### Neutral
-- **White Stock / Dark Grey Stock** (`--paper`): the page, the masthead background and the card's faces.
-- **Pale Grey Stock** (`--paper-deep`): the riddle input and the cake plate.
-- **Desk Grey** (`--desk`): the surface the card lies on, behind the opening only. It fades out the moment the card's back becomes the cover.
-- **Graphite Body / Pale Body** (`--text`): body copy, a step softer than the ink.
-- **Faded Graphite** (`--muted`): meta lines, folios, page numbers, captions, ledes, the colophon, the "or just scroll" aside.
-- **Trim Line** (`--rule`): dashed trim between spreads, the hairline gutter between pages, list dividers, column rules, the rules inside the card.
-- **Halftone Grey** (`--halftone`): the dotted fill for baselines and test data.
-- `--blend` (`multiply` by day, `screen` by night) and `--grain-opacity` (.18 / .14) set how the grain sits on the stock.
+- **Sheet** (`sheet`): the page and the card's stock. Night: **Graphite Sheet**.
+- **Sheet Deep** (`sheet-deep`): fields and inputs. Night: **Graphite Deep**.
+- **Drafting Desk** (`drafting-desk`): the table under the closed card, ruled in a 24px grid. Night: **Night Desk**.
+- **Drafting Ink** (`drafting-ink`): headings, links, rules, the solid button. Night: **Chalk Ink**.
+- **Body Ink** (`body-ink`): running text. Night: **Chalk Text**.
+- **Pencil** (`pencil`): meta lines, captions, dimension marks, hatching. Night: **Night Pencil**.
+- **Hairline** (`hairline`): dividers between list rows and columns. Night: **Night Hairline**.
+- The grid is the ink at 7.5% (night: 6%), `--grid`.
 
 ### Named Rules
-**The Two Drums Rule.** Every colour is one of the two inks, a tint of the grey (halftone, rule, muted, desk), or the paper. A third hue breaks the print.
+**The One Mark Rule.** Each region gets at most one red mark: the thing a recruiter should see first. If two things are red, neither is.
 
-**The Red Text Rule.** Red is text only where it reaches 4.5:1 on its ground (the card's contact labels on paper). Everywhere else red is a fill, an underline or a shadow, and any text on a red fill uses `--on-accent`.
-
-**The Token-Only Rule.** Components take colours from the tokens. The grain's neutral grey inside its SVG filter is the only literal colour, and it is blended, not seen.
+**The Token Rule.** Every colour comes from the custom properties on `:root` and `[data-theme]`. No literal colours in components.
 
 ## Typography
 
-**Display Font:** Anybody (fallback Arial Narrow, sans-serif), a variable width face set wide and heavy.
-**Body Font:** Literata (fallback Georgia, serif), with optical sizing on.
-**Code:** the system monospace (`ui-monospace`, SF Mono, Menlo), at 0.86em, only inside `code`.
+**Display Font:** Archivo (with Helvetica Neue, Arial)
+**Body Font:** Archivo
+**Label/Mono Font:** the system monospace, for code only
 
-**Character:** a stretched, poster-weight grotesque for the shouting parts, against a warm book serif for reading. The width axis carries the hierarchy as much as size does.
+**Character:** One grotesque with a width axis. Wide and heavy (`wdth` 108 to 112, weight 800) it becomes the nameplate and section titles. At normal width it's an even, workmanlike reading face. Numbers use tabular figures.
 
 ### Hierarchy
-- **Display** (900, width 140, line-height 0.95): the cover title, "The build log", with "Issue 2" under it in Literata italic `--muted`. On phones it drops to width 110 and clamp(2.4rem, 12.5vw, 3.6rem). Misregistered 6px 4px (4px 3px on phones).
-- **Card name** (850, width 115, line-height 1): the name on the card's front, which is the page's `h1`. Misregistered 2px 2px, the smallest offset, since the card is the smallest sheet.
-- **Headline** (850, width 125, line-height 0.95): spread titles ("Experience", "Projects"). Always `.ink`, so they carry the misregistration.
-- **Title** (750, width 105, line-height 1.15): article titles on a page. A section-sized variant (850, width 125, clamp 1.9–2.6rem) heads page-level sections.
-- **Body** (Literata 400, line-height 1.65, held to 65ch): paragraphs and points. Ledes, meta lines, captions and the colophon are Literata italic in `--muted`.
-- **Label** (Anybody 600–800, about 0.85–1.1rem): masthead contents, the print toggle, folios, chart values (tabular numbers), cover lines, contact links, the card's organisation line and contact labels.
+- **Card name** (800, clamp(2rem, 7vw, 3.3rem), 1): the name on the card. The bar's name uses the same lettering at the Emphasis size, so the two can swap mid-transition.
+- **Headline** (800, clamp(2rem, 4.4vw, 3.25rem), 1): section titles, standing on a 1px ink rule.
+- **Title** (700, clamp(1.35rem, 2.2vw, 1.7rem), 1.3): roles and projects.
+- **Lede** (450, clamp(1.25rem, 2.2vw, 1.6rem), 1.4): the About statement and the contact line, in ink.
+- **Body** (400, 1.0625rem, 1.6): running text, max 68ch.
+- **Emphasis** (700, 1.2rem, 1.3): list leads, skill and school names, the bar's name.
+- **Small** (550, 0.95rem): the bar's links, the card's lines, chart labels and captions.
+- **Label** (550, 0.85rem): title block labels, dimension figures, chart ends. Sentence case, never tracked capitals.
 
 ### Named Rules
-**The Wide Not Tall Rule.** Hierarchy comes from Anybody's width and weight axes first. Headings are set wide (105 to 140), never condensed.
+**The Ramp Rule.** Every font size is one of the eight ramp tokens (`--fs-label` to `--fs-name`). No one-off sizes.
 
-**The Mono Is Code Rule.** Monospace appears only for code. Labels, dates, values and file names use Anybody.
+**The Same Lettering Rule.** The card's name and the bar's name share family, weight and width, and differ only in size. The transition depends on it.
 
 ## Layout
 
-The page opens on a full-bleed stage: the desk, with the card centred at min(580px, 100%) wide and an aspect ratio of 91 / 55. Under the card sit a one-line intro, GitHub, LinkedIn and Resume (PDF) as highlighter links, and "Open the build log" with an "or just scroll" aside. With motion on, the stage is laid over the cover at a full screen's height (100svh) and both are pinned together for one screen of scroll, so the grown card back lands on a cover that is already in place.
+The sheet is a centred column, min(1200px, 100% minus two gutters), with the twelve-column hairline grid fixed behind it. Gutters run clamp(16px, 4vw, 56px). Sections are separated by clamp(40px, 5.5vw, 72px) of space above and below, with more space above a title than below its rule. Content pairs sit in two equal columns that collapse to one below 900px. The full-time role's points run in two columns divided by a hairline.
 
-Below that, a single column of sheets, centred at 1200px with a `--gutter` of clamp(16px, 4vw, 56px). The masthead sticks to the top with a 2px ink rule under it. The cover sets the title full width, then a two-column body: the intro line, contact links and "See my card again" on the left, "In this issue" cover lines on the right. Each spread has generous vertical padding (clamp(56px, 8vw, 104px)), a dashed trim line on top, a headline title, and two pages in a grid split by a 1px rule down the middle (gap clamp(40px, 6vw, 88px)). Reading text holds to 65ch. A folio sits at the bottom outer corner of each page. A full-width article (the day job lead) can run across the spread with its points in two ruled columns.
+The bar is fixed at the top: 64px, or 104px below 900px, where the links move to a second row that scrolls sideways and fades at the edge. On phones the About link drops out, because the name already leads there.
 
-At 900px and below the spread becomes one page per row, the gutter rule and columns drop, and the masthead wraps its contents to a second row. At 600px and below the masthead stops sticking, the issue line hides, the card sits near the top of the stage (padding max(24px, 9svh)) so the card, intro, links and button fit the first screen, the cover tightens, and chart labels move above their bars. Every touch target is at least 44px tall.
+The first screen is the card, centred on the desk at every width, with the intro line, links and "Open the portfolio" under it.
 
 ## Elevation & Depth
 
-Flat, as paper is, with one object lifted off the desk. Depth on the page comes from overprinting, not lifting: the misregistered red pass, the grain blended over the sheet, and the riddle's dog-eared corner. The name card is the one physical object, so it is the one thing with a cast shadow and real 3D (perspective 1600px on its holder, `rotateY` on the card, hidden back faces).
+The sheet is flat. Depth exists only on the drafting desk, where the card casts a soft lifted shadow. The shadow fades out as the card opens, because the card becomes the sheet.
 
 ### Shadow Vocabulary
-- **Misregistration** (`text-shadow: var(--mis-x) var(--mis-y) 0 var(--accent)`, 3px 2px; cover title 6px 4px, phone 4px 3px; card name 2px 2px): the red pass on `.ink` headings. Snaps to `0 0 0` when in register.
-- **Card shadow** (`--card-shadow`; day `0 1px 2px rgb(20 21 24 / .14), 0 22px 44px -14px rgb(20 21 24 / .32)`, night the same shape in black at .4 and .7): a contact shadow and a soft drop under the card faces on the desk. Only the meishi uses it.
-- **Ink outline** (`box-shadow: inset 0 0 0 2px var(--ink)`): the outline on chart result bars. Halftone baselines use a 1px `--halftone` outline.
-- **Fold edge** (`box-shadow: -1px 1px 0 var(--ink)`): the crease on the riddle's folded corner.
+- **Card on the desk** (`box-shadow: 0 1px 2px rgb(22 23 26 / .12), 0 24px 48px -18px rgb(22 23 26 / .34)`): the closed card only. At night it adds a 1px cut edge at 7% chalk, so graphite stands off the dark desk.
 
 ### Named Rules
-**The Overprint Rule.** Depth on the page is ink on ink. Shadows there only exist as the second ink pass, an inset outline, or a paper fold.
-
-**The One Object Rule.** Only the name card lifts off its surface. Spreads, panels, the riddle card and the masthead stay flat on the sheet.
-
-**The One Copy Rule.** Effects never duplicate text. Find-in-page and copy see one copy.
+**The Flat Sheet Rule.** Nothing on the open sheet casts a shadow. Separation comes from hairlines and space.
 
 ## Shapes
 
-Square. Radius is 0 on the card, buttons, inputs, panels and bars. Borders are 2px solid ink for frames (masthead rule, print toggle, riddle card, input, cover lines rule) and 1px `--rule` for dividers, including the rules inside the card. The trim line between spreads is 2px dashed. The range chart's cutoff is a 2px dashed ink line. The card's front carries a 4px red rule beside the organisation name. The riddle has a folded corner drawn as a diagonal two-colour gradient. The centrefold has two 3px staples down its middle. Small SVGs (the cat on the riddle card, the night cat on the colophon rule, the cake, the moon in the toggle) are flat ink fills with 2px ink strokes where outlined.
+Edges are drawn, not rounded: 2px on buttons and inputs, 3px on the card. Frames are 1px ink lines: the riddle box, the title block cells, the outline button. Chart bars are square. Hatching runs at 135°, 1px lines 6px apart.
 
 ## Components
 
-### Name card (signature)
-A meishi, 91 × 55, on the desk. Front: "Azbil ASPO, Singapore" in Anybody 650 beside a 4px red rule (text only, never a logo), the name as the misregistered card name, the job title in Literata, and the email under a 1px rule. Back: the name again and a ruled list of Email, GitHub and LinkedIn with red Anybody labels; the back is a picture (`aria-hidden`, `inert`), and the real links are on the stage and the cover. Both faces are paper with the card shadow.
-
-### The hand-over (signature)
-On load the card rises into place with a slight bow: from 44px down and tipped back 20deg, through a small overshoot (-6px, -5deg), to rest, in 0.8s on `--ease-out` (`cubic-bezier(.16, 1, .3, 1)`). It is the only automatic motion. Returning visitors (`data-card="seen"`) get no hand-over and open on the cover, with "See my card again" to scroll back up.
-
-### The flip (signature)
-GSAP ScrollTrigger pins `.opening` (the stage and the cover) for one screen, scrubbed at 0.5. One progress value, 0 to 1, is rendered into CSS variables on the stage, so the same scroll position always draws the same picture in both directions. From 0 to 0.12 the lines under the card step aside (fade and drop 12px). From 0 to 0.42 the card turns over (`--card-turn` to 180deg, power1.inOut) and swells to 1.12. From 0.45 to 0.75 its back grows until it covers the screen (power2.in) while its contact details fade. At 0.75 the card and desk vanish and the cover underneath is already in place, with no faded in-between. From 0.76 to 0.96 the cover title prints in: `--print` rolls a clip-path from the left and `--mis-x` slides the red pass from -18px into register offset. "Open the build log" scrolls through the same motion and then focuses the cover title. Without GSAP or with reduced motion, the card and the cover are plain sections, front side up.
-
-### Masthead
-The zine's title bar. "Shafik Adam" in Anybody 800 at width 120, then "The build log, issue 2, November 2026" in Literata italic `--muted`. Contents links on the right in Anybody 600; hover and the current section get a thick red underline (0.3em). Sticky on desktop, static on phones.
-
 ### Buttons
-- **Open the build log:** a solid ink block, 48px tall, 24px side padding, Anybody 750 in paper. Hover fills it red with `--on-accent` text. Presses to `scale(.97)`.
-- **Print toggle:** a square 2px ink-outlined button, 44px tall, with a small moon icon and "Night print". Pressed, it fills with ink and the label turns paper. Switching prints fades background and text colours for .35s.
-- **Check (riddle):** a solid ink block, 44px, square. **Reset the riddle** is the outlined twin that fills with ink on hover.
+- **Shape:** drawn edge (2px).
+- **Primary:** solid Drafting Ink with Sheet text, 48px tall ("Open the portfolio", "Check").
+- **Hover / Focus:** turns Rule Red with On Red text; presses to 97% on click; the focus ring is 2px Rule Red, offset 3px.
+- **Outline:** 1px ink frame, transparent fill; fills with ink on hover ("Dark mode", "Reset the riddle").
 
-### Cover lines
-The cover's contents: a 2px ink rule, "In this issue", then a list of links with page numbers (tabular, `--muted`) aligned right and a 1px rule under each. The lead line (the production result) sits on a red fill in `--on-accent`. Hover gives a red underline.
+### Cards / Containers
+- **Business card:** 91:55, Sheet stock, card shadow on the desk, 3px corners. It holds the org line with its short red rule, the name, the title, and the email under a hairline. Drafting dimension lines and figures sit outside the top and left edges on wider screens.
+- **Riddle box:** 1px ink frame on Sheet, 26px inset.
 
-### Links
-Inline links are ink, 1px underline thickening to 2px on hover. Contact and call-to-action links are Anybody words with a thick red underline like a highlighter pass (0.22–0.32em, skip-ink off). Hover fills them red with `--on-accent` text and drops the underline.
+### Inputs / Fields
+- **Style:** Sheet Deep fill, 1px ink stroke, 2px corners, 16px text (no zoom on iPhone).
+- **Focus:** the 2px red focus ring.
 
-### Headline panel
-A red block (14px 18px padding) with `--on-accent` Anybody 650 text: the one result an article leads with.
+### Navigation
+- **The bar:** name on the left in the card's lettering, section links on the right in 550 weight, and the outline theme button. The current section and hover get a 2px red underline, offset .45em.
+
+### Card to sheet (signature)
+One scrubbed, pinned, snapped motion (GSAP ScrollTrigger), using transforms and opacity only. The card's lines and the links under it step aside. The card's stock scales into the full sheet. The name walks to the bar and swaps with the bar's name in the same frame. The links arrive from the right in uneven steps. About, already laid out underneath, fades in. Letting go mid-way settles to whichever end you were heading for. Under reduced motion or without GSAP, the card and About are plain sections and the bar is always shown.
 
 ### Charts
-Two inks, drawn to scale. Each row is label, track and value. The result is a red bar with a 2px inset ink outline. Baselines and test data print as a grey halftone dot (5px grid; 4px for the small test-data strip), quieter than the result. A tiny result prints as a solid ink sliver (min 3px). A range chart adds a 1px rule track, a dashed ink cutoff and an axis with end values. Captions are Literata italic `--muted`. The headline chart is taller (30px) with a larger value.
+Drawn to scale. The result is a solid Rule Red bar, the baseline is hatched in Pencil, other ranges are outlined in ink, and a sliver too small to see is drawn as an ink line.
 
-### Riddle
-A card framed in 2px ink on paper, with a red dog-ear that shrinks away when solved and a cat sitting on its top edge. Input on `--paper-deep` at 16px (so phones don't zoom), a solid ink "Check" button, both square and 44px. Solving it makes the letters of `ad-nap` hop into `pan-da` with a 70ms stagger.
-
-### Focus
-Every interactive element gets a 3px solid `--focus` outline (red) at a 3px offset.
-
-### Misregistered titles
-Section titles, the cover title and the card name are one text copy with the red pass as a `text-shadow`. A section title snaps into register (shadow to 0) over .45s when it is hovered, when its spread is the URL `:target`, or when focus is anywhere inside its spread.
-
-### Scroll print
-As a section title crosses the band from 90% to 72% down the viewport, it prints, scrubbed to the scroll by GSAP ScrollTrigger (`scrub: 0.4`): `--print` rolls a clip-path from the left, then `--mis-x` slides the red pass from -18px into its 3px offset. Scrolling back un-prints it. Only CSS variables move; the `.is-scroll-print` class is added by script, so without GSAP or with reduced motion the titles simply show printed.
+### Title block
+The footer is a framed grid of cells (drawn by, built with, revision, date), with labels in Pencil and values in ink.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** take every colour from the tokens and check both prints.
-- **Do** keep to two inks: graphite (pale grey at night) and red, plus the lighter grey tints and the paper.
-- **Do** put red behind text, under text or beside it, and set any text on a red fill in `--on-accent`.
-- **Do** make misregistration with `text-shadow` on one copy of the text, offset by `--mis-x` and `--mis-y`.
-- **Do** use print furniture for structure: the name card, cover lines with page numbers, folios, trim lines, page gutters.
-- **Do** draw numbers to scale, with the production result in red and baselines or test data in halftone.
-- **Do** keep every corner square and every touch target at 44px or more.
-- **Do** drive scroll motion with one value rendered into CSS variables, so hover, focus, `:target` and reduced motion keep working and the page looks finished without GSAP.
-- **Do** let motion answer the user, apart from the hand-over on load, and show final states under `prefers-reduced-motion`.
+- **Do** keep red to one mark per region (The One Mark Rule).
+- **Do** draw separation with 1px hairlines and space, not boxes and shadows.
+- **Do** keep the card's name and the bar's name in the same lettering (The Same Lettering Rule).
+- **Do** mark a baseline or test data with hatching and keep it smaller than the result.
+- **Do** drive motion through CSS variables, so hover, focus and reduced motion keep working when the script is absent.
 
 ### Don't:
-- **Don't** set red text on paper below 4.5:1.
-- **Don't** duplicate text to fake a second ink pass.
-- **Don't** add a third hue, a gradient sky, or a glow.
-- **Don't** distress the paper: one static grain layer, no torn edges or fake grunge.
-- **Don't** round corners, and don't give any container but the name card a drop shadow.
-- **Don't** show the Azbil logo; the organisation is text.
-- **Don't** use monospace for labels, dates or values; it is for code only.
-- **Don't** add automatic motion beyond the hand-over.
-- **Don't** let the test-data strip outweigh production results.
+- **Don't** add texture, grain, gradients or glow: the sheet is clean stock.
+- **Don't** use monospace except for code.
+- **Don't** put a shadow on anything but the closed card.
+- **Don't** add tracked all-caps labels or eyebrows above headings.
+- **Don't** scale text up in a transition: move it, fade it, or scale the paper behind it.
