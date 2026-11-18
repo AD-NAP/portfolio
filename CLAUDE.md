@@ -36,13 +36,13 @@ The concept (since v1.0.0, 2026-11-18): the site is **The build log**, a self-pu
 - The cover carries the proof: cover lines ("In this issue") link to the articles with page numbers, and the production result leads.
 - Contact links (Email, GitHub, LinkedIn, Resume PDF) stay on the cover as well as on the back page.
 - Production results get the visual weight. Test data (e.g. the 330 mocked records) stays small.
-- Phones: the first screen shows the whole card front (name, title, Azbil, email) and "Open the build log". The same flip runs on phones.
+- First screen, at every width: the card front (name, title, Azbil, email), then under the card a one-line intro ("Software engineer: cloud backends and AI tools…"), GitHub, LinkedIn and Resume (PDF), and "Open the build log". The recruiter critic asked for this so the first screen still answers who, what and how to reach him (2026-11-18). The same flip runs on phones.
 - Fonts: Anybody (display, set wide and heavy) and Literata (body). Code uses the system monospace, and only for code. (2026-11-18)
 - GSAP (core and ScrollTrigger) is self-hosted in `assets/vendor/`, pinned to one version; the page loads no third-party scripts. Use the `gsap-*` skills for GSAP work, but prefer plain CSS where it is enough. Animate CSS variables rather than inline styles, so the CSS states (hover, focus, `:target`, reduced motion) keep working, and the page must look finished if GSAP fails to load. (2026-11-18)
 
 ## Motion
 - Allowed automatic motion: only the hand-over on page load (the card rises into place with a slight bow, under 1s).
-- Scroll motion, scrubbed to the scrollbar so it answers the visitor and reverses on the way back up: the card flip (GSAP ScrollTrigger pins the card for one screen, turns it, grows its back over the screen and dissolves it into the cover; "Open the build log" scrolls through the same motion) and section titles printing as they scroll into view. Returning visitors (`card = seen`) open on the cover, with "See my card again" to replay. Any other scroll motion needs Shafik's approval first. (Shafik, 2026-11-18)
+- Scroll motion, scrubbed to the scrollbar so it answers the visitor and reverses on the way back up: the card flip (GSAP ScrollTrigger pins the card and the cover together for one screen; the card turns in real 3D, its back grows over the screen and swaps instantly for the cover underneath, whose title then receives its ink; no faded in-between; "Open the build log" scrolls through the same motion) and section titles printing as they scroll into view. Returning visitors (`card = seen`) open on the cover, with "See my card again" to replay. Any other scroll motion needs Shafik's approval first. (Shafik, 2026-11-18)
 - Everything else answers the user: the print toggle, section titles snapping into register on hover or focus, the riddle corner unfolding and the `ad-nap` letters flipping, the cat's tail flick when the riddle card comes into view.
 - `prefers-reduced-motion` shows final states with no animation: no pin, no flip; the card and the cover are normal sections.
 

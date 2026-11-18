@@ -156,34 +156,57 @@
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       root.classList.add("has-card-motion");
-      // How far the card must grow, from where it sits in the pinned stage, for its back to cover the screen.
+      const opening = document.querySelector(".opening");
       const hand = document.querySelector(".meishi-hand");
+      // How far the card must grow, from where it sits on the stage, for its back to cover the screen.
       const fillScale = () => {
         const w = meishi.offsetWidth, h = meishi.offsetHeight;
         const hr = hand.getBoundingClientRect(), sr = stage.getBoundingClientRect();
         const cx = hr.left - sr.left + w / 2, cy = hr.top - sr.top + h / 2;   // card centre within the stage
-        const sx = 2 * Math.max(cx, innerWidth - cx) / w;
-        const sy = 2 * Math.max(cy, innerHeight - cy) / h;
-        return Math.max(sx, sy) * 1.08;
+        return Math.max(2 * Math.max(cx, innerWidth - cx) / w, 2 * Math.max(cy, innerHeight - cy) / h) * 1.08;
       };
-      const tl = gsap.timeline({
+      // One number, p (0 to 1), follows the scroll; render() turns it into the CSS variables the stage
+      // reads (see .card-stage in styles.css). Same p, same picture, in both directions.
+      const turnEase = gsap.parseEase("power1.inOut"), growEase = gsap.parseEase("power2.in");
+      const span = (p, a, b) => gsap.utils.clamp(0, 1, (p - a) / (b - a));
+      let fill = 1;
+      const render = p => {
+        const turn = turnEase(span(p, 0, 0.42));          // 0 to 0.42: the card turns over
+        const grow = growEase(span(p, 0.45, 0.75));       // 0.45 to 0.75: its back grows over the screen
+        const after = 1 - span(p, 0, 0.12);               // the lines under the card step aside first
+        const landed = p >= 0.75;                         // the back is now the cover's paper
+        const ink = span(p, 0.76, 0.96);                  // and the cover title receives its ink
+        const v = {
+          "--card-turn": `${180 * turn}deg`,
+          "--card-scale": p < 0.45 ? 1 + 0.12 * turn : 1.12 + (fill - 1.12) * grow,
+          "--back-ink": 1 - span(p, 0.45, 0.57),
+          "--after-alpha": after, "--after-y": `${12 * (1 - after)}px`, "--after-vis": after > 0 ? "visible" : "hidden",
+          "--face-alpha": landed ? 0 : 1, "--desk-alpha": landed ? 0 : 1, "--stage-events": landed ? "none" : "auto",
+        };
+        for (const k in v) stage.style.setProperty(k, v[k]);
+        coverTitle.style.setProperty("--print", `${100 * ink}%`);
+        coverTitle.style.setProperty("--mis-x", `${-18 + 24 * ink}px`);
+      };
+      coverTitle.classList.add("is-scroll-print");
+      const progress = { p: 0 };
+      const tween = gsap.to(progress, {
+        p: 1, ease: "none", onUpdate: () => render(progress.p),
         scrollTrigger: {
-          trigger: stage, start: "top top", end: "+=100%",
-          pin: true, pinSpacing: false, scrub: 0.5, invalidateOnRefresh: true,
+          trigger: opening, start: "top top", end: "+=100%",
+          pin: true, scrub: 0.5, invalidateOnRefresh: true,   // card and cover pinned together
+          onRefresh: () => { fill = fillScale(); render(progress.p); },
           onLeave: markCardSeen,
         },
       });
-      tl.to(".card-stage__cta", { autoAlpha: 0, y: 12, duration: 0.12, ease: "none" }, 0)
-        .to(meishi, { rotationY: 180, scale: 1.12, duration: 0.42, ease: "power1.inOut" }, 0)
-        .to(".meishi__back > *", { autoAlpha: 0, duration: 0.12, ease: "none" }, 0.5)
-        .to(meishi, { scale: fillScale, duration: 0.3, ease: "power2.in" }, 0.45)
-        .set(".card-stage__desk", { autoAlpha: 0 }, 0.72)
-        // Once the cover shows through, let clicks reach it instead of the (fading) card stage.
-        .set(stage, { pointerEvents: "none" }, 0.72)
-        // Fade the faces, not the card: opacity on the card itself would flatten its 3D and show the front mirrored.
-        .to(".meishi__face", { autoAlpha: 0, duration: 0.28, ease: "none" }, 0.72);
-      cardTrigger = tl.scrollTrigger;
-      return () => { root.classList.remove("has-card-motion"); cardTrigger = null; };
+      fill = fillScale();
+      render(0);
+      cardTrigger = tween.scrollTrigger;
+      if (cardSeen() && !location.hash) window.scrollTo(0, cardTrigger.end);
+      return () => {
+        root.classList.remove("has-card-motion"); coverTitle.classList.remove("is-scroll-print");
+        stage.removeAttribute("style"); coverTitle.style.removeProperty("--print"); coverTitle.style.removeProperty("--mis-x");
+        cardTrigger = null;
+      };
     });
 
     /* ---------- Section titles print as they scroll into view ----------
@@ -192,7 +215,7 @@
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.utils.toArray(".spread__title").forEach(title => {   // top to bottom, as ScrollTrigger expects
         title.classList.add("is-scroll-print");
-        gsap.timeline({ scrollTrigger: { trigger: title, start: "top 90%", end: "top 60%", scrub: 0.4 } })
+        gsap.timeline({ scrollTrigger: { trigger: title, start: "top 90%", end: "top 72%", scrub: 0.4 } })
           .fromTo(title, { "--print": "0%" }, { "--print": "100%", ease: "none", duration: 0.55 })
           .fromTo(title, { "--mis-x": "-18px" }, { "--mis-x": "3px", ease: "power2.out", duration: 0.45 }, 0.3);
       });
@@ -202,6 +225,7 @@
   // Returning visitors (with no #link to follow) open straight on the cover. Wait for "load":
   // a jump made earlier is undone when the browser settles the page's scroll position.
   if (stage && cardSeen() && !location.hash) {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     const jump = () => requestAnimationFrame(() => window.scrollTo(0, coverTop()));
     if (document.readyState === "complete") jump();
     else window.addEventListener("load", jump, { once: true });

@@ -104,7 +104,8 @@ mark { background: var(--accent); color: var(--on-accent); padding: 0 .2em; box-
 /* Section titles print as they scroll into view (main.js, GSAP ScrollTrigger, scrubbed).
    GSAP only moves two variables: --print rolls the inks across, --mis-x slides the red pass
    into place. Without GSAP, or with reduced motion, the class is never added and titles show printed. */
-.spread__title.is-scroll-print {
+.spread__title.is-scroll-print,
+.cover__name.is-scroll-print {
   clip-path: inset(-12px calc(100% - var(--print, 100%)) -12px 0);
   transition: none;   /* the scroll drives the shadow; a transition would make it lag */
 }
@@ -216,25 +217,36 @@ main { padding: 0 var(--gutter); }
    Without GSAP or with reduced motion it is simply the first section, front side up. */
 /* Full bleed with an explicit width, so GSAP measures the real size when it pins the stage. */
 .card-stage { position: relative; overflow: clip; width: calc(100% + 2 * var(--gutter)); margin: 0 0 0 calc(var(--gutter) * -1); padding: clamp(40px, 8vw, 96px) 0; }
-.card-stage__desk { position: absolute; inset: 0; background: var(--desk); }
+.card-stage { pointer-events: var(--stage-events, auto); }
+.card-stage__desk { position: absolute; inset: 0; background: var(--desk); opacity: var(--desk-alpha, 1); }
 .card-stage__inner {
   position: relative; display: grid; justify-items: center; gap: 26px;
   padding: 0 var(--gutter); perspective: 1800px;
 }
-.meishi-hand { width: min(580px, 100%); transform-origin: 50% 100%; animation: hand-over .8s var(--ease-out) both; }
+.meishi-hand {
+  width: min(580px, 100%); transform-origin: 50% 100%;
+  perspective: 1600px;   /* the card's own turn needs perspective on its parent */
+  animation: hand-over .8s var(--ease-out) both;
+}
+[data-card="seen"] .meishi-hand { animation: none; }
 /* Offered the polite way: it rises into place with a slight bow, then levels out. */
 @keyframes hand-over {
-  from { opacity: 0; transform: translateY(56px) rotateX(24deg); }
-  55%  { opacity: 1; transform: translateY(-6px) rotateX(-5deg); }
-  to   { opacity: 1; transform: none; }
+  from { transform: translateY(44px) rotateX(20deg); }
+  55%  { transform: translateY(-6px) rotateX(-5deg); }
+  to   { transform: none; }
 }
-.meishi { position: relative; aspect-ratio: 91 / 55; transform-style: preserve-3d; }
+.meishi {
+  position: relative; aspect-ratio: 91 / 55; transform-style: preserve-3d;
+  transform: rotateY(var(--card-turn, 0deg)) scale(var(--card-scale, 1));
+}
 .meishi__face {
   position: absolute; inset: 0; display: flex; flex-direction: column;
   padding: clamp(16px, 5%, 32px) clamp(18px, 6%, 38px);
   background: var(--paper); box-shadow: var(--card-shadow);
   backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  opacity: var(--face-alpha, 1);
 }
+.meishi__back > * { opacity: var(--back-ink, 1); }
 .meishi__back { transform: rotateY(180deg); }
 .meishi__org { display: flex; align-items: center; gap: 10px; margin: 0; font: 650 clamp(.78rem, 2.2vw, .95rem) var(--font-display); color: var(--ink); }
 .meishi__mark { width: 4px; align-self: stretch; min-height: 1.1em; background: var(--accent); }
@@ -247,9 +259,15 @@ main { padding: 0 var(--gutter); }
 .meishi__email a { display: inline-flex; align-items: center; min-height: 44px; margin: -12px 0 -12px; }
 .meishi__back-name { margin: 0 0 auto; font: 800 clamp(.95rem, 2.8vw, 1.2rem) var(--font-display); color: var(--ink); }
 .meishi__contacts { display: grid; gap: 6px; margin: 0; font-size: clamp(.78rem, 2.2vw, .95rem); }
-.meishi__contacts div { display: grid; grid-template-columns: 6.5em 1fr; gap: 12px; padding-top: 6px; border-top: 1px solid var(--rule); }
+.meishi__contacts div { display: grid; grid-template-columns: 6.5em 1fr; align-items: baseline; gap: 12px; padding-top: 6px; border-top: 1px solid var(--rule); }
 .meishi__contacts dt { font: 700 1em var(--font-display); color: var(--accent); }
 .meishi__contacts dd { margin: 0; color: var(--text); overflow-wrap: anywhere; }
+.card-stage__after {
+  display: grid; justify-items: center; gap: 14px; text-align: center;
+  opacity: var(--after-alpha, 1); transform: translateY(var(--after-y, 0px)); visibility: var(--after-vis, visible);
+}
+.card-stage__intro { max-width: 46ch; margin: 0; font-size: clamp(1rem, 1.6vw, 1.12rem); line-height: 1.45; }
+.card-stage__links { justify-content: center; margin: 0; }
 .card-stage__cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 16px; margin: 0; }
 .card-open {
   display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px;
@@ -260,8 +278,14 @@ main { padding: 0 var(--gutter); }
 .card-open:active { transform: scale(.97); }
 .card-stage__or { font-style: italic; color: var(--muted); }
 
-/* With GSAP: the stage fills the screen and is pinned over the cover while the card turns. */
-.has-card-motion .card-stage { z-index: 20; min-height: 100svh; display: grid; align-items: center; padding: 72px 0 40px; }
+/* With GSAP: the card stage lies over the cover, and both are pinned together while the card turns,
+   so the grown back lands exactly where the cover already sits. */
+.opening { position: relative; }
+.has-card-motion .opening { min-height: 100svh; }
+.has-card-motion .card-stage {
+  position: absolute; top: 0; left: calc(var(--gutter) * -1); z-index: 20;
+  height: 100svh; margin: 0; display: grid; align-items: center; padding: 64px 0 24px;
+}
 .has-card-motion .meishi { will-change: transform; }
 
 /* ---------- Spreads ---------- */
@@ -478,7 +502,10 @@ main { padding: 0 var(--gutter); }
   .chart__axis { grid-template-columns: 1fr; }
   .chart__axis > span:not(.chart__track) { display: none; }
   .riddle { padding: 20px 18px; }
-  .has-card-motion .card-stage { align-items: start; padding-top: max(28px, 12svh); }
+  .has-card-motion .card-stage { align-items: start; padding-top: max(24px, 9svh); }
+  .card-stage__inner { gap: 18px; }
+  .card-stage__after { gap: 8px; }
+  .mast__nav a { padding: 0 6px; font-size: .86rem; }
 }
 
 /* ---------- Reduced motion: the finished print, nothing moving ---------- */

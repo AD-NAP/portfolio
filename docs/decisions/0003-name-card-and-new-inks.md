@@ -18,7 +18,8 @@ v1.0.0 opened straight on the zine cover. For v1.1.0 (Issue 2) Shafik wanted vis
 
 ## Consequences
 
-- The phone first screen now shows the card front and its email, not the cover lines. The cover lines come right after the flip.
+- The first screen shows the card front, then a one-line intro, GitHub, LinkedIn, Resume (PDF) and "Open the build log" under the card. The recruiter critic warned that a bare card hides the positioning and links, so they sit with the card rather than only on the cover. The cover lines come right after the flip.
+- The card and the cover are pinned together, so the grown back swaps for a cover that is already in place: no faded or blank moment (from the Impeccable finish review).
 - The card's back is a picture (`aria-hidden`, `inert`); the real links live on the cover, so screen readers and keyboards never meet hidden or mirrored links.
 - Reduced motion, or GSAP failing to load, shows the card and the cover as plain sections.
 - The token names changed from `--yellow`/`--on-yellow` to `--accent`/`--on-accent`.
