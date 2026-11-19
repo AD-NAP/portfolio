@@ -18,7 +18,7 @@ const STATE_DIR = path.join(ROOT, ".claude", "hooks", ".state");
 const PASS_FILE = path.join(STATE_DIR, ".last-pass");
 const BLOCKS_FILE = path.join(STATE_DIR, ".stop-blocks");
 const MAX_BLOCKS = 3;
-const SITE_FILES = ["index.html", "assets"];
+const SITE_FILES = ["index.html", "assets", "back"];
 
 const out = obj => { process.stdout.write(JSON.stringify(obj)); process.exit(0); };
 const read = f => { try { return fs.readFileSync(f, "utf8").trim(); } catch { return ""; } };

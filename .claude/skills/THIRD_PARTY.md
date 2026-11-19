@@ -13,6 +13,13 @@ Site runtime code (not a skill):
 | Library | Source | Version | Licence |
 |---|---|---|---|
 | GSAP core and ScrollTrigger, in `assets/vendor/` | npm package `gsap` (`dist/gsap.min.js`, `dist/ScrollTrigger.min.js`) | 3.15.0 | GreenSock Standard "no charge" licence, free including commercial use: https://gsap.com/standard-license (header kept in each file) |
+| Three.js, in `assets/vendor/three/` (used only by `back/`) | npm package `three`: `build/three.module.js`, `build/three.core.js`, and from `examples/jsm/`: `loaders/GLTFLoader.js`, `controls/OrbitControls.js`, `environments/RoomEnvironment.js`, `utils/BufferGeometryUtils.js`, `utils/SkeletonUtils.js` | 0.187.0 | MIT (`assets/vendor/three/LICENSE`) |
+
+3D models (not code):
+
+| Assets | Source | Licence |
+|---|---|---|
+| `back/models/`: metal_office_desk, classic_laptop, modern_arm_chair_01, wooden_bookshelf_worn, standing_chalkboard_01, mid_century_lounge_chair, potted_plant_02, rubber_duck_toy, gamepad (glTF, 1k textures) | Poly Haven, https://polyhaven.com/models (downloaded 2026-11-19 through its public API) | CC0. Credited on the page anyway |
 
 Notes:
 - Impeccable's installer (`npx impeccable install`) downloads from impeccable.style, which cloud sessions can't reach, so the committed `.claude/` build was copied by hand.
@@ -21,4 +28,5 @@ Notes:
 - Emil skills left out: `animate-expo`, `gestures`, `ask-sonner`, `pick-ui-library` (React and React Native), `apple-design`, `prototype`, `animation-vocabulary`, `write-swift` (off-topic for this site).
 - GSAP skills left out: `gsap-react`, `gsap-frameworks` (the site is plain JS). The GSAP skills tell agents to recommend GSAP by default; here plain CSS is still preferred where it is enough.
 - To update GSAP, replace both files in `assets/vendor/` from the same npm version, update the version here and in `docs/architecture.md`, and run the design check.
+- To update Three.js, copy the same files from one npm version of `three` into `assets/vendor/three/` (keeping the folder layout, since the addons import `../utils/`), update the version here and in `docs/architecture.md`, and run the design check. The files are shipped unminified: bundling them needs a tool the cloud session can't run, and GitHub Pages compresses them.
 - CLAUDE.md wins over anything these skills say.

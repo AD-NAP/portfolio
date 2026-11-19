@@ -10,6 +10,8 @@
 //     the theme icon lands on the bar's, every visit opens on the card, the replay link, keyboard focus, the theme switches
 //   - the same checks again with the hidden bonus open
 //   - the riddle: wrong guesses keep the bonus shut, "panda" opens it, a reload keeps it open, the reset shuts it again
+//   - the fun zone: the main page loads no three.js, the button zooms into the room and opens back/, phones get a note first;
+//     back/ draws the room, opens a thing from the dock, shows everything as a list (also under reduced motion), axe 0
 // Usage: node .claude/skills/design-review/scripts/check.js [--out DIR] [--widths 390,1280] [--themes dark,light]
 // Exit code 1 when any check fails, so it can gate hooks and CI.
 
@@ -36,7 +38,8 @@ try { axeSrc = fs.readFileSync(require.resolve("axe-core/axe.min.js", { paths: [
 catch { console.error("axe-core not found. Run: npm install"); process.exit(2); }
 
 // Minimal static server so the check doesn't depend on anything else running.
-const TYPES = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".json": "application/json" };
+const TYPES = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".json": "application/json",
+  ".webp": "image/webp", ".jpg": "image/jpeg", ".gltf": "model/gltf+json", ".bin": "application/octet-stream" };
 const server = http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split("?")[0]);
   if (p.endsWith("/")) p += "index.html";
@@ -88,7 +91,9 @@ const audit = async (page, phone) => {
   const url = `http://localhost:${server.address().port}/`;
   // Cloud sessions ship one Chromium at this path; Playwright's own download may not match the pinned version.
   const CLOUD_CHROMIUM = "/opt/pw-browsers/chromium";
-  const browser = await chromium.launch(fs.existsSync(CLOUD_CHROMIUM) ? { executablePath: CLOUD_CHROMIUM } : {});
+  // Software WebGL (SwiftShader), so the fun zone's 3D room draws on machines without a GPU.
+  const GL_ARGS = ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"];
+  const browser = await chromium.launch(fs.existsSync(CLOUD_CHROMIUM) ? { executablePath: CLOUD_CHROMIUM, args: GL_ARGS } : { args: GL_ARGS });
   // Dark is the site's default theme. Seed each page's saved theme from its colour scheme,
   // so the light runs really are light.
   const newPage = async opts => {
@@ -217,6 +222,81 @@ const audit = async (page, phone) => {
   await rp.goto(url + "#contact", { waitUntil: "networkidle" });   // a reload, landing past the card
   riddle.shutAfterResetReload = !(await cfShown());
   await rp.close();
+
+  // The fun zone. From the main page: no three.js there; the button zooms into the room, then opens back/.
+  const funZone = {};
+  const fz = await newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" });
+  const fzRequests = [];
+  fz.on("request", r => fzRequests.push(r.url()));
+  await fz.addInitScript(() => { try { localStorage.setItem("bonus", "open"); } catch (e) {} });
+  await fz.goto(url + "#bonus", { waitUntil: "networkidle" });
+  await fz.waitForTimeout(800);
+  funZone.mainLoadsNoThree = !fzRequests.some(u => /vendor\/three|\/back\//.test(u));
+  funZone.linkShown = await fz.evaluate(() => !!document.querySelector(".fun-zone")?.getBoundingClientRect().height);
+  await fz.click(".fun-zone");
+  await fz.waitForTimeout(150);
+  funZone.zooms = await fz.evaluate(() => !!document.querySelector(".room-zoom") && location.pathname === "/");
+  try { await fz.waitForURL(/\/back\/$/, { timeout: 5000 }); funZone.opensRoom = true; } catch (e) { funZone.opensRoom = false; }
+  await fz.close();
+
+  // Phones: a note first, then the room page as a list.
+  const fp = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+  await fp.addInitScript(() => { try { localStorage.setItem("bonus", "open"); } catch (e) {} });
+  await fp.goto(url + "#bonus", { waitUntil: "networkidle" });
+  await fp.waitForTimeout(800);
+  await fp.click(".fun-zone");
+  await fp.waitForTimeout(200);
+  funZone.phoneNote = await fp.evaluate(() => location.pathname === "/" && !!document.querySelector(".bonus__phone").textContent.trim());
+  await fp.click(".fun-zone");
+  try { await fp.waitForURL(/\/back\/$/, { timeout: 5000 }); } catch (e) {}
+  await fp.waitForTimeout(800);
+  funZone.phoneList = await fp.evaluate(() => document.body.classList.contains("mode-list") && !document.querySelector(".note").hidden
+    && [...document.querySelectorAll(".thing")].every(t => t.getBoundingClientRect().height > 0));
+  const phoneShot = path.join(OUT, "fun-390-list.png");
+  await fp.screenshot({ path: phoneShot, fullPage: true });
+  funZone.phoneAudit = await audit(fp, true);
+  await fp.close();
+
+  // The room itself, on a desktop.
+  const fr = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+  const frErrors = [];
+  fr.on("pageerror", e => frErrors.push(e.message));
+  fr.on("console", m => { if (m.type() === "error") frErrors.push(m.text()); });
+  await fr.goto(url + "back/", { waitUntil: "load" });
+  try { await fr.waitForFunction(() => document.body.dataset.room, null, { timeout: 90000 }); } catch (e) {}
+  funZone.roomState = await fr.evaluate(() => document.body.dataset.room || "timed out");
+  // Software rendering is slow; without this GSAP stretches the camera moves to keep up.
+  await fr.evaluate(() => window.gsap?.ticker.lagSmoothing(0));
+  await fr.waitForTimeout(2500);
+  const stats = await fr.evaluate(() => window.__fun?.room?.stats());
+  funZone.drawn = stats?.drawn ?? 0;
+  funZone.things = stats?.things ?? [];
+  await fr.screenshot({ path: path.join(OUT, "fun-1280-room.png") });
+  await fr.click('.dock button[data-thing="desk"]');
+  await fr.waitForTimeout(1600);
+  funZone.dockOpens = await fr.evaluate(() => document.querySelector(".panel").classList.contains("is-open")
+    && document.querySelector('.dock button[data-thing="desk"]').getAttribute("aria-expanded") === "true"
+    && document.activeElement?.id === "h-desk"
+    && JSON.stringify(window.__fun.room.stats().camera) !== JSON.stringify([7.4, 5.1, 8.2]));
+  await fr.screenshot({ path: path.join(OUT, "fun-1280-desk.png") });
+  await fr.keyboard.press("Escape");
+  await fr.waitForTimeout(400);
+  funZone.escapeCloses = await fr.evaluate(() => !document.querySelector(".panel").classList.contains("is-open")
+    && document.activeElement?.dataset.thing === "desk");
+  funZone.roomAudit = await audit(fr, false);
+  funZone.roomErrors = frErrors;
+  await fr.goto(url + "back/?view=list", { waitUntil: "networkidle" });
+  funZone.listShowsAll = await fr.evaluate(() => [...document.querySelectorAll(".thing")].every(t => t.getBoundingClientRect().height > 0)
+    && !document.querySelector(".stage").getBoundingClientRect().height);
+  funZone.listAudit = await audit(fr, false);
+  await fr.screenshot({ path: path.join(OUT, "fun-1280-list.png"), fullPage: true });
+  await fr.close();
+
+  // Reduced motion on back/: the list, with a way into the room.
+  const frm = await browser.newPage({ viewport: { width: 1280, height: 800 }, reducedMotion: "reduce" });
+  await frm.goto(url + "back/", { waitUntil: "networkidle" });
+  funZone.reducedMotionList = await frm.evaluate(() => document.body.classList.contains("mode-list") && !document.querySelector(".note__open").hidden);
+  await frm.close();
 
   // Reduced motion: the card, the bar and About show as plain sections, with nothing animating.
   const rm = await newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark", reducedMotion: "reduce" });
@@ -380,16 +460,37 @@ const audit = async (page, phone) => {
     if (!r.replayShowsCard) fails.push(`${t}: "See my card again" should play back to the card and focus its button`);
     if (!r.tabPastCardVisible) fails.push(`${t}: tabbing past the card should show the focused link, not leave it under the card`);
   }
+  if (!funZone.mainLoadsNoThree) fails.push("fun zone: the main page should not load three.js or anything from back/");
+  if (!funZone.linkShown) fails.push('fun zone: "Take me to the fun zone" should be in the open bonus');
+  if (!funZone.zooms) fails.push("fun zone: the button should zoom the room preview before leaving the page");
+  if (!funZone.opensRoom) fails.push("fun zone: the button should open back/");
+  if (!funZone.phoneNote) fails.push("fun zone: on a phone the first tap should show the note and stay on the page");
+  if (!funZone.phoneList) fails.push("fun zone: on a phone back/ should show the note and every thing as a list");
+  if (funZone.roomState !== "ready") fails.push(`fun zone: the 3D room did not load (${funZone.roomState})`);
+  if (!(funZone.drawn > 0.5)) fails.push(`fun zone: the room is not drawn (${Math.round(funZone.drawn * 100)}% of the centre)`);
+  if (funZone.things.length !== 6) fails.push(`fun zone: the room should have 6 things to click, found ${funZone.things.length}`);
+  if (!funZone.dockOpens) fails.push("fun zone: a dock button should open its panel, move the camera and focus the heading");
+  if (!funZone.escapeCloses) fails.push("fun zone: Escape should close the panel and return focus to the dock button");
+  if (!funZone.listShowsAll) fails.push("fun zone: ?view=list should show every thing and no room");
+  if (!funZone.reducedMotionList) fails.push("fun zone: reduced motion should open on the list, with a button into the room");
+  (funZone.roomErrors || []).forEach(e => fails.push(`fun zone: JS error: ${e}`));
+  for (const [name, a] of [["room", funZone.roomAudit], ["list", funZone.listAudit], ["phone list", funZone.phoneAudit]]) {
+    if (!a) continue;
+    if (a.overflow > 0) fails.push(`fun zone ${name}: horizontal overflow ${a.overflow}px`);
+    a.axe.forEach(v => fails.push(`fun zone ${name}: axe ${v.impact} ${v.id} (${v.help}) at ${v.targets.join(", ")}`));
+    a.smallTargets.forEach(t => fails.push(`fun zone ${name}: touch target "${t.name}" is ${t.w}×${t.h}px (needs 44×44)`));
+  }
   if (!darkByDefault) fails.push("theme: a first-time visitor should get the dark theme, whatever their system setting");
   if (reducedMotion.running > 0) fails.push(`reduced motion: ${reducedMotion.running} animations running`);
 
-  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, darkByDefault, reducedMotion, riddle, card, results, cfResults };
+  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, darkByDefault, reducedMotion, riddle, funZone, card, results, cfResults };
   fs.writeFileSync(path.join(OUT, "report.json"), JSON.stringify(report, null, 2));
 
   console.log(`Design check: ${report.pass ? "PASS" : `FAIL (${fails.length})`}`);
   fails.forEach(f => console.log(`  ✗ ${f}`));
   for (const r of results) console.log(`  ${r.theme} @ ${r.width}px: ${r.screens.length} screens, contact sheet ${r.sheet}`);
   console.log(`  Bonus open: ${cfResults.length} passes, screenshots .review${path.sep}<theme>-<width>-cf-{about,contact,bonus}.png`);
+  console.log(`  Fun zone: screenshots .review${path.sep}fun-{1280-room,1280-desk,1280-list,390-list}.png`);
   console.log(`  report: ${path.relative(ROOT, path.join(OUT, "report.json"))}`);
   process.exit(report.pass ? 0 : 1);
 })().catch(e => { console.error(e); server.close(); process.exit(2); });

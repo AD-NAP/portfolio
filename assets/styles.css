@@ -374,13 +374,22 @@ main { position: relative; z-index: 1; padding: 0 var(--gutter); }
 .bonus__lede { font-size: var(--fs-title); font-weight: 750; color: var(--ink); margin-bottom: 6px; }
 .riddle-reset { margin-top: 8px; color: var(--ink); background: transparent; border: 1px solid var(--ink); }
 .riddle-reset:hover { background: var(--ink); color: var(--paper); }
-.cake { width: 150px; height: auto; flex: none; }
-.cake__plate { fill: var(--paper-deep); stroke: var(--ink); stroke-width: 1.5; }
-.cake__body { fill: var(--accent); stroke: var(--ink); stroke-width: 1.5; }
-.cake__layer { fill: none; stroke: var(--ink); stroke-width: 1.5; }
-.cake__icing { fill: var(--paper); stroke: var(--ink); stroke-width: 1.5; }
-.cake__candle { fill: var(--ink); }
-.cake__flame { fill: var(--accent); stroke: var(--ink); stroke-width: 1.2; }
+.bonus__room { flex: 1 1 320px; max-width: 520px; }
+.bonus__room img { display: block; width: 100%; height: auto; border: 1px solid var(--ink); border-radius: 2px; background: var(--ink); }
+.bonus__text { flex: 1 1 300px; max-width: 60ch; }
+.bonus__text p { margin: 0 0 12px; }
+.bonus__phone:empty { display: none; }
+.bonus__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.bonus__actions .riddle-reset { margin-top: 0; }
+.fun-zone {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 2px;
+  color: var(--paper); background: var(--ink); border: 1px solid var(--ink); text-decoration: none;
+  font: 650 var(--fs-body) var(--font); transition: transform .12s var(--ease-out), background-color .2s, color .2s;
+}
+.fun-zone:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.fun-zone:active { transform: scale(.97); }
+/* The zoom into the room: a copy of the preview, fixed over the page, grown to fill it (main.js). */
+.room-zoom { position: fixed; z-index: 100; margin: 0; object-fit: cover; transform-origin: 0 0; pointer-events: none; }
 
 /* ---------- Title block ---------- */
 .titleblock { position: relative; z-index: 1; width: var(--sheet); margin: 0 auto 40px; }
