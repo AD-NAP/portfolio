@@ -10,7 +10,8 @@
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+  <!-- Not render-blocking: the first paint must be the room's picture, straight after the zoom from the portfolio. -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="fun.css">
   <script type="importmap">
     {
@@ -36,6 +37,7 @@
 
   <main id="main">
     <div class="stage" aria-hidden="true">
+      <img class="stage__poster" src="../assets/fun-preview.webp" width="960" height="600" alt="">
       <canvas class="stage__canvas"></canvas>
       <p class="stage__tag"></p>
       <p class="stage__loading">Setting up the room <span class="stage__pct">0%</span></p>

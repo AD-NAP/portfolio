@@ -19,7 +19,7 @@ Site runtime code (not a skill):
 
 | Assets | Source | Licence |
 |---|---|---|
-| `back/models/`: metal_office_desk, classic_laptop, modern_arm_chair_01, wooden_bookshelf_worn, standing_chalkboard_01, mid_century_lounge_chair, potted_plant_02, rubber_duck_toy, gamepad (glTF, 1k textures) | Poly Haven, https://polyhaven.com/models (downloaded 2026-11-19 through its public API) | CC0. Credited on the page anyway |
+| `back/models/`: metal_office_desk, classic_laptop, modern_arm_chair_01, wooden_bookshelf_worn, standing_chalkboard_01, mid_century_lounge_chair, potted_plant_02, rubber_duck_toy, gamepad (glTF, 1k textures) | Poly Haven, https://polyhaven.com/models (downloaded 2026-11-19 through its public API) | CC0. Credited on the page anyway. Textures converted from JPEG to WebP (v1.3.2) and the `.gltf` files pointed at them |
 
 Notes:
 - Impeccable's installer (`npx impeccable install`) downloads from impeccable.style, which cloud sessions can't reach, so the committed `.claude/` build was copied by hand.

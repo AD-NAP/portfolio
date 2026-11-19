@@ -52,6 +52,7 @@ Shafik's creative side, behind the riddle (Shafik, 2026-11-19; `docs/decisions/0
 - It has its own look. The Design section above (drawing sheet, tokens, Archivo, two themes, one red) does not apply to `back/`; DESIGN.md doesn't either. Content, Accessibility and Git rules still apply.
 - A Three.js room with clean, detailed models, not low poly. Models are CC0 (Poly Haven now; Kenney pieces can be added from Shafik's PC). Credit the source on the page.
 - Desktop first. Phones, reduced motion and browsers without WebGL get the same content as a plain list, with a note; nobody has to use the 3D room to read anything.
+- The main page may prefetch the room (the files in `back/manifest.json`) only after the riddle is solved and the Bonus is near, on a desktop, never with reduced motion or Data Saver. A recruiter's visit downloads nothing from the fun side. Keep the room light (WebP textures) and the manifest complete; the checker tests both. The room page opens on the Bonus's picture and crossfades to the live room, lined up exactly. (Shafik, 2026-11-19)
 - Content: hobbies, a museum of past versions, a monthly learning log (like a summarised dev log for the month), future goals, and a mini game (Squash the bugs, for now). Facts about Shafik still come from `content/resume.md`; what he hasn't written is a visible `PLACEHOLDER`.
 
 ## Accessibility (WCAG 2.1 AA; the axe scan must stay at 0 violations)

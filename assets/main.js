@@ -157,6 +157,28 @@
         { duration: 600, easing: "cubic-bezier(.65, 0, .35, 1)", fill: "forwards" }
       ).finished.then(go, go);
     });
+    // Fetch the fun side ahead of the click, so the zoom ends on a room that is ready. Only after the riddle
+    // (the Bonus is shown), only on a desktop that will use the 3D room, and never when the visitor saves data.
+    let prefetched = false;
+    const prefetchRoom = () => {
+      if (prefetched || bonus.hidden || isPhone || reduceMotion || navigator.connection?.saveData) return;
+      prefetched = true;
+      fetch("back/manifest.json").then(r => r.json()).then(m => m.files.forEach(href => {
+        const link = document.createElement("link");
+        link.rel = "prefetch";
+        link.href = href;
+        document.head.appendChild(link);
+      })).catch(() => { prefetched = false; });
+    };
+    if ("IntersectionObserver" in window) {
+      const near = new IntersectionObserver(entries => {
+        if (entries.some(e => e.isIntersecting)) { prefetchRoom(); if (prefetched) near.disconnect(); }
+      }, { rootMargin: "800px 0px" });
+      near.observe(bonus);
+    }
+    funZone?.addEventListener("pointerenter", prefetchRoom);
+    funZone?.addEventListener("focus", prefetchRoom);
+
     // Coming back with the browser's Back button: take the zoomed copy away.
     window.addEventListener("pageshow", () => document.querySelectorAll(".room-zoom").forEach(el => el.remove()));
 

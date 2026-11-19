@@ -10,7 +10,9 @@
 //     the theme icon lands on the bar's, every visit opens on the card, the replay link, keyboard focus, the theme switches
 //   - the same checks again with the hidden bonus open
 //   - the riddle: wrong guesses keep the bonus shut, "panda" opens it, a reload keeps it open, the reset shuts it again
-//   - the fun zone: the main page loads no three.js, the button zooms into the room and opens back/, phones get a note first;
+//   - the fun zone: nothing from it loads before the riddle; after it, a desktop prefetches every file in back/manifest.json
+//     (and the manifest lists everything the room loads), phones never do; the button zooms into the room and opens back/,
+//     which opens on the room's picture until the live room is ready; phones get a note first;
 //     back/ draws the room, opens a thing from the dock, shows everything as a list (also under reduced motion), axe 0
 // Usage: node .claude/skills/design-review/scripts/check.js [--out DIR] [--widths 390,1280] [--themes dark,light]
 // Exit code 1 when any check fails, so it can gate hooks and CI.
@@ -225,13 +227,29 @@ const audit = async (page, phone) => {
 
   // The fun zone. From the main page: no three.js there; the button zooms into the room, then opens back/.
   const funZone = {};
+  const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "back/manifest.json"), "utf8")).files;
+  const local = u => { const p = new URL(u); return p.origin === new URL(url).origin ? p.pathname.slice(1) : null; };
+  const isRoomFile = u => /vendor\/three|\/back\//.test(u);
+
+  // Before the riddle: a whole visit to the main page downloads nothing from the fun side.
+  const fn = await newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" });
+  const fnRequests = [];
+  fn.context().on("request", r => fnRequests.push(r.url()));
+  await fn.goto(url + "#contact", { waitUntil: "networkidle" });
+  await fn.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+  await fn.waitForTimeout(1500);
+  funZone.mainLoadsNoThree = !fnRequests.some(isRoomFile);
+  await fn.close();
+
+  // After the riddle, on a desktop: once the Bonus is near, every file the room needs is prefetched.
   const fz = await newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" });
   const fzRequests = [];
-  fz.on("request", r => fzRequests.push(r.url()));
+  fz.context().on("request", r => fzRequests.push(r.url()));
   await fz.addInitScript(() => { try { localStorage.setItem("bonus", "open"); } catch (e) {} });
   await fz.goto(url + "#bonus", { waitUntil: "networkidle" });
-  await fz.waitForTimeout(800);
-  funZone.mainLoadsNoThree = !fzRequests.some(u => /vendor\/three|\/back\//.test(u));
+  await fz.waitForTimeout(2000);
+  const fetchedPaths = new Set(fzRequests.map(local).filter(Boolean));
+  funZone.prefetchMissing = manifest.filter(f => !fetchedPaths.has(f) && !(f === "back/" && fetchedPaths.has("back/index.html")));
   funZone.linkShown = await fz.evaluate(() => !!document.querySelector(".fun-zone")?.getBoundingClientRect().height);
   await fz.click(".fun-zone");
   await fz.waitForTimeout(150);
@@ -241,9 +259,12 @@ const audit = async (page, phone) => {
 
   // Phones: a note first, then the room page as a list.
   const fp = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+  const fpRequests = [];
+  fp.context().on("request", r => fpRequests.push(r.url()));
   await fp.addInitScript(() => { try { localStorage.setItem("bonus", "open"); } catch (e) {} });
   await fp.goto(url + "#bonus", { waitUntil: "networkidle" });
-  await fp.waitForTimeout(800);
+  await fp.waitForTimeout(1500);
+  funZone.phoneNoPrefetch = !fpRequests.some(isRoomFile);
   await fp.click(".fun-zone");
   await fp.waitForTimeout(200);
   funZone.phoneNote = await fp.evaluate(() => location.pathname === "/" && !!document.querySelector(".bonus__phone").textContent.trim());
@@ -262,8 +283,20 @@ const audit = async (page, phone) => {
   const frErrors = [];
   fr.on("pageerror", e => frErrors.push(e.message));
   fr.on("console", m => { if (m.type() === "error") frErrors.push(m.text()); });
-  await fr.goto(url + "back/", { waitUntil: "load" });
+  const frRequests = [];
+  fr.context().on("request", r => frRequests.push(r.url()));
+  await fr.goto(url + "back/", { waitUntil: "domcontentloaded" });
+  // The room's picture holds the screen first; the live room stays hidden until it has a finished frame.
+  funZone.posterFirst = await fr.evaluate(() => {
+    const poster = document.querySelector(".stage__poster");
+    return !!poster && getComputedStyle(poster).opacity === "1" && getComputedStyle(document.querySelector(".stage__canvas")).opacity === "0";
+  });
   try { await fr.waitForFunction(() => document.body.dataset.room, null, { timeout: 90000 }); } catch (e) {}
+  // Software rendering is slow, so give the crossfade time to finish rather than checking at a fixed moment.
+  funZone.liveReplacesPoster = await fr.waitForFunction(() => getComputedStyle(document.querySelector(".stage__canvas")).opacity === "1"
+    && getComputedStyle(document.querySelector(".stage__poster")).opacity === "0", null, { timeout: 5000 }).then(() => true, () => false);
+  funZone.unlisted = [...new Set(frRequests.map(local).filter(Boolean))]
+    .map(p => (p === "back/index.html" ? "back/" : p)).filter(p => !manifest.includes(p));
   funZone.roomState = await fr.evaluate(() => document.body.dataset.room || "timed out");
   // Software rendering is slow; without this GSAP stretches the camera moves to keep up.
   await fr.evaluate(() => window.gsap?.ticker.lagSmoothing(0));
@@ -460,7 +493,12 @@ const audit = async (page, phone) => {
     if (!r.replayShowsCard) fails.push(`${t}: "See my card again" should play back to the card and focus its button`);
     if (!r.tabPastCardVisible) fails.push(`${t}: tabbing past the card should show the focused link, not leave it under the card`);
   }
-  if (!funZone.mainLoadsNoThree) fails.push("fun zone: the main page should not load three.js or anything from back/");
+  if (!funZone.mainLoadsNoThree) fails.push("fun zone: before the riddle, the main page should not load three.js or anything from back/");
+  if (funZone.prefetchMissing?.length) fails.push(`fun zone: with the Bonus in view on a desktop, these room files were not prefetched: ${funZone.prefetchMissing.slice(0, 5).join(", ")}${funZone.prefetchMissing.length > 5 ? "…" : ""}`);
+  if (!funZone.phoneNoPrefetch) fails.push("fun zone: a phone should never prefetch the 3D room");
+  if (funZone.unlisted?.length) fails.push(`fun zone: back/manifest.json is missing files the room loads: ${funZone.unlisted.join(", ")}`);
+  if (!funZone.posterFirst) fails.push("fun zone: the room page should open on the room's picture, with the live room hidden until it is ready");
+  if (!funZone.liveReplacesPoster) fails.push("fun zone: once ready, the live room should replace the picture");
   if (!funZone.linkShown) fails.push('fun zone: "Take me to the fun zone" should be in the open bonus');
   if (!funZone.zooms) fails.push("fun zone: the button should zoom the room preview before leaving the page");
   if (!funZone.opensRoom) fails.push("fun zone: the button should open back/");
