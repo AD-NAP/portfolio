@@ -9,11 +9,11 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
-- [?] Publish v1.3.0, v1.3.1, v1.3.2 and v1.4.0 on github.com (notes and screenshots in `docs/releases/`)
+- [x] Publish v1.3.0, v1.3.1, v1.3.2 and v1.4.0 on github.com (published 2026-11-19 from a local session with `gh`; v1.4.0 is Latest)
 - [?] Try v1.4.0 on your PC: the look-around feel (±30°, speed), each close-up, the Menu and the door
 - [x] Fun side content: hobbies and goals from Shafik, the learning log for October and November summarised from the vault (v1.3.1, 2026-11-19)
 - [?] Try the fun zone on your PC with a real GPU: the camera glides, dragging to turn the room, the panda's hop
-- [?] Publish v1.2.2 on github.com (notes and screenshots in `docs/releases/v1.2.2.md`)
+- [x] Publish v1.2.2 on github.com (published 2026-11-19 from a local session with `gh`)
 - [x] Publish v1.1.0 on github.com (published 2026-11-18 from a local session with `gh`)
 - [?] Recruiter critic's questions (2026-11-18): cumulus-coach eval results; a demo, screenshot or recording of cumulus-coach; anything shareable about the metadata generator's effect; junior or mid-level target
 - [x] Delete the two merged branches on GitHub: `claude/ecstatic-dijkstra-wwvvi2` and `claude/beautiful-meitner-lxxr21` (deleted 2026-11-18)
@@ -82,7 +82,7 @@ From `vault/ideas/business-card-idea.md`: each project told as Problem, Constrai
 - [x] Sun/moon switch at the card's top-right; its icon walks into the bar's theme button as the card opens (Shafik)
 - [x] The theme buttons show the theme they switch to: sun and "Light mode" in dark, moon and "Dark mode" in light (Shafik)
 - [x] Checker: every visit opens on the card, the icon lands within 1px, the card's switch swaps theme, icon and labels; `--card` contrast pairs
-- [?] Publish v1.2.2 on github.com (notes in `docs/releases/v1.2.2.md`)
+- [x] Publish v1.2.2 on github.com (published 2026-11-19 from a local session with `gh`)
 
 ## v1.2.1: one pace for the card, dark by default (2026-11-19)
 
