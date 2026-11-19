@@ -4,17 +4,22 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Light and dark ---------- */
-  const toggle = document.querySelector(".theme-toggle");
+  // Two switches, the bar's and the card's. Each shows the theme it switches to (CSS swaps sun and moon).
+  const switches = document.querySelectorAll(".theme-switch");
+  const toggleText = document.querySelector(".theme-toggle__text");
+  const cardSwitch = document.querySelector(".card-theme");
   const themeMeta = document.querySelector('meta[name="theme-color"]');
   const isDark = () => root.dataset.theme === "dark";
   const sync = () => {
-    toggle?.setAttribute("aria-pressed", String(isDark()));
+    const other = isDark() ? "Light" : "Dark";
+    if (toggleText) toggleText.textContent = `${other} mode`;
+    cardSwitch?.setAttribute("aria-label", `Switch to ${other.toLowerCase()} mode`);
     if (themeMeta) themeMeta.content = getComputedStyle(root).getPropertyValue("--paper").trim();
   };
   sync();
 
   let switchTimer;
-  toggle?.addEventListener("click", () => {
+  switches.forEach(button => button.addEventListener("click", () => {
     const next = isDark() ? "light" : "dark";
     if (!reduceMotion) {
       root.classList.add("is-switching");
@@ -24,7 +29,7 @@
     root.dataset.theme = next;
     try { localStorage.setItem("theme", next); } catch (e) {}
     sync();
-  });
+  }));
 
   /* ---------- The bar: mark the section you are reading ---------- */
   const navLinks = [...document.querySelectorAll(".bar__nav a")];
@@ -143,8 +148,8 @@
   const openButton = document.querySelector(".card-open");
   const DURATION = 1.5;   // seconds, the same for every way of opening or closing
   let ctl = null;         // the two-state controller, while motion is on
-  const cardSeen = () => { try { return localStorage.getItem("card") === "seen"; } catch (e) { return false; } };
-  const markCardSeen = () => { try { localStorage.setItem("card", "seen"); } catch (e) {} };
+  // Every visit opens on the card. Before v1.2.2 the page remembered a visit ("card" = "seen"): forget it.
+  try { localStorage.removeItem("card"); } catch (e) {}
   const afterScroll = fn => {
     let done = false;
     const go = () => { if (!done) { done = true; fn(); } };
@@ -154,7 +159,6 @@
 
   openButton?.addEventListener("click", e => {
     e.preventDefault();
-    markCardSeen();
     if (ctl) return ctl.open(true);
     about.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
     aboutTitle?.focus({ preventScroll: true });
@@ -180,10 +184,16 @@
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       root.classList.add("has-card-motion");
-      // The nav arrives from the right in uneven steps, the theme button last.
-      const arrivals = [...bar.querySelectorAll(".bar__nav li"), bar.querySelector(".theme-toggle")];
+      // The nav arrives from the right in uneven steps. The theme button comes early, so its frame
+      // is in place before the card's sun or moon lands in it.
+      const links = [...bar.querySelectorAll(".bar__nav li")];
+      const barSwitch = bar.querySelector(".theme-toggle");
       const steps = [0, .09, .16, .21, .25, .28, .30, .31];
-      arrivals.forEach((el, i) => el.style.setProperty("--d", steps[Math.min(i, steps.length - 1)]));
+      links.forEach((el, i) => el.style.setProperty("--d", steps[Math.min(i, steps.length - 1)]));
+      barSwitch.style.setProperty("--d", .12);
+      const arrivals = [...links, barSwitch];
+      const cardIcon = cardSwitch?.querySelector(".theme-icon");
+      const barIcon = barSwitch.querySelector(".theme-icon");
 
       // Layout position within the stage, ignoring transforms (the card's lift may still be running).
       const offsetIn = (el, ancestor) => {
@@ -215,6 +225,18 @@
         const t = getComputedStyle(lift).transform, liftY = t && t !== "none" ? new DOMMatrixReadOnly(t).m42 : 0;
         m.nx += target.left - (landed.left - s.left); m.ny += target.top - (landed.top - s.top - liftY);
         keep.forEach(([k, v]) => stage.style.setProperty(k, v));
+        // The theme icon walks the same way, from the card's corner into the bar's button.
+        // Measure both at rest: the card's icon untranslated, the bar's button fully arrived.
+        m.ix = m.iy = 0;
+        if (cardIcon) {
+          const keepIcon = ["--icon-x", "--icon-y"].map(k => [k, stage.style.getPropertyValue(k)]);
+          const keepNav = bar.style.getPropertyValue("--nav-p");
+          stage.style.setProperty("--icon-x", "0px"); stage.style.setProperty("--icon-y", "0px"); bar.style.setProperty("--nav-p", 1);
+          const from = cardIcon.getBoundingClientRect(), to = barIcon.getBoundingClientRect();
+          m.ix = to.left - from.left; m.iy = to.top - (from.top - liftY);
+          keepIcon.forEach(([k, v]) => stage.style.setProperty(k, v));
+          bar.style.setProperty("--nav-p", keepNav);
+        }
       };
 
       const span = (p, a, b) => gsap.utils.clamp(0, 1, (p - a) / (b - a));
@@ -237,6 +259,7 @@
           "--desk-alpha": p < .6 ? 1 : 0,            // hidden under the grown paper by then
           "--name-x": px(m.nx * walk), "--name-y": px(m.ny * walk), "--name-s": 1 + (m.ns - 1) * walk,
           "--name-alpha": landed ? 0 : 1,
+          "--icon-x": px(m.ix * walk), "--icon-y": px(m.iy * walk), "--icon-alpha": landed ? 0 : 1,
           "--stage-vis": p >= .9 ? "hidden" : "visible", "--stage-events": front > .5 ? "auto" : "none",
         });
         set(about, { "--about-alpha": fade, "--about-y": px(10 * (1 - fade)), "--about-events": fade > .5 ? "auto" : "none" });
@@ -251,7 +274,7 @@
       const lock = on => root.classList.toggle("is-card-locked", on);
       const progress = { p: 0 };
       const opened = () => {
-        state = "open"; lock(false); markCardSeen(); topSince = performance.now();
+        state = "open"; lock(false); topSince = performance.now();
         focusAfter?.focus({ preventScroll: true }); focusAfter = null;
       };
       const closed = () => {
@@ -308,8 +331,8 @@
       document.fonts?.ready.then(remeasure);                     // Archivo changes the name's size
       lift.addEventListener("animationend", remeasure, { once: true });
 
-      // Returning visitors, and visitors following a #link, start on the portfolio.
-      if (cardSeen() || location.hash) finish();
+      // Visitors following a #link start on the portfolio; everyone else on the card.
+      if (location.hash) finish();
       else { lock(true); measure(); render(0); }
 
       return () => {

@@ -7,7 +7,7 @@
 //   - token contrast (text ≥ 4.5:1, focus ≥ 3:1) per theme
 //   - touch targets under 44px at phone widths
 //   - the card: on the first screen with no bar, the button opens the portfolio, the name lands on the bar's name,
-//     letting go mid-way snaps to an end, returning visitors open on the portfolio, the replay link, keyboard focus
+//     the theme icon lands on the bar's, every visit opens on the card, the replay link, keyboard focus, the theme switches
 //   - the same checks again with the hidden bonus open
 //   - the riddle: wrong guesses keep the bonus shut, "panda" opens it, a reload keeps it open, the reset shuts it again
 // Usage: node .claude/skills/design-review/scripts/check.js [--out DIR] [--widths 390,1280] [--themes dark,light]
@@ -58,6 +58,7 @@ const TOKEN_PAIRS = [
   ["--text", "--paper", 4.5], ["--ink", "--paper", 4.5], ["--muted", "--paper", 4.5],
   ["--text", "--paper-deep", 4.5], ["--muted", "--paper-deep", 4.5], ["--on-accent", "--accent", 4.5],
   ["--paper", "--ink", 4.5], ["--focus", "--paper", 3], ["--focus", "--paper-deep", 3],
+  ["--ink", "--card", 4.5], ["--text", "--card", 4.5], ["--muted", "--card", 4.5], ["--focus", "--card", 3],
 ];
 
 // Checks that read the page as it stands: overflow, axe, small touch targets.
@@ -179,8 +180,8 @@ const audit = async (page, phone) => {
     const cfErrors = [];
     cfPage.on("pageerror", e => cfErrors.push(e.message));
     cfPage.on("console", m => { if (m.type() === "error") cfErrors.push(m.text()); });
-    await cfPage.addInitScript(() => { try { localStorage.setItem("bonus", "open"); localStorage.setItem("card", "seen"); } catch (e) {} });
-    await cfPage.goto(url, { waitUntil: "networkidle" });
+    await cfPage.addInitScript(() => { try { localStorage.setItem("bonus", "open"); } catch (e) {} });
+    await cfPage.goto(url + "#about", { waitUntil: "networkidle" });
     await cfPage.waitForTimeout(2500);
     const cfScreens = [];
     for (const [name, sel] of [["about", "#about"], ["contact", "#contact"], ["bonus", "#bonus"]]) {
@@ -208,12 +209,12 @@ const audit = async (page, phone) => {
   await tryGuess(" Panda ");
   riddle.openAfterRight = await cfShown();
   riddle.contentsLinkShown = await rp.evaluate(() => !!document.querySelector(".bonus-entry a")?.getBoundingClientRect().width);
-  await rp.reload({ waitUntil: "networkidle" });
+  await rp.goto(url + "#contact", { waitUntil: "networkidle" });   // a reload, landing past the card
   riddle.openAfterReload = await cfShown();
   await rp.click(".riddle-reset");
   await rp.waitForTimeout(200);
   riddle.shutAfterReset = !(await cfShown()) && await rp.evaluate(() => !document.querySelector(".riddle__form").hidden && document.activeElement?.id === "guess");
-  await rp.reload({ waitUntil: "networkidle" });
+  await rp.goto(url + "#contact", { waitUntil: "networkidle" });   // a reload, landing past the card
   riddle.shutAfterResetReload = !(await cfShown());
   await rp.close();
 
@@ -254,6 +255,11 @@ const audit = async (page, phone) => {
       const box = el => { const g = document.createRange(); g.selectNodeContents(el); return g.getBoundingClientRect(); };
       const a = box(document.getElementById("card-name")), b = box(document.querySelector(".bar__name"));
       return Math.max(Math.abs(a.left - b.left), Math.abs(a.top - b.top), Math.abs(a.width - b.width));
+    });
+    // The card's sun or moon, at its landing spot, must sit on the bar's.
+    r.iconOffset = await cp.evaluate(() => {
+      const a = document.querySelector(".card-theme .theme-icon").getBoundingClientRect(), b = document.querySelector(".theme-toggle .theme-icon").getBoundingClientRect();
+      return Math.max(Math.abs(a.left - b.left), Math.abs(a.top - b.top));
     });
     // At the top of the page, one wheel step up plays it back to the card, at the same pace.
     await cp.mouse.move(width / 2, height / 2);
@@ -297,11 +303,27 @@ const audit = async (page, phone) => {
     });
     await kp.close();
 
-    const rv = await newPage({ viewport: { width, height }, colorScheme: "light" });
+    // Every visit opens on the card, even for a visitor the page used to remember ("card" = "seen" before v1.2.2).
+    const rv = await browser.newPage({ viewport: { width, height }, colorScheme: "light" });   // no saved theme: dark by default
     await rv.addInitScript(() => { try { localStorage.setItem("card", "seen"); } catch (e) {} });
     await rv.goto(url, { waitUntil: "networkidle" });
     await rv.waitForTimeout(1200);
-    r.returningOpensOnPortfolio = await rv.evaluate(() => { const b = document.getElementById("about-title").getBoundingClientRect(); return b.top >= 0 && b.top < innerHeight / 2 && getComputedStyle(document.querySelector(".bar")).visibility === "visible"; });
+    r.returningOpensOnCard = await rv.evaluate(() => getComputedStyle(document.querySelector(".bar")).visibility === "hidden" && document.getElementById("card-name").getBoundingClientRect().top > 60);
+    // The card's switch: dark (the default) shows the sun and offers light; one press switches and swaps both buttons.
+    const themeState = () => rv.evaluate(() => ({
+      theme: document.documentElement.dataset.theme,
+      text: document.querySelector(".theme-toggle__text").textContent.trim(),
+      label: document.querySelector(".card-theme").getAttribute("aria-label"),
+      sun: getComputedStyle(document.querySelector(".card-theme .theme-icon__sun")).display !== "none",
+      moon: getComputedStyle(document.querySelector(".card-theme .theme-icon__moon")).display !== "none",
+    }));
+    const before = await themeState();
+    await rv.click(".card-theme");
+    const after = await themeState();
+    r.themeSwitch = before.theme === "dark" && before.text === "Light mode" && before.label === "Switch to light mode" && before.sun && !before.moon
+      && after.theme === "light" && after.text === "Dark mode" && after.label === "Switch to dark mode" && !after.sun && after.moon;
+    await rv.click(".card-open");
+    await rv.waitForTimeout(2200);
     await rv.click(".card-replay");
     await rv.waitForTimeout(3600);
     r.replayShowsCard = await rv.evaluate(() => getComputedStyle(document.querySelector(".bar")).visibility === "hidden" && document.activeElement?.classList.contains("card-open"));
@@ -352,7 +374,9 @@ const audit = async (page, phone) => {
     if (!r.wheelPaced || !r.wheelOpens) fails.push(`${t}: one small wheel step should play the whole transition, at the button's pace`);
     if (!r.scrollsAfterOpen) fails.push(`${t}: once open, the page should scroll normally`);
     if (!r.wheelUpCloses) fails.push(`${t}: scrolling up at the top of the page should play back to the card`);
-    if (!r.returningOpensOnPortfolio) fails.push(`${t}: a returning visitor should open on the portfolio with the bar shown`);
+    if (!r.returningOpensOnCard) fails.push(`${t}: every visit should open on the card, even for a visitor who has seen it before`);
+    if (!(r.iconOffset <= 1)) fails.push(`${t}: the card's theme icon lands ${r.iconOffset?.toFixed(1)}px away from the bar's (needs 1px or less)`);
+    if (!r.themeSwitch) fails.push(`${t}: the card's theme switch should change the theme, swap sun and moon, and change the bar's text and its label`);
     if (!r.replayShowsCard) fails.push(`${t}: "See my card again" should play back to the card and focus its button`);
     if (!r.tabPastCardVisible) fails.push(`${t}: tabbing past the card should show the focused link, not leave it under the card`);
   }

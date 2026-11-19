@@ -13,8 +13,6 @@
       try { t = localStorage.getItem("theme"); } catch (e) {}
       if (t !== "light" && t !== "dark") t = "dark";
       document.documentElement.dataset.theme = t;
-      // A returning visitor opens on the portfolio: skip the card's lift before it paints.
-      try { if (localStorage.getItem("card") === "seen" && !location.hash) document.documentElement.dataset.card = "seen"; } catch (e) {}
     })();
   </script>
   <meta name="color-scheme" content="dark light">
@@ -54,9 +52,10 @@
         <li><a href="#contact">Contact</a></li>
       </ol>
     </nav>
-    <button class="theme-toggle" type="button" aria-pressed="false">
-      <svg class="theme-toggle__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 3.5a8.5 8.5 0 1 0 5 15.2A9 9 0 0 1 15.5 3.5z"/></svg>
-      <span>Dark mode</span>
+    <!-- Shows the theme it switches to: sun and "Light mode" in dark, moon and "Dark mode" in light (main.js). -->
+    <button class="theme-toggle theme-switch" type="button">
+      <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><g class="theme-icon__sun"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.8v3M12 19.2v3M1.8 12h3M19.2 12h3M4.8 4.8l2.1 2.1M17.1 17.1l2.1 2.1M4.8 19.2l2.1-2.1M17.1 6.9l2.1-2.1"/></g><path class="theme-icon__moon" d="M15.5 3.5a8.5 8.5 0 1 0 5 15.2A9 9 0 0 1 15.5 3.5z"/></svg>
+      <span class="theme-toggle__text">Light mode</span>
     </button>
   </header>
 
@@ -76,6 +75,8 @@
               </svg>
               <span class="card__dim card__dim--w" aria-hidden="true">91</span>
               <span class="card__dim card__dim--h" aria-hidden="true">55</span>
+              <!-- The card's own theme switch; its icon travels to the bar's button as the card opens. -->
+              <button class="card-theme theme-switch" type="button" aria-label="Switch to light mode"><svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><g class="theme-icon__sun"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.8v3M12 19.2v3M1.8 12h3M19.2 12h3M4.8 4.8l2.1 2.1M17.1 17.1l2.1 2.1M4.8 19.2l2.1-2.1M17.1 6.9l2.1-2.1"/></g><path class="theme-icon__moon" d="M15.5 3.5a8.5 8.5 0 1 0 5 15.2A9 9 0 0 1 15.5 3.5z"/></svg></button>
               <div class="card__front">
                 <p class="card__org"><span class="card__mark" aria-hidden="true"></span>Azbil ASPO, Singapore</p>
                 <h1 id="card-name" class="card__name">Shafik Adam</h1>
@@ -362,7 +363,7 @@
     <dl class="titleblock__grid">
       <div class="titleblock__main"><dt>Drawn by</dt><dd>Shafik Adam</dd></div>
       <div><dt>Built with</dt><dd>Plain HTML, CSS and JavaScript, hosted on GitHub Pages</dd></div>
-      <div><dt>Revision</dt><dd>1.2.1</dd></div>
+      <div><dt>Revision</dt><dd>1.2.2</dd></div>
       <div><dt>Date</dt><dd>Nov 2026</dd></div>
     </dl>
   </footer>
