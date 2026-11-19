@@ -90,6 +90,18 @@ Copied on 2026-10-31. Sources: the public repo `AD-NAP/cumulus-coach` (`README.m
 - rag-agent-service: never started; the idea became cumulus-coach. (`projects/rag-agent-service.md`, `projects/cumulus-coach.md`)
 - 30-days-of-python, neetcode-150: practice repos, nothing solved yet. (`projects/30-days-of-python.md`, `projects/neetcode-150.md`)
 
+## From AD-NAP/vault: the fun side (2026-11-19)
+
+Facts for the fun side's learning log (`back/`, desk). Summaries of Shafik's own notes; nothing about his job, per the vault's privacy rule.
+
+- October 2026: day-ahead load forecast for one office building (Building Data Genome Project 2) beat "same hour last week" by 24.5% (MAE 34.5 against 45.7 kWh). Data leakage took three tries: lags count backward from the target hour, not from now. (`dev-log/04-10-2026.md`)
+- October 2026: started cumulus-coach on 20-10-2026, an AWS study agent with RAG, citations, an off-topic cutoff and tool calling. (`projects/cumulus-coach.md`)
+- October 2026: learned Claude Code's building blocks (CLAUDE.md, skills, hooks, subagents, plan mode) by building this portfolio; Playwright drives a real browser for the checker's screenshots and accessibility scan. (`dev-log/09-10-2026.md`, BACKLOG.md "Learning path")
+- November 2026: model predictive control for edge-energy-optimizer: a thermal model fitted from a system identification experiment, a 24-hour plan re-solved every hour; 14% to 20% cheaper than the fixed thermostat on unseen periods (also above). Done 16-11-2026. (`projects/edge-energy-optimizer.md`)
+- November 2026: NAP (Not Another Prototype), a Claude Code dev team (PM, Architect, Engineer, Reviewer, run by a Personal Assistant), took one brief to a working app in about 45 minutes: 7 issues, 4 PRs, all approved on the first review, CI green. Public repo: https://github.com/AD-NAP/not-another-prototype (public since 09-11-2026). (`dev-log/14-11-2026.md`, `dev-log/15-11-2026.md`, `projects/nap.md`)
+- November 2026, lessons from NAP: agents in headless runs need one command per call; a test that reads the CI file as text doesn't prove CI works; a stacked PR landed on a dead branch. (`dev-log/14-11-2026.md`, `dev-log/15-11-2026.md`)
+- November 2026, lessons from this site: the zine, the business card that opens into a drawing sheet, and the fun side's room; scale a background layer, never the text; search for what exists before building. (`dev-log/18-11-2026.md`, `dev-log/19-11-2026.md`)
+
 ## Education
 
 - National University of Singapore, School of Computing: Bachelor of Computing (Computer Science), Honours (Merit), Jan 2026. Relevant coursework: Software Engineering; Data Structures and Algorithms; Design and Analysis of Algorithms; Programming Methodology I & II; Computer Organisation; Introduction to AI.
@@ -121,3 +133,8 @@ Copied on 2026-10-31. Sources: the public repo `AD-NAP/cumulus-coach` (`README.m
 - Ground Labs dates corrected from Aug 2019 to Nov 2019 (wrong) to May 2022 to Aug 2022, during NUS. Final interview 27 Apr 2022; NUS SIP period 11 May to 31 Jul 2022, shown as May to Aug. (Shafik, 2026-10-22)
 - Keeps a dev log and learning notes for his projects in the vault: dated entries such as `dev-log/04-10-2026.md` and notes under `learning/machine-learning/`, cited as sources above. Used on the v1.0.0 cover ("I keep a dev log of what each project teaches me") and in "Notes I took", whose lessons restate facts already in this file. (2026-11-18)
 - Cloud BMS is written in TypeScript: the frontend is Svelte in TypeScript, and the backend is mostly AWS CDK in TypeScript. Python is used only for the Brick Schema metadata tooling, because of the Brick Schema libraries. (Shafik, 2026-11-18)
+
+## Facts Shafik added for the fun side (2026-11-19)
+
+- Hobbies: reads self-help books on how people think, such as *The Art of Thinking Clearly*; plays shooter games and is "pretty good at it". (Shafik, 2026-11-19)
+- Goals: the AWS Certified Cloud Practitioner certificate by the end of 2026; finish cumulus-coach by the end of 2026; edge-energy-optimizer shown as completed. (Shafik, 2026-11-19)

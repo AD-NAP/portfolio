@@ -163,6 +163,11 @@
     let solved = false;
     try { solved = ["bonus", ...OLD_KEYS].some(k => localStorage.getItem(k) === "open"); } catch (e) {}
     if (solved) openBonus(false);
+    // A link to #bonus (from the fun side's "Back to the portfolio") arrives while the section is still hidden,
+    // so the browser can't land on it. Scroll there once the page has loaded (an earlier jump gets reset).
+    if (solved && location.hash === "#bonus") {
+      window.addEventListener("load", () => requestAnimationFrame(() => bonus.scrollIntoView({ behavior: "instant", block: "start" })), { once: true });
+    }
   }
 
   /* ---------- The card opens into the portfolio ----------

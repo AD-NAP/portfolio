@@ -64,7 +64,20 @@
         <p>Once a month I sum up what I learned, like a short dev log for the month.</p>
         <article class="log">
           <h3>November 2026</h3>
-          <p class="placeholder">PLACEHOLDER: Shafik's summary of what he learned in November 2026.</p>
+          <ul class="log__list">
+            <li><strong>Model predictive control.</strong> I fitted a simple thermal model from an experiment on a simulated building, then planned its heating 24 hours ahead, every hour. On weeks it hadn't seen, it cost 14% to 20% less than a fixed thermostat.</li>
+            <li><strong>An AI dev team that ships.</strong> <a href="https://github.com/AD-NAP/not-another-prototype">NAP</a>, my Claude Code team of a PM, an Architect, an Engineer and a Reviewer, took one brief to a working app in about 45 minutes: 7 issues, 4 PRs, all approved on the first review, CI green.</li>
+            <li><strong>What broke along the way.</strong> Agents in headless runs need one command per call. A test that only reads the CI file doesn't prove CI works. A stacked PR can land on a dead branch.</li>
+            <li><strong>This site, three times over.</strong> The build log zine, the business card that opens into a drawing sheet, and this room. Scale the paper, never the text. Search for what exists before building it.</li>
+          </ul>
+        </article>
+        <article class="log">
+          <h3>October 2026</h3>
+          <ul class="log__list">
+            <li><strong>Forecasting with real meter data.</strong> A day-ahead load forecast for an office building beat "same hour last week" by 24.5%. Data leakage took me three tries: lags count back from the hour you predict, not from now.</li>
+            <li><strong>RAG and tool calling.</strong> I started <a href="https://github.com/AD-NAP/cumulus-coach">cumulus-coach</a>, an AWS study agent that answers with citations, refuses off-topic questions, and calls a tool.</li>
+            <li><strong>Claude Code's building blocks.</strong> I learned CLAUDE.md, skills, hooks, subagents and plan mode by building this portfolio. Playwright drives a real browser to screenshot it and test its accessibility.</li>
+          </ul>
         </article>
       </section>
 
@@ -100,7 +113,11 @@
       <section class="thing" id="thing-board" data-thing="board" aria-labelledby="h-board">
         <p class="thing__where">On the chalkboard</p>
         <h2 id="h-board">Future goals</h2>
-        <p class="placeholder">PLACEHOLDER: Shafik's goals, written by him.</p>
+        <ul class="goals">
+          <li><span class="goals__mark" aria-hidden="true"></span><span>Get the AWS Certified Cloud Practitioner certificate by the end of 2026.</span></li>
+          <li><span class="goals__mark" aria-hidden="true"></span><span>Finish <a href="https://github.com/AD-NAP/cumulus-coach">cumulus-coach</a>, my AWS study agent, by the end of 2026.</span></li>
+          <li class="is-done"><span class="goals__mark" aria-hidden="true"></span><span>Finish edge-energy-optimizer. <strong>Done</strong> in November 2026.</span></li>
+        </ul>
       </section>
 
       <section class="thing" id="thing-chair" data-thing="chair" aria-labelledby="h-chair">
@@ -108,8 +125,9 @@
         <h2 id="h-chair">Hobbies</h2>
         <p>Life off the clock.</p>
         <ul class="hobbies">
+          <li>I read self-help books about how people think, like <cite>The Art of Thinking Clearly</cite>.</li>
+          <li>I play shooter games, and I'm pretty good at them.</li>
           <li>I love cats and pandas.</li>
-          <li class="placeholder">PLACEHOLDER: more of Shafik's hobbies, in his words.</li>
         </ul>
       </section>
 

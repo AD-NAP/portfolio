@@ -110,7 +110,7 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   const bulb = new THREE.PointLight(0xffc56e, 5, 5, 2);
   bulb.position.y = 1.45;
   lamp.add(bulb);
-  lamp.position.set(2.6, 0, -0.75);
+  lamp.position.set(2.7, 0, -2.2);
   scene.add(lamp);
 
   /* ---------- Things you can click ---------- */
