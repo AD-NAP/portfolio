@@ -65,14 +65,15 @@ Since v1.3.0 ([decisions/0005-the-fun-side.md](decisions/0005-the-fun-side.md)).
 | `back/fun.css` | Its own palette and type (Bricolage Grotesque), room mode and list mode. |
 | `back/fun.js` | Picks the view, opens one thing at a time, runs Squash the bugs. Loads `room.js` only when the 3D room is shown. |
 | `back/room.js` | The Three.js scene: renderer, lights, the room shell, Poly Haven models, the procedural arcade cabinet, panda and books, hover and click, GSAP camera glides. |
-| `back/models/` | Nine Poly Haven glTF models at 1k textures (CC0), about 18 MB. |
+| `back/models/` | Nine Poly Haven glTF models at 1k textures (CC0), converted to WebP: about 5.9 MB. |
 | `back/museum/` | Small screenshots of the three looks for the museum. |
 | `assets/vendor/three/` | Three.js 0.187.0 as the official ES modules: `build/three.module.js`, `build/three.core.js` and the addons GLTFLoader, OrbitControls, RoomEnvironment (with the two utils GLTFLoader imports). |
 
 - **Views.** Room mode (desktop, WebGL) or list mode (phones, reduced motion, no WebGL, or `?view=list`). The header toggle or the note's button switches. The list never downloads Three.js.
 - **Room.** A 6 × 5 m room open at the front corner, seen from a fixed angle (`HOME` in `room.js`). OrbitControls let the visitor turn it a little: no pan, limited angles and distance. ACES tone mapping, RoomEnvironment lighting, one shadow-casting key light, a warm window and floor lamp.
 - **Choosing a thing.** Clicking an object (a click, not a drag) or its dock button opens the panel on that thing's section, glides the camera to a view worked out from the object's box, and focuses the section heading (from the dock). "Back to the room" or Escape glides back and returns focus.
-- **Way in.** The camera starts 22% closer and settles to `HOME` in 1.6s, continuing the zoom from the Bonus.
+- **Way in.** The page opens on `.stage__poster` (the Bonus's picture, `object-fit: cover`). `room.js` fits the camera to that crop (narrower vertical view on screens wider than 16:10), compiles its shaders (`compileAsync`) and draws hidden frames; then the canvas fades in over the poster (0.4s). Fonts load without blocking the first paint; the arcade's screen waits up to 1.5s for Bricolage.
+- **Prefetch.** `back/manifest.json` lists every file the room needs. `main.js` prefetches them once the Bonus is near (desktop, no reduced motion, no Data Saver), or on hover or focus of the link. Textures are WebP. The checker fails if the room requests a file the manifest doesn't list.
 - **Checker hook.** `window.__fun.room.stats()` renders a frame and reports how much of the centre is drawn, the things and the camera position.
 
 ## Hosting

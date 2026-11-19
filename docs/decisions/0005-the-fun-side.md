@@ -25,6 +25,15 @@ The card and the drawing sheet are the business side of the site. Shafik wanted 
 - **The plain list.** All the content is real HTML in the page: one section per thing, plus a row of real buttons that mirror clicking in the room. `?view=list`, phones, reduced motion and browsers without WebGL get the same content as a plain list, with a note and (where it can work) a button into the 3D room.
 - **Achievements** from the demo are left out of v1.3.0, to keep the first version small.
 
+## Revised in v1.3.2 (2026-11-19)
+
+Shafik found the wait after "Take me to the fun zone" too long, and asked for the room to load in the background so the zoom feels smooth.
+
+- **Lighter.** The models' textures are WebP instead of JPEG, 14.9 MB down to 2.2 MB. The models folder went from about 18 MB to 5.9 MB, with no visible difference in side-by-side screenshots.
+- **Prefetched.** `back/manifest.json` lists every file the room needs. Once the riddle is solved and the Bonus is near the screen, on a desktop (not with reduced motion or Data Saver), `main.js` adds a `<link rel="prefetch">` for each. Hovering or focusing the link starts it too. Before the riddle, nothing from the fun side loads.
+- **Seamless.** The room page opens on the same picture the zoom ended on (`.stage__poster`), with fonts not blocking the first paint. The room compiles its shaders and draws hidden frames, then crossfades in (0.4s). The camera's view is fitted to the picture's `object-fit: cover` crop, so they line up at every screen shape (under 0.6% of pixels differ). The camera pull-back on arrival is gone.
+- **Measured** in headless Chromium on a 20 Mbit/s connection: from the click to the live room took 13.9s before, 10.0s cold after the change, and 8.4s with the prefetch done, of which about 6.8s is software rendering in the cloud machine. After the prefetch, only 2 requests (the web font) went to the network.
+
 ## Consequences
 
 - `back/` is exempt from the Design rules in `CLAUDE.md` and from DESIGN.md. The Impeccable detector's design-system rules are ignored for `back/**`, with this decision as the reason. Content, accessibility and git rules still apply.

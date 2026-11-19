@@ -9,7 +9,7 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
-- [?] Publish v1.3.0 and v1.3.1 on github.com (notes and screenshots in `docs/releases/`)
+- [?] Publish v1.3.0, v1.3.1 and v1.3.2 on github.com (notes and screenshots in `docs/releases/`)
 - [x] Fun side content: hobbies and goals from Shafik, the learning log for October and November summarised from the vault (v1.3.1, 2026-11-19)
 - [?] Try the fun zone on your PC with a real GPU: the camera glides, dragging to turn the room, the panda's hop
 - [?] Publish v1.2.2 on github.com (notes and screenshots in `docs/releases/v1.2.2.md`)
@@ -25,6 +25,14 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [?] Where SQL and React were used (both are in Skills with no evidence on the page). GitHub Actions answered 2026-10-22: he worked with the team's pipeline, set up by a senior; cumulus-coach will add CI/CD he builds himself
 - [~] LLM or AI engineering work to show: cumulus-coach (the AWS study agent: RAG, tool calling, eval, Docker, CI) will cover it, after the demo ships around 2026-10-30
 - [?] Enable the Design plugin (install card shown 2026-10-09 and again 2026-10-22) so `design-critique` and `accessibility-review` are available
+
+## v1.3.2: a room that's ready before you click (2026-11-19)
+
+- [x] Textures to WebP: models 18 MB to 5.9 MB, no visible difference
+- [x] Prefetch from `back/manifest.json` once the Bonus is near (desktop only, after the riddle, not with reduced motion or Data Saver)
+- [x] The room page opens on the Bonus's picture and crossfades to the live room, lined up exactly; shaders compiled first; no pull-back
+- [x] Checker: nothing loads before the riddle, every manifest file prefetched after it, no prefetch on phones, manifest covers the room, poster first
+- [ ] Shafik: try the click on a real PC; the room should appear as the zoom ends
 
 ## v1.3.0: the fun side (2026-11-19)
 

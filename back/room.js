@@ -6,7 +6,8 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
-const W = 6, D = 5, H = 2.7, T = 0.14;               // room width (x), depth (z), wall height, wall thickness
+const W = 6, D = 5, H = 2.7, T = 0.14;
+const FOV = 30, POSTER_ASPECT = 1440 / 900;           // the camera, and the shape of assets/fun-preview.webp               // room width (x), depth (z), wall height, wall thickness
 export const HOME = { pos: new THREE.Vector3(7.4, 5.1, 8.2), target: new THREE.Vector3(-0.15, 0.6, -0.35) };
 
 const COL = {
@@ -31,7 +32,7 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
   scene.environmentIntensity = 0.45;
 
-  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 80);
+  const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 80);
   camera.position.copy(HOME.pos);
 
   const controls = new OrbitControls(camera, canvas);
@@ -183,6 +184,8 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   thing("chair", chair);
 
   // Arcade cabinet against the left wall, near the front.
+  // The arcade's screen text uses Bricolage; the page loads it without blocking, so wait for it briefly.
+  await Promise.race([document.fonts?.load('800 64px "Bricolage Grotesque"'), new Promise(r => setTimeout(r, 1500))]).catch(() => {});
   const arcade = makeArcade();
   arcade.rotation.y = Math.PI / 2;
   arcade.position.set(-W / 2 + 0.42, 0, 1.55);
@@ -210,6 +213,11 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
+    // Frame the room the way the poster is cropped (object-fit: cover of a 16:10 picture taken at 30°):
+    // on wider screens the picture loses its top and bottom, so narrow the vertical view to match.
+    camera.fov = camera.aspect > POSTER_ASPECT
+      ? THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(FOV / 2)) * POSTER_ASPECT / camera.aspect))
+      : FOV;
     camera.updateProjectionMatrix();
   };
   new ResizeObserver(resize).observe(canvas);
@@ -301,15 +309,10 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
       .to(controls.target, { x: target.x, y: target.y, z: target.z }, 0);
   };
 
-  // The way in: the camera starts a little closer, as if still finishing the zoom from the portfolio, and settles back.
-  if (!reduceMotion && gsap) {
-    camera.position.lerpVectors(HOME.pos, HOME.target, 0.22);
-    controls.update();
-    glide(HOME, 1.6, "expo.out");
-  }
-
-  // Wait one frame so the first visible frame is a finished one.
-  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  // Compile every shader and draw a few frames while the canvas is still hidden behind the poster,
+  // so textures are on the GPU and the first visible frame is a finished one.
+  await renderer.compileAsync(scene, camera);
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(r))));
 
   return {
     focus: name => views[name] && glide(views[name]),
