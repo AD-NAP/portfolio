@@ -13,7 +13,7 @@ Site runtime code (not a skill):
 | Library | Source | Version | Licence |
 |---|---|---|---|
 | GSAP core and ScrollTrigger, in `assets/vendor/` | npm package `gsap` (`dist/gsap.min.js`, `dist/ScrollTrigger.min.js`) | 3.15.0 | GreenSock Standard "no charge" licence, free including commercial use: https://gsap.com/standard-license (header kept in each file) |
-| Three.js, in `assets/vendor/three/` (used only by `back/`) | npm package `three`: `build/three.module.js`, `build/three.core.js`, and from `examples/jsm/`: `loaders/GLTFLoader.js`, `controls/OrbitControls.js`, `environments/RoomEnvironment.js`, `utils/BufferGeometryUtils.js`, `utils/SkeletonUtils.js` | 0.187.0 | MIT (`assets/vendor/three/LICENSE`) |
+| Three.js, in `assets/vendor/three/` (used only by `back/`) | npm package `three`: `build/three.module.js`, `build/three.core.js`, and from `examples/jsm/`: `loaders/GLTFLoader.js`, `environments/RoomEnvironment.js`, `utils/BufferGeometryUtils.js`, `utils/SkeletonUtils.js` | 0.187.0 | MIT (`assets/vendor/three/LICENSE`) |
 
 3D models (not code):
 

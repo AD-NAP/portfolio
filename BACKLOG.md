@@ -9,7 +9,8 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
-- [?] Publish v1.3.0, v1.3.1 and v1.3.2 on github.com (notes and screenshots in `docs/releases/`)
+- [?] Publish v1.3.0, v1.3.1, v1.3.2 and v1.4.0 on github.com (notes and screenshots in `docs/releases/`)
+- [?] Try v1.4.0 on your PC: the look-around feel (±30°, speed), each close-up, the Menu and the door
 - [x] Fun side content: hobbies and goals from Shafik, the learning log for October and November summarised from the vault (v1.3.1, 2026-11-19)
 - [?] Try the fun zone on your PC with a real GPU: the camera glides, dragging to turn the room, the panda's hop
 - [?] Publish v1.2.2 on github.com (notes and screenshots in `docs/releases/v1.2.2.md`)
@@ -25,6 +26,18 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [?] Where SQL and React were used (both are in Skills with no evidence on the page). GitHub Actions answered 2026-10-22: he worked with the team's pipeline, set up by a senior; cumulus-coach will add CI/CD he builds himself
 - [~] LLM or AI engineering work to show: cumulus-coach (the AWS study agent: RAG, tool calling, eval, Docker, CI) will cover it, after the demo ships around 2026-10-30
 - [?] Enable the Design plugin (install card shown 2026-10-09 and again 2026-10-22) so `design-critique` and `accessibility-review` are available
+
+## v1.4.0: standing in the room (2026-11-19)
+
+- [x] First person at eye height; three walls, a floor and a ceiling with a ceiling light; smaller room, things around the walls
+- [x] Mouse look-around (±30°, ±10°), arrow keys too; OrbitControls removed
+- [x] Walking up to each thing (the arcade face to face); panel beside it
+- [x] Hidden UI: only "Menu" in the room; Menu, Esc or Tab bring it back; hint on arrival once per visit
+- [x] A door with a glowing EXIT sign back to the portfolio
+- [x] Prefetch once the card has opened (Shafik), desktop only
+- [x] Checker: look-around limits, hidden UI, Menu, Esc, Tab, close-ups, the door, prefetch after the card opens
+- [ ] Ideas: goals written on the chalkboard; the month on the laptop screen; a wall clock or a framed picture if the walls feel bare
+- [ ] Achievements (still parked)
 
 ## v1.3.2: a room that's ready before you click (2026-11-19)
 

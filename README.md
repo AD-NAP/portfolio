@@ -25,6 +25,7 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
+| [v1.4.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.4.0) | 2026-11-19 | Standing in the room: first person with mouse look-around, a ceiling light, walking right up to each thing, a hidden UI with a Menu button, an EXIT door; the room prefetches once the card is open |
 | [v1.3.2](https://github.com/AD-NAP/portfolio/releases/tag/v1.3.2) | 2026-11-19 | The fun zone loads in the background once the riddle is solved, its textures are 7× lighter, and the zoom hands over to the live room without a gap |
 | [v1.3.1](https://github.com/AD-NAP/portfolio/releases/tag/v1.3.1) | 2026-11-19 | The fun side gets its content: a learning log for October and November, goals and hobbies; the Bonus moves below Contact |
 | [v1.3.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.3.0) | 2026-11-19 | The fun side: solving the riddle leads to a 3D room (Three.js, Poly Haven models) with a museum of past versions, a learning log, goals, hobbies and Squash the bugs; the Bonus zooms into it; a plain list for phones and reduced motion |

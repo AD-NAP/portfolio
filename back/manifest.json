@@ -1,5 +1,5 @@
 {
- "about": "Files the fun side's 3D room needs. main.js prefetches them once the Bonus is near on a desktop; the design checker fails if the room requests a file missing here.",
+ "about": "Files the fun side's 3D room needs. main.js prefetches them once the card has opened into the portfolio, on a desktop; the design checker fails if the room requests a file missing here.",
  "files": [
   "back/",
   "back/fun.css",
@@ -10,7 +10,6 @@
   "assets/vendor/gsap.min.js",
   "assets/vendor/three/build/three.module.js",
   "assets/vendor/three/build/three.core.js",
-  "assets/vendor/three/addons/controls/OrbitControls.js",
   "assets/vendor/three/addons/environments/RoomEnvironment.js",
   "assets/vendor/three/addons/loaders/GLTFLoader.js",
   "assets/vendor/three/addons/utils/BufferGeometryUtils.js",

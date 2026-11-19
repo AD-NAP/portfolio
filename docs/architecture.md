@@ -64,16 +64,18 @@ Since v1.3.0 ([decisions/0005-the-fun-side.md](decisions/0005-the-fun-side.md)).
 | `back/index.html` | All the content as real HTML: one `.thing` section per object, the dock of object buttons, the panel, the note. Import map for Three.js. |
 | `back/fun.css` | Its own palette and type (Bricolage Grotesque), room mode and list mode. |
 | `back/fun.js` | Picks the view, opens one thing at a time, runs Squash the bugs. Loads `room.js` only when the 3D room is shown. |
-| `back/room.js` | The Three.js scene: renderer, lights, the room shell, Poly Haven models, the procedural arcade cabinet, panda and books, hover and click, GSAP camera glides. |
+| `back/room.js` | The Three.js scene, seen first person: renderer, lights (ceiling spot, window, floor lamp), the three-walled room with a ceiling, Poly Haven models, the procedural arcade, panda, books and door, the mouse look-around, hover and click, GSAP walks up to each thing. |
 | `back/models/` | Nine Poly Haven glTF models at 1k textures (CC0), converted to WebP: about 5.9 MB. |
 | `back/museum/` | Small screenshots of the three looks for the museum. |
-| `assets/vendor/three/` | Three.js 0.187.0 as the official ES modules: `build/three.module.js`, `build/three.core.js` and the addons GLTFLoader, OrbitControls, RoomEnvironment (with the two utils GLTFLoader imports). |
+| `assets/vendor/three/` | Three.js 0.187.0 as the official ES modules: `build/three.module.js`, `build/three.core.js` and the addons GLTFLoader and RoomEnvironment (with the two utils GLTFLoader imports). |
 
 - **Views.** Room mode (desktop, WebGL) or list mode (phones, reduced motion, no WebGL, or `?view=list`). The header toggle or the note's button switches. The list never downloads Three.js.
-- **Room.** A 6 × 5 m room open at the front corner, seen from a fixed angle (`HOME` in `room.js`). OrbitControls let the visitor turn it a little: no pan, limited angles and distance. ACES tone mapping, RoomEnvironment lighting, one shadow-casting key light, a warm window and floor lamp.
-- **Choosing a thing.** Clicking an object (a click, not a drag) or its dock button opens the panel on that thing's section, glides the camera to a view worked out from the object's box, and focuses the section heading (from the dock). "Back to the room" or Escape glides back and returns focus.
+- **Room.** A 4.6 m wide room with back, left and right walls, a floor and a ceiling; the visitor stands at the open side at eye height (`HOME` in `room.js`). The walls and ceiling run on past the camera, so turning never shows an edge. ACES tone mapping, RoomEnvironment lighting, a shadow-casting ceiling spotlight, a warm window and floor lamp.
+- **Look-around.** `LOOK` sets the head turn: ±30° and ±10° in the room, ±8° and ±5° up close. The pointer's position on the page sets the target turn, eased every frame (`1 - exp(-dt·5)`); arrow keys call `look()`. Under reduced motion there is no turn.
+- **Hidden UI.** `body.ui-open` shows the title, list toggle, back link, row of things and credits; without it, in room mode, only `.menu-btn` shows. Menu, Esc and `focusin` on a hidden control set it; a click on the room clears it.
+- **Choosing a thing.** Clicking an object or its button opens the panel on that thing's section, glides the camera to its spot in `SPOTS` (look at, stand from, distance), and focuses the section heading (from the row). "Back to the room" or Escape glides back; focus returns to the row after keyboard use. The door (`exit`) goes to `../#bonus`.
 - **Way in.** The page opens on `.stage__poster` (the Bonus's picture, `object-fit: cover`). `room.js` fits the camera to that crop (narrower vertical view on screens wider than 16:10), compiles its shaders (`compileAsync`) and draws hidden frames; then the canvas fades in over the poster (0.4s). Fonts load without blocking the first paint; the arcade's screen waits up to 1.5s for Bricolage.
-- **Prefetch.** `back/manifest.json` lists every file the room needs. `main.js` prefetches them once the Bonus is near (desktop, no reduced motion, no Data Saver), or on hover or focus of the link. Textures are WebP. The checker fails if the room requests a file the manifest doesn't list.
+- **Prefetch.** `back/manifest.json` lists every file the room needs. `main.js` prefetches them once the card has opened (the `portfolio:open` event from `opened()`) and the browser is idle, on a desktop with no reduced motion or Data Saver, or on hover or focus of the link. Textures are WebP. The checker fails if the room requests a file the manifest doesn't list.
 - **Checker hook.** `window.__fun.room.stats()` renders a frame and reports how much of the centre is drawn, the things and the camera position.
 
 ## Hosting

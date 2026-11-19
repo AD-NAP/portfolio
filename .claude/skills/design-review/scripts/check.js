@@ -231,14 +231,18 @@ const audit = async (page, phone) => {
   const local = u => { const p = new URL(u); return p.origin === new URL(url).origin ? p.pathname.slice(1) : null; };
   const isRoomFile = u => /vendor\/three|\/back\//.test(u);
 
-  // Before the riddle: a whole visit to the main page downloads nothing from the fun side.
+  // While the card is closed, nothing from the fun side downloads. Once it opens (and the browser is idle),
+  // a desktop prefetches every file in the manifest.
   const fn = await newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" });
   const fnRequests = [];
   fn.context().on("request", r => fnRequests.push(r.url()));
-  await fn.goto(url + "#contact", { waitUntil: "networkidle" });
-  await fn.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
-  await fn.waitForTimeout(1500);
+  await fn.goto(url, { waitUntil: "networkidle" });
+  await fn.waitForTimeout(2000);
   funZone.mainLoadsNoThree = !fnRequests.some(isRoomFile);
+  await fn.click(".card-open, [data-open-portfolio], a[href='#about'].card__open").catch(() => fn.keyboard.press("PageDown"));
+  await fn.waitForTimeout(4000);
+  const openedPaths = new Set(fnRequests.map(local).filter(Boolean));
+  funZone.prefetchAfterOpenMissing = manifest.filter(f => !openedPaths.has(f) && !(f === "back/" && openedPaths.has("back/index.html")));
   await fn.close();
 
   // After the riddle, on a desktop: once the Bonus is near, every file the room needs is prefetched.
@@ -305,19 +309,71 @@ const audit = async (page, phone) => {
   funZone.drawn = stats?.drawn ?? 0;
   funZone.things = stats?.things ?? [];
   await fr.screenshot({ path: path.join(OUT, "fun-1280-room.png") });
+  // Immersed on arrival: only "Menu" shows.
+  const shown = sel => fr.evaluate(s => getComputedStyle(document.querySelector(s)).opacity === "1", sel);
+  funZone.immersed = !(await shown(".brand")) && !(await shown(".dock")) && await fr.evaluate(() => !document.querySelector(".menu-btn").hidden);
+  // Looking around: the mouse at the right edge turns the head right, by no more than 30°; the middle brings it back.
+  // Software rendering is slow, so wait for the turn to settle rather than a fixed time.
+  const yaw = () => fr.evaluate(() => window.__fun.room.stats().yaw);
+  await fr.mouse.move(1279, 400);
+  await fr.waitForFunction(() => window.__fun.room.stats().yaw < -28, null, { timeout: 10000 }).catch(() => {});
+  await fr.waitForTimeout(500);
+  const turned = await yaw();
+  await fr.mouse.move(640, 400);
+  await fr.waitForFunction(() => Math.abs(window.__fun.room.stats().yaw) < 2, null, { timeout: 10000 }).catch(() => {});
+  const back = await yaw();
+  funZone.look = { turned, back };
+  funZone.looksAround = turned < -20 && turned >= -30.5 && Math.abs(back) < 3;
+  // Menu brings the rest back; then a button in the row opens the desk, walks up to it and focuses its heading.
+  await fr.click(".menu-btn");
+  await fr.waitForTimeout(400);
+  funZone.menuShows = await shown(".dock") && await shown(".brand");
   await fr.click('.dock button[data-thing="desk"]');
   await fr.waitForTimeout(1600);
   funZone.dockOpens = await fr.evaluate(() => document.querySelector(".panel").classList.contains("is-open")
     && document.querySelector('.dock button[data-thing="desk"]').getAttribute("aria-expanded") === "true"
     && document.activeElement?.id === "h-desk"
-    && JSON.stringify(window.__fun.room.stats().camera) !== JSON.stringify([7.4, 5.1, 8.2]));
+    && window.__fun.room.stats().distanceTo.desk <= 1.6);
+  funZone.uiHiddenUpClose = !(await shown(".dock"));
   await fr.screenshot({ path: path.join(OUT, "fun-1280-desk.png") });
   await fr.keyboard.press("Escape");
   await fr.waitForTimeout(400);
   funZone.escapeCloses = await fr.evaluate(() => !document.querySelector(".panel").classList.contains("is-open")
     && document.activeElement?.dataset.thing === "desk");
+  // With no panel open, Esc toggles the menu.
+  const uiOpen = () => fr.evaluate(() => document.body.classList.contains("ui-open"));
+  const before = await uiOpen();
+  await fr.keyboard.press("Escape");
+  await fr.waitForTimeout(200);
+  funZone.escapeTogglesMenu = (await uiOpen()) !== before;
+  // Tab into a hidden control shows the UI.
+  await fr.evaluate(() => { document.activeElement?.blur(); document.body.classList.remove("ui-open"); });
+  for (let i = 0; i < 4 && !(await uiOpen()); i++) await fr.keyboard.press("Tab");
+  funZone.tabShowsUi = await uiOpen();
+  // Walking up to each thing ends close to it.
+  funZone.closeUps = {};
+  for (const t of ["desk", "shelf", "board", "chair", "arcade", "panda"]) {
+    await fr.evaluate(t => window.__fun.open(t), t);
+    await fr.waitForTimeout(1500);
+    funZone.closeUps[t] = await fr.evaluate(t => window.__fun.room.stats().distanceTo[t], t);
+    if (t === "arcade") await fr.screenshot({ path: path.join(OUT, "fun-1280-arcade.png") });
+    await fr.evaluate(() => window.__fun.close());
+    await fr.waitForTimeout(1300);
+  }
+  // The door: aim at it (the head turns as the mouse moves), then click it, and the portfolio opens.
+  await fr.evaluate(() => document.body.classList.remove("ui-open"));
+  funZone.exitInRoom = await fr.evaluate(() => window.__fun.room.stats().exit);
+  for (let i = 0; i < 4; i++) {
+    const [x, y] = await fr.evaluate(() => window.__fun.room.stats().exitAt);
+    await fr.mouse.move(Math.min(Math.max(x, 1), 1279), Math.min(Math.max(y, 1), 799));
+    await fr.waitForTimeout(1500);
+  }
+  await fr.screenshot({ path: path.join(OUT, "fun-1280-door.png") });
   funZone.roomAudit = await audit(fr, false);
   funZone.roomErrors = frErrors;
+  const [ex, ey] = await fr.evaluate(() => window.__fun.room.stats().exitAt);
+  await fr.mouse.click(ex, ey);
+  funZone.doorLeads = await fr.waitForURL(/\/#bonus$/, { timeout: 5000 }).then(() => true, () => false);
   await fr.goto(url + "back/?view=list", { waitUntil: "networkidle" });
   funZone.listShowsAll = await fr.evaluate(() => [...document.querySelectorAll(".thing")].every(t => t.getBoundingClientRect().height > 0)
     && !document.querySelector(".stage").getBoundingClientRect().height);
@@ -493,10 +549,19 @@ const audit = async (page, phone) => {
     if (!r.replayShowsCard) fails.push(`${t}: "See my card again" should play back to the card and focus its button`);
     if (!r.tabPastCardVisible) fails.push(`${t}: tabbing past the card should show the focused link, not leave it under the card`);
   }
-  if (!funZone.mainLoadsNoThree) fails.push("fun zone: before the riddle, the main page should not load three.js or anything from back/");
+  if (!funZone.mainLoadsNoThree) fails.push("fun zone: while the card is closed, the main page should not load three.js or anything from back/");
   if (funZone.prefetchMissing?.length) fails.push(`fun zone: with the Bonus in view on a desktop, these room files were not prefetched: ${funZone.prefetchMissing.slice(0, 5).join(", ")}${funZone.prefetchMissing.length > 5 ? "…" : ""}`);
   if (!funZone.phoneNoPrefetch) fails.push("fun zone: a phone should never prefetch the 3D room");
   if (funZone.unlisted?.length) fails.push(`fun zone: back/manifest.json is missing files the room loads: ${funZone.unlisted.join(", ")}`);
+  if (funZone.prefetchAfterOpenMissing?.length) fails.push(`fun zone: after the card opens on a desktop, these room files were not prefetched: ${funZone.prefetchAfterOpenMissing.slice(0, 5).join(", ")}${funZone.prefetchAfterOpenMissing.length > 5 ? "…" : ""}`);
+  if (!funZone.immersed) fails.push('fun zone: in the room only "Menu" should show at first; the title and the row of things stay hidden');
+  if (!funZone.looksAround) fails.push(`fun zone: the mouse should turn the view, up to 30° (turned ${funZone.look?.turned}°, back ${funZone.look?.back}°)`);
+  if (!funZone.menuShows) fails.push('fun zone: "Menu" should bring the title and the row of things back');
+  if (!funZone.uiHiddenUpClose) fails.push("fun zone: up close to a thing, the room's UI should stay hidden");
+  if (!funZone.escapeTogglesMenu) fails.push("fun zone: with no panel open, Esc should open or close the menu");
+  if (!funZone.tabShowsUi) fails.push("fun zone: tabbing into the hidden UI should show it");
+  for (const [t, d] of Object.entries(funZone.closeUps || {})) if (!(d <= 2.1)) fails.push(`fun zone: walking up to "${t}" should end close to it (${d} m away)`);
+  if (!funZone.exitInRoom || !funZone.doorLeads) fails.push("fun zone: the room should have a door, and clicking it should go back to the portfolio's Bonus");
   if (!funZone.posterFirst) fails.push("fun zone: the room page should open on the room's picture, with the live room hidden until it is ready");
   if (!funZone.liveReplacesPoster) fails.push("fun zone: once ready, the live room should replace the picture");
   if (!funZone.linkShown) fails.push('fun zone: "Take me to the fun zone" should be in the open bonus');
@@ -507,7 +572,7 @@ const audit = async (page, phone) => {
   if (funZone.roomState !== "ready") fails.push(`fun zone: the 3D room did not load (${funZone.roomState})`);
   if (!(funZone.drawn > 0.5)) fails.push(`fun zone: the room is not drawn (${Math.round(funZone.drawn * 100)}% of the centre)`);
   if (funZone.things.length !== 6) fails.push(`fun zone: the room should have 6 things to click, found ${funZone.things.length}`);
-  if (!funZone.dockOpens) fails.push("fun zone: a dock button should open its panel, move the camera and focus the heading");
+  if (!funZone.dockOpens) fails.push("fun zone: a button in the row should open its panel, walk up to the thing and focus the heading");
   if (!funZone.escapeCloses) fails.push("fun zone: Escape should close the panel and return focus to the dock button");
   if (!funZone.listShowsAll) fails.push("fun zone: ?view=list should show every thing and no room");
   if (!funZone.reducedMotionList) fails.push("fun zone: reduced motion should open on the list, with a button into the room");
