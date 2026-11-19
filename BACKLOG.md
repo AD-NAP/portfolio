@@ -44,6 +44,7 @@ Decision: `docs/decisions/0005-the-fun-side.md`. Idea: vault `ideas/back-of-the-
 - [ ] Shadows are soft and faint in software rendering; check them on a real GPU and tune the key light
 - [ ] Phones: a light version of the 3D room, if wanted later
 - [ ] A new learning log entry each month
+- [?] Recruiter critic (v1.3): move the Bonus section and its nav link after Contact, next to the riddle, so the evidence reads unbroken. Shafik decides (page order is his rule). Report: `reviews/2026-11-19-recruiter-critic-v1.3.md`
 
 ## Next: projects as engineering stories
 
