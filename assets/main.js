@@ -157,11 +157,12 @@
         { duration: 600, easing: "cubic-bezier(.65, 0, .35, 1)", fill: "forwards" }
       ).finished.then(go, go);
     });
-    // Fetch the fun side ahead of the click, so the zoom ends on a room that is ready. Only after the riddle
-    // (the Bonus is shown), only on a desktop that will use the 3D room, and never when the visitor saves data.
+    // Fetch the fun side ahead of time, so the zoom ends on a room that is ready: once the card has opened into
+    // the portfolio and the browser is idle (Shafik, 2026-11-19). Only on a desktop that will use the 3D room,
+    // and never when the visitor saves data. Prefetches are the lowest priority, so the page itself comes first.
     let prefetched = false;
     const prefetchRoom = () => {
-      if (prefetched || bonus.hidden || isPhone || reduceMotion || navigator.connection?.saveData) return;
+      if (prefetched || isPhone || reduceMotion || navigator.connection?.saveData) return;
       prefetched = true;
       fetch("back/manifest.json").then(r => r.json()).then(m => m.files.forEach(href => {
         const link = document.createElement("link");
@@ -170,12 +171,12 @@
         document.head.appendChild(link);
       })).catch(() => { prefetched = false; });
     };
-    if ("IntersectionObserver" in window) {
-      const near = new IntersectionObserver(entries => {
-        if (entries.some(e => e.isIntersecting)) { prefetchRoom(); if (prefetched) near.disconnect(); }
-      }, { rootMargin: "800px 0px" });
-      near.observe(bonus);
-    }
+    const whenIdle = fn => ("requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 4000 }) : setTimeout(fn, 1500));
+    document.addEventListener("portfolio:open", () => whenIdle(prefetchRoom), { once: true });
+    // Without the card's transition (GSAP missing), the portfolio is open from the start.
+    window.addEventListener("load", () => {
+      if (!document.documentElement.classList.contains("has-card-motion")) whenIdle(prefetchRoom);
+    }, { once: true });
     funZone?.addEventListener("pointerenter", prefetchRoom);
     funZone?.addEventListener("focus", prefetchRoom);
 
@@ -336,6 +337,7 @@
       const progress = { p: 0 };
       const opened = () => {
         state = "open"; lock(false); topSince = performance.now();
+        document.dispatchEvent(new Event("portfolio:open"));   // the fun side may start downloading now
         focusAfter?.focus({ preventScroll: true }); focusAfter = null;
       };
       const closed = () => {

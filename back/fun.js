@@ -14,6 +14,7 @@ const noteOpen = $(".note__open");
 const canvas = $(".stage__canvas");
 const tag = $(".stage__tag");
 const pct = $(".stage__pct");
+const menuBtn = $(".menu-btn");
 
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isPhone = matchMedia("(max-width: 820px), (hover: none) and (pointer: coarse)").matches;
@@ -25,11 +26,28 @@ const hasWebGL = (() => {
 let room = null;        // the 3D room, once loaded
 let roomLoading = null;
 let current = null;     // the open thing
-const LABELS = Object.fromEntries(dockBtns.map(b => [b.dataset.thing, b.textContent]));
+const LABELS = { ...Object.fromEntries(dockBtns.map(b => [b.dataset.thing, b.textContent])), exit: "Back to the portfolio" };
+
+/* ---------- Hidden UI: in the room only "Menu" shows; Menu, Esc or Tab bring the rest back ---------- */
+let keyboard = false;   // was the last input a key? Then focus follows; after a click it doesn't
+document.addEventListener("keydown", () => { keyboard = true; }, true);
+document.addEventListener("pointerdown", () => { keyboard = false; }, true);
+function setUi(open) {
+  body.classList.toggle("ui-open", open);
+  menuBtn.setAttribute("aria-expanded", String(open));
+  menuBtn.textContent = open ? "Close menu" : "Menu";
+}
+menuBtn.addEventListener("click", () => setUi(!body.classList.contains("ui-open")));
+// Tabbing into anything that's hidden shows it, so a focused control is never invisible.
+document.addEventListener("focusin", e => {
+  if (body.classList.contains("mode-room") && e.target !== menuBtn && e.target.closest(".top, .dock, .credits")) setUi(true);
+});
 
 /* ---------- One thing at a time ---------- */
 function open(thing, { from = "dock" } = {}) {
   if (!body.classList.contains("mode-room")) return;
+  setUi(false);
+  hideHint();
   current = thing;
   things.forEach(t => t.classList.toggle("is-active", t.dataset.thing === thing));
   dockBtns.forEach(b => b.setAttribute("aria-expanded", String(b.dataset.thing === thing)));
@@ -50,14 +68,41 @@ function close() {
   dockBtns.forEach(b => b.setAttribute("aria-expanded", "false"));
   stopGame();
   room?.reset();
-  if (panel.contains(document.activeElement)) dockBtns.find(b => b.dataset.thing === was)?.focus();
+  if (!panel.contains(document.activeElement)) return;
+  if (keyboard) dockBtns.find(b => b.dataset.thing === was)?.focus();
+  else document.activeElement.blur();
 }
 
 dockBtns.forEach(b => b.addEventListener("click", () => {
   if (current === b.dataset.thing) close(); else open(b.dataset.thing);
 }));
 closeBtn.addEventListener("click", close);
-document.addEventListener("keydown", e => { if (e.key === "Escape" && current) close(); });
+// Esc closes a thing first; in the room itself it opens and closes the menu.
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    if (current) close();
+    else if (body.classList.contains("mode-room")) setUi(!body.classList.contains("ui-open"));
+    return;
+  }
+  // Arrow keys look around, unless a control or the panel has the keyboard.
+  const turns = { ArrowLeft: [-0.25, 0], ArrowRight: [0.25, 0], ArrowUp: [0, 0.25], ArrowDown: [0, -0.25] };
+  if (turns[e.key] && room && body.classList.contains("mode-room") && !e.target.closest("button, a, input, .panel")) {
+    e.preventDefault();
+    room.look(...turns[e.key]);
+  }
+});
+
+/* ---------- Arrival hint ---------- */
+let hintTimer = 0;
+function hideHint() { clearTimeout(hintTimer); body.classList.remove("show-hint"); }
+function showHint() {
+  try {                                                 // once per visit
+    if (sessionStorage.getItem("fun-hint") === "seen") return;
+    sessionStorage.setItem("fun-hint", "seen");
+  } catch (e) {}
+  body.classList.add("show-hint");
+  hintTimer = setTimeout(hideHint, 4500);
+}
 
 /* ---------- Room or list ---------- */
 async function showRoom() {
@@ -65,15 +110,21 @@ async function showRoom() {
   things.forEach(t => t.classList.remove("is-active"));
   note.hidden = true;
   toggle.hidden = false;
+  menuBtn.hidden = false;
+  setUi(false);
   toggle.textContent = "Show as a list";
   if (!roomLoading) {
     roomLoading = import("./room.js")
       .then(m => m.startRoom({
         canvas, tag, labels: LABELS, reduceMotion,
-        onPick: thing => (current === thing ? close() : open(thing, { from: "room" })),
+        onPick: thing => {
+          if (thing === "exit") { location.href = "../#bonus"; return; }
+          if (!thing) { setUi(false); return; }                       // a click on the room itself
+          if (current === thing) close(); else open(thing, { from: "room" });
+        },
         onProgress: p => { pct.textContent = `${Math.round(p * 100)}%`; },
       }))
-      .then(r => { room = r; body.classList.add("is-ready"); body.dataset.room = "ready"; })
+      .then(r => { room = r; body.classList.add("is-ready"); body.dataset.room = "ready"; showHint(); })
       .catch(err => {
         console.warn("The 3D room could not load:", err);
         body.dataset.room = "failed";
@@ -87,8 +138,10 @@ async function showRoom() {
 function showList(message, canOpen) {
   close();
   room?.pause();
-  body.classList.remove("mode-room");
+  body.classList.remove("mode-room", "ui-open");
   body.classList.add("mode-list");
+  menuBtn.hidden = true;
+  hideHint();
   things.forEach(t => t.classList.remove("is-active"));
   toggle.hidden = !hasWebGL || body.dataset.room === "failed" || !!canOpen;   // the note has its own button
   toggle.textContent = "Show the 3D room";

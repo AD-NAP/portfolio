@@ -90,6 +90,27 @@ button { font: inherit; cursor: pointer; }
 .is-ready .stage__loading { opacity: 0; }
 .stage__pct { font-variant-numeric: tabular-nums; color: var(--chalk); }
 
+/* ---------- Immersed: in the room only "Menu" shows. Menu, Esc or Tab bring the rest back (fun.js). ----------
+   Hidden with opacity, not visibility, so Tab still reaches every control (and showing it on focus). */
+.menu-btn {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / .18); background: rgb(23 33 43 / .6); color: var(--chalk);
+  font-size: 15px; font-weight: 600; backdrop-filter: blur(6px);
+}
+.menu-btn:hover { border-color: var(--bamboo); }
+.mode-room .brand, .mode-room .view-toggle, .mode-room .top__back, .mode-room .dock, .mode-room .credits {
+  transition: opacity .25s var(--ease-out);
+}
+.mode-room:not(.ui-open) .brand, .mode-room:not(.ui-open) .view-toggle, .mode-room:not(.ui-open) .top__back,
+.mode-room:not(.ui-open) .dock, .mode-room:not(.ui-open) .credits { opacity: 0; pointer-events: none; }
+
+.stage__hint {
+  position: absolute; left: 50%; bottom: 40px; margin: 0; transform: translateX(-50%);
+  padding: 8px 16px; border-radius: 999px; background: rgb(23 33 43 / .86); color: var(--chalk);
+  font-size: 15px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .5s var(--ease-out);
+}
+.show-hint .stage__hint { opacity: 1; }
+
 /* ---------- Dock: the things, as real buttons ---------- */
 .dock {
   position: fixed; left: 28px; bottom: 24px; z-index: 5;
@@ -225,5 +246,6 @@ cite { font-style: italic; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stage__poster, .stage__canvas, .panel, .stage__tag, .dock button, .game__grid button { transition: none; }
+  .stage__poster, .stage__canvas, .panel, .stage__tag, .dock button, .game__grid button, .stage__hint,
+  .mode-room .brand, .mode-room .view-toggle, .mode-room .top__back, .mode-room .dock, .mode-room .credits { transition: none; }
 }

@@ -34,6 +34,18 @@ Shafik found the wait after "Take me to the fun zone" too long, and asked for th
 - **Seamless.** The room page opens on the same picture the zoom ended on (`.stage__poster`), with fonts not blocking the first paint. The room compiles its shaders and draws hidden frames, then crossfades in (0.4s). The camera's view is fitted to the picture's `object-fit: cover` crop, so they line up at every screen shape (under 0.6% of pixels differ). The camera pull-back on arrival is gone.
 - **Measured** in headless Chromium on a 20 Mbit/s connection: from the click to the live room took 13.9s before, 10.0s cold after the change, and 8.4s with the prefetch done, of which about 6.8s is software rendering in the cloud machine. After the prefetch, only 2 requests (the web font) went to the network.
 
+## Revised in v1.4.0 (2026-11-19): standing in the room
+
+Shafik wanted to feel inside the room, not look down on a model of it.
+
+- **First person.** The camera stands at eye height (1.6 m) at the open side, facing the back wall, 55° tall. The room is smaller (4.6 m wide) with three walls, a floor and a ceiling; the walls and ceiling run on past the visitor, so looking around never shows an edge. OrbitControls is gone.
+- **Look around.** The mouse's position anywhere on the page turns the head up to ±30° left and right and ±10° up and down, eased toward it every frame; leaving the window brings it back to the middle. Arrow keys do the same. Up close to a thing the limits shrink to ±8° and ±5°.
+- **Walking up to a thing.** Each thing has a hand-set spot (where to look, which side to stand, how far). The camera glides there (1.1s) and stands right in front of it; the arcade's screen fills the view face to face. The view is nudged so the thing sits left of the panel.
+- **Light.** A round ceiling light with a soft shadow-casting spotlight, the window's warm glow, and the floor lamp, over the room's own bounce light.
+- **Hidden UI.** Only a quiet "Menu" button shows in the room. Menu, Esc or Tab bring back the title, "Back to the portfolio", the list toggle and the row of things; clicking the room hides them. Esc closes an open thing first. Controls are hidden with opacity, not visibility, so Tab still reaches them and shows them. A hint on arrival ("Move your mouse to look around. Click anything. Esc for the menu.") shows once per visit, for about 4s.
+- **A way out in the room.** A door with a glowing EXIT sign on the right wall goes back to the portfolio's Bonus.
+- **Prefetch earlier.** Shafik chose to start the download once the card has opened into the portfolio (on a desktop, when the browser is idle), not after the riddle: the room is about 6 MB. Nothing downloads while the card is closed.
+
 ## Consequences
 
 - `back/` is exempt from the Design rules in `CLAUDE.md` and from DESIGN.md. The Impeccable detector's design-system rules are ignored for `back/**`, with this decision as the reason. Content, accessibility and git rules still apply.
