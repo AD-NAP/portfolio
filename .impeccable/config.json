@@ -75,6 +75,42 @@
         ],
         "createdAt": "2026-11-18T15:30:56.320Z",
         "reason": "Mask-image alpha stop for the phone bar's edge fade; black here is opacity, not a colour"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          "back/**"
+        ],
+        "createdAt": "2026-11-19T07:09:05.373Z",
+        "reason": "back/ is the fun side: its own look by Shafik's decision (2026-11-19), exempt from DESIGN.md. See CLAUDE.md and docs/decisions/0005-the-fun-side.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "back/**"
+        ],
+        "createdAt": "2026-11-19T07:09:05.380Z",
+        "reason": "back/ is the fun side: its own look by Shafik's decision (2026-11-19), exempt from DESIGN.md. See CLAUDE.md and docs/decisions/0005-the-fun-side.md"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "back/**"
+        ],
+        "createdAt": "2026-11-19T07:09:05.390Z",
+        "reason": "back/ is the fun side: its own look by Shafik's decision (2026-11-19), exempt from DESIGN.md. See CLAUDE.md and docs/decisions/0005-the-fun-side.md"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "back/**"
+        ],
+        "createdAt": "2026-11-19T07:09:05.397Z",
+        "reason": "back/ is the fun side: its own look by Shafik's decision (2026-11-19), exempt from DESIGN.md. See CLAUDE.md and docs/decisions/0005-the-fun-side.md"
       }
     ]
   }

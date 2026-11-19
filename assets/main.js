@@ -126,6 +126,40 @@
 
     document.querySelector(".riddle-reset")?.addEventListener("click", closeBonus);
 
+    // "Take me to the fun zone": the preview grows until the room fills the screen, then the room page opens.
+    // Phones get a note first (the room is built for a computer); reduced motion goes straight there.
+    const funZone = document.querySelector(".fun-zone");
+    const funNote = document.querySelector(".bonus__phone");
+    const preview = document.querySelector(".bonus__room img");
+    const isPhone = window.matchMedia("(max-width: 820px), (hover: none) and (pointer: coarse)").matches;
+    let warned = false;
+    funZone?.addEventListener("click", e => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      if (isPhone && !warned) {
+        e.preventDefault();
+        warned = true;
+        funNote.textContent = "The 3D room is built for a computer. On a phone it opens as a simple list.";
+        funZone.textContent = "Open the list";
+        return;
+      }
+      if (reduceMotion || !preview || !preview.complete || !preview.animate) return;
+      e.preventDefault();
+      const r = preview.getBoundingClientRect();
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const s = Math.max(vw / r.width, vh / r.height);
+      const zoom = preview.cloneNode();
+      zoom.className = "room-zoom";
+      Object.assign(zoom.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+      document.body.appendChild(zoom);
+      const go = () => { window.location.href = funZone.href; };
+      zoom.animate(
+        [{ transform: "none" }, { transform: `translate(${(vw - r.width * s) / 2 - r.left}px, ${(vh - r.height * s) / 2 - r.top}px) scale(${s})` }],
+        { duration: 600, easing: "cubic-bezier(.65, 0, .35, 1)", fill: "forwards" }
+      ).finished.then(go, go);
+    });
+    // Coming back with the browser's Back button: take the zoomed copy away.
+    window.addEventListener("pageshow", () => document.querySelectorAll(".room-zoom").forEach(el => el.remove()));
+
     let solved = false;
     try { solved = ["bonus", ...OLD_KEYS].some(k => localStorage.getItem(k) === "open"); } catch (e) {}
     if (solved) openBonus(false);

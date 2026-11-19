@@ -9,6 +9,9 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
+- [?] Publish v1.3.0 on github.com (notes and screenshots in `docs/releases/v1.3.0.md`)
+- [?] Fun side content, in your words: hobbies, the November 2026 learning log entry, and future goals (now visible PLACEHOLDERs in `back/index.html`)
+- [?] Try the fun zone on your PC with a real GPU: the camera glides, dragging to turn the room, the panda's hop
 - [?] Publish v1.2.2 on github.com (notes and screenshots in `docs/releases/v1.2.2.md`)
 - [x] Publish v1.1.0 on github.com (published 2026-11-18 from a local session with `gh`)
 - [?] Recruiter critic's questions (2026-11-18): cumulus-coach eval results; a demo, screenshot or recording of cumulus-coach; anything shareable about the metadata generator's effect; junior or mid-level target
@@ -22,6 +25,26 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [?] Where SQL and React were used (both are in Skills with no evidence on the page). GitHub Actions answered 2026-10-22: he worked with the team's pipeline, set up by a senior; cumulus-coach will add CI/CD he builds himself
 - [~] LLM or AI engineering work to show: cumulus-coach (the AWS study agent: RAG, tool calling, eval, Docker, CI) will cover it, after the demo ships around 2026-10-30
 - [?] Enable the Design plugin (install card shown 2026-10-09 and again 2026-10-22) so `design-critique` and `accessibility-review` are available
+
+## v1.3.0: the fun side (2026-11-19)
+
+Decision: `docs/decisions/0005-the-fun-side.md`. Idea: vault `ideas/back-of-the-sheet-idea.md`.
+
+- [x] `back/`: a 3D room in Three.js 0.187.0 (self-hosted ES modules, import map, no build step) with nine Poly Haven models (CC0) and a procedural arcade cabinet, panda, books, window and floor lamp
+- [x] Six things to choose: desk (learning log), bookshelf (museum of past versions), chalkboard (future goals), lounge chair (hobbies), arcade (Squash the bugs), panda; camera glides to each, panel beside it, dock of real buttons, Escape closes
+- [x] Museum: the building (v0.5.0, screenshotted from its tag), the zine (v1.1.0) and the drawing sheet, each linked to its release
+- [x] Plain list for phones, reduced motion, no WebGL and `?view=list`; phones and the list never load Three.js
+- [x] Bonus: the cake is replaced by a still of the room and "Take me to the fun zone", which zooms into it; phones get a note first
+- [x] Checker: software WebGL; no Three.js on the main page, the zoom, the phone note, the room draws, dock, Escape, list, reduced motion, axe on all of them. Stop hook watches `back/`
+- [x] Impeccable: main page clean; design-system rules ignored for `back/**` with a reason (it has its own look)
+- [x] CLAUDE.md rules for the fun side, architecture, decision 0005, THIRD_PARTY, README, release notes
+- [ ] Kenney pieces (kenney.nl refuses downloads from the cloud; download on the PC and add to `back/models/`)
+- [ ] Achievements ("Solved the riddle", "Clicked every object", "Scored 8+ in the arcade"), left out of v1.3.0
+- [ ] A real mini game to replace Squash the bugs
+- [ ] Shadows are soft and faint in software rendering; check them on a real GPU and tune the key light
+- [ ] Phones: a light version of the 3D room, if wanted later
+- [ ] A new learning log entry each month
+- [?] Recruiter critic (v1.3): move the Bonus section and its nav link after Contact, next to the riddle, so the evidence reads unbroken. Shafik decides (page order is his rule). Report: `reviews/2026-11-19-recruiter-critic-v1.3.md`
 
 ## Next: projects as engineering stories
 

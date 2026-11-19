@@ -15,7 +15,7 @@ One page, three files, no build step:
 | `index.html` | All content and structure: the bar, the opening (the card `#card` lying over About), then Experience, Projects, the hidden Bonus, Lessons learned, Skills and Education, Contact with the riddle, and the title block footer. |
 | `assets/styles.css` | Layout, both themes, the type ramp, the card and the CSS variables the transition drives. Colours and font sizes come from tokens in `:root` and `[data-theme]`. |
 | `assets/main.js` | Behaviour: the card-to-sheet transition (two states: wheel, touch, keys and the button; returning visitors, replay, keyboard), theme toggle, section highlight, the riddle and its bonus, the `ad-nap` flip. |
-| `assets/vendor/` | GSAP 3.15.0 (`gsap.min.js`, `ScrollTrigger.min.js`), self-hosted. Licence and source in `.claude/skills/THIRD_PARTY.md`. |
+| `assets/vendor/` | GSAP 3.15.0 (`gsap.min.js`, `ScrollTrigger.min.js`) and Three.js 0.187.0 (`three/`, used only by `back/`), self-hosted. Licences and sources in `.claude/skills/THIRD_PARTY.md`. |
 
 Also in `assets/`: `favicon.svg` (a tiny card on the desk) and `og.png`, the 1200x630 link preview: a screenshot of the closed card in the light theme. Re-render it with Playwright if the card changes.
 
@@ -52,6 +52,28 @@ Below 900px the bar grows to two rows (name and theme button, then the links in 
 ## The bonus
 
 The Bonus section is in the page from the start but `hidden`, along with its bar link. Solving the riddle in Contact shows both and saves `bonus = open` in `localStorage`, so it stays open on later visits. The older keys `centrefold` (v1.x) and `b1` (v0.x) also open it. Nothing a recruiter needs lives there.
+
+It shows `assets/fun-preview.webp`, a still of the fun side's room, and "Take me to the fun zone". On a desktop the link grows a fixed copy of the preview to cover the screen (Web Animations, 0.6s, transforms only) and then opens `back/`. On a phone the first tap shows a note instead ("built for a computer"); the second opens `back/`, which shows a list there. Under reduced motion it opens `back/` at once.
+
+## The fun side (`back/`)
+
+Since v1.3.0 ([decisions/0005-the-fun-side.md](decisions/0005-the-fun-side.md)). Its own look; the drawing sheet's rules don't apply.
+
+| File | Job |
+|---|---|
+| `back/index.html` | All the content as real HTML: one `.thing` section per object, the dock of object buttons, the panel, the note. Import map for Three.js. |
+| `back/fun.css` | Its own palette and type (Bricolage Grotesque), room mode and list mode. |
+| `back/fun.js` | Picks the view, opens one thing at a time, runs Squash the bugs. Loads `room.js` only when the 3D room is shown. |
+| `back/room.js` | The Three.js scene: renderer, lights, the room shell, Poly Haven models, the procedural arcade cabinet, panda and books, hover and click, GSAP camera glides. |
+| `back/models/` | Nine Poly Haven glTF models at 1k textures (CC0), about 18 MB. |
+| `back/museum/` | Small screenshots of the three looks for the museum. |
+| `assets/vendor/three/` | Three.js 0.187.0 as the official ES modules: `build/three.module.js`, `build/three.core.js` and the addons GLTFLoader, OrbitControls, RoomEnvironment (with the two utils GLTFLoader imports). |
+
+- **Views.** Room mode (desktop, WebGL) or list mode (phones, reduced motion, no WebGL, or `?view=list`). The header toggle or the note's button switches. The list never downloads Three.js.
+- **Room.** A 6 × 5 m room open at the front corner, seen from a fixed angle (`HOME` in `room.js`). OrbitControls let the visitor turn it a little: no pan, limited angles and distance. ACES tone mapping, RoomEnvironment lighting, one shadow-casting key light, a warm window and floor lamp.
+- **Choosing a thing.** Clicking an object (a click, not a drag) or its dock button opens the panel on that thing's section, glides the camera to a view worked out from the object's box, and focuses the section heading (from the dock). "Back to the room" or Escape glides back and returns focus.
+- **Way in.** The camera starts 22% closer and settles to `HOME` in 1.6s, continuing the zoom from the Bonus.
+- **Checker hook.** `window.__fun.room.stats()` renders a frame and reports how much of the centre is drawn, the things and the camera position.
 
 ## Hosting
 
