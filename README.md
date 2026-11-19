@@ -25,6 +25,7 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
+| [v1.2.2](https://github.com/AD-NAP/portfolio/releases/tag/v1.2.2) | 2026-11-19 | Every visit opens on the card; a lighter card in dark mode; a sun/moon switch on the card whose icon walks into the bar's theme button, and theme buttons that show the theme they switch to |
 | [v1.2.1](https://github.com/AD-NAP/portfolio/releases/tag/v1.2.1) | 2026-11-19 | Any scroll or the button opens the card in the same 1.5s (it was far too fast from the button), scrolling up at the top plays it back; dark is the default theme |
 | [v1.2.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.2.0) | 2026-11-18 | The business card opens into a drawing sheet. Crisp, snapped card-to-portfolio transition, warm-grey sheet with a hairline grid, Archivo, one red accent, title block footer; the riddle stays, the zine and the cats retire |
 | [v1.1.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.1.0) | 2026-11-18 | Issue 2: opens on a meishi-style name card that turns over into the zine cover as you scroll; grey and red inks |

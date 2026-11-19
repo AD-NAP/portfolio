@@ -9,6 +9,7 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
+- [?] Publish v1.2.2 on github.com (notes and screenshots in `docs/releases/v1.2.2.md`)
 - [x] Publish v1.1.0 on github.com (published 2026-11-18 from a local session with `gh`)
 - [?] Recruiter critic's questions (2026-11-18): cumulus-coach eval results; a demo, screenshot or recording of cumulus-coach; anything shareable about the metadata generator's effect; junior or mid-level target
 - [x] Delete the two merged branches on GitHub: `claude/ecstatic-dijkstra-wwvvi2` and `claude/beautiful-meitner-lxxr21` (deleted 2026-11-18)
@@ -28,6 +29,15 @@ From `vault/ideas/business-card-idea.md`: each project told as Problem, Constrai
 
 - [ ] Pull each step's facts for cumulus-coach and edge-energy-optimizer from the vault dev logs into `content/resume.md` ("From AD-NAP/vault"), and have Shafik check them
 - [ ] Restructure the two project entries; gaps get visible PLACEHOLDERs
+
+## v1.2.2: always the card, a visible dark card, a theme icon that travels (2026-11-19)
+
+- [x] Every visit opens on the card; the "seen" memory is gone (old saved values are cleared) (Shafik)
+- [x] Dark mode: the card has its own lighter graphite stock (`--card`) so it stands off the desk (Shafik)
+- [x] Sun/moon switch at the card's top-right; its icon walks into the bar's theme button as the card opens (Shafik)
+- [x] The theme buttons show the theme they switch to: sun and "Light mode" in dark, moon and "Dark mode" in light (Shafik)
+- [x] Checker: every visit opens on the card, the icon lands within 1px, the card's switch swaps theme, icon and labels; `--card` contrast pairs
+- [?] Publish v1.2.2 on github.com (notes in `docs/releases/v1.2.2.md`)
 
 ## v1.2.1: one pace for the card, dark by default (2026-11-19)
 

@@ -4,7 +4,8 @@
 
 :root,
 [data-theme="light"] {
-  --paper: #F4F4F1;        /* the sheet, and the card's stock */
+  --paper: #F4F4F1;        /* the sheet */
+  --card: #F4F4F1;         /* the card's stock: the same as the sheet in light */
   --paper-deep: #E8E8E4;   /* fields and inputs */
   --desk: #DADAD5;         /* the drafting table the card lies on */
   --grid: rgb(22 23 26 / .075);
@@ -20,6 +21,7 @@
 
 [data-theme="dark"] {
   --paper: #1C1D1F;        /* graphite sheet */
+  --card: #2C2E32;         /* the card's stock: a lighter graphite, so it stands off the dark desk */
   --paper-deep: #26282B;
   --desk: #121314;
   --grid: rgb(236 236 233 / .06);
@@ -30,7 +32,7 @@
   --on-accent: #16171A;
   --rule: #3B3E42;
   --focus: #F05A5F;
-  --card-shadow: 0 0 0 1px rgb(236 236 233 / .07), 0 1px 2px rgb(0 0 0 / .45), 0 24px 48px -18px rgb(0 0 0 / .8);   /* a faint cut edge: graphite card on a dark desk */
+  --card-shadow: 0 0 0 1px rgb(236 236 233 / .12), 0 1px 2px rgb(0 0 0 / .45), 0 24px 48px -18px rgb(0 0 0 / .8);   /* a faint cut edge: graphite card on a dark desk */
 }
 
 :root {
@@ -127,9 +129,13 @@ strong { color: var(--ink); font-weight: 650; }
   background: transparent; border: 1px solid var(--ink); border-radius: 2px;
   transition: background-color .2s, color .2s, transform .12s var(--ease-out);
 }
-.theme-toggle:active { transform: scale(.97); }
-.theme-toggle[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-.theme-toggle__icon { width: 16px; height: 16px; fill: currentColor; }
+.theme-toggle:active, .card-theme:active { transform: scale(.94); }
+/* Sun and moon: the icon shows the theme the button switches to. */
+.theme-icon { flex: none; width: 18px; height: 18px; overflow: visible; }
+.theme-icon__sun circle, .theme-icon__moon { fill: currentColor; }
+.theme-icon__sun path { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+[data-theme="light"] .theme-icon__sun, [data-theme="dark"] .theme-icon__moon { display: none; }
+.theme-toggle .theme-icon { opacity: var(--brand-alpha, 1); }   /* hidden until the card's icon lands on it */
 
 /* ---------- Layout ---------- */
 main { position: relative; z-index: 1; padding: 0 var(--gutter); }
@@ -161,13 +167,12 @@ main { position: relative; z-index: 1; padding: 0 var(--gutter); }
 }
 .intro__inner { position: relative; display: grid; justify-items: center; gap: 30px; padding: 0 var(--gutter); }
 .card-lift { position: relative; z-index: 2; width: min(560px, 100%); animation: lift .7s var(--ease-out) both; }
-[data-card="seen"] .card-lift { animation: none; }
 @keyframes lift { from { transform: translateY(18px); } }   /* set down on the desk; it is visible from the first frame */
 .card { position: relative; aspect-ratio: 91 / 55; }
 .card__shadow, .card__paper { position: absolute; inset: 0; border-radius: 3px; }
 .card__shadow { box-shadow: var(--card-shadow); opacity: var(--shadow-alpha, 1); }
 .card__paper {
-  background: var(--paper); opacity: var(--paper-alpha, 1);
+  background: var(--card); opacity: var(--paper-alpha, 1);
   transform: translate(var(--paper-x, 0px), var(--paper-y, 0px)) scale(var(--paper-sx, 1), var(--paper-sy, 1));
 }
 /* Drafting dimensions: a business card is 91 by 55 millimetres. */
@@ -176,6 +181,18 @@ main { position: relative; z-index: 1; padding: 0 var(--gutter); }
 .card__dim { position: absolute; font-size: var(--fs-label); font-weight: 550; color: var(--muted); font-variant-numeric: tabular-nums; opacity: var(--front-alpha, 1); background: var(--desk); padding: 0 6px; line-height: 1; }
 .card__dim--w { left: 50%; top: -33px; translate: -50% -50%; }
 .card__dim--h { left: -33px; top: 50%; translate: -50% -50%; }
+/* The card's theme switch, top right. While the card opens, its icon walks to the bar's button. */
+.card-theme {
+  position: absolute; z-index: 1; top: clamp(4px, 2.5%, 16px); right: clamp(4px, 3%, 20px);
+  display: grid; place-items: center; width: 44px; height: 44px; padding: 0;
+  color: var(--ink); background: transparent; border: 0; border-radius: 2px; cursor: pointer;
+  transition: transform .12s var(--ease-out);
+}
+.card-theme .theme-icon {
+  opacity: var(--icon-alpha, 1);
+  transform: translate(var(--icon-x, 0px), var(--icon-y, 0px));
+}
+.card-theme:hover { color: var(--accent); }
 .card__front {
   position: relative; height: 100%; display: flex; flex-direction: column;
   padding: clamp(16px, 5.5%, 34px) clamp(18px, 6.5%, 40px);
@@ -221,7 +238,7 @@ main { position: relative; z-index: 1; padding: 0 var(--gutter); }
   width: auto; height: 100svh; margin: 0; padding: 0; display: grid; align-items: center;
   visibility: var(--stage-vis, visible); pointer-events: var(--stage-events, auto);
 }
-.has-card-motion .card__paper, .has-card-motion .card__name { will-change: transform; }
+.has-card-motion .card__paper, .has-card-motion .card__name, .has-card-motion .card-theme .theme-icon { will-change: transform; }
 /* The name is the page's h1: when the stage hides, the name stays in the page (transparent, on top of
    the bar's name) so it is still the page's heading for screen readers. */
 .has-card-motion .card__name { visibility: visible; pointer-events: none; }
@@ -398,7 +415,7 @@ main { position: relative; z-index: 1; padding: 0 var(--gutter); }
   /* If the links still run past the edge, fade them out there so it reads as "scroll for more". */
   .bar__nav.is-clipped { mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
   .bar__nav:hover, .bar__nav:focus-within { mask-image: none; }
-  .theme-toggle span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .theme-toggle__text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .theme-toggle { min-width: 44px; min-height: 44px; justify-content: center; padding: 0; }
   .card__dims, .card__dim { display: none; }   /* no room for dimensions beside a phone-width card */
   .intro__inner { gap: 22px; }
