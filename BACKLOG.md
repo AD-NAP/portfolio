@@ -9,8 +9,8 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 
 ## Waiting on Shafik
 
-- [?] Publish v1.3.0 on github.com (notes and screenshots in `docs/releases/v1.3.0.md`)
-- [?] Fun side content, in your words: hobbies, the November 2026 learning log entry, and future goals (now visible PLACEHOLDERs in `back/index.html`)
+- [?] Publish v1.3.0 and v1.3.1 on github.com (notes and screenshots in `docs/releases/`)
+- [x] Fun side content: hobbies and goals from Shafik, the learning log for October and November summarised from the vault (v1.3.1, 2026-11-19)
 - [?] Try the fun zone on your PC with a real GPU: the camera glides, dragging to turn the room, the panda's hop
 - [?] Publish v1.2.2 on github.com (notes and screenshots in `docs/releases/v1.2.2.md`)
 - [x] Publish v1.1.0 on github.com (published 2026-11-18 from a local session with `gh`)
@@ -43,8 +43,9 @@ Decision: `docs/decisions/0005-the-fun-side.md`. Idea: vault `ideas/back-of-the-
 - [ ] A real mini game to replace Squash the bugs
 - [ ] Shadows are soft and faint in software rendering; check them on a real GPU and tune the key light
 - [ ] Phones: a light version of the 3D room, if wanted later
-- [ ] A new learning log entry each month
-- [?] Recruiter critic (v1.3): move the Bonus section and its nav link after Contact, next to the riddle, so the evidence reads unbroken. Shafik decides (page order is his rule). Report: `reviews/2026-11-19-recruiter-critic-v1.3.md`
+- [ ] A new learning log entry each month: December 2026 next, summarised from the vault dev logs into `content/resume.md` first, then `back/index.html`
+- [ ] Ideas: write the goals on the 3D chalkboard itself; show the learning log's month on the laptop screen
+- [x] Recruiter critic (v1.3): the Bonus section and its bar link moved after Contact, next to the riddle (Shafik agreed; v1.3.1). Report: `reviews/2026-11-19-recruiter-critic-v1.3.md`
 
 ## Next: projects as engineering stories
 

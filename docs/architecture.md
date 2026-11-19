@@ -12,7 +12,7 @@ One page, three files, no build step:
 
 | File | Job |
 |---|---|
-| `index.html` | All content and structure: the bar, the opening (the card `#card` lying over About), then Experience, Projects, the hidden Bonus, Lessons learned, Skills and Education, Contact with the riddle, and the title block footer. |
+| `index.html` | All content and structure: the bar, the opening (the card `#card` lying over About), then Experience, Projects, Lessons learned, Skills and Education, Contact with the riddle, the hidden Bonus (the way into the fun side, right after the riddle that opens it; moved there in v1.3.1), and the title block footer. |
 | `assets/styles.css` | Layout, both themes, the type ramp, the card and the CSS variables the transition drives. Colours and font sizes come from tokens in `:root` and `[data-theme]`. |
 | `assets/main.js` | Behaviour: the card-to-sheet transition (two states: wheel, touch, keys and the button; returning visitors, replay, keyboard), theme toggle, section highlight, the riddle and its bonus, the `ad-nap` flip. |
 | `assets/vendor/` | GSAP 3.15.0 (`gsap.min.js`, `ScrollTrigger.min.js`) and Three.js 0.187.0 (`three/`, used only by `back/`), self-hosted. Licences and sources in `.claude/skills/THIRD_PARTY.md`. |
