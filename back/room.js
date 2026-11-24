@@ -6,6 +6,10 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 // Room: x from -W/2 to W/2, back wall at z = -D_BACK. Walls, floor and ceiling run on past the visitor to
 // z = D_FRONT, so looking around never shows an edge. T is the wall thickness.
@@ -16,10 +20,12 @@ export const HOME = { pos: new THREE.Vector3(0, 1.6, 3.3), target: new THREE.Vec
 const LOOK = { room: { yaw: THREE.MathUtils.degToRad(30), pitch: THREE.MathUtils.degToRad(10) },
                close: { yaw: THREE.MathUtils.degToRad(8), pitch: THREE.MathUtils.degToRad(5) } };
 
+// A cyberpunk bedroom at night (since v1.6.0): dark blue-grey surfaces, cyan and magenta neon, a rainy city outside.
 const COL = {
-  wall: 0xb7c3b0, ceiling: 0xf2efe8, skirting: 0xf1ede4, rug: 0xd9a441, rugInner: 0xe9c983,
-  arcade: 0x23408e, lampShade: 0xf7e7c6, metal: 0x2b2f33, door: 0xe9e4da, exit: 0x2f9e57,
+  wall: 0x272c40, ceiling: 0x1b1e2b, skirting: 0x14161f, rug: 0x2a2440, rugInner: 0x3a2f5c,
+  arcade: 0x23408e, metal: 0x2b2f33, door: 0x2e3346, exit: 0x2f9e57,
   pandaWhite: 0xf3f0ea, pandaBlack: 0x1c1d20,
+  cyan: 0x2ee6ff, magenta: 0xff2bd6,
 };
 
 export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onProgress }) {
@@ -36,7 +42,7 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.5;
+  scene.environmentIntensity = 0.22;   // night: the room's own bounce is faint, the neon does the work
 
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.05, 40);
 
@@ -54,7 +60,8 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   /* ---------- Room shell: floor, three walls, ceiling ---------- */
   const floorTex = planks();
   floorTex.repeat.set(1.2, 1.5);
-  shell.add(mesh(new THREE.BoxGeometry(W + 2 * T, T, L), std(0xffffff, 0.55, { map: floorTex }), { y: -T / 2, z: zMid, cast: false }));
+  // Dark polished boards: a little sheen and metalness so the neon shows in them.
+  shell.add(mesh(new THREE.BoxGeometry(W + 2 * T, T, L), std(0xffffff, 0.32, { map: floorTex, metalness: 0.15 }), { y: -T / 2, z: zMid, cast: false }));
   const wallMat = std(COL.wall, 0.92);
   shell.add(mesh(new THREE.BoxGeometry(W + 2 * T, H, T), wallMat, { y: H / 2, z: -D_BACK - T / 2 }));
   shell.add(mesh(new THREE.BoxGeometry(T, H, L), wallMat, { x: -W / 2 - T / 2, y: H / 2, z: zMid }));
@@ -72,27 +79,32 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   rug.position.set(0, 0, 0.15);
   shell.add(rug);
 
-  // Window over the desk: an evening sky with a city line, glowing a little.
+  // Window over the desk: a city at night, with rain running down the glass.
   const win = new THREE.Group();
-  win.add(new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.0), new THREE.MeshBasicMaterial({ map: eveningSky(), toneMapped: false })));
-  const frame = std(COL.skirting, 0.5);
+  win.add(new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.0), new THREE.MeshBasicMaterial({ map: nightCity(), toneMapped: false })));
+  const rainTex = rain();
+  const rainPane = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.0),
+    new THREE.MeshBasicMaterial({ map: rainTex, transparent: true, depthWrite: false, toneMapped: false }));
+  rainPane.position.z = 0.005;
+  win.add(rainPane);
+  const frame = std(0x0f1118, 0.35, { metalness: 0.6 });
   [[0, 0.53, 1.72, 0.06], [0, -0.53, 1.72, 0.06], [-0.83, 0, 0.06, 1.12], [0.83, 0, 0.06, 1.12], [0, 0, 0.04, 1.0]].forEach(([x, y, w, h]) =>
     win.add(mesh(new THREE.BoxGeometry(w, h, 0.06), frame, { x, y, z: 0.02 })));
   win.add(mesh(new THREE.BoxGeometry(1.8, 0.05, 0.16), frame, { x: 0, y: -0.57, z: 0.06 }));
   win.position.set(-0.55, 1.85, -D_BACK + 0.01);
   shell.add(win);
-  const sky = new THREE.PointLight(0xffb27a, 1.6, 3.5, 2);
+  const sky = new THREE.PointLight(0x7a6cff, 1.4, 3.5, 2);   // the city's violet glow through the glass
   sky.position.set(-0.55, 1.75, -D_BACK + 0.5);
   scene.add(sky);
 
-  /* ---------- Light: a ceiling light, a floor lamp, and the room's own bounce ---------- */
+  /* ---------- Light: a dim ceiling panel, neon strips, and the room's own bounce ---------- */
   const ceilingLight = new THREE.Group();
   ceilingLight.add(mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.03, 64), std(COL.ceiling, 0.6), { cast: false }));
   ceilingLight.add(mesh(new THREE.CylinderGeometry(0.26, 0.24, 0.05, 64),
-    new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xfff1d6, emissiveIntensity: 1.6, roughness: 0.4 }), { y: -0.035, cast: false }));
+    new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xc9d6ff, emissiveIntensity: 0.55, roughness: 0.4 }), { y: -0.035, cast: false }));
   ceilingLight.position.set(0, H - 0.015, -0.1);
   scene.add(ceilingLight);
-  const spot = new THREE.SpotLight(0xfff0d8, 26, 9, 1.15, 0.85, 1.6);
+  const spot = new THREE.SpotLight(0xb4c2ff, 9, 9, 1.15, 0.85, 1.6);
   spot.position.set(0, H - 0.1, -0.1);
   spot.target.position.set(0, 0, -0.3);
   spot.castShadow = true;
@@ -100,19 +112,33 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   spot.shadow.bias = -0.0004;
   spot.shadow.normalBias = 0.02;
   scene.add(spot, spot.target);
-  scene.add(new THREE.HemisphereLight(0xdfe6ff, 0x9a948a, 0.45));   // the ground colour lights the ceiling
+  scene.add(new THREE.HemisphereLight(0x5a66a8, 0x221a30, 0.3));
 
-  const lamp = new THREE.Group();
-  lamp.add(mesh(new THREE.CylinderGeometry(0.16, 0.18, 0.03, 48), std(COL.metal, 0.4, { metalness: 0.6 }), { y: 0.015 }));
-  lamp.add(mesh(new THREE.CylinderGeometry(0.014, 0.014, 1.45, 16), std(COL.metal, 0.4, { metalness: 0.6 }), { y: 0.75 }));
-  lamp.add(mesh(new THREE.CylinderGeometry(0.15, 0.23, 0.3, 48, 1, true),
-    new THREE.MeshStandardMaterial({ color: COL.lampShade, emissive: 0xffc56e, emissiveIntensity: 0.45, side: THREE.DoubleSide, roughness: 0.9 }),
-    { y: 1.5, cast: false }));
-  const bulb = new THREE.PointLight(0xffc56e, 3, 4, 2);
-  bulb.position.y = 1.45;
-  lamp.add(bulb);
-  lamp.position.set(W / 2 - 0.28, 0, 0.42);
-  scene.add(lamp);
+  // Neon strips: a glowing tube where each wall meets the ceiling (cyan on the left and back, magenta on the
+  // right), and a cyan strip low on the back wall behind the desk. Each has coloured light beside it.
+  const neon = color => new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(2.2), toneMapped: false });
+  const strip = (len, color, { x = 0, y = 0, z = 0, along = "x" }) => {
+    const geo = along === "x" ? new THREE.BoxGeometry(len, 0.025, 0.025) : new THREE.BoxGeometry(0.025, 0.025, len);
+    shell.add(mesh(geo, neon(color), { x, y, z, cast: false, receive: false }));
+  };
+  const glowAt = (color, intensity, [x, y, z], range = 4) => {
+    const p = new THREE.PointLight(color, intensity, range, 2);
+    p.position.set(x, y, z); scene.add(p); return p;
+  };
+  strip(W - 0.1, COL.cyan, { y: H - 0.04, z: -D_BACK + 0.04 });
+  strip(D_BACK + 1.6, COL.cyan, { x: -W / 2 + 0.04, y: H - 0.04, z: -D_BACK / 2 + 0.8, along: "z" });
+  strip(D_BACK + 1.6, COL.magenta, { x: W / 2 - 0.04, y: H - 0.04, z: -D_BACK / 2 + 0.8, along: "z" });
+  strip(1.9, COL.cyan, { x: -0.55, y: 0.95, z: -D_BACK + 0.03 });
+  glowAt(COL.cyan, 2.2, [-W / 2 + 0.4, H - 0.3, -0.6]);
+  glowAt(COL.magenta, 2.6, [W / 2 - 0.4, H - 0.3, -0.6]);
+  glowAt(COL.cyan, 0.45, [-1.25, 0.95, -D_BACK + 0.1], 1.6);   // against the wall, off to the side, so it washes the wall, not the laptop
+
+  // A neon sign over the right side of the back wall: the GitHub name and a panda's face.
+  const signTex = neonSign();
+  const sign = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 0.55), new THREE.MeshBasicMaterial({ map: signTex, transparent: true, depthWrite: false, toneMapped: false }));
+  sign.position.set(1.25, 2.12, -D_BACK + 0.02);
+  shell.add(sign);
+  glowAt(COL.magenta, 1.0, [1.25, 2.0, -D_BACK + 0.4], 2.5);
 
   /* ---------- Things you can click ---------- */
   const picks = [];   // groups with userData.thing
@@ -157,7 +183,7 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   const boardTops = probe.intersectObject(shelfModel, true)
     .filter(h => h.face && h.face.normal.clone().transformDirection(h.object.matrixWorld).y > 0.5)
     .map(h => h.point.y).filter(y => y < sb.max.y - 0.05).sort((p, q) => p - q);
-  const bookCols = [0x2e6b34, 0x7fb07c, 0xd9a441, 0x3d5a80, 0xb5584a, 0xe2d9c4, 0x5d4a6e];
+  const bookCols = [0x2b3a6b, 0x6b2f6b, 0x1f5a6b, 0x8a2f55, 0x3a3f55, 0x22786b, 0x5d4a8e];
   const inner = sb.getSize(new THREE.Vector3());
   boardTops.slice(0, -1).forEach((y, level) => {
     let z = mid.z - inner.z / 2 + 0.08;
@@ -223,10 +249,20 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   };
 
   /* ---------- Size and render ---------- */
+  // Bloom: only what is brighter than the threshold glows (the neon, the screens, the signs, the city).
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.75, 0.45, 0.9);
+  composer.addPass(bloom);
+  composer.addPass(new OutputPass());
+  const draw = () => composer.render();
+
   const resize = () => {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
     renderer.setSize(w, h, false);
+    composer.setPixelRatio(renderer.getPixelRatio());
+    composer.setSize(w, h);
     camera.aspect = w / h;
     // Frame the room the way the poster is cropped (object-fit: cover of a 16:10 picture): on wider screens
     // the picture loses its top and bottom, so narrow the vertical view to match.
@@ -239,7 +275,7 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   resize();
 
   let running = true;
-  let last = performance.now();
+  let last = performance.now(), last0 = last;
   renderer.setAnimationLoop(() => {
     if (!running) return;
     // Ease the head toward where the mouse points; time-based, so it feels the same at any frame rate.
@@ -247,8 +283,10 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
     last = now;
     look.yaw += (look.toYaw - look.yaw) * k;
     look.pitch += (look.toPitch - look.pitch) * k;
+    rainTex.offset.y += Math.min(now - last0, 100) / 1000 * 0.35;   // the rain runs down the glass
+    last0 = now;
     placeCamera();
-    renderer.render(scene, camera);
+    draw();
     if (hovered) placeTag(hovered);
   });
 
@@ -275,7 +313,7 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   const light = (g, on) => g.traverse(c => {
     if (!c.isMesh || !c.material.emissive) return;
     if (c.userData.baseEmissive.getHex() !== 0) return;   // leave glowing parts (screens, shades) as they are
-    if (on) { c.material.emissive.set(0xffd9a0); c.material.emissiveIntensity = 0.07; }
+    if (on) { c.material.emissive.set(0x7fe9ff); c.material.emissiveIntensity = 0.09; }
     else { c.material.emissive.copy(c.userData.baseEmissive); c.material.emissiveIntensity = c.userData.baseEmissiveIntensity; }
   });
   const setHover = g => {
@@ -369,12 +407,12 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
         .to(panda.position, { y: 0.012, duration: 0.36, ease: "bounce.out" });
     },
     pause: () => { running = false; },
-    resume: () => { running = true; last = performance.now(); },
+    resume: () => { running = true; last = last0 = performance.now(); },
     // For the design checker: renders a frame and reports how much of it is drawn, the things, the camera
     // and the head turn in degrees, and how far the camera stands from each thing it can walk up to.
     stats: () => {
       placeCamera();
-      renderer.render(scene, camera);
+      draw();
       const gl = renderer.getContext();
       const w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
       const px = new Uint8Array(4 * 64 * 64);
@@ -426,7 +464,7 @@ function roundedSlab(w, d, r, h) {
   return g;
 }
 
-// Oak planks, drawn once into a canvas.
+// Dark stained planks, drawn once into a canvas.
 function planks() {
   const c = document.createElement("canvas");
   c.width = 1024; c.height = 1024;
@@ -436,14 +474,14 @@ function planks() {
     let at = -(r * 137) % 400;
     while (at < c.width) {
       const len = 300 + ((r * 97 + at) % 260);
-      const l = 50 + ((r * 31 + at) % 9) - 4;
-      x.fillStyle = `hsl(27 34% ${l}%)`;
+      const l = 15 + ((r * 31 + at) % 7) - 3;
+      x.fillStyle = `hsl(232 14% ${l}%)`;
       x.fillRect(at, r * h, len, h);
-      x.fillStyle = "rgba(60,35,20,.35)";
+      x.fillStyle = "rgba(0,0,0,.45)";
       x.fillRect(at, r * h, 2, h);
       at += len;
     }
-    x.fillStyle = "rgba(60,35,20,.4)";
+    x.fillStyle = "rgba(0,0,0,.5)";
     x.fillRect(0, r * h, c.width, 2);
   }
   const t = new THREE.CanvasTexture(c);
@@ -454,23 +492,80 @@ function planks() {
   return t;
 }
 
-// An evening sky over a city line, for the window.
-function eveningSky() {
+// A city at night, for the window: a violet haze, two rows of towers with lit windows, and a few signs.
+function nightCity() {
   const c = document.createElement("canvas");
-  c.width = 512; c.height = 320;
+  c.width = 1024; c.height = 640;
   const x = c.getContext("2d");
   const g = x.createLinearGradient(0, 0, 0, c.height);
-  g.addColorStop(0, "#2d4a73"); g.addColorStop(0.55, "#d98a6a"); g.addColorStop(1, "#f6c27a");
+  g.addColorStop(0, "#120f33"); g.addColorStop(0.55, "#4a2a7a"); g.addColorStop(1, "#b0428f");
   x.fillStyle = g; x.fillRect(0, 0, c.width, c.height);
-  const towers = [[0, 150], [40, 110], [70, 170], [120, 90], [150, 140], [200, 120], [240, 60], [262, 60], [300, 130], [345, 100], [390, 160], [430, 115], [470, 140]];
-  towers.forEach(([at, top], i) => {
-    const w = 38 + (i * 13) % 20;
-    x.fillStyle = "#1f2a3d"; x.fillRect(at, top, w, c.height - top);
-    x.fillStyle = "rgba(255,214,140,.85)";
-    for (let wy = top + 10; wy < c.height - 6; wy += 14)
-      for (let wx = at + 6; wx < at + w - 6; wx += 10)
-        if ((wx * 7 + wy * 3 + i) % 5 === 0) x.fillRect(wx, wy, 4, 6);
+  const lit = ["rgba(120,235,255,.95)", "rgba(255,130,225,.9)", "rgba(255,214,140,.9)"];
+  const row = (towers, shade, win) => towers.forEach(([at, top, w], i) => {
+    x.fillStyle = shade; x.fillRect(at, top, w, c.height - top);
+    x.fillStyle = "rgba(160,120,255,.35)"; x.fillRect(at, top, w, 3);   // a lit roof edge
+    for (let wy = top + 14; wy < c.height - 8; wy += win)
+      for (let wx = at + 8; wx < at + w - 8; wx += win * 0.75)
+        if ((wx * 7 + wy * 3 + i * 11) % 3 === 0) { x.fillStyle = lit[(wx + wy + i) % 3]; x.fillRect(wx, wy, win * 0.35, win * 0.5); }
   });
+  row([[0, 260, 110], [120, 180, 90], [230, 300, 130], [380, 140, 80], [470, 230, 120], [610, 110, 70], [700, 250, 140], [860, 170, 100], [960, 280, 70]], "#2b2256", 18);
+  row([[-20, 400, 160], [150, 360, 120], [290, 430, 180], [480, 380, 140], [640, 420, 170], [820, 350, 130], [960, 410, 90]], "#17122e", 26);
+  // Vertical neon signs on the front towers.
+  [[175, 380, "#2ee6ff"], [520, 400, "#ff2bd6"], [850, 370, "#ffd36b"]].forEach(([sx, sy, col]) => {
+    x.shadowColor = col; x.shadowBlur = 18; x.fillStyle = col;
+    x.fillRect(sx, sy, 14, 110);
+  });
+  x.shadowBlur = 0;
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+
+// Thin rain streaks on a transparent canvas; the room scrolls it down the glass every frame.
+function rain() {
+  const c = document.createElement("canvas");
+  c.width = 256; c.height = 512;
+  const x = c.getContext("2d");
+  for (let i = 0; i < 140; i++) {
+    const sx = (i * 73) % 256, sy = (i * 191) % 512, len = 18 + (i * 37) % 30;
+    x.strokeStyle = `rgba(190,215,255,${0.12 + ((i * 13) % 10) / 50})`;
+    x.lineWidth = 1;
+    x.beginPath(); x.moveTo(sx, sy); x.lineTo(sx - 2, sy + len); x.stroke();
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(2, 1);
+  return t;
+}
+
+// The neon sign: "ad-nap" in a glowing tube line, with a panda's face beside it.
+function neonSign() {
+  const c = document.createElement("canvas");
+  c.width = 1024; c.height = 512;
+  const x = c.getContext("2d");
+  const tube = (col, draw) => {
+    // A wide soft glow, then the bright tube, then a white-hot core.
+    [[col, 28, 10], [col, 8, 6], ["#ffffff", 0, 2]].forEach(([s, blur, lw]) => {
+      x.shadowColor = col; x.shadowBlur = blur; x.strokeStyle = s; x.lineWidth = lw;
+      x.lineCap = x.lineJoin = "round";
+      draw();
+    });
+  };
+  // Panda face on the left.
+  tube("#2ee6ff", () => {
+    x.beginPath(); x.arc(230, 270, 120, 0, Math.PI * 2); x.stroke();                      // head
+    x.beginPath(); x.arc(135, 165, 42, 0, Math.PI * 2); x.stroke();                       // ears
+    x.beginPath(); x.arc(325, 165, 42, 0, Math.PI * 2); x.stroke();
+    x.beginPath(); x.ellipse(185, 255, 26, 38, 0.5, 0, Math.PI * 2); x.stroke();          // eye patches
+    x.beginPath(); x.ellipse(275, 255, 26, 38, -0.5, 0, Math.PI * 2); x.stroke();
+    x.beginPath(); x.ellipse(230, 320, 16, 10, 0, 0, Math.PI * 2); x.stroke();            // nose
+  });
+  // The name on the right.
+  x.font = '700 150px "Bricolage Grotesque", system-ui, sans-serif';
+  x.textAlign = "left"; x.textBaseline = "middle";
+  tube("#ff2bd6", () => x.strokeText("ad-nap", 400, 270));
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
   return t;
@@ -577,8 +672,8 @@ function makePanda() {
 // A door in its frame, with a handle and a glowing EXIT sign above it. Built facing +z; turned onto the wall.
 function makeDoor(std, mesh) {
   const g = new THREE.Group();
-  const trim = std(0xf1ede4, 0.5);
-  const panelMat = std(0xe9e4da, 0.55);
+  const trim = std(0x14161f, 0.4, { metalness: 0.5 });
+  const panelMat = std(COL.door, 0.45, { metalness: 0.3 });
   g.add(mesh(new THREE.BoxGeometry(0.9, 2.05, 0.04), panelMat, { y: 1.025, z: 0.03 }));
   [[-0.49, 1.06, 0.08, 2.12], [0.49, 1.06, 0.08, 2.12], [0, 2.14, 1.06, 0.08]].forEach(([x, y, w, h]) =>
     g.add(mesh(new THREE.BoxGeometry(w, h, 0.07), trim, { x, y, z: 0.035 })));

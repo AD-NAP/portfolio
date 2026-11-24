@@ -9,3 +9,6 @@ node_modules/
 !.impeccable/critique/
 **/.impeccable/hook.cache.json
 .claude/skills/impeccable/scripts/bin/
+
+# Raw downloads waiting to be compressed (v1.6.0)
+back/models/_incoming/
