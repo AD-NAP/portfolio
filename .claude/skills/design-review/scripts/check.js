@@ -330,9 +330,9 @@ const audit = async (page, phone) => {
     return !!poster && getComputedStyle(poster).opacity === "1" && getComputedStyle(document.querySelector(".stage__canvas")).opacity === "0";
   });
   try { await fr.waitForFunction(() => document.body.dataset.room, null, { timeout: 90000 }); } catch (e) {}
-  // Software rendering is slow, so give the crossfade time to finish rather than checking at a fixed moment.
+  // Software rendering is slow (slower on the Windows PC than in the cloud), so give the crossfade up to 15s rather than checking at a fixed moment.
   funZone.liveReplacesPoster = await fr.waitForFunction(() => getComputedStyle(document.querySelector(".stage__canvas")).opacity === "1"
-    && getComputedStyle(document.querySelector(".stage__poster")).opacity === "0", null, { timeout: 5000 }).then(() => true, () => false);
+    && getComputedStyle(document.querySelector(".stage__poster")).opacity === "0", null, { timeout: 15000 }).then(() => true, () => false);
   funZone.unlisted = [...new Set(frRequests.map(local).filter(Boolean))]
     .map(p => (p === "back/index.html" ? "back/" : p)).filter(p => !manifest.includes(p));
   funZone.roomState = await fr.evaluate(() => document.body.dataset.room || "timed out");
