@@ -25,6 +25,7 @@ The checker serves the site, screenshots both themes at phone and desktop width,
 
 | Version | Date | Summary |
 |---|---|---|
+| [v1.5.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.5.0) | 2026-11-24 | Projects as engineering stories: Problem, Result and Key decisions up front, the full story (Constraints, Architecture, Implementation, What went wrong) one click away; phone charts line up with their axis |
 | [v1.4.0](https://github.com/AD-NAP/portfolio/releases/tag/v1.4.0) | 2026-11-19 | Standing in the room: first person with mouse look-around, a ceiling light, walking right up to each thing, a hidden UI with a Menu button, an EXIT door; the room prefetches once the card is open |
 | [v1.3.2](https://github.com/AD-NAP/portfolio/releases/tag/v1.3.2) | 2026-11-19 | The fun zone loads in the background once the riddle is solved, its textures are 7× lighter, and the zoom hands over to the live room without a gap |
 | [v1.3.1](https://github.com/AD-NAP/portfolio/releases/tag/v1.3.1) | 2026-11-19 | The fun side gets its content: a learning log for October and November, goals and hobbies; the Bonus moves below Contact |

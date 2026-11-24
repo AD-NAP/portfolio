@@ -239,15 +239,14 @@
               </div>
               <div class="story__row">
                 <dt>Architecture</dt>
-                <dd>Offline, 10 public AWS doc pages are split into 500-word chunks with 50 words of overlap, embedded locally and stored in Chroma. Online, a question is checked against the cutoff, the top 3 chunks go to Claude as numbered excerpts, and the reply comes back as an <code>Answer</code>: text, a refused flag and the cited sources. The tool agent adds a Claude tool-use loop with <code>lookup_service</code>, capped at 5 rounds.</dd>
+                <dd>Offline, 10 public AWS doc pages are split into 500-word chunks with 50 words of overlap, embedded locally and stored in Chroma. Online, a question is checked against the cutoff, the top 3 chunks go to Claude as numbered excerpts, and every claim cites one. The reply comes back as an <code>Answer</code>: text, a refused flag and the cited sources.</dd>
               </div>
               <div class="story__row">
                 <dt>Implementation</dt>
                 <dd>
                   <ul class="points">
-                    <li>RAG over 10 public AWS doc pages: chunked with overlap and embedded locally into Chroma. The top 3 chunks go to Claude as numbered excerpts, and every claim cites one.</li>
-                    <li>A tool-using agent: a Claude tool-use loop calls <code>lookup_service</code>, feeds the result back as a citable source, and stops after 5 rounds. Every answer is structured: text, a refused flag and the cited sources.</li>
-                    <li>18 pytest tests with Claude and Chroma replaced by fakes, so they need no API key, run in GitHub Actions on every push.</li>
+                    <li>The tool agent runs a Claude tool-use loop that calls <code>lookup_service</code> when the excerpts are not enough, feeds the result back as a citable source, and stops after 5 rounds.</li>
+                    <li>The tests replace Claude and Chroma with fakes, so they are free and need no API key.</li>
                   </ul>
                 </dd>
               </div>
@@ -264,7 +263,7 @@
           <dl class="story">
             <div class="story__row">
               <dt>Problem</dt>
-              <dd>Heating at the wrong hour costs more. The goal is to cut a building's energy cost without hurting comfort. Phases 1 and 2 forecast a real office building's load a day ahead, then heat a simulated home more cheaply, with comfort no worse.</dd>
+              <dd>Heating at the wrong hour costs more. The goal is one loop that forecasts a building's load, decides when to heat, and acts, cutting energy cost without hurting comfort. Phase 1 built the forecast on a real office building's meter data; phase 2 built the deciding and acting on a simulated heat pump home.</dd>
             </div>
             <div class="story__row">
               <dt>Result</dt>
@@ -314,19 +313,23 @@
                 <dt>Implementation</dt>
                 <dd>
                   <ul class="points">
-                    <li>Phase 1: hourly forecast with gradient boosted trees on real meter data (Building Data Genome Project 2). Trained on 2016, tested on all of 2017, split by time.</li>
-                    <li>Phase 2: controls a simulated heat pump home in the BOPTEST simulator (Docker). A look-ahead heuristic cut heating cost 10% to 16% against a fixed thermostat.</li>
-                    <li>Then a model predictive controller: a thermal model fitted from a system identification experiment, plus a 24-hour linear program re-solved every hour.</li>
+                    <li>Phase 1: gradient boosted trees (scikit-learn) on real meter data from the Building Data Genome Project 2, with calendar, weather and lagged load as inputs.</li>
+                    <li>Phase 2: the BOPTEST simulator in Docker. The look-ahead heuristic alone cut heating cost 10% to 16% against the fixed thermostat.</li>
                   </ul>
                 </dd>
               </div>
               <div class="story__row">
                 <dt>What went wrong</dt>
-                <dd>The first predictive controller asked for the temperature it planned. On sunny days the setpoint drifted upward, and the heat pump kept an empty room at 28 to 30 °C (48 Kh of discomfort). Asking for the comfort floor whenever the plan says off fixed it.</dd>
+                <dd>
+                  <ul class="points">
+                    <li>The first predictive controller asked for the temperature it planned. On sunny days the setpoint drifted upward, and the heat pump kept an empty room at 28 to 30 °C (48 Kh of discomfort). Asking for the comfort floor whenever the plan says off fixed it.</li>
+                    <li>Data leakage in the forecast took three tries to remove: the lagged inputs have to count back from the hour being predicted, not from now.</li>
+                  </ul>
+                </dd>
               </div>
             </dl>
           </details>
-          <p class="entry__status">Phases 1 and 2 are done. Phases 3 to 5 are parked.</p>
+          <p class="entry__status">Phases 3 to 5 (BACnet and Modbus, a battery for peak shaving, edge deployment) are parked for now.</p>
           <p class="entry__stack">Python, scikit-learn, SciPy, BOPTEST, Docker, pytest, uv</p>
           <p class="entry__link"><a href="https://github.com/AD-NAP/edge-energy-optimizer">Code on GitHub</a></p>
         </article>
@@ -445,7 +448,7 @@
     <dl class="titleblock__grid">
       <div class="titleblock__main"><dt>Drawn by</dt><dd>Shafik Adam</dd></div>
       <div><dt>Built with</dt><dd>Plain HTML, CSS and JavaScript, hosted on GitHub Pages</dd></div>
-      <div><dt>Revision</dt><dd>1.4.0</dd></div>
+      <div><dt>Revision</dt><dd>1.5.0</dd></div>
       <div><dt>Date</dt><dd>Nov 2026</dd></div>
     </dl>
   </footer>

@@ -23,9 +23,27 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [x] Riddle reset button in the centrefold; the cat moved from the cover to the riddle card (Shafik, 2026-11-18)
 - [?] Shareable numbers: Event Log page size or volumes, tests or IaC for Cloud BMS, how much the metadata generator and config tool are used
 - [?] cumulus-coach eval results (RAG agent vs tool agent), to add to the chart and a cover line
-- [?] Where SQL and React were used (both are in Skills with no evidence on the page). GitHub Actions answered 2026-10-22: he worked with the team's pipeline, set up by a senior; cumulus-coach will add CI/CD he builds himself
+- [x] Where SQL and React were used: familiar, used a bit, not main skills, so they stay in Skills with no proof on the page (Shafik, 2026-11-24). GitHub Actions answered 2026-10-22: he worked with the team's pipeline, set up by a senior; cumulus-coach will add CI/CD he builds himself
+- [x] Try the card on a phone: one swipe up opens it, a swipe down at the top closes it (Shafik, 2026-11-24: works)
+- [ ] Publish v1.5.0 on github.com (notes and screenshots in `docs/releases/v1.5.0.md`)
 - [~] LLM or AI engineering work to show: cumulus-coach (the AWS study agent: RAG, tool calling, eval, Docker, CI) will cover it, after the demo ships around 2026-10-30
 - [?] Enable the Design plugin (install card shown 2026-10-09 and again 2026-10-22) so `design-critique` and `accessibility-review` are available
+
+## v1.5.0: projects as engineering stories (2026-11-24)
+
+Plan approved 2026-11-24 (Shafik checked the draft wording in the plan). Branch `claude/v1.5-engineering-stories`. From vault `ideas/business-card-idea.md`.
+
+- [x] Facts for both stories copied into `content/resume.md` with sources (edge-energy-optimizer decisions 0002 to 0004 and architecture; cumulus-coach ADR 0001 and 0002, vault notes)
+- [x] Each project: Problem, Result (chart first) and Key decisions shown; Constraints, Architecture, Implementation and What went wrong under "Read the full story" (native `<details>`, no JS)
+- [x] Phones: every chart row has one fixed value column, so the tracks and the axis line up (the cutoff label sat right of the dashed line before)
+- [x] Checker: stories start folded, Enter and a click open them, a click folds them, 2px focus ring, `summary` in the 44px touch-target check, Highlights still land; the bonus-open pass unfolds every story for axe, overflow and screenshots (`cf-projects`)
+- [x] Checker: the fun zone's crossfade wait is 15s (the Windows PC's software WebGL needed more than 5s; it failed on `main` too)
+- [ ] cumulus-coach: add the eval results to its Result when the eval set is done (baseline score, one improvement measured, RagAgent vs ToolAgent); no "What went wrong" row until there is a citable one
+- [x] Recruiter critic (v1.5): Interview. Fixed repetition inside the stories, edge's Problem as one loop, the status line, the footer; added the data-leakage story. Report: `reviews/2026-11-24-recruiter-critic-v1.5.md`
+- [?] Critic: Lessons learned repeats three of the stories' Key decisions. Keep it, trim it to what the stories don't say (the bias, the holidays), or fold it into the stories?
+- [?] Critic: lead edge-energy-optimizer with the cost result (14% to 20%) as a to-scale chart and Highlight. Needs the absolute costs from `docs/results/phase2.md` copied in first
+- [?] Critic: a visible one-liner for "heated an empty room to 30 °C"; anything that went wrong in cumulus-coach; why cursor pagination and ULID ordering for the Event Log; is cumulus-coach runnable on AWS; show NAP in Projects?
+- [ ] Tooling: start sessions inside `projects/portfolio/` so the `recruiter-critic` agent loads (2026-11-24 it was run as a general-purpose agent with its brief)
 
 ## v1.4.0: standing in the room (2026-11-19)
 
@@ -68,12 +86,12 @@ Decision: `docs/decisions/0005-the-fun-side.md`. Idea: vault `ideas/back-of-the-
 - [ ] Ideas: write the goals on the 3D chalkboard itself; show the learning log's month on the laptop screen
 - [x] Recruiter critic (v1.3): the Bonus section and its bar link moved after Contact, next to the riddle (Shafik agreed; v1.3.1). Report: `reviews/2026-11-19-recruiter-critic-v1.3.md`
 
-## Next: projects as engineering stories
+## Done in v1.5.0: projects as engineering stories
 
 From `vault/ideas/business-card-idea.md`: each project told as Problem, Constraints, Architecture, Decisions, Implementation, Result.
 
-- [ ] Pull each step's facts for cumulus-coach and edge-energy-optimizer from the vault dev logs into `content/resume.md` ("From AD-NAP/vault"), and have Shafik check them
-- [ ] Restructure the two project entries; gaps get visible PLACEHOLDERs
+- [x] Pull each step's facts for cumulus-coach and edge-energy-optimizer into `content/resume.md`, and have Shafik check them (v1.5.0)
+- [x] Restructure the two project entries (v1.5.0). No PLACEHOLDER needed: cumulus-coach's Result is the measured cutoff, and its status says the eval is next
 
 ## v1.2.2: always the card, a visible dark card, a theme icon that travels (2026-11-19)
 
@@ -90,7 +108,7 @@ From `vault/ideas/business-card-idea.md`: each project told as Problem, Constrai
 - [x] Moving up at the very top plays it back; the page scrolls normally everywhere else
 - [x] Dark is the default theme for first-time visitors (Shafik)
 - [x] Checker: paced button and wheel, closing at the top, normal scrolling once open, dark default
-- [ ] Try it on a phone: one swipe up should open it, a swipe down at the top should close it
+- [x] Try it on a phone: one swipe up should open it, a swipe down at the top should close it (works, 2026-11-24)
 
 ## v1.2.0: the business card opens into a drawing sheet (2026-11-18)
 

@@ -23,6 +23,10 @@ The resume download, `assets/Shafik-Adam-Resume.pdf`, is built from the vault ma
 
 `content/resume.md` is the only source of facts. Nothing appears on the site unless it is in that file first.
 
+## Projects as engineering stories
+
+Since v1.5.0. Each project `<article>` (ids `cumulus-coach` and `edge-energy-optimizer`, which the Highlights link to) holds a `<dl class="story">`: Problem, Result (the to-scale chart and one line) and Key decisions are always shown. A native `<details class="story__more">` ("Read the full story") folds Constraints, Architecture, Implementation and What went wrong. Result comes before Decisions on purpose, so the number is seen first. No JS: it works without GSAP and under reduced motion, and it opens instantly. The summary's plus is two CSS bars (`::before`, `::after`); the upright hides when open.
+
 ## The card opens into the sheet
 
 Since v1.2.0, as two states since v1.2.1 ([decisions/0004-card-into-portfolio.md](decisions/0004-card-into-portfolio.md)).
