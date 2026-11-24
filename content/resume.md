@@ -67,6 +67,16 @@ Phase 2 facts copied on 2026-11-16 from the public repo `AD-NAP/edge-energy-opti
 - Model predictive controller: a four-parameter thermal model fitted from a system identification experiment (random heat pump signal), plus a 24-hour linear program (SciPy HiGHS) re-solved every hour. On two unseen two-week test periods it cut cost 14% to 20% against the thermostat and 3% to 8% against the heuristic, with similar comfort. (`docs/results/phase2.md`, `docs/decisions/0004-mpc-controller.md`)
 - Stack added in phase 2: SciPy, BOPTEST, Docker. (`pyproject.toml`, `README.md`)
 
+Story facts copied on 2026-11-24 for the engineering stories (v1.5.0), from the same repo at commit `5b55b2b` (local copy now in the workspace archive):
+
+- Goal: reduce a building's energy cost, mainly its peak demand, without hurting occupant comfort, using a system that runs at the edge next to the equipment. (`docs/architecture.md`)
+- Architecture: one loop that repeats: measure, forecast, decide, act. Controllers implement `setpoint_c(observation, forecast) -> float` in °C and know nothing about BOPTEST; the experiment runner translates to and from the BOPTEST API, so phase 3 can put BACnet underneath them unchanged. (`docs/architecture.md`, `docs/decisions/0003-control-strategy.md`)
+- Constraint: every forecast feature must be known 24 hours before the hour being predicted. Measured weather stands in for weather forecasts, so reported errors are optimistic. One training year gives few holiday examples. (`docs/decisions/0002-forecasting-data-and-model.md`)
+- Decision: a look-ahead heuristic first, re-decided every hour from a 24-hour forecast: follow the lower comfort bound, preheat 4 hours before occupancy, add 1 °C when the price is in the cheapest quarter of the forecast. Not MPC at first: MPC needs a thermal model and an optimizer; the heuristic needs neither. (`docs/decisions/0003-control-strategy.md`)
+- Decision: the MPC's four-number thermal model is fitted with least squares from an identification experiment that drives the heat pump with a random signal. A model fitted on the thermostat runs was worse than assuming the temperature stays put, because the thermostat raised power exactly when the room cooled. (`docs/decisions/0004-mpc-controller.md`)
+- Decision: MPC solves a 24-hour linear program every hour with SciPy's HiGHS. Two unseen two-week test periods were added for all controllers, because the heuristic's settings were tuned on the scenarios it is reported on and the first MPC fix was made after seeing them. (`docs/decisions/0003-control-strategy.md`, `docs/decisions/0004-mpc-controller.md`)
+- What went wrong: the first MPC always asked for the temperature it planned. On sunny days the room ran warmer than the model expected, the setpoint followed it upward, and the heat pump kept heating an empty room at 28 to 30 °C (48 Kh of discomfort in the typical period). Asking for the comfort floor whenever the plan says off fixed it. (`docs/decisions/0004-mpc-controller.md`)
+
 ## From the cumulus-coach repo and vault
 
 Copied on 2026-10-31. Sources: the public repo `AD-NAP/cumulus-coach` (`README.md`, commit `e611980`), vault `projects/cumulus-coach.md` and vault `career/resume-master.md` (updated 29-10-2026).
@@ -84,6 +94,13 @@ Copied on 2026-10-31. Sources: the public repo `AD-NAP/cumulus-coach` (`README.m
 - Stack: Python, the Claude API (Haiku 5.5 for development), Chroma with local embeddings, pytest, GitHub Actions. (`README.md`)
 - Status: minimum demo complete on 29-10-2026. Next: an eval set of about 20 questions comparing `RagAgent` and `ToolAgent`. (vault `projects/cumulus-coach.md`, `README.md`)
 - Master CV wording: summary adds "and LLM applications with RAG and function calling"; skills row "AI and LLM: Claude API (function calling, structured outputs), RAG, embeddings, Chroma vector store, Claude Code, GitHub Copilot". (vault `career/resume-master.md`)
+
+Story facts copied on 2026-11-24 for the engineering stories (v1.5.0). Sources: repo `docs/ADR.md` and `docs/ARCHITECTURE.md` (commit `e611980`), vault `projects/cumulus-coach.md` (25-10-2026 notes):
+
+- Decision 0001: Chroma as a local, file-based vector store with its default local embedding model. No extra API key or cost for embeddings; runs the same on a laptop, in Docker and in CI. Trade-off: a small local model retrieves less well than a large hosted one; the eval set will show whether that matters. (`docs/ADR.md`)
+- Decision 0002: every agent implements `Agent.run(question) -> Answer`; retrieval and tools are plain functions any agent can call, so the eval compares backends fairly on the same questions, retrieval and tools. (`docs/ADR.md`)
+- Constraint: the Claude API is pay-as-you-go, with $5 prepaid credits, auto-reload off and a spend limit; Haiku 5.5 for development. (vault `projects/cumulus-coach.md`, 25-10-2026)
+- Constraint: the demo must be cheap, run on a laptop and in CI, and be easy for someone else to clone and run. (`docs/ADR.md`, 0001 context)
 
 ### Considered and not used
 
@@ -133,6 +150,9 @@ Facts for the fun side's learning log (`back/`, desk). Summaries of Shafik's own
 - Ground Labs dates corrected from Aug 2019 to Nov 2019 (wrong) to May 2022 to Aug 2022, during NUS. Final interview 27 Apr 2022; NUS SIP period 11 May to 31 Jul 2022, shown as May to Aug. (Shafik, 2026-10-22)
 - Keeps a dev log and learning notes for his projects in the vault: dated entries such as `dev-log/04-10-2026.md` and notes under `learning/machine-learning/`, cited as sources above. Used on the v1.0.0 cover ("I keep a dev log of what each project teaches me") and in "Notes I took", whose lessons restate facts already in this file. (2026-11-18)
 - Cloud BMS is written in TypeScript: the frontend is Svelte in TypeScript, and the backend is mostly AWS CDK in TypeScript. Python is used only for the Brick Schema metadata tooling, because of the Brick Schema libraries. (Shafik, 2026-11-18)
+
+- SQL and React: familiar, used a bit, not main skills. They stay in Skills with no proof on the page. (Shafik, 2026-11-24)
+- Engineering stories (v1.5.0): Shafik approved the draft wording of both project stories in the plan on 2026-11-24.
 
 ## Facts Shafik added for the fun side (2026-11-19)
 

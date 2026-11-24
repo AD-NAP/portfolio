@@ -288,6 +288,27 @@ main { position: relative; z-index: 1; padding: 0 var(--gutter); }
 .points li::marker { color: var(--muted); }
 .points--cols { columns: 2; column-gap: clamp(40px, 6vw, 96px); column-rule: 1px solid var(--rule); max-width: none !important; }
 .points--cols li { break-inside: avoid; }
+/* Engineering stories: each part a row on a hairline, like a spec table on a drawing. */
+.story { margin: 22px 0 0; }
+.story__row { padding: 12px 0 4px; border-top: 1px solid var(--rule); }
+.story dt { font-size: var(--fs-label); font-weight: 650; color: var(--muted); margin-bottom: 6px; }
+.story dd { margin: 0 0 10px; }
+.story dd > p { margin: 0 0 10px; }
+.story dd > .chart { margin: 10px 0 18px; }
+.story dd > .points { margin-bottom: 0; }
+.story__more { margin: 0 0 20px; border-top: 1px solid var(--rule); }
+.story__more > summary {
+  position: relative; display: inline-flex; align-items: center; min-height: 44px; padding-left: 22px;
+  font-weight: 650; color: var(--ink); cursor: pointer; list-style: none;
+}
+.story__more > summary::-webkit-details-marker { display: none; }
+/* A drawn plus that loses its upright when open. */
+.story__more > summary::before,
+.story__more > summary::after { content: ""; position: absolute; top: 50%; left: 0; width: 11px; height: 2px; margin-top: -1px; background: var(--ink); }
+.story__more > summary::after { left: 4.5px; width: 2px; height: 11px; margin-top: -5.5px; }
+.story__more[open] > summary::after { display: none; }
+@media (hover: hover) { .story__more > summary:hover { text-decoration: underline; text-underline-offset: 4px; } }
+.story__more > .story { margin-top: 0; }
 .job__pair { margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--rule); }
 
 /* ---------- Charts: drawn to scale ---------- */
@@ -430,10 +451,10 @@ main { position: relative; z-index: 1; padding: 0 var(--gutter); }
   .intro__inner { gap: 22px; }
   .intro__after { gap: 8px; }
   .links { gap: 0 20px; margin-top: 16px; }
-  .chart__row { grid-template-columns: 1fr auto; gap: 4px 12px; }
+  /* One fixed value column, so every track (and the axis under them) is the same width and the cutoff lines up. */
+  .chart__row { grid-template-columns: 1fr 7.5rem; gap: 4px 12px; }
   .chart__label { grid-column: 1 / -1; }
-  .chart__axis { grid-template-columns: 1fr; }
-  .chart__axis > span:not(.chart__track) { display: none; }
+  .chart__axis > span:first-child { display: none; }
   .riddle { padding: 20px 18px; }
 }
 
