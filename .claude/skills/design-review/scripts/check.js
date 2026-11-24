@@ -8,7 +8,8 @@
 //   - touch targets under 44px at phone widths
 //   - the card: on the first screen with no bar, the button opens the portfolio, the name lands on the bar's name,
 //     the theme icon lands on the bar's, every visit opens on the card, the replay link, keyboard focus, the theme switches
-//   - the same checks again with the hidden bonus open
+//   - the same checks again with the hidden bonus open and every project story unfolded
+//   - the project stories: folded at first, Enter and a click open them, focus ring, Highlights still land
 //   - the riddle: wrong guesses keep the bonus shut, "panda" opens it, a reload keeps it open, the reset shuts it again
 //   - the fun zone: nothing from it loads before the riddle; after it, a desktop prefetches every file in back/manifest.json
 //     (and the manifest lists everything the room loads), phones never do; the button zooms into the room and opens back/,
@@ -77,7 +78,7 @@ const audit = async (page, phone) => {
       targets: v.nodes.slice(0, 5).map(n => n.target.join(" ")) }));
   });
   const smallTargets = phone ? await page.evaluate(() =>
-    [...document.querySelectorAll("a[href], button, input")]
+    [...document.querySelectorAll("a[href], button, input, summary")]
       .map(el => { const r = el.getBoundingClientRect(); return { el, r }; })
       .filter(({ el, r }) => r.width > 0 && getComputedStyle(el).visibility !== "hidden" && !el.classList.contains("skip"))
       .filter(({ r }) => r.width < 44 || r.height < 44)
@@ -190,8 +191,10 @@ const audit = async (page, phone) => {
     await cfPage.addInitScript(() => { try { localStorage.setItem("bonus", "open"); } catch (e) {} });
     await cfPage.goto(url + "#about", { waitUntil: "networkidle" });
     await cfPage.waitForTimeout(2500);
+    // This pass also opens every project story, so axe, overflow and the screenshots cover them open.
+    await cfPage.evaluate(() => document.querySelectorAll(".story__more").forEach(d => { d.open = true; }));
     const cfScreens = [];
-    for (const [name, sel] of [["about", "#about"], ["contact", "#contact"], ["bonus", "#bonus"]]) {
+    for (const [name, sel] of [["about", "#about"], ["projects", "#projects"], ["contact", "#contact"], ["bonus", "#bonus"]]) {
       await cfPage.evaluate(s => document.querySelector(s).scrollIntoView({ behavior: "instant", block: "start" }), sel);
       await cfPage.waitForTimeout(700);
       const file = path.join(OUT, `${tag}-cf-${name}.png`);
@@ -224,6 +227,37 @@ const audit = async (page, phone) => {
   await rp.goto(url + "#contact", { waitUntil: "networkidle" });   // a reload, landing past the card
   riddle.shutAfterResetReload = !(await cfShown());
   await rp.close();
+
+  // Project stories: shut at first, Enter and a click open them, a click shuts them, the focus ring shows,
+  // and the Highlights still land on each project.
+  const stories = {};
+  const sp = await newPage({ viewport: { width: 1280, height: 800 }, colorScheme: "dark" });
+  await sp.goto(url + "#projects", { waitUntil: "networkidle" });
+  await sp.waitForTimeout(1500);
+  const storyOpen = () => sp.evaluate(() => [...document.querySelectorAll(".story__more")].map(d => d.open));
+  stories.count = (await storyOpen()).length;
+  stories.shutAtStart = (await storyOpen()).every(o => !o);
+  await sp.focus("#cumulus-coach .story__more > summary");
+  await sp.keyboard.press("Enter");
+  stories.enterOpens = (await storyOpen())[0] === true;
+  stories.focusRing = await sp.evaluate(() => { const s = document.activeElement; const cs = getComputedStyle(s);
+    return s.matches("summary:focus-visible") && cs.outlineStyle !== "none" && parseFloat(cs.outlineWidth) >= 2; });
+  await sp.click("#edge-energy-optimizer .story__more > summary");
+  stories.clickOpens = (await storyOpen())[1] === true;
+  await sp.click("#edge-energy-optimizer .story__more > summary");
+  stories.clickShuts = (await storyOpen())[1] === false;
+  await sp.goto(url + "#about", { waitUntil: "networkidle" });
+  await sp.waitForTimeout(1500);
+  stories.highlightsLand = true;
+  for (const id of ["cumulus-coach", "edge-energy-optimizer"]) {
+    await sp.click(`.highlights a[href="#${id}"]`);
+    await sp.waitForTimeout(1200);
+    const top = await sp.evaluate(i => document.getElementById(i).getBoundingClientRect().top, id);
+    if (!(top >= -2 && top < 400)) stories.highlightsLand = false;
+    await sp.evaluate(() => document.getElementById("about").scrollIntoView({ behavior: "instant" }));
+    await sp.waitForTimeout(300);
+  }
+  await sp.close();
 
   // The fun zone. From the main page: no three.js there; the button zooms into the room, then opens back/.
   const funZone = {};
@@ -296,9 +330,9 @@ const audit = async (page, phone) => {
     return !!poster && getComputedStyle(poster).opacity === "1" && getComputedStyle(document.querySelector(".stage__canvas")).opacity === "0";
   });
   try { await fr.waitForFunction(() => document.body.dataset.room, null, { timeout: 90000 }); } catch (e) {}
-  // Software rendering is slow, so give the crossfade time to finish rather than checking at a fixed moment.
+  // Software rendering is slow (slower on the Windows PC than in the cloud), so give the crossfade up to 15s rather than checking at a fixed moment.
   funZone.liveReplacesPoster = await fr.waitForFunction(() => getComputedStyle(document.querySelector(".stage__canvas")).opacity === "1"
-    && getComputedStyle(document.querySelector(".stage__poster")).opacity === "0", null, { timeout: 5000 }).then(() => true, () => false);
+    && getComputedStyle(document.querySelector(".stage__poster")).opacity === "0", null, { timeout: 15000 }).then(() => true, () => false);
   funZone.unlisted = [...new Set(frRequests.map(local).filter(Boolean))]
     .map(p => (p === "back/index.html" ? "back/" : p)).filter(p => !manifest.includes(p));
   funZone.roomState = await fr.evaluate(() => document.body.dataset.room || "timed out");
@@ -531,6 +565,12 @@ const audit = async (page, phone) => {
   if (!riddle.openAfterReload) fails.push("riddle: the bonus should stay open after a reload");
   if (!riddle.shutAfterReset) fails.push('riddle: "Reset the riddle" should hide the bonus, show the form again and focus the input');
   if (!riddle.shutAfterResetReload) fails.push("riddle: after a reset the bonus should stay shut on reload");
+  if (stories.count !== 2) fails.push(`stories: expected 2 "Read the full story" toggles, found ${stories.count}`);
+  if (!stories.shutAtStart) fails.push("stories: the full stories should start folded");
+  if (!stories.enterOpens) fails.push('stories: Enter on "Read the full story" should open it');
+  if (!stories.focusRing) fails.push('stories: "Read the full story" should show a 2px focus ring from the keyboard');
+  if (!stories.clickOpens || !stories.clickShuts) fails.push('stories: a click on "Read the full story" should open it, and another should fold it');
+  if (!stories.highlightsLand) fails.push("stories: the Highlights links should land on cumulus-coach and edge-energy-optimizer");
   if (reducedMotion.cardPinned || !reducedMotion.cardAndAboutShown || !reducedMotion.barShown) fails.push("reduced motion: the card should not be pinned; the card, the bar and About should all show as plain sections");
   for (const r of card) {
     const t = `card @ ${r.width}px`;
@@ -586,13 +626,13 @@ const audit = async (page, phone) => {
   if (!darkByDefault) fails.push("theme: a first-time visitor should get the dark theme, whatever their system setting");
   if (reducedMotion.running > 0) fails.push(`reduced motion: ${reducedMotion.running} animations running`);
 
-  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, darkByDefault, reducedMotion, riddle, funZone, card, results, cfResults };
+  const report = { url: "local", when: new Date().toISOString(), pass: fails.length === 0, fails, darkByDefault, reducedMotion, riddle, stories, funZone, card, results, cfResults };
   fs.writeFileSync(path.join(OUT, "report.json"), JSON.stringify(report, null, 2));
 
   console.log(`Design check: ${report.pass ? "PASS" : `FAIL (${fails.length})`}`);
   fails.forEach(f => console.log(`  ✗ ${f}`));
   for (const r of results) console.log(`  ${r.theme} @ ${r.width}px: ${r.screens.length} screens, contact sheet ${r.sheet}`);
-  console.log(`  Bonus open: ${cfResults.length} passes, screenshots .review${path.sep}<theme>-<width>-cf-{about,contact,bonus}.png`);
+  console.log(`  Bonus open: ${cfResults.length} passes, screenshots .review${path.sep}<theme>-<width>-cf-{about,projects,contact,bonus}.png (stories open)`);
   console.log(`  Fun zone: screenshots .review${path.sep}fun-{1280-room,1280-desk,1280-list,390-list}.png`);
   console.log(`  report: ${path.relative(ROOT, path.join(OUT, "report.json"))}`);
   process.exit(report.pass ? 0 : 1);

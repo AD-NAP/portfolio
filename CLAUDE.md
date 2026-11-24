@@ -35,6 +35,7 @@ The concept (since v1.2.0, 2026-11-18): **the business card opens into a drawing
 - The business card (91 × 55): "Azbil ASPO, Singapore" as text with a short red rule (never the Azbil logo), the name (the page's `h1`), the title, the email, and the sun/moon theme switch at its top-right. Drafting dimension marks sit outside it on wider screens. (Shafik, 2026-11-18)
 - About carries the proof on the first portfolio screen: Highlights link to the articles, and the production result leads.
 - Contact links (Email, GitHub, LinkedIn, Resume PDF) stay in About as well as in Contact.
+- Projects are engineering stories (since v1.5.0): Problem, Result and Key decisions shown; Constraints, Architecture, Implementation and What went wrong folded under "Read the full story". Every part's facts come from `content/resume.md`. (Shafik, 2026-11-24)
 - Production results get the visual weight. Test data (e.g. the 330 mocked records) stays small.
 - First screen, at every width: the card (name, title, Azbil, email), then under it a one-line intro ("Software engineer: cloud backends and AI tools…"), GitHub, LinkedIn and Resume (PDF), and "Open the portfolio". The recruiter critic asked for this so the first screen still answers who, what and how to reach him (2026-11-18).
 - Font: Archivo (variable width and weight) for everything; wide and heavy for the name and section titles. The card's name and the bar's name share lettering so they can swap. Code uses the system monospace, and only for code. (2026-11-18)

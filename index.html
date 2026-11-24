@@ -187,34 +187,72 @@
         <article id="cumulus-coach" class="col">
           <h3 class="entry__title">cumulus-coach</h3>
           <p class="entry__meta">Personal project, in progress. Started Oct 2026</p>
-          <p>An AWS study coach. It answers from public AWS documentation with citations, looks up a service with a tool when the excerpts are not enough, and says so instead of guessing when the documents do not cover a question.</p>
-          <figure class="chart chart--range" aria-label="Best-match distance on 18 test questions, drawn to scale from 0 to 2.1: on-topic 0.53 to 1.04, near-topic 0.79 to 1.34, off-topic 1.74 to 2.06. The cutoff is 1.1.">
-            <div class="chart__plot" style="--cut:52.38%">
-              <div class="chart__row chart__row--result">
-                <span class="chart__label">On-topic questions</span>
-                <span class="chart__track"><span class="chart__bar" style="--from:25.14%; --to:49.62%"></span></span>
-                <span class="chart__value">0.53 to 1.04</span>
-              </div>
-              <div class="chart__row">
-                <span class="chart__label">Near-topic questions</span>
-                <span class="chart__track"><span class="chart__bar chart__bar--plain" style="--from:37.81%; --to:63.90%"></span></span>
-                <span class="chart__value">0.79 to 1.34</span>
-              </div>
-              <div class="chart__row">
-                <span class="chart__label">Off-topic questions</span>
-                <span class="chart__track"><span class="chart__bar chart__bar--plain" style="--from:82.67%; --to:98.19%"></span></span>
-                <span class="chart__value">1.74 to 2.06</span>
-              </div>
-              <div class="chart__row chart__axis" aria-hidden="true"><span></span><span class="chart__track"><span class="chart__end">0</span><span class="chart__cut">cutoff 1.1</span><span class="chart__end chart__end--max">2.1</span></span><span></span></div>
+          <dl class="story">
+            <div class="story__row">
+              <dt>Problem</dt>
+              <dd>AWS documentation is long, and an LLM can answer confidently when it is wrong. I wanted a study coach that answers only from the official docs, cites the page for every claim, and says so instead of guessing.</dd>
             </div>
-            <figcaption>Best-match distance on 18 test questions; smaller is closer. Above the 1.1 cutoff, a question is refused without an API call. Below it, Claude answers from the excerpts, and the system prompt refuses what they do not support.</figcaption>
-          </figure>
-          <ul class="points">
-            <li>RAG over 10 public AWS doc pages: chunked with overlap and embedded locally into Chroma. The top 3 chunks go to Claude as numbered excerpts, and every claim cites one.</li>
-            <li>A tool-using agent: a Claude tool-use loop calls <code>lookup_service</code>, feeds the result back as a citable source, and stops after 5 rounds. Every answer is structured: text, a refused flag and the cited sources.</li>
-            <li>18 pytest tests with Claude and Chroma replaced by fakes, so they need no API key, run in GitHub Actions on every push.</li>
-          </ul>
-          <p class="entry__status">Minimum demo done. Next: an eval set of about 20 questions comparing the plain RAG agent with the tool-using one.</p>
+            <div class="story__row">
+              <dt>Result</dt>
+              <dd>
+                <figure class="chart chart--range" aria-label="Best-match distance on 18 test questions, drawn to scale from 0 to 2.1: on-topic 0.53 to 1.04, near-topic 0.79 to 1.34, off-topic 1.74 to 2.06. The cutoff is 1.1.">
+                  <div class="chart__plot" style="--cut:52.38%">
+                    <div class="chart__row chart__row--result">
+                      <span class="chart__label">On-topic questions</span>
+                      <span class="chart__track"><span class="chart__bar" style="--from:25.14%; --to:49.62%"></span></span>
+                      <span class="chart__value">0.53 to 1.04</span>
+                    </div>
+                    <div class="chart__row">
+                      <span class="chart__label">Near-topic questions</span>
+                      <span class="chart__track"><span class="chart__bar chart__bar--plain" style="--from:37.81%; --to:63.90%"></span></span>
+                      <span class="chart__value">0.79 to 1.34</span>
+                    </div>
+                    <div class="chart__row">
+                      <span class="chart__label">Off-topic questions</span>
+                      <span class="chart__track"><span class="chart__bar chart__bar--plain" style="--from:82.67%; --to:98.19%"></span></span>
+                      <span class="chart__value">1.74 to 2.06</span>
+                    </div>
+                    <div class="chart__row chart__axis" aria-hidden="true"><span></span><span class="chart__track"><span class="chart__end">0</span><span class="chart__cut">cutoff 1.1</span><span class="chart__end chart__end--max">2.1</span></span><span></span></div>
+                  </div>
+                  <figcaption>Best-match distance on 18 test questions; smaller is closer. Above the 1.1 cutoff, a question is refused without an API call. Below it, Claude answers from the excerpts, and the system prompt refuses what they do not support.</figcaption>
+                </figure>
+                <p>Minimum demo done in Oct 2026. 18 tests run in CI on every push.</p>
+              </dd>
+            </div>
+            <div class="story__row">
+              <dt>Key decisions</dt>
+              <dd>
+                <ul class="points">
+                  <li><strong>Refuse in two layers.</strong> A distance cutoff in code turns far-off questions away before any API call, and the system prompt catches what the excerpts do not support.</li>
+                  <li><strong>Local embeddings in Chroma.</strong> No second API key or cost, and it runs the same on a laptop and in CI. The trade-off is weaker retrieval than a hosted model; the eval will measure it.</li>
+                  <li><strong>One interface for every agent.</strong> <code>Agent.run(question) -&gt; Answer</code>, so the plain RAG agent and the tool-using one can be compared on the same questions.</li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+          <details class="story__more">
+            <summary>Read the full story</summary>
+            <dl class="story">
+              <div class="story__row">
+                <dt>Constraints</dt>
+                <dd>A pay-as-you-go API with $5 of prepaid credits and a spend limit, so Haiku 5.5 for development. It must run on a laptop and in CI, and the tests must need no API key.</dd>
+              </div>
+              <div class="story__row">
+                <dt>Architecture</dt>
+                <dd>Offline, 10 public AWS doc pages are split into 500-word chunks with 50 words of overlap, embedded locally and stored in Chroma. Online, a question is checked against the cutoff, the top 3 chunks go to Claude as numbered excerpts, and every claim cites one. The reply comes back as an <code>Answer</code>: text, a refused flag and the cited sources.</dd>
+              </div>
+              <div class="story__row">
+                <dt>Implementation</dt>
+                <dd>
+                  <ul class="points">
+                    <li>The tool agent runs a Claude tool-use loop that calls <code>lookup_service</code> when the excerpts are not enough, feeds the result back as a citable source, and stops after 5 rounds.</li>
+                    <li>The tests replace Claude and Chroma with fakes, so they are free and need no API key.</li>
+                  </ul>
+                </dd>
+              </div>
+            </dl>
+          </details>
+          <p class="entry__status">Next: an eval set of about 20 questions comparing the plain RAG agent with the tool-using one.</p>
           <p class="entry__stack">Python, Claude API, Chroma, pytest, GitHub Actions</p>
           <p class="entry__link"><a href="https://github.com/AD-NAP/cumulus-coach">Code on GitHub</a></p>
         </article>
@@ -222,28 +260,76 @@
         <article id="edge-energy-optimizer" class="col">
           <h3 class="entry__title">edge-energy-optimizer</h3>
           <p class="entry__meta">Personal project. Phases 1 and 2 done, Oct to Nov 2026</p>
-          <p>Forecasts a real office building's energy load a day ahead, then controls a simulated heat pump home to cut its heating cost. Two of five planned phases are done.</p>
-          <figure class="chart" aria-label="Forecast error: 45.7 kWh for the same-hour-last-week baseline compared with 34.5 kWh for the forecast model, drawn to scale">
-            <div class="chart__plot">
-              <div class="chart__row">
-                <span class="chart__label">Baseline error (same hour last week)</span>
-                <span class="chart__track"><span class="chart__bar chart__bar--before" style="--to:100%"></span></span>
-                <span class="chart__value">45.7 kWh</span>
-              </div>
-              <div class="chart__row chart__row--result">
-                <span class="chart__label">Forecast model error</span>
-                <span class="chart__track"><span class="chart__bar" style="--to:75.49%"></span></span>
-                <span class="chart__value">34.5 kWh</span>
-              </div>
+          <dl class="story">
+            <div class="story__row">
+              <dt>Problem</dt>
+              <dd>Heating at the wrong hour costs more. The goal is one loop that forecasts a building's load, decides when to heat, and acts, cutting energy cost without hurting comfort. Phase 1 built the forecast on a real office building's meter data; phase 2 built the deciding and acting on a simulated heat pump home.</dd>
             </div>
-            <figcaption>Phase 1 forecast: mean absolute error on the 2017 test year. Lower is better: 24.5% better than the baseline.</figcaption>
-          </figure>
-          <ul class="points">
-            <li>Phase 1: hourly forecast with gradient boosted trees on real meter data (Building Data Genome Project 2). Trained on 2016, tested on all of 2017, split by time.</li>
-            <li>Phase 2: controls a simulated heat pump home in the BOPTEST simulator (Docker). A look-ahead heuristic cut heating cost 10% to 16% against a fixed thermostat.</li>
-            <li>Then a model predictive controller: a thermal model fitted from a system identification experiment, plus a 24-hour linear program re-solved every hour. On two unseen test periods it cut cost 14% to 20% against the thermostat and 3% to 8% against the heuristic, with similar comfort.</li>
-          </ul>
-          <p class="entry__status">Phases 1 and 2 are done. Phases 3 to 5 are parked.</p>
+            <div class="story__row">
+              <dt>Result</dt>
+              <dd>
+                <figure class="chart" aria-label="Forecast error: 45.7 kWh for the same-hour-last-week baseline compared with 34.5 kWh for the forecast model, drawn to scale">
+                  <div class="chart__plot">
+                    <div class="chart__row">
+                      <span class="chart__label">Baseline error (same hour last week)</span>
+                      <span class="chart__track"><span class="chart__bar chart__bar--before" style="--to:100%"></span></span>
+                      <span class="chart__value">45.7 kWh</span>
+                    </div>
+                    <div class="chart__row chart__row--result">
+                      <span class="chart__label">Forecast model error</span>
+                      <span class="chart__track"><span class="chart__bar" style="--to:75.49%"></span></span>
+                      <span class="chart__value">34.5 kWh</span>
+                    </div>
+                  </div>
+                  <figcaption>Phase 1 forecast: mean absolute error on the 2017 test year. Lower is better: 24.5% better than the baseline.</figcaption>
+                </figure>
+                <p>Phase 2: model predictive control cut heating cost 14% to 20% against a fixed thermostat on two unseen periods, and 3% to 8% below the look-ahead heuristic, with similar comfort.</p>
+              </dd>
+            </div>
+            <div class="story__row">
+              <dt>Key decisions</dt>
+              <dd>
+                <ul class="points">
+                  <li><strong>Split by time.</strong> Trained on 2016 and tested on all of 2017, against the "same hour last week" baseline.</li>
+                  <li><strong>A simple heuristic first.</strong> Preheat 4 hours before people arrive and add 1 °C when prices are in their cheapest quarter. The predictive controller came later and had to beat it.</li>
+                  <li><strong>Learn the house from an experiment.</strong> The thermal model is fitted from a run that drives the heat pump with a random signal. Data from the thermostat runs gave a model worse than assuming the temperature stays put.</li>
+                  <li><strong>Test on unseen periods.</strong> The heuristic was tuned on the scenarios it was reported on, so every controller was also tested on two periods nothing was tuned on.</li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+          <details class="story__more">
+            <summary>Read the full story</summary>
+            <dl class="story">
+              <div class="story__row">
+                <dt>Constraints</dt>
+                <dd>Everything is simulated, so no hardware. Every forecast input must be known 24 hours ahead. One year of training data. Comfort must not get worse.</dd>
+              </div>
+              <div class="story__row">
+                <dt>Architecture</dt>
+                <dd>One loop: measure, forecast, decide, act. Controllers only implement <code>setpoint_c(observation, forecast)</code> and know nothing about the simulator, so a later phase can put BACnet underneath them unchanged. The predictive controller pairs a four-number thermal model with a 24-hour linear program (SciPy HiGHS), re-solved every hour.</dd>
+              </div>
+              <div class="story__row">
+                <dt>Implementation</dt>
+                <dd>
+                  <ul class="points">
+                    <li>Phase 1: gradient boosted trees (scikit-learn) on real meter data from the Building Data Genome Project 2, with calendar, weather and lagged load as inputs.</li>
+                    <li>Phase 2: the BOPTEST simulator in Docker. The look-ahead heuristic alone cut heating cost 10% to 16% against the fixed thermostat.</li>
+                  </ul>
+                </dd>
+              </div>
+              <div class="story__row">
+                <dt>What went wrong</dt>
+                <dd>
+                  <ul class="points">
+                    <li>The first predictive controller asked for the temperature it planned. On sunny days the setpoint drifted upward, and the heat pump kept an empty room at 28 to 30 °C (48 Kh of discomfort). Asking for the comfort floor whenever the plan says off fixed it.</li>
+                    <li>Data leakage in the forecast took three tries to remove: the lagged inputs have to count back from the hour being predicted, not from now.</li>
+                  </ul>
+                </dd>
+              </div>
+            </dl>
+          </details>
+          <p class="entry__status">Phases 3 to 5 (BACnet and Modbus, a battery for peak shaving, edge deployment) are parked for now.</p>
           <p class="entry__stack">Python, scikit-learn, SciPy, BOPTEST, Docker, pytest, uv</p>
           <p class="entry__link"><a href="https://github.com/AD-NAP/edge-energy-optimizer">Code on GitHub</a></p>
         </article>
@@ -362,7 +448,7 @@
     <dl class="titleblock__grid">
       <div class="titleblock__main"><dt>Drawn by</dt><dd>Shafik Adam</dd></div>
       <div><dt>Built with</dt><dd>Plain HTML, CSS and JavaScript, hosted on GitHub Pages</dd></div>
-      <div><dt>Revision</dt><dd>1.4.0</dd></div>
+      <div><dt>Revision</dt><dd>1.5.0</dd></div>
       <div><dt>Date</dt><dd>Nov 2026</dd></div>
     </dl>
   </footer>
