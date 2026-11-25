@@ -28,6 +28,18 @@ Status: `[ ]` to do · `[~]` in progress · `[x]` done · `[?]` waiting on Shafi
 - [ ] Publish v1.5.0 on github.com (notes and screenshots in `docs/releases/v1.5.0.md`)
 - [~] LLM or AI engineering work to show: cumulus-coach (the AWS study agent: RAG, tool calling, eval, Docker, CI) will cover it, after the demo ships around 2026-10-30
 - [?] Enable the Design plugin (install card shown 2026-10-09 and again 2026-10-22) so `design-critique` and `accessibility-review` are available
+- [?] Compare the fun side prototypes at `/back/proto/` (branch `explore/fun-side`) and pick a direction
+
+## Exploration: fun side without live Three.js (2026-11-25)
+
+Plan approved 2026-11-25. Branch `explore/fun-side` (from `claude/v1.6-cyberpunk-room`), never merged as-is. Why: the live room loads ~8 MB and compiles shaders before it shows, which breaks the smooth hand-off from the Bonus. Each prototype runs the real fun side (`back/fun.js` loads the engine named in `body[data-engine]`); only the room changes. Hub: `back/proto/index.html`. Serve with `node tools/serve.js . 8765`.
+
+- [x] Tooling: `tools/serve.js` in the repo, `.claude/launch.json` points at it
+- [x] A: layered diorama. `tools/capture-diorama.js` renders the room once (4 depth layers, a poster, 6 close-ups) via an opt-in `capture` option in `room.js`; `back/proto/a-diorama/` pans the layers with the mouse and zooms into a close-up. About 0.35 MB to the room. Known: a brief double image mid-crossfade; no neon bloom on the props; the panda can't hop on its own in the room view
+- [ ] B: scroll-scrubbed video
+- [ ] C: CSS 3D room
+- [ ] D: slimmer Three.js (baked light, one meshopt GLB, no shadows or bloom)
+- [ ] Note: `assets/fun-preview.webp` still shows the cosy room, not the cyberpunk one (also on `claude/v1.6-cyberpunk-room`)
 
 ## v1.5.0: projects as engineering stories (2026-11-24)
 

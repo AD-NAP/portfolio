@@ -114,7 +114,7 @@ async function showRoom() {
   setUi(false);
   toggle.textContent = "Show as a list";
   if (!roomLoading) {
-    roomLoading = import("./room.js")
+    roomLoading = import(body.dataset.engine || "./room.js")   // explore/fun-side: a prototype can swap the engine
       .then(m => m.startRoom({
         canvas, tag, labels: LABELS, reduceMotion,
         onPick: thing => {

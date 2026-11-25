@@ -1,0 +1,33 @@
+/* Prototype A: the diorama stack. Loaded after fun.css; everything else on the page is the real fun side. */
+
+/* Cross-page morph: the hub's thumbnail (same name) grows into the room's poster as this page opens. */
+@view-transition { navigation: auto; }
+.stage__poster { view-transition-name: room; }
+
+.dio { position: absolute; inset: 0; overflow: hidden; opacity: 0; transition: opacity .4s var(--ease-out); }
+.is-ready .dio { opacity: 1; }
+.dio.is-hot { cursor: pointer; }
+
+/* The world: every layer, centred on the stage, panned by the head turn (--lx/--ly) and zoomed toward a thing (--z*). */
+.dio__world {
+  position: absolute; left: 50%; top: 50%; width: var(--pw); height: var(--ph);
+  margin: calc(var(--ph) / -2) 0 0 calc(var(--pw) / -2);
+  transform: translate3d(calc(var(--lx, 0px) * var(--zs, 1) + var(--zx, 0px)), calc(var(--ly, 0px) * var(--zs, 1) + var(--zy, 0px)), 0) scale(var(--zs, 1));
+  will-change: transform;
+}
+.dio__layer {
+  position: absolute; inset: 0; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none;
+  transform: translate3d(var(--dx, 0px), 0, 0);
+}
+
+/* The close-up of the chosen thing, over the zoomed world. */
+.dio__close {
+  position: absolute; left: 50%; top: 50%; width: var(--pw); height: var(--ph);
+  margin: calc(var(--ph) / -2) 0 0 calc(var(--pw) / -2);
+  opacity: var(--co, 0); pointer-events: none;
+  transform: translate3d(var(--lx, 0px), calc(var(--ly, 0px) + var(--hop, 0%)), 0) scale(var(--cs, 1));
+  will-change: transform, opacity;
+}
+.dio__close:not([src]) { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) { .dio { transition: none; } }

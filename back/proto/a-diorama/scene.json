@@ -1,0 +1,73 @@
+{
+ "about": "Made by tools/capture-diorama.js from back/room.js. Depth is metres from where you stand; hotspots are % of the picture.",
+ "overscan": 1.3,
+ "layers": [
+  {
+   "name": "backdrop",
+   "depth": 5.4,
+   "src": "img/layer-backdrop.webp"
+  },
+  {
+   "name": "wall",
+   "depth": 4.94,
+   "src": "img/layer-wall.webp"
+  },
+  {
+   "name": "middle",
+   "depth": 4.42,
+   "src": "img/layer-middle.webp"
+  },
+  {
+   "name": "front",
+   "depth": 3.12,
+   "src": "img/layer-front.webp"
+  }
+ ],
+ "poster": "img/poster.webp",
+ "beauty": "img/beauty.webp",
+ "closeups": {
+  "arcade": "img/closeup-arcade.webp",
+  "desk": "img/closeup-desk.webp",
+  "shelf": "img/closeup-shelf.webp",
+  "board": "img/closeup-board.webp",
+  "chair": "img/closeup-chair.webp",
+  "panda": "img/closeup-panda.webp"
+ },
+ "hotspots": {
+  "desk": {
+   "x": 44.51,
+   "y": 58.83,
+   "layer": 1
+  },
+  "board": {
+   "x": 60.58,
+   "y": 59.45,
+   "layer": 1
+  },
+  "shelf": {
+   "x": 25.84,
+   "y": 52.1,
+   "layer": 2
+  },
+  "arcade": {
+   "x": 17.61,
+   "y": 62.27,
+   "layer": 3
+  },
+  "chair": {
+   "x": 69.61,
+   "y": 62.11,
+   "layer": 2
+  },
+  "panda": {
+   "x": 59.14,
+   "y": 76.91,
+   "layer": 3
+  },
+  "exit": {
+   "x": 95.71,
+   "y": 55.19,
+   "layer": 3
+  }
+ }
+}

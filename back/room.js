@@ -28,7 +28,7 @@ const COL = {
   cyan: 0x2ee6ff, magenta: 0xff2bd6,
 };
 
-export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onProgress }) {
+export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onProgress, capture = false }) {
   const gsap = window.gsap;
 
   /* ---------- Renderer, scene, camera ---------- */
@@ -149,7 +149,7 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   const loader = new GLTFLoader(manager);
   const MODELS = ["metal_office_desk", "classic_laptop", "modern_arm_chair_01", "wooden_bookshelf_worn", "standing_chalkboard_01",
     "mid_century_lounge_chair", "potted_plant_02", "rubber_duck_toy", "gamepad"];
-  const loaded = Object.fromEntries(await Promise.all(MODELS.map(async n => [n, (await loader.loadAsync(`models/${n}/${n}.gltf`)).scene])));
+  const loaded = Object.fromEntries(await Promise.all(MODELS.map(async n => [n, (await loader.loadAsync(new URL(`models/${n}/${n}.gltf`, import.meta.url).href)).scene])));
   Object.values(loaded).forEach(o => o.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } }));
 
   // Back wall: the desk under the window, with the laptop and office chair. The learning log.
@@ -276,7 +276,8 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
 
   let running = true;
   let last = performance.now(), last0 = last;
-  renderer.setAnimationLoop(() => {
+  // capture (explore/fun-side only): no render loop; tools/capture-diorama.js drives the frames itself.
+  if (!capture) renderer.setAnimationLoop(() => {
     if (!running) return;
     // Ease the head toward where the mouse points; time-based, so it feels the same at any frame rate.
     const now = performance.now(), k = 1 - Math.exp(-Math.min(now - last, 100) / 1000 * 5);
@@ -395,6 +396,12 @@ export async function startRoom({ canvas, tag, labels, reduceMotion, onPick, onP
   placeCamera();
   await renderer.compileAsync(scene, camera);
   await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(r))));
+
+  if (capture) {
+    const groups = { shell, ceilingLight, desk, board, shelf, arcade, chair, panda, door };
+    const setView = ({ pos, target }) => { view.pos.copy(pos); view.target.copy(target); placeCamera(); };
+    return { THREE, scene, camera, renderer, composer, groups, picks, HOME, SPOTS, viewFor, setView, centre };
+  }
 
   return {
     focus: name => SPOTS[name] && glide(viewFor(name), LOOK.close),

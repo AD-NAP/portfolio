@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Diorama capture</title>
+  <meta name="robots" content="noindex">
+  <!-- Used only by tools/capture-diorama.js: renders the live room once, in depth layers, for the diorama prototype. -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+  <style>html, body { margin: 0; background: #000; } canvas { display: block; width: 1872px; height: 1170px; }</style>
+  <script type="importmap">
+    { "imports": { "three": "../../../assets/vendor/three/build/three.module.js", "three/addons/": "../../../assets/vendor/three/addons/" } }
+  </script>
+</head>
+<body>
+  <canvas></canvas>
+  <p class="tag" hidden></p>
+  <script type="module">
+    import { startRoom } from "../../room.js";
+
+    const OVERSCAN = 1.3;   // each picture is 30% wider and taller than the view, so the diorama can pan like a head turn
+    // Depth layers, back to front. Anything not listed (walls, window, neon, ceiling light) is the backdrop.
+    const LAYERS = [
+      { name: "backdrop", groups: [] },
+      { name: "wall", groups: ["desk", "board"] },
+      { name: "middle", groups: ["shelf", "chair"] },
+      { name: "front", groups: ["arcade", "panda", "door"] },
+    ];
+
+    const canvas = document.querySelector("canvas");
+    const r = await startRoom({ canvas, tag: document.querySelector(".tag"), labels: {}, reduceMotion: true, onPick() {}, capture: true });
+    const { THREE, scene, camera, renderer, composer, groups, picks, HOME, SPOTS, viewFor, setView, centre } = r;
+    await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+
+    // The room's resize() frames a 16:10 view at FOV 55; widen it so the middle 1/OVERSCAN matches that view exactly.
+    const baseFov = camera.fov;
+    const wideFov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(baseFov / 2)) * OVERSCAN));
+    const widen = () => { camera.fov = wideFov; camera.updateProjectionMatrix(); };
+
+    // Layer k + 1 for each depth layer; every mesh keeps layer 0 so the shadow camera still sees the whole room.
+    scene.traverse(o => o.layers.enable(1));
+    LAYERS.forEach((l, i) => l.groups.forEach(g => groups[g].traverse(o => { o.layers.disable(1); o.layers.enable(i + 1); })));
+    scene.traverse(o => { if (o.isLight) o.layers.enableAll(); });
+
+    const grab = () => canvas.toDataURL("image/webp", 0.82);
+    const renderLayer = i => {
+      camera.layers.set(i + 1);
+      if (i === 0) composer.render();                        // the backdrop keeps the bloom on the neon and the city
+      else { renderer.setRenderTarget(null); renderer.setClearColor(0x000000, 0); renderer.clear(); renderer.render(scene, camera); }
+      return grab();
+    };
+    const renderAll = () => { camera.layers.set(0); composer.render(); return grab(); };
+
+    window.capture = () => {
+      const out = { overscan: OVERSCAN, layers: [], closeups: {}, hotspots: {} };
+      // The poster: the normal view, no overscan, the frame the diorama starts on (assets/fun-preview.webp is the old room).
+      setView(HOME);
+      out.poster = renderAll();
+      widen();
+      const v = new THREE.Vector3();
+      LAYERS.forEach((l, i) => {
+        // How far the layer sits from you: the mean distance of its things (the back wall for the backdrop).
+        const depth = l.groups.length
+          ? l.groups.reduce((s, g) => s + centre(groups[g]).distanceTo(camera.position), 0) / l.groups.length
+          : camera.position.z + 2.1;
+        out.layers.push({ name: l.name, depth: +depth.toFixed(2), data: renderLayer(i) });
+      });
+      out.beauty = renderAll();
+      // Where each thing is on the picture, in % of the overscanned frame, and which layer it lives on.
+      picks.forEach(p => {
+        const name = p.userData.thing;
+        centre(p).project(camera);
+        const c = centre(p).project(camera);
+        out.hotspots[name] = {
+          x: +((c.x + 1) / 2 * 100).toFixed(2), y: +((1 - c.y) / 2 * 100).toFixed(2),
+          layer: LAYERS.findIndex(l => l.groups.includes(name === "exit" ? "door" : name)),
+        };
+      });
+      // A close-up per thing, from the same spot the live room walks you to.
+      Object.keys(SPOTS).forEach(name => {
+        camera.fov = baseFov; camera.updateProjectionMatrix();   // viewFor() measures with the normal view
+        setView(viewFor(name)); widen();
+        out.closeups[name] = renderAll();
+      });
+      setView(HOME); widen();
+      return out;
+    };
+    document.body.dataset.ready = "1";
+  </script>
+</body>
+</html>

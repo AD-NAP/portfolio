@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fun side prototypes</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <style>
+    @view-transition { navigation: auto; }
+    :root { --night: #17212b; --night-2: #213040; --chalk: #eef3ef; --dim: #a9b6c2; --bamboo: #8fd18c; color-scheme: dark; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: var(--night); color: var(--chalk); font: 400 17px/1.55 "Segoe UI", system-ui, sans-serif; }
+    main { max-width: 1040px; margin: 0 auto; padding: 48px 16px 64px; }
+    h1 { margin: 0 0 6px; font-size: 34px; line-height: 1.1; }
+    .lede { margin: 0 0 32px; color: var(--dim); max-width: 60ch; }
+    ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+    li { background: var(--night-2); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+    li img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+    .room-thumb { view-transition-name: room; }
+    .card { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    h2 { margin: 0; font-size: 20px; }
+    p { margin: 0; }
+    .meta { color: var(--dim); font-size: 15px; }
+    a { color: var(--chalk); font-weight: 600; text-underline-offset: .2em; }
+    a.go { margin-top: auto; padding-top: 8px; }
+    .todo { color: var(--dim); font-style: italic; margin-top: auto; padding-top: 8px; }
+    .blank { aspect-ratio: 16 / 10; background: repeating-linear-gradient(135deg, #1c2836 0 12px, #213040 12px 24px); }
+    :focus-visible { outline: 3px solid var(--bamboo); outline-offset: 3px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Fun side prototypes</h1>
+    <p class="lede">Branch <code>explore/fun-side</code>. Each direction runs the real fun side's content; only the room changes. Compare them with the current room, then pick one.</p>
+    <ol>
+      <li>
+        <img src="../../assets/fun-preview.webp" alt="" width="960" height="600">
+        <div class="card">
+          <h2>Current: live 3D room</h2>
+          <p class="meta">Three.js, 9 models, bloom. About 8 MB before the first frame.</p>
+          <a class="go" href="../">Open the current room</a>
+        </div>
+      </li>
+      <li>
+        <img class="room-thumb" src="a-diorama/img/poster.webp" alt="" width="960" height="600">
+        <div class="card">
+          <h2>A: layered diorama</h2>
+          <p class="meta">Four pictures rendered once from the 3D room. About 0.35 MB to the room, close-ups after. Try: move the mouse, click the arcade, press Esc. The thumbnail morphs into the room as you open it.</p>
+          <a class="go" href="a-diorama/">Open the diorama</a>
+        </div>
+      </li>
+      <li>
+        <div class="blank" aria-hidden="true"></div>
+        <div class="card">
+          <h2>B: scroll-scrubbed video</h2>
+          <p class="meta">Pre-rendered camera moves, stepped through with GSAP.</p>
+          <p class="todo">Not built yet.</p>
+        </div>
+      </li>
+      <li>
+        <div class="blank" aria-hidden="true"></div>
+        <div class="card">
+          <h2>C: CSS 3D room</h2>
+          <p class="meta">Walls as transformed boxes, objects as flat illustrations.</p>
+          <p class="todo">Not built yet.</p>
+        </div>
+      </li>
+      <li>
+        <div class="blank" aria-hidden="true"></div>
+        <div class="card">
+          <h2>D: slimmer Three.js</h2>
+          <p class="meta">Baked lighting, one compressed model file, no shadows or bloom.</p>
+          <p class="todo">Not built yet.</p>
+        </div>
+      </li>
+    </ol>
+  </main>
+</body>
+</html>
