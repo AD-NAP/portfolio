@@ -1,0 +1,17 @@
+/* Prototype B: the video stage. Loaded after fun.css; everything else on the page is the real fun side. */
+
+/* Cross-page morph: the hub's thumbnail (same name) grows into the room's poster as this page opens. */
+@view-transition { navigation: auto; }
+.stage__poster { view-transition-name: room; transform: scale(1.06); }   /* matches the video, so the crossfade lines up */
+
+.vid { position: absolute; inset: 0; overflow: hidden; opacity: 0; transition: opacity .4s var(--ease-out); }
+.is-ready .vid { opacity: 1; }
+.vid.is-hot { cursor: pointer; }
+/* 6% larger than the stage so the small head turn (--px/--py) never shows an edge. */
+.vid__video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transform: translate3d(var(--px, 0%), var(--py, 0%), 0) scale(1.06);
+  will-change: transform; pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) { .vid { transition: none; } }

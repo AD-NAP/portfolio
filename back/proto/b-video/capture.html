@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Video capture</title>
+  <meta name="robots" content="noindex">
+  <!-- Used only by tools/capture-video.js: renders a camera tour through the live room, one frame at a time. -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+  <style>html, body { margin: 0; background: #000; } canvas { display: block; width: 1280px; height: 800px; }</style>
+  <script type="importmap">
+    { "imports": { "three": "../../../assets/vendor/three/build/three.module.js", "three/addons/": "../../../assets/vendor/three/addons/" } }
+  </script>
+</head>
+<body>
+  <canvas></canvas>
+  <p class="tag" hidden></p>
+  <script type="module">
+    import { startRoom } from "../../room.js";
+
+    const STEP = 12;   // frames between two points of the tour
+
+    const canvas = document.querySelector("canvas");
+    const r = await startRoom({ canvas, tag: document.querySelector(".tag"), labels: {}, reduceMotion: true, onPick() {}, capture: true });
+    const { THREE, camera, composer, picks, HOME, SPOTS, viewFor, setView } = r;
+    await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+
+    // Hotspots at the start: each thing's box on screen, in % of the frame.
+    setView(HOME);
+    const hotspots = {};
+    picks.forEach(p => {
+      const b = new THREE.Box3().setFromObject(p);
+      let x0 = 1, y0 = 1, x1 = -1, y1 = -1;
+      for (let i = 0; i < 8; i++) {
+        const c = new THREE.Vector3(i & 1 ? b.max.x : b.min.x, i & 2 ? b.max.y : b.min.y, i & 4 ? b.max.z : b.min.z).project(camera);
+        x0 = Math.min(x0, c.x); x1 = Math.max(x1, c.x); y0 = Math.min(y0, c.y); y1 = Math.max(y1, c.y);
+      }
+      const pc = v => +((v + 1) / 2 * 100).toFixed(2);
+      hotspots[p.userData.thing] = { x0: pc(Math.max(x0, -1)), x1: pc(Math.min(x1, 1)), y0: pc(-Math.min(y1, 1)), y1: pc(-Math.max(y0, -1)) };
+    });
+
+    // The tour: from where you stand, past every thing from left to right, stepping back toward the middle between two.
+    const order = Object.keys(SPOTS).sort((a, b) => SPOTS[a].look.clone().project(camera).x - SPOTS[b].look.clone().project(camera).x);
+    const views = order.map(viewFor);
+    const pos = [HOME.pos.clone()], tgt = [HOME.target.clone()], stopAt = {};
+    views.forEach((v, i) => {
+      if (i > 0) {
+        const a = views[i - 1];
+        pos.push(a.pos.clone().lerp(v.pos, 0.5).lerp(HOME.pos, 0.45));
+        tgt.push(a.target.clone().lerp(v.target, 0.5).lerp(HOME.target, 0.3));
+      }
+      stopAt[order[i]] = pos.length * STEP;   // frame index of this stop (the point about to be added)
+      pos.push(v.pos.clone()); tgt.push(v.target.clone());
+    });
+    const pCurve = new THREE.CatmullRomCurve3(pos, false, "centripetal");
+    const tCurve = new THREE.CatmullRomCurve3(tgt, false, "centripetal");
+    const frames = (pos.length - 1) * STEP + 1;
+
+    window.tour = { frames, order, stopAt, hotspots };
+    window.frame = i => {
+      const t = i / (frames - 1);
+      setView({ pos: pCurve.getPoint(t), target: tCurve.getPoint(t) });
+      composer.render();
+      return canvas.toDataURL("image/png");
+    };
+    document.body.dataset.ready = "1";
+  </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+{
+ "about": "Made by tools/capture-video.js from back/room.js. Stops are frame numbers; hotspots are boxes in % of the first frame.",
+ "fps": 30,
+ "frames": 133,
+ "video": "tour.mp4",
+ "poster": "poster.webp",
+ "order": [
+  "arcade",
+  "shelf",
+  "desk",
+  "panda",
+  "board",
+  "chair"
+ ],
+ "stops": {
+  "arcade": 12,
+  "shelf": 36,
+  "desk": 60,
+  "panda": 84,
+  "board": 108,
+  "chair": 132
+ },
+ "hotspots": {
+  "desk": {
+   "x0": 24.72,
+   "x1": 57.34,
+   "y0": 46.76,
+   "y1": 82.68
+  },
+  "board": {
+   "x0": 58.34,
+   "x1": 70.11,
+   "y0": 51.28,
+   "y1": 74.75
+  },
+  "shelf": {
+   "x0": 4.77,
+   "x1": 27.71,
+   "y0": 18.25,
+   "y1": 89.66
+  },
+  "arcade": {
+   "x0": 0,
+   "x1": 22.72,
+   "y0": 28.05,
+   "y1": 100
+  },
+  "chair": {
+   "x0": 61.54,
+   "x1": 100,
+   "y0": 49.99,
+   "y1": 92.64
+  },
+  "panda": {
+   "x0": 54.21,
+   "x1": 72.7,
+   "y0": 67.79,
+   "y1": 100
+  },
+  "exit": {
+   "x0": 95.41,
+   "x1": 100,
+   "y0": 0,
+   "y1": 100
+  }
+ }
+}

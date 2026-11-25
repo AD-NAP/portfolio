@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CSS 3D capture</title>
+  <meta name="robots" content="noindex">
+  <!-- Used only by tools/capture-css3d.js: bakes the live room into flat surfaces and cut-outs for the CSS 3D prototype. -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+  <style>html, body { margin: 0; background: #000; } canvas { display: block; width: 1440px; height: 900px; }</style>
+  <script type="importmap">
+    { "imports": { "three": "../../../assets/vendor/three/build/three.module.js", "three/addons/": "../../../assets/vendor/three/addons/" } }
+  </script>
+</head>
+<body>
+  <canvas></canvas>
+  <p class="tag" hidden></p>
+  <script type="module">
+    import { startRoom } from "../../room.js";
+
+    const W = 4.6, D_BACK = 2.1, H = 2.7;      // as in room.js
+    const NEAR_END = 3.2;                       // surfaces stop just in front of where you stand
+    const PX_PER_M = 360;                       // surface texture resolution
+    const SPRITE_PX = 1300;                     // the longer side of each cut-out, so it stays sharp up close
+    const THINGS = ["desk", "board", "shelf", "arcade", "chair", "panda"];
+
+    const canvas = document.querySelector("canvas");
+    const r = await startRoom({ canvas, tag: document.querySelector(".tag"), labels: {}, reduceMotion: true, onPick() {}, capture: true });
+    const { THREE, scene, camera, renderer, composer, groups, HOME, setView } = r;
+    await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+    renderer.setPixelRatio(1); composer.setPixelRatio(1);
+
+    // Layer 1: the room itself (walls, window, neon, rug, ceiling light, door). Layer 2 + i: one thing each.
+    // Every mesh keeps layer 0, so the shadow camera still sees everything and the shadows are baked in.
+    scene.traverse(o => o.layers.enable(1));
+    THINGS.forEach((n, i) => groups[n].traverse(o => { o.layers.disable(1); o.layers.enable(2 + i); }));
+    scene.traverse(o => { if (o.isLight) o.layers.enableAll(); });
+
+    const size = (w, h) => { renderer.setSize(w, h, false); composer.setSize(w, h); };
+    const grab = (q = 0.82) => canvas.toDataURL("image/webp", q);
+    const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
+    const arr = v => v.toArray().map(n => +n.toFixed(4));
+    const basis = cam => {
+      cam.updateMatrixWorld(true);
+      const e = cam.matrixWorld.elements;
+      return { right: v3(e[0], e[1], e[2]).normalize(), up: v3(e[4], e[5], e[6]).normalize(), fwd: v3(-e[8], -e[9], -e[10]).normalize() };
+    };
+
+    // A surface: an orthographic camera just inside it, seeing only a thin slice, with bloom on the neon.
+    const surface = (name, centre, look, up, w, h) => {
+      const cam = new THREE.OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0.01, 0.8);
+      cam.position.copy(centre).addScaledVector(look, -0.7);
+      cam.up.copy(up);
+      cam.lookAt(centre);
+      cam.layers.set(1);
+      size(Math.round(w * PX_PER_M), Math.round(h * PX_PER_M));
+      composer.passes[0].camera = cam;
+      renderer.setClearColor(0x000000, 1);
+      composer.render();
+      const b = basis(cam);
+      return { name, centre: arr(centre), right: arr(b.right), up: arr(b.up), w, h, data: grab() };
+    };
+    const zMid = (NEAR_END - D_BACK) / 2, L = NEAR_END + D_BACK;
+
+    window.capture = () => {
+      const out = { room: { W, H, D_BACK, NEAR_END }, home: { pos: arr(HOME.pos), target: arr(HOME.target) }, surfaces: [], sprites: [] };
+
+      // The poster: the room as you first see it (the normal 16:10 view at FOV 55).
+      size(1440, 900);
+      composer.passes[0].camera = camera;
+      camera.aspect = 1.6; camera.fov = 55; camera.updateProjectionMatrix();
+      camera.layers.set(0);
+      setView(HOME);
+      renderer.setClearColor(0x000000, 1);
+      composer.render();
+      out.poster = grab();
+
+      out.surfaces.push(surface("back", v3(0, H / 2, -D_BACK), v3(0, 0, -1), v3(0, 1, 0), W, H));
+      out.surfaces.push(surface("left", v3(-W / 2, H / 2, zMid), v3(-1, 0, 0), v3(0, 1, 0), L, H));
+      out.surfaces.push(surface("right", v3(W / 2, H / 2, zMid), v3(1, 0, 0), v3(0, 1, 0), L, H));
+      out.surfaces.push(surface("floor", v3(0, 0, zMid), v3(0, -1, 0), v3(0, 0, -1), W, L));
+      out.surfaces.push(surface("ceiling", v3(0, H, zMid), v3(0, 1, 0), v3(0, 0, -1), W, L));
+      composer.passes[0].camera = camera;
+
+      // A cut-out per thing, seen from where you stand, on a plane facing you at the thing's nearest point:
+      // from there it lines up exactly with the real render, and it never pokes through a wall.
+      THINGS.forEach((name, i) => {
+        const box = new THREE.Box3().setFromObject(groups[name]);
+        const cam = new THREE.PerspectiveCamera(30, 1, 0.05, 40);
+        cam.position.copy(HOME.pos);
+        cam.lookAt(box.getCenter(new THREE.Vector3()));
+        cam.updateMatrixWorld(true);
+        const inv = cam.matrixWorldInverse;
+        let tx = 0, ty = 0, near = Infinity;
+        for (let k = 0; k < 8; k++) {
+          const p = v3(k & 1 ? box.max.x : box.min.x, k & 2 ? box.max.y : box.min.y, k & 4 ? box.max.z : box.min.z).applyMatrix4(inv);
+          tx = Math.max(tx, Math.abs(p.x / -p.z)); ty = Math.max(ty, Math.abs(p.y / -p.z)); near = Math.min(near, -p.z);
+        }
+        tx *= 1.03; ty *= 1.03;
+        cam.aspect = tx / ty;
+        cam.fov = THREE.MathUtils.radToDeg(2 * Math.atan(ty));
+        cam.updateProjectionMatrix();
+        cam.layers.set(2 + i);
+        const s = SPRITE_PX / Math.max(tx, ty);
+        size(Math.round(tx * s), Math.round(ty * s));
+        renderer.setRenderTarget(null);
+        renderer.setClearColor(0x000000, 0);
+        renderer.clear();
+        renderer.render(scene, cam);
+        const b = basis(cam);
+        const centre = HOME.pos.clone().addScaledVector(b.fwd, near);
+        out.sprites.push({ name, centre: arr(centre), right: arr(b.right), up: arr(b.up), w: +(2 * near * tx).toFixed(4), h: +(2 * near * ty).toFixed(4), data: grab(0.86) });
+      });
+
+      // The exit: the door's rectangle on the right wall (it is baked into the wall's picture).
+      const d = new THREE.Box3().setFromObject(groups.door);
+      out.exit = { name: "exit", centre: arr(v3(W / 2 - 0.02, (d.min.y + d.max.y) / 2, (d.min.z + d.max.z) / 2)), right: [0, 0, 1], up: [0, 1, 0], w: +(d.max.z - d.min.z).toFixed(3), h: +(d.max.y - d.min.y).toFixed(3) };
+      return out;
+    };
+    document.body.dataset.ready = "1";
+  </script>
+</body>
+</html>

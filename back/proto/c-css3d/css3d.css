@@ -1,0 +1,20 @@
+/* Prototype C: the CSS 3D scene. Loaded after fun.css; everything else on the page is the real fun side. */
+
+/* Cross-page morph: the hub's thumbnail (same name) grows into the room's poster as this page opens. */
+@view-transition { navigation: auto; }
+.stage__poster { view-transition-name: room; }
+
+/* The stage gets its perspective from css3d.js, matched to the room camera's field of view. */
+.c3d { position: absolute; inset: 0; overflow: hidden; background: #0b0d14; opacity: 0; transition: opacity .4s var(--ease-out); }
+.is-ready .c3d { opacity: 1; }
+.c3d.is-hot { cursor: pointer; }
+.c3d__cam { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
+.c3d__plane {
+  position: absolute; left: 0; top: 0; width: 1000px; height: 1000px; max-width: none;
+  transform-origin: 0 0; user-select: none; -webkit-user-drag: none; pointer-events: none;
+}
+/* Hover: the cut-out brightens a touch, like the live room's glow. */
+.c3d__thing { transition: filter .2s; }
+.c3d__thing.is-hot { filter: brightness(1.25) saturate(1.1); }
+
+@media (prefers-reduced-motion: reduce) { .c3d, .c3d__thing { transition: none; } }

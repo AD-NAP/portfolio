@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS 3D prototype</title>
+  <meta name="description" content="The fun side of Shafik Adam's portfolio: a 3D room with his hobbies, a museum of the site's past versions, a monthly learning log and his goals.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#17212b">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Not render-blocking: the first paint must be the room's picture, straight after the zoom from the portfolio. -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="../../fun.css">
+  <link rel="stylesheet" href="css3d.css">
+  <script src="../../../assets/vendor/gsap.min.js" defer></script>
+  <script type="module" src="../../fun.js"></script>
+</head>
+<body class="mode-list" data-engine="./proto/c-css3d/css3d.js">
+  <a class="skip" href="#things">Skip to the things in the room</a>
+
+  <header class="top">
+    <h1 class="brand"><span class="brand__name">Shafik's room</span> <span class="brand__sub">The fun side of my portfolio</span></h1>
+    <nav class="top__nav" aria-label="Page">
+      <button class="view-toggle" type="button" hidden>Show as a list</button>
+      <a class="top__back" href="../../../#bonus">Back to the portfolio</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="things" hidden>Menu</button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="stage" aria-hidden="true">
+      <img class="stage__poster" src="img/poster.webp" width="1440" height="900" alt="">
+      <canvas class="stage__canvas"></canvas>
+      <p class="stage__tag"></p>
+      <p class="stage__hint">Move your mouse to look around. Click anything. Esc for the menu.</p>
+      <p class="stage__loading">Setting up the room <span class="stage__pct">0%</span></p>
+    </div>
+
+    <div class="note" hidden>
+      <p class="note__text"></p>
+      <button class="note__open" type="button">Open the 3D room</button>
+    </div>
+
+    <nav class="dock" id="things" aria-label="Things in the room" tabindex="-1">
+      <button type="button" data-thing="desk" aria-controls="thing-desk" aria-expanded="false">Desk</button>
+      <button type="button" data-thing="shelf" aria-controls="thing-shelf" aria-expanded="false">Bookshelf</button>
+      <button type="button" data-thing="board" aria-controls="thing-board" aria-expanded="false">Chalkboard</button>
+      <button type="button" data-thing="chair" aria-controls="thing-chair" aria-expanded="false">Lounge chair</button>
+      <button type="button" data-thing="arcade" aria-controls="thing-arcade" aria-expanded="false">Arcade</button>
+      <button type="button" data-thing="panda" aria-controls="thing-panda" aria-expanded="false">Panda</button>
+    </nav>
+
+    <div class="panel" aria-live="polite">
+      <button class="panel__close" type="button">Back to the room</button>
+
+      <section class="thing" id="thing-desk" data-thing="desk" aria-labelledby="h-desk">
+        <p class="thing__where">On the desk</p>
+        <h2 id="h-desk">Learning log</h2>
+        <p>Once a month I sum up what I learned, like a short dev log for the month.</p>
+        <article class="log">
+          <h3>November 2026</h3>
+          <ul class="log__list">
+            <li><strong>Model predictive control.</strong> I fitted a simple thermal model from an experiment on a simulated building, then planned its heating 24 hours ahead, every hour. On weeks it hadn't seen, it cost 14% to 20% less than a fixed thermostat.</li>
+            <li><strong>An AI dev team that ships.</strong> <a href="https://github.com/AD-NAP/not-another-prototype">NAP</a>, my Claude Code team of a PM, an Architect, an Engineer and a Reviewer, took one brief to a working app in about 45 minutes: 7 issues, 4 PRs, all approved on the first review, CI green.</li>
+            <li><strong>What broke along the way.</strong> Agents in headless runs need one command per call. A test that only reads the CI file doesn't prove CI works. A stacked PR can land on a dead branch.</li>
+            <li><strong>This site, three times over.</strong> The build log zine, the business card that opens into a drawing sheet, and this room. Scale the paper, never the text. Search for what exists before building it.</li>
+          </ul>
+        </article>
+        <article class="log">
+          <h3>October 2026</h3>
+          <ul class="log__list">
+            <li><strong>Forecasting with real meter data.</strong> A day-ahead load forecast for an office building beat "same hour last week" by 24.5%. Data leakage took me three tries: lags count back from the hour you predict, not from now.</li>
+            <li><strong>RAG and tool calling.</strong> I started <a href="https://github.com/AD-NAP/cumulus-coach">cumulus-coach</a>, an AWS study agent that answers with citations, refuses off-topic questions, and calls a tool.</li>
+            <li><strong>Claude Code's building blocks.</strong> I learned CLAUDE.md, skills, hooks, subagents and plan mode by building this portfolio. Playwright drives a real browser to screenshot it and test its accessibility.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="thing" id="thing-shelf" data-thing="shelf" aria-labelledby="h-shelf">
+        <p class="thing__where">On the bookshelf</p>
+        <h2 id="h-shelf">Museum of past versions</h2>
+        <p>This portfolio has had three looks so far, and this room has had two. Every version is still a tagged release you can open.</p>
+        <ol class="museum">
+          <li>
+            <img src="../../museum/building.webp" width="640" height="400" alt="The building version: Shafik's name beside an isometric office tower with lit windows, one floor per section, under a night sky.">
+            <h3>The building</h3>
+            <p class="museum__when">v0.1.0 to v0.5.0, October to November 2026</p>
+            <p>An isometric building that leaned toward the mouse. Each floor was a section, read from the roof down, and a hidden basement opened behind a riddle.</p>
+            <a href="https://github.com/AD-NAP/portfolio/releases/tag/v0.5.0">Last release, v0.5.0</a>
+          </li>
+          <li>
+            <img src="../../museum/zine.webp" width="640" height="400" alt="The zine version: a large two-ink title, The build log, with a list of cover lines that link to the stories.">
+            <h3>The build log</h3>
+            <p class="museum__when">v1.0.0 to v1.1.0, November 2026</p>
+            <p>A two-ink riso zine. Cover lines linked to the proof, and solving the riddle opened a centrefold. Issue 2 opened on a name card.</p>
+            <a href="https://github.com/AD-NAP/portfolio/releases/tag/v1.1.0">Last release, v1.1.0</a>
+          </li>
+          <li>
+            <img src="../../museum/sheet.webp" width="640" height="400" alt="The current version: a business card lying on a dark drafting desk, with Shafik's name, title and email.">
+            <h3>The drawing sheet</h3>
+            <p class="museum__when">v1.2.0 to now</p>
+            <p>A business card that opens into a technical drawing sheet. It's the version you came from.</p>
+            <a href="../../../">Open it</a>
+          </li>
+          <li>
+            <img src="../../museum/room.webp" width="640" height="400" alt="The cosy room: a warm study with sage walls, a desk under an evening window, a bookshelf, an arcade cabinet, a lounge chair and a floor lamp, with a panda on the rug.">
+            <h3>The cosy room</h3>
+            <p class="museum__when">v1.3.0 to v1.5.0, November 2026</p>
+            <p>The first version of this room: a warm study at sunset, before it turned into a cyberpunk bedroom at night.</p>
+            <a href="https://github.com/AD-NAP/portfolio/releases/tag/v1.4.0">Its last new look, v1.4.0</a>
+          </li>
+        </ol>
+      </section>
+
+      <section class="thing" id="thing-board" data-thing="board" aria-labelledby="h-board">
+        <p class="thing__where">On the chalkboard</p>
+        <h2 id="h-board">Future goals</h2>
+        <ul class="goals">
+          <li><span class="goals__mark" aria-hidden="true"></span><span>Get the AWS Certified Cloud Practitioner certificate by the end of 2026.</span></li>
+          <li><span class="goals__mark" aria-hidden="true"></span><span>Finish <a href="https://github.com/AD-NAP/cumulus-coach">cumulus-coach</a>, my AWS study agent, by the end of 2026.</span></li>
+          <li class="is-done"><span class="goals__mark" aria-hidden="true"></span><span>Finish edge-energy-optimizer. <strong>Done</strong> in November 2026.</span></li>
+        </ul>
+      </section>
+
+      <section class="thing" id="thing-chair" data-thing="chair" aria-labelledby="h-chair">
+        <p class="thing__where">In the lounge chair</p>
+        <h2 id="h-chair">Hobbies</h2>
+        <p>Life off the clock.</p>
+        <ul class="hobbies">
+          <li>I read self-help books about how people think, like <cite>The Art of Thinking Clearly</cite>.</li>
+          <li>I play shooter games, and I'm pretty good at them.</li>
+          <li>I love cats and pandas.</li>
+        </ul>
+      </section>
+
+      <section class="thing" id="thing-arcade" data-thing="arcade" aria-labelledby="h-arcade">
+        <p class="thing__where">In the arcade cabinet</p>
+        <h2 id="h-arcade">Squash the bugs</h2>
+        <p>Ten seconds. Squash the bugs and leave the pandas alone. A bug is worth 1 point; a panda costs 2.</p>
+        <div class="game">
+          <p class="game__score" role="status">Press Start when you're ready.</p>
+          <div class="game__grid"></div>
+          <button class="game__start" type="button">Start</button>
+        </div>
+      </section>
+
+      <section class="thing" id="thing-panda" data-thing="panda" aria-labelledby="h-panda">
+        <p class="thing__where">On the rug</p>
+        <h2 id="h-panda">Hi, I'm the panda</h2>
+        <p>Shafik's favourite animal. I was hiding in his GitHub name all along: read <span class="mono">ad-nap</span> backwards.</p>
+        <p>You solved the riddle, so this room is yours to look around.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="credits">
+    <p>3D models from <a href="https://polyhaven.com/models">Poly Haven</a> (CC0). Built with three.js and GSAP.</p>
+  </footer>
+</body>
+</html>
